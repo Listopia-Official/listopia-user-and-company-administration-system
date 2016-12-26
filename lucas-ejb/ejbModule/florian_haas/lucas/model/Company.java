@@ -18,6 +18,13 @@ public class Company extends AccountOwner {
 	private List<Taxdata> taxdata = new ArrayList<>();
 	private List<PurchaseLog> purchaseLogs = new ArrayList<>();
 
+	public Company(String name, String description, EnumCompanyType companyType, Integer requiredEmployeesCount) {
+		this.name = name;
+		this.description = description;
+		this.companyType = companyType;
+		this.requiredEmployeesCount = requiredEmployeesCount;
+	}
+
 	public List<Employment> getAllEmployees() {
 		return Collections.unmodifiableList(employees);
 	}
