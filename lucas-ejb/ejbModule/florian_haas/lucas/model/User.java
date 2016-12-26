@@ -93,7 +93,7 @@ public class User extends AccountOwner {
 	}
 
 	public Set<Visa> getVisa() {
-		return visa;
+		return Collections.unmodifiableSet(visa);
 	}
 
 	public boolean addVisa(Visa visa) {
