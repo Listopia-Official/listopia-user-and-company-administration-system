@@ -11,7 +11,6 @@ public class Item extends EntityBase {
 	private String description;
 	private Integer itemsAvaible = 0;
 	private BigDecimal pricePerItem;
-	private Boolean hasToBeOrdered = Boolean.FALSE;
 	private List<PurchaseLog> purchaseLogs = new ArrayList<>();
 
 	public Item(String name, String description, BigDecimal pricePerItem, Integer itemsAvaible) {
@@ -54,11 +53,7 @@ public class Item extends EntityBase {
 	}
 
 	public Boolean getHasToBeOrdered() {
-		return this.hasToBeOrdered;
-	}
-
-	public void setHasToBeOrdered(Boolean hasToBeOrdered) {
-		this.hasToBeOrdered = hasToBeOrdered;
+		return this.itemsAvaible == 0;
 	}
 
 	public List<PurchaseLog> getPurchaseLogs() {
