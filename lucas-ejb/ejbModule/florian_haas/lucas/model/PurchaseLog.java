@@ -10,13 +10,16 @@ public class PurchaseLog extends EntityBase {
 	private Company company;
 	private LocalDateTime dateTime;
 	private Item item;
+	private EnumPayType payType;
 	private Integer count;
 	private BigDecimal currentPrice;
 
-	public PurchaseLog(Company company, LocalDateTime dateTime, Item item, Integer count, BigDecimal currentPrice) {
+	public PurchaseLog(Company company, LocalDateTime dateTime, Item item, EnumPayType payType, Integer count,
+			BigDecimal currentPrice) {
 		this.company = company;
 		this.dateTime = dateTime;
 		this.item = item;
+		this.payType = payType;
 		this.count = count;
 		this.currentPrice = currentPrice;
 	}
@@ -25,44 +28,27 @@ public class PurchaseLog extends EntityBase {
 		return this.company;
 	}
 
-	public void setCompany(Company company) {
-		this.company = company;
-	}
-
 	public LocalDateTime getDateTime() {
 		return this.dateTime;
-	}
-
-	public void setDateTime(LocalDateTime dateTime) {
-		this.dateTime = dateTime;
 	}
 
 	public Item getItem() {
 		return this.item;
 	}
 
-	public void setItem(Item item) {
-		this.item = item;
+	public EnumPayType getPayType() {
+		return payType;
 	}
 
 	public Integer getCount() {
 		return this.count;
 	}
 
-	public void setCount(Integer count) {
-		this.count = count;
-	}
-
 	public BigDecimal getCurrentPrice() {
 		return this.currentPrice;
-	}
-
-	public void setCurrentPrice(BigDecimal currentPrice) {
-		this.currentPrice = currentPrice;
 	}
 
 	public BigDecimal getTotalPrice() {
 		return currentPrice.multiply(new BigDecimal(count));
 	}
-
 }
