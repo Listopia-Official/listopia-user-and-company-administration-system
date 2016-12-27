@@ -6,10 +6,10 @@ public class Company extends AccountOwner {
 
 	private static final long serialVersionUID = -8593998936489707393L;
 
-	private String name;
+	private String name;// Unique
 	private String description;
 	private String room;
-	private String section;
+	private Integer section;
 	private EnumCompanyType companyType;
 	private Company parentCompany;
 	private List<Employment> employees = new ArrayList<>();
@@ -18,10 +18,14 @@ public class Company extends AccountOwner {
 	private List<Taxdata> taxdata = new ArrayList<>();
 	private List<PurchaseLog> purchaseLogs = new ArrayList<>();
 
-	public Company(String name, String description, EnumCompanyType companyType, Integer requiredEmployeesCount) {
+	public Company(String name, String description, String room, Integer section, EnumCompanyType companyType,
+			List<Employment> managers, Integer requiredEmployeesCount) {
 		this.name = name;
 		this.description = description;
+		this.room = room;
+		this.section = section;
 		this.companyType = companyType;
+		this.employees.addAll(managers);
 		this.requiredEmployeesCount = requiredEmployeesCount;
 	}
 
@@ -88,11 +92,11 @@ public class Company extends AccountOwner {
 		this.room = room;
 	}
 
-	public String getSection() {
+	public Integer getSection() {
 		return this.section;
 	}
 
-	public void setSection(String section) {
+	public void setSection(Integer section) {
 		this.section = section;
 	}
 
@@ -113,7 +117,7 @@ public class Company extends AccountOwner {
 	}
 
 	public Set<Company> getChildCompanies() {
-		return childCompanies;
+		return Collections.unmodifiableSet(childCompanies);
 	}
 
 	public boolean addChildCompany(Company childCompany) {
@@ -137,7 +141,7 @@ public class Company extends AccountOwner {
 	}
 
 	public List<Taxdata> getTaxdata() {
-		return taxdata;
+		return Collections.unmodifiableList(taxdata);
 	}
 
 	public boolean addTaxdata(Taxdata taxdata) {
@@ -149,7 +153,7 @@ public class Company extends AccountOwner {
 	}
 
 	public List<PurchaseLog> getPurchaseLogs() {
-		return purchaseLogs;
+		return Collections.unmodifiableList(purchaseLogs);
 	}
 
 	public boolean addPurchaseLog(PurchaseLog purchaseLog) {
