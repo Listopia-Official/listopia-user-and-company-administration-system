@@ -20,6 +20,8 @@ public interface ReadOnlyDAO<E extends EntityBase> {
 
 	public Boolean exists(Long id);
 
+	public E refresh(E entity);
+
 	public List<E> readOnlyJPQLQuery(String jpql, Object... params);
 
 	public List<E> readOnlyCriteriaQuery(BiFunction<Root<E>, CriteriaBuilder, Predicate[]> restrictions);
