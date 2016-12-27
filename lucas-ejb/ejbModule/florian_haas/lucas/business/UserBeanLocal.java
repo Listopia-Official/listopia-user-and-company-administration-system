@@ -20,18 +20,6 @@ public interface UserBeanLocal {
 
 	public User findById(Long userId);
 
-	public List<User> findByForename(String forename);
-
-	public List<User> findBySurname(String forename);
-
-	public List<User> findBySchoolGrade(Integer schoolGrade);
-
-	public List<User> findBySchoolClass(String schoolClass);
-
-	public List<User> findByUserType(EnumUserType userType);
-
-	public List<User> findByRanks(String... ranks);
-
 	public List<User> findUsers(Long userId, String forename, String surname, Integer schoolGrade, String schoolClass,
 			EnumUserType userType, String[] ranks, Boolean useUserId, Boolean useForename, Boolean useSurname, Boolean useSchoolGrade,
 			Boolean useSchoolClass, Boolean useUserType, Boolean useRanks, EnumQueryComparator userIdComparator,

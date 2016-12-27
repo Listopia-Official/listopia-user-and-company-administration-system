@@ -22,12 +22,6 @@ public interface AttendanceBeanLocal {
 
 	public Attendancedata findByUserCardId(Long userCardId);
 
-	public List<Attendancedata> findByIsUserInState(Boolean isUserInState);
-
-	public List<Attendancedata> findByTimePresentDay(Long timePresentDay);
-
-	public List<Attendancedata> findByValidTimeMissing(Long validTimeMissing);
-
 	public List<Attendancedata> findAttendancedata(Long id, Long userId, Long userCardId, Boolean isUserInState, Long timePresentDay,
 			Long validTimeMissing, Boolean useId, Boolean useUserId, Boolean useUserCardId, Boolean useIsUserInState,
 			Boolean useTimePresentDay, Boolean useVaidTimeMissing, EnumQueryComparator idComparator,

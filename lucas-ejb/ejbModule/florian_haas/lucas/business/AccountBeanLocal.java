@@ -25,12 +25,6 @@ public interface AccountBeanLocal {
 
 	public Account findById(Long id);
 
-	public List<Account> findAccountByBankBalance(BigDecimal bankBalance);
-
-	public List<Account> findAccountByBlocked(Boolean blocked);
-
-	public List<Account> findAccountByAccountOwnerType(EnumAccountOwnerType ownerType);
-
 	public List<Account> findAccounts(Long id, EnumAccountOwnerType ownerType, BigDecimal bankBalance, Boolean blocked, Boolean useId,
 			Boolean useOwnerType, Boolean useBankBalance, Boolean useBlocked, EnumQueryComparator idComparator,
 			EnumQueryComparator bankBalanceComparator);
