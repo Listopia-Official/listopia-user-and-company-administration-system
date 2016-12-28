@@ -2,10 +2,15 @@ package florian_haas.lucas.model;
 
 import java.io.Serializable;
 
+import javax.persistence.*;
+
+@MappedSuperclass
 public abstract class EntityBase implements Serializable {
 
 	private static final long serialVersionUID = -3022778277072552040L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	public Long getId() {

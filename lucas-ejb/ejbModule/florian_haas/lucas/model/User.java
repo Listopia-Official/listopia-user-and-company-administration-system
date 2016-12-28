@@ -2,18 +2,38 @@ package florian_haas.lucas.model;
 
 import java.util.*;
 
+import javax.persistence.*;
+
+@Entity
 public class User extends AccountOwner {
 
 	private static final long serialVersionUID = -2632198556827472552L;
 
+	@Column(nullable = true)
 	private String forename;
+
+	@Column(nullable = true)
 	private String surname;
+
+	@Column(nullable = true)
 	private Integer schoolGrade;
+
+	@Column(nullable = true)
 	private String schoolClass;
+
+	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> ranks = new ArrayList<>();
+
+	@OneToOne(cascade = CascadeType.ALL, optional = true, orphanRemoval = true)
 	private Attendancedata attendancedata;
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<UserCard> userCards = new HashSet<>();
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<Visa> visa = new HashSet<>();
+
+	User() {}
 
 	public User(String forename, String surname, Integer schoolGrade, String schoolClass, String... ranks) {
 		this.forename = forename;
