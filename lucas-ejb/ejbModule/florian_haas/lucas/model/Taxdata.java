@@ -3,14 +3,30 @@ package florian_haas.lucas.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import javax.persistence.*;
+
+@Entity
 public class Taxdata extends EntityBase {
 
 	private static final long serialVersionUID = -4156175587632314959L;
 
+	@ManyToOne(optional = false)
+	@JoinColumn(nullable = false)
 	private Company company;
+
+	@Basic(optional = false)
+	@Column(nullable = false)
 	private LocalDate date;
+
+	@Basic(optional = false)
+	@Column(nullable = false, precision = 7, scale = 38)
 	private BigDecimal incomings;
+
+	@Basic(optional = false)
+	@Column(nullable = false, precision = 7, scale = 38)
 	private BigDecimal outgoings;
+
+	Taxdata() {}
 
 	public Taxdata(Company company, LocalDate date, BigDecimal incomings, BigDecimal outgoings) {
 		this.company = company;

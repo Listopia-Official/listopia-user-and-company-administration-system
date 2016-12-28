@@ -3,15 +3,33 @@ package florian_haas.lucas.model;
 import java.math.BigDecimal;
 import java.util.*;
 
+import javax.persistence.*;
+
+@Entity
 public class Item extends EntityBase {
 
 	private static final long serialVersionUID = -3598214275967142864L;
 
+	@Basic(optional = false)
+	@Column(nullable = false, unique = true)
 	private String name;
+
+	@Basic(optional = true)
+	@Column(nullable = true)
 	private String description;
+
+	@Basic(optional = false)
+	@Column(nullable = false)
 	private Integer itemsAvaible = 0;
+
+	@Basic(optional = false)
+	@Column(nullable = false, scale = 7, precision = 38)
 	private BigDecimal pricePerItem;
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "item")
 	private List<PurchaseLog> purchaseLogs = new ArrayList<>();
+
+	Item() {}
 
 	public Item(String name, String description, BigDecimal pricePerItem, Integer itemsAvaible) {
 		this.name = name;

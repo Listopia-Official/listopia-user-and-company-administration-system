@@ -2,21 +2,55 @@ package florian_haas.lucas.model;
 
 import java.util.*;
 
+import javax.persistence.*;
+
+@Entity
+@DiscriminatorValue(value = "company")
 public class Company extends AccountOwner {
 
 	private static final long serialVersionUID = -8593998936489707393L;
 
-	private String name;// Unique
+	@Basic(optional = false)
+	@Column(nullable = false, unique = true)
+	private String name;
+
+	@Basic(optional = false)
+	@Column(nullable = false)
 	private String description;
+
+	@Basic(optional = false)
+	@Column(nullable = false)
 	private String room;
+
+	@Basic(optional = false)
+	@Column(nullable = false)
 	private Integer section;
+
+	@Basic(optional = false)
+	@Column(nullable = false)
 	private EnumCompanyType companyType;
+
+	@ManyToOne(optional = true)
+	@JoinColumn(nullable = true)
 	private Company parentCompany;
-	private List<Employment> employees = new ArrayList<>();
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parentCompany")
 	private Set<Company> childCompanies = new HashSet<>();
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "company")
+	private List<Employment> employees = new ArrayList<>();
+
+	@Basic(optional = false)
+	@Column(nullable = false)
 	private Integer requiredEmployeesCount = 0;
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "company")
 	private List<Taxdata> taxdata = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "company")
 	private List<PurchaseLog> purchaseLogs = new ArrayList<>();
+
+	Company() {}
 
 	public Company(String name, String description, String room, Integer section, EnumCompanyType companyType,
 			List<Employment> managers, Integer requiredEmployeesCount) {

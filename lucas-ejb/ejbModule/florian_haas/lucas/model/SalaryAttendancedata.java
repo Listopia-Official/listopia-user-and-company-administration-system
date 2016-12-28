@@ -2,16 +2,27 @@ package florian_haas.lucas.model;
 
 import java.time.LocalDate;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Entity
 public class SalaryAttendancedata extends EntityBase {
 
 	private static final long serialVersionUID = 6663270725797916280L;
 
+	@ManyToOne(optional = false)
+	@JoinColumn(nullable = false)
 	private SalaryData salaryData;
+
+	@Basic(optional = false)
+	@Column(nullable = false)
 	private LocalDate date;
+
+	@Basic(optional = false)
+	@Column(nullable = false)
 	private EnumWorkShift workShift;
+
+	@Basic(optional = false)
+	@Column(nullable = false)
 	private Boolean wasPresent = Boolean.FALSE;
 
 	SalaryAttendancedata() {}

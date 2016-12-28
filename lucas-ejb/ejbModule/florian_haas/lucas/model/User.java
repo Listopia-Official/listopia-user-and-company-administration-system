@@ -5,20 +5,14 @@ import java.util.*;
 import javax.persistence.*;
 
 @Entity
+@DiscriminatorValue(value = "user")
 public class User extends AccountOwner {
 
 	private static final long serialVersionUID = -2632198556827472552L;
 
-	@Column(nullable = true)
 	private String forename;
-
-	@Column(nullable = true)
 	private String surname;
-
-	@Column(nullable = true)
 	private Integer schoolGrade;
-
-	@Column(nullable = true)
 	private String schoolClass;
 
 	@ElementCollection(fetch = FetchType.EAGER)
@@ -32,6 +26,9 @@ public class User extends AccountOwner {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<Visa> visa = new HashSet<>();
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user")
+	private Set<Employment> employments = new HashSet<>();
 
 	User() {}
 
@@ -118,5 +115,17 @@ public class User extends AccountOwner {
 
 	public boolean addVisa(Visa visa) {
 		return this.visa.add(visa);
+	}
+
+	public Set<Employment> getEmployments() {
+		return Collections.unmodifiableSet(employments);
+	}
+
+	public boolean addEmployment(Employment employment) {
+		return employments.add(employment);
+	}
+
+	public boolean removeEmployment(Employment employment) {
+		return employments.remove(employment);
 	}
 }

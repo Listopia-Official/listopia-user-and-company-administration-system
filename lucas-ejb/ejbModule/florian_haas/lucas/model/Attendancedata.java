@@ -2,22 +2,45 @@ package florian_haas.lucas.model;
 
 import java.util.*;
 
-import florian_haas.lucas.util.Stopwatch;
+import javax.persistence.*;
 
+@Entity
 public class Attendancedata extends EntityBase {
 
 	private static final long serialVersionUID = -2732516380228841229L;
 
+	@OneToOne(optional = false, mappedBy = "attendancedata")
 	private User user;
+
+	@Column(nullable = false)
+	@Basic(optional = false)
 	private Boolean isUserInState = Boolean.FALSE;
+
+	@Column(nullable = false)
+	@Basic(optional = false)
 	private Long timePresentDay = 0L;
+
+	@Column(nullable = false)
+	@Basic(optional = false)
 	private Long validTimeMissing = 0L;
 
+	@Embedded
+	@AttributeOverrides(value = {
+			@AttributeOverride(name = "startTime", column = @Column(name = "startTimeIn")), @AttributeOverride(name = "tmpStartTime", column = @Column(name = "tmpStartTimeIn")), @AttributeOverride(name = "duration", column = @Column(name = "durationIn")), @AttributeOverride(name = "tmpDuration", column = @Column(name = "tmpDurationIn")), @AttributeOverride(name = "running", column = @Column(name = "runningIn")) })
 	private Stopwatch timeIn = new Stopwatch();
+
+	@Embedded
+	@AttributeOverrides(value = {
+			@AttributeOverride(name = "startTime", column = @Column(name = "startTimeOut")), @AttributeOverride(name = "tmpStartTime", column = @Column(name = "tmpStartTimeOut")), @AttributeOverride(name = "duration", column = @Column(name = "durationOut")), @AttributeOverride(name = "tmpDuration", column = @Column(name = "tmpDurationOut")), @AttributeOverride(name = "running", column = @Column(name = "runningOut")) })
 	private Stopwatch timeOut = new Stopwatch();
 
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "attendancedata")
 	private List<AttendanceActivityLog> activityLogs = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "attendancedata")
 	private List<AttendanceLog> attendanceLogs = new ArrayList<>();
+
+	Attendancedata() {}
 
 	public Attendancedata(User user) {
 		this.user = user;
