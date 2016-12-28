@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="lucas-ejb">
+		<class>florian_haas.lucas.model.User</class>
+		<class>florian_haas.lucas.model.EntityBase</class>
+		<class>florian_haas.lucas.model.Attendancedata</class>
+		<class>florian_haas.lucas.model.UserCard</class>
+		<class>florian_haas.lucas.model.Visa</class>
+		<class>florian_haas.lucas.database.converter.LocalDateTimeToTimestampConverter</class>
+		<class>florian_haas.lucas.model.Stopwatch</class>
+		<class>florian_haas.lucas.model.AccountOwner</class>
+		<class>florian_haas.lucas.model.Account</class>
+		<class>florian_haas.lucas.model.Company</class>
+		<class>florian_haas.lucas.model.TransactionLog</class>
+		<class>florian_haas.lucas.model.GlobalData</class>
+		<class>florian_haas.lucas.model.AttendanceActivityLog</class>
+		<class>florian_haas.lucas.model.AttendanceLog</class>
+		<class>florian_haas.lucas.model.Employment</class>
+		<class>florian_haas.lucas.model.SalaryData</class>
+		<class>florian_haas.lucas.model.Item</class>
+		<class>florian_haas.lucas.model.PurchaseLog</class>
+		<class>florian_haas.lucas.model.Taxdata</class>
+		<class>florian_haas.lucas.model.SalaryAttendancedata</class>
+	</persistence-unit>
+</persistence>
