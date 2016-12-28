@@ -1,7 +1,7 @@
 package florian_haas.lucas.database;
 
 public enum EnumQueryComparator {
-	EQUAL, NOT_EQUAL, GREATHER_THAN, LESS_THAN, GREATHER_EQUAL, LESS_EQUAL, IN, NOT_IN, LIKE, NOT_LIKE;
+	EQUAL, NOT_EQUAL, GREATHER_THAN, LESS_THAN, GREATHER_EQUAL, LESS_EQUAL, MEMBER_OF, NOT_MEMBER_OF, LIKE, NOT_LIKE;
 
 	public static EnumQueryComparator[] getNumericComparators() {
 		return new EnumQueryComparator[] {
@@ -10,7 +10,7 @@ public enum EnumQueryComparator {
 
 	public static EnumQueryComparator[] getArrayComparators() {
 		return new EnumQueryComparator[] {
-				EQUAL, NOT_EQUAL, IN, NOT_IN };
+				EQUAL, NOT_EQUAL, MEMBER_OF, NOT_MEMBER_OF };
 	}
 
 	public static EnumQueryComparator[] getTextComparators() {
