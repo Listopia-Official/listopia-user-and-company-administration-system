@@ -3,19 +3,50 @@ package florian_haas.lucas.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import javax.persistence.*;
+
+@Entity
 public class TransactionLog extends EntityBase {
 
 	private static final long serialVersionUID = 7946302440312827012L;
 
+	@ManyToOne(optional = false)
+	@JoinColumn(nullable = false)
 	private Account account;
+
+	@Basic(optional = false)
+	@Column(nullable = false)
 	private LocalDateTime dateTime;
+
+	@Basic(optional = false)
+	@Column(nullable = false)
 	private EnumAccountAction action;
+
+	@Basic(optional = false)
+	@Column(nullable = false)
 	private EnumAccountActionType actionType;
+
+	@OneToOne(optional = true)
+	@JoinColumn(nullable = true)
 	private Account relatedAccount;
+
+	@Basic(optional = false)
+	@Column(nullable = false, precision = 7, scale = 38)
 	private BigDecimal amount;
+
+	@Basic(optional = false)
+	@Column(nullable = false, precision = 7, scale = 38)
 	private BigDecimal previousBankBalance;
+
+	@OneToOne(optional = true)
+	@JoinColumn(nullable = true)
 	private User bankUser;
+
+	@Basic(optional = true)
+	@Column(nullable = true)
 	private String comment;
+
+	TransactionLog() {}
 
 	public TransactionLog(Account account, LocalDateTime dateTime, EnumAccountAction action, EnumAccountActionType actionType,
 			Account relatedAccount, BigDecimal amount, BigDecimal prevBankBalance, User bankUser, String comment) {
