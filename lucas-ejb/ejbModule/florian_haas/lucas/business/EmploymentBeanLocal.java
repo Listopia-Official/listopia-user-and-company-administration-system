@@ -1,7 +1,6 @@
 package florian_haas.lucas.business;
 
 import java.time.LocalDate;
-import java.util.Map;
 
 import javax.ejb.Local;
 
@@ -23,10 +22,16 @@ public interface EmploymentBeanLocal {
 
 	public SalaryData setWorkShifts(Long salaryDataId, EnumWorkShift... workShifts);
 
-	public SalaryData addAttendanceEntry(Long salaryDataId, Map<EnumWorkShift, Boolean> shifts);
+	public SalaryData addAttendancedata(Long salaryDataId, LocalDate date, EnumWorkShift workShift, Boolean wasPresent);
 
-	public SalaryData setAttendanceEntry(Long salaryDataId, LocalDate date, Map<EnumWorkShift, Boolean> shifts);
+	public SalaryData setAttendancedataDate(Long attendancedataId, LocalDate date);
 
-	public SalaryData removeAttendanceEntry(Long salaryDataId, LocalDate date);
+	public SalaryData setAttendancedataShift(Long attendancedataId, EnumWorkShift shift);
+
+	public SalaryData setAttendancedataWasPresent(Long attendancedataId, Boolean wasPresent);
+
+	public SalaryData removeAttendancedata(Long salaryDataId, Long attendancedataKey);
+
+	public void paySalary(Company company, LocalDate date, EnumWorkShift shift);
 
 }
