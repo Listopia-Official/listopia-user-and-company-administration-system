@@ -10,7 +10,7 @@ public enum EnumQueryComparator {
 
 	public static EnumQueryComparator[] getArrayComparators() {
 		return new EnumQueryComparator[] {
-				EQUAL, NOT_EQUAL, MEMBER_OF, NOT_MEMBER_OF };
+				MEMBER_OF, NOT_MEMBER_OF };
 	}
 
 	public static EnumQueryComparator[] getTextComparators() {
