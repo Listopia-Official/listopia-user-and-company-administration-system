@@ -26,6 +26,4 @@ public interface ReadOnlyDAO<E extends EntityBase> {
 
 	public List<E> readOnlyCriteriaQuery(BiFunction<Root<E>, CriteriaBuilder, Predicate[]> restrictions);
 
-	public List<E> readOnlyCriteriaQuery(BiFunction<Root<E>, CriteriaBuilder, Predicate[]> restrictions, Order[] orders);
-
 }
