@@ -21,5 +21,12 @@
 		<class>florian_haas.lucas.model.PurchaseLog</class>
 		<class>florian_haas.lucas.model.Taxdata</class>
 		<class>florian_haas.lucas.model.SalaryAttendancedata</class>
+		<properties>
+			<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+			<property name="javax.persistence.schema-generation.create-database-schemas" value="true"/>
+			<property name="javax.persistence.schema-generation.scripts.action" value="drop-and-create"/>
+			<property name="javax.persistence.schema-generation.scripts.create-target" value="E:\JavaEE\scripts\scripts.sql"/>
+			<property name="javax.persistence.schema-generation.scripts.drop-target" value="E:\JavaEE\scripts\scripts.sql"/>
+		</properties>
 	</persistence-unit>
 </persistence>
