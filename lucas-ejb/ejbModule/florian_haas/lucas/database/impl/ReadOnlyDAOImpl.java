@@ -48,8 +48,7 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 
 	@Override
 	public Boolean exists(Long id) {
-		return manager.createQuery("SELECT COUNT(e.id) FROM " + entityClass.getSimpleName() + " e WHERE e.id=:id", Long.class)
-				.getSingleResult() > 0;
+		return manager.createQuery("SELECT COUNT(e.id) FROM " + entityClass.getSimpleName() + " e WHERE e.id=:id", Long.class).getSingleResult() > 0;
 	}
 
 	@Override
@@ -75,9 +74,9 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 	}
 
 	@SuppressWarnings("unchecked")
-	protected final <T extends Comparable<? super T>> Predicate getSingularRestriction(SingularAttribute<? super E, T> attribute,
-			T value, EnumQueryComparator comparator, CriteriaBuilder builder, Root<E> root) {
-		Expression<T> comparableExpression = root.get(attribute);
+	protected final <T extends Comparable<? super T>> Predicate getSingularRestriction(SingularAttribute<? super E, T> attribute, T value,
+			EnumQueryComparator comparator, CriteriaBuilder builder, Path<E> path) {
+		Expression<T> comparableExpression = path.get(attribute);
 
 		if (comparator == null) comparator = EnumQueryComparator.EQUAL;
 
@@ -100,20 +99,18 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 			case NOT_EQUAL:
 				return builder.notEqual(comparableExpression, value);
 			case LIKE:
-				if (value instanceof String) { return builder.like((Expression<String>) (Expression<?>) comparableExpression,
-						(String) value); }
+				if (value instanceof String) { return builder.like((Expression<String>) (Expression<?>) comparableExpression, (String) value); }
 			case NOT_LIKE:
-				if (value instanceof String) { return builder.notLike((Expression<String>) (Expression<?>) comparableExpression,
-						(String) value); }
+				if (value instanceof String) { return builder.notLike((Expression<String>) (Expression<?>) comparableExpression, (String) value); }
 			default:
 				return null;
 		}
 	}
 
 	protected final <T extends Comparable<? super T>> void getSingularRestriction(SingularAttribute<? super E, T> attribute, T value,
-			Boolean useValue, EnumQueryComparator comparator, List<Predicate> list, CriteriaBuilder builder, Root<E> root) {
+			Boolean useValue, EnumQueryComparator comparator, List<Predicate> list, CriteriaBuilder builder, Path<E> path) {
 		if (useValue) {
-			Predicate val = getSingularRestriction(attribute, value, comparator, builder, root);
+			Predicate val = getSingularRestriction(attribute, value, comparator, builder, path);
 			if (val != null) {
 				list.add(val);
 			}
@@ -121,8 +118,8 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 	}
 
 	@SuppressWarnings("hiding")
-	protected final <V, C extends Collection<V>, E extends EntityBase> List<Predicate> getPluralRestriction(
-			PluralAttribute<E, C, V> attribute, C value, EnumQueryComparator comparator, CriteriaBuilder builder, Root<E> root) {
+	protected final <V, C extends Collection<V>, E extends EntityBase> List<Predicate> getPluralRestriction(PluralAttribute<E, C, V> attribute,
+			C value, EnumQueryComparator comparator, CriteriaBuilder builder, Root<E> root) {
 		List<Predicate> predicates = new ArrayList<>();
 		Expression<C> expression = root.get(attribute);
 
@@ -154,8 +151,8 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 	}
 
 	@SuppressWarnings("hiding")
-	protected final <V, C extends Collection<V>, E extends EntityBase> void getPluralRestriction(PluralAttribute<E, C, V> attribute,
-			C value, Boolean useValue, EnumQueryComparator comparator, List<Predicate> list, CriteriaBuilder builder, Root<E> root) {
+	protected final <V, C extends Collection<V>, E extends EntityBase> void getPluralRestriction(PluralAttribute<E, C, V> attribute, C value,
+			Boolean useValue, EnumQueryComparator comparator, List<Predicate> list, CriteriaBuilder builder, Root<E> root) {
 		if (useValue) list.addAll(getPluralRestriction(attribute, value, comparator, builder, root));
 	}
 
