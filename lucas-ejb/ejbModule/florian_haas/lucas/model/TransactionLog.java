@@ -31,11 +31,11 @@ public class TransactionLog extends EntityBase {
 	private Account relatedAccount;
 
 	@Basic(optional = false)
-	@Column(nullable = false, precision = 7, scale = 38)
+	@Column(nullable = false, precision = 38, scale = 7)
 	private BigDecimal amount;
 
 	@Basic(optional = false)
-	@Column(nullable = false, precision = 7, scale = 38)
+	@Column(nullable = false, precision = 38, scale = 7)
 	private BigDecimal previousBankBalance;
 
 	@OneToOne(optional = true)

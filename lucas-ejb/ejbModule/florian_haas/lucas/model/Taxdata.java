@@ -19,11 +19,11 @@ public class Taxdata extends EntityBase {
 	private LocalDate date;
 
 	@Basic(optional = false)
-	@Column(nullable = false, precision = 7, scale = 38)
+	@Column(nullable = false, precision = 38, scale = 7)
 	private BigDecimal incomings;
 
 	@Basic(optional = false)
-	@Column(nullable = false, precision = 7, scale = 38)
+	@Column(nullable = false, precision = 38, scale = 7)
 	private BigDecimal outgoings;
 
 	Taxdata() {}
