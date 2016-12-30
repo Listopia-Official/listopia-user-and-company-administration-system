@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
 
 import florian_haas.lucas.model.EntityBase;
-import florian_haas.lucas.util.QuadFunction;
+import florian_haas.lucas.util.TriFunction;
 
 public interface ReadOnlyDAO<E extends EntityBase> {
 
@@ -24,7 +24,6 @@ public interface ReadOnlyDAO<E extends EntityBase> {
 
 	public List<E> readOnlyJPQLQuery(String jpql, Object... params);
 
-	public List<E> readOnlyCriteriaQuery(
-			QuadFunction<CriteriaQuery<E>, Root<EntityBase>, Root<E>, CriteriaBuilder, Predicate[]> restrictions);
+	public List<E> readOnlyCriteriaQuery(TriFunction<CriteriaQuery<E>, Root<E>, CriteriaBuilder, Predicate[]> restrictions);
 
 }

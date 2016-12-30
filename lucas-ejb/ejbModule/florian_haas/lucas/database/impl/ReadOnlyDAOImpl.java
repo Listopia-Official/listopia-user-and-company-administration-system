@@ -11,7 +11,7 @@ import javax.persistence.metamodel.*;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.EntityBase;
-import florian_haas.lucas.util.QuadFunction;
+import florian_haas.lucas.util.TriFunction;
 
 @Named
 public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyDAO<E> {
@@ -66,20 +66,17 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 		return query.getResultList();
 	}
 
-	public List<E> readOnlyCriteriaQuery(
-			QuadFunction<CriteriaQuery<E>, Root<EntityBase>, Root<E>, CriteriaBuilder, Predicate[]> restrictions) {
+	public List<E> readOnlyCriteriaQuery(TriFunction<CriteriaQuery<E>, Root<E>, CriteriaBuilder, Predicate[]> restrictions) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<E> query = builder.createQuery(entityClass);
-		Root<EntityBase> baseRoot = query.from(EntityBase.class);
 		Root<E> root = query.from(entityClass);
-		query.select(root).where(restrictions.apply(query, baseRoot, root, builder));
+		query.select(root).where(restrictions.apply(query, root, builder));
 		return manager.createQuery(query).getResultList();
 	}
 
-	@SuppressWarnings({
-			"unchecked", "hiding" })
-	protected final <T extends Comparable<? super T>, E extends EntityBase> Predicate getSingularRestriction(
-			SingularAttribute<E, T> attribute, T value, EnumQueryComparator comparator, CriteriaBuilder builder, Root<E> root) {
+	@SuppressWarnings("unchecked")
+	protected final <T extends Comparable<? super T>> Predicate getSingularRestriction(SingularAttribute<? super E, T> attribute,
+			T value, EnumQueryComparator comparator, CriteriaBuilder builder, Root<E> root) {
 		Expression<T> comparableExpression = root.get(attribute);
 
 		if (comparator == null) comparator = EnumQueryComparator.EQUAL;
@@ -113,10 +110,8 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 		}
 	}
 
-	@SuppressWarnings("hiding")
-	protected final <T extends Comparable<? super T>, E extends EntityBase> void getSingularRestriction(
-			SingularAttribute<E, T> attribute, T value, Boolean useValue, EnumQueryComparator comparator, List<Predicate> list,
-			CriteriaBuilder builder, Root<E> root) {
+	protected final <T extends Comparable<? super T>> void getSingularRestriction(SingularAttribute<? super E, T> attribute, T value,
+			Boolean useValue, EnumQueryComparator comparator, List<Predicate> list, CriteriaBuilder builder, Root<E> root) {
 		if (useValue) {
 			Predicate val = getSingularRestriction(attribute, value, comparator, builder, root);
 			if (val != null) {
