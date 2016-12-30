@@ -1,6 +1,7 @@
 package florian_haas.lucas.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -11,6 +12,7 @@ public abstract class AccountOwner extends EntityBase {
 
 	@OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
 	@JoinColumn(nullable = false)
+	@NotNull
 	private Account account;
 
 	protected AccountOwner() {
