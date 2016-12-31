@@ -20,6 +20,7 @@ public class Attendancedata extends EntityBase {
 
 	@Column(nullable = false)
 	@Basic(optional = false)
+	@NotNull
 	private Boolean isUserInState = Boolean.FALSE;
 
 	@Column(nullable = false)

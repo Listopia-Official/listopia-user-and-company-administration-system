@@ -28,6 +28,7 @@ public class Account extends EntityBase {
 	@Basic(optional = false)
 	@Column(nullable = false)
 	@AssertFalse(groups = UnblockedAccountRequiredValidationGroup.class)
+	@NotNull
 	private Boolean blocked = Boolean.FALSE;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "account")
