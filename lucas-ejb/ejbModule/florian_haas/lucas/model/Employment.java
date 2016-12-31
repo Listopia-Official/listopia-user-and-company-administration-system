@@ -1,6 +1,8 @@
 package florian_haas.lucas.model;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Employment extends EntityBase {
@@ -9,17 +11,21 @@ public class Employment extends EntityBase {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(nullable = false)
+	@NotNull
 	private User user;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(nullable = false)
+	@NotNull
 	private Company company;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
 	private EnumEmployeePosition position;
 
 	@OneToOne(cascade = CascadeType.ALL, optional = true, orphanRemoval = true)
+	@Valid
 	private SalaryData salaryData;
 
 	Employment() {}

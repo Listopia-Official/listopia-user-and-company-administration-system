@@ -3,6 +3,9 @@ package florian_haas.lucas.model;
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+import florian_haas.lucas.model.validation.ValidTimeMillis;
 
 @Entity
 public class AttendanceActivityLog extends EntityBase {
@@ -11,18 +14,22 @@ public class AttendanceActivityLog extends EntityBase {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(nullable = false)
+	@NotNull
 	private Attendancedata attendancedata;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
 	private LocalDateTime dateTime;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
 	private EnumAttendanceAction action;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@ValidTimeMillis
 	private Long time;
 
 	AttendanceActivityLog() {}

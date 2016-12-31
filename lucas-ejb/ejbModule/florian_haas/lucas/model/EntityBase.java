@@ -3,6 +3,7 @@ package florian_haas.lucas.model;
 import java.io.Serializable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
 public abstract class EntityBase implements Serializable {
@@ -11,6 +12,7 @@ public abstract class EntityBase implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@NotNull
 	private Long id;
 
 	public Long getId() {

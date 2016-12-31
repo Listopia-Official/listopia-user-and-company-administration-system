@@ -3,6 +3,10 @@ package florian_haas.lucas.model;
 import java.util.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+
+import florian_haas.lucas.util.validation.NotNullCollection;
 
 @Entity
 @DiscriminatorValue(value = "company")
@@ -12,22 +16,28 @@ public class Company extends AccountOwner {
 
 	@Basic(optional = false)
 	@Column(nullable = false, unique = true)
+	@NotNull
 	private String name;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
 	private String description;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
 	private String room;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
+	@Min(value = 0)
 	private Integer section;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
 	private EnumCompanyType companyType;
 
 	@ManyToOne(optional = true)
@@ -35,25 +45,34 @@ public class Company extends AccountOwner {
 	private Company parentCompany;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parentCompany")
+	@NotNullCollection
 	private Set<Company> childCompanies = new HashSet<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "company")
+	@NotNullCollection
+	@Valid
 	private List<Employment> employees = new ArrayList<>();
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
+	@Min(value = 0)
 	private Integer requiredEmployeesCount = 0;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "company")
+	@NotNullCollection
+	@Valid
 	private List<Taxdata> taxdata = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "company")
+	@NotNullCollection
+	@Valid
 	private List<PurchaseLog> purchaseLogs = new ArrayList<>();
 
 	Company() {}
 
-	public Company(String name, String description, String room, Integer section, EnumCompanyType companyType,
-			List<Employment> managers, Integer requiredEmployeesCount) {
+	public Company(String name, String description, String room, Integer section, EnumCompanyType companyType, List<Employment> managers,
+			Integer requiredEmployeesCount) {
 		this.name = name;
 		this.description = description;
 		this.room = room;
