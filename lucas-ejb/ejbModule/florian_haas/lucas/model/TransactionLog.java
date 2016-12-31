@@ -4,26 +4,34 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+import florian_haas.lucas.model.validation.*;
 
 @Entity
+@ValidTransactionLog
 public class TransactionLog extends EntityBase {
 
 	private static final long serialVersionUID = 7946302440312827012L;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(nullable = false)
+	@NotNull
 	private Account account;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
 	private LocalDateTime dateTime;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
 	private EnumAccountAction action;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
 	private EnumAccountActionType actionType;
 
 	@OneToOne(optional = true)
@@ -32,10 +40,12 @@ public class TransactionLog extends EntityBase {
 
 	@Basic(optional = false)
 	@Column(nullable = false, precision = 38, scale = 7)
+	@ValidTransactionAmount
 	private BigDecimal amount;
 
 	@Basic(optional = false)
 	@Column(nullable = false, precision = 38, scale = 7)
+	@ValidBankBalance
 	private BigDecimal previousBankBalance;
 
 	@OneToOne(optional = true)
@@ -44,12 +54,13 @@ public class TransactionLog extends EntityBase {
 
 	@Basic(optional = true)
 	@Column(nullable = true)
+	@ShortComment
 	private String comment;
 
 	TransactionLog() {}
 
-	public TransactionLog(Account account, LocalDateTime dateTime, EnumAccountAction action, EnumAccountActionType actionType,
-			Account relatedAccount, BigDecimal amount, BigDecimal prevBankBalance, User bankUser, String comment) {
+	public TransactionLog(Account account, LocalDateTime dateTime, EnumAccountAction action, EnumAccountActionType actionType, Account relatedAccount,
+			BigDecimal amount, BigDecimal prevBankBalance, User bankUser, String comment) {
 		this.account = account;
 		this.dateTime = dateTime;
 		this.action = action;
