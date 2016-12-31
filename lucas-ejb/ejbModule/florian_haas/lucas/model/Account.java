@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
+
+import florian_haas.lucas.model.validation.*;
+import florian_haas.lucas.util.validation.NotNullCollection;
 
 @Entity
 public class Account extends EntityBase {
@@ -12,17 +16,21 @@ public class Account extends EntityBase {
 
 	@OneToOne(mappedBy = "account", optional = false)
 	@JoinColumn(nullable = false)
+	@NotNull
 	private AccountOwner owner;
 
 	@Basic(optional = false)
 	@Column(nullable = false, scale = 7, precision = 38)
+	@ValidBankBalance
 	private BigDecimal bankBalance = BigDecimal.ZERO;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@AssertFalse(groups = UnblockedAccountRequiredValidationGroup.class)
 	private Boolean blocked = Boolean.FALSE;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "account")
+	@NotNullCollection
 	private List<TransactionLog> transactionLogs = new ArrayList<>();
 
 	Account() {}
