@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import florian_haas.lucas.model.validation.*;
+import florian_haas.lucas.model.validation.ValidTimeMillis;
 import florian_haas.lucas.util.validation.NotNullCollection;
 
 @Entity
@@ -25,12 +25,12 @@ public class Attendancedata extends EntityBase {
 
 	@Column(nullable = false)
 	@Basic(optional = false)
-	@ValidTimePresentDay
+	@ValidTimeMillis
 	private Long timePresentDay = 0L;
 
 	@Column(nullable = false)
 	@Basic(optional = false)
-	@ValidValidTimeMissing
+	@ValidTimeMillis
 	private Long validTimeMissing = 0L;
 
 	@Embedded

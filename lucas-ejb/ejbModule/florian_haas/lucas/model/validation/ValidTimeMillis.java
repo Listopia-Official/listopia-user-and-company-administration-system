@@ -15,9 +15,9 @@ import javax.validation.constraints.*;
 @Documented
 @NotNull
 @Min(value = 0)
-public @interface ValidValidTimeMissing {
+public @interface ValidTimeMillis {
 
-	String message() default "Invalid valid time missing";
+	String message() default "Invalid time";
 
 	Class<?>[] groups() default {};
 
