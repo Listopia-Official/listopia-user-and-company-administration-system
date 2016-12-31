@@ -3,6 +3,11 @@ package florian_haas.lucas.model;
 import java.util.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import florian_haas.lucas.model.validation.*;
+import florian_haas.lucas.util.validation.NotNullCollection;
 
 @Entity
 public class Attendancedata extends EntityBase {
@@ -10,6 +15,7 @@ public class Attendancedata extends EntityBase {
 	private static final long serialVersionUID = -2732516380228841229L;
 
 	@OneToOne(optional = false, mappedBy = "attendancedata")
+	@NotNull
 	private User user;
 
 	@Column(nullable = false)
@@ -18,10 +24,12 @@ public class Attendancedata extends EntityBase {
 
 	@Column(nullable = false)
 	@Basic(optional = false)
+	@ValidTimePresentDay
 	private Long timePresentDay = 0L;
 
 	@Column(nullable = false)
 	@Basic(optional = false)
+	@ValidValidTimeMissing
 	private Long validTimeMissing = 0L;
 
 	@Embedded
@@ -35,9 +43,13 @@ public class Attendancedata extends EntityBase {
 	private Stopwatch timeOut = new Stopwatch();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "attendancedata")
+	@NotNullCollection
+	@Valid
 	private List<AttendanceActivityLog> activityLogs = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "attendancedata")
+	@NotNullCollection
+	@Valid
 	private List<AttendanceLog> attendanceLogs = new ArrayList<>();
 
 	Attendancedata() {}
