@@ -1,5 +1,6 @@
 package florian_haas.lucas.util;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 public class Utils {
@@ -16,5 +17,25 @@ public class Utils {
 			tmp.put(key, (V) valueO);
 		});
 		return Collections.unmodifiableMap(tmp);
+	}
+
+	public static boolean isLessThanZero(BigDecimal decimal) {
+		return decimal.compareTo(BigDecimal.ZERO) < 0;
+	}
+
+	public static boolean isGreatherThanZero(BigDecimal decimal) {
+		return decimal.compareTo(BigDecimal.ZERO) > 0;
+	}
+
+	public static boolean isGreatherEqualZero(BigDecimal decimal) {
+		return decimal.compareTo(BigDecimal.ZERO) >= 0;
+	}
+
+	public static boolean isLessEqualZero(BigDecimal decimal) {
+		return decimal.compareTo(BigDecimal.ZERO) <= 0;
+	}
+
+	public static boolean isZero(BigDecimal decimal) {
+		return decimal.compareTo(BigDecimal.ZERO) == 0;
 	}
 }
