@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 import florian_haas.lucas.model.validation.*;
@@ -31,6 +32,7 @@ public class Account extends EntityBase {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "account")
 	@NotNullCollection
+	@Valid
 	private List<TransactionLog> transactionLogs = new ArrayList<>();
 
 	Account() {}
