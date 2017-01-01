@@ -82,7 +82,7 @@ public class Item extends EntityBase {
 	}
 
 	public Boolean getHasToBeOrdered() {
-		return this.itemsAvaible == 0;
+		return this.itemsAvaible.equals(0);
 	}
 
 	public List<PurchaseLog> getPurchaseLogs() {
