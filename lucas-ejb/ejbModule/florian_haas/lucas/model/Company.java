@@ -10,6 +10,8 @@ import florian_haas.lucas.util.validation.*;
 
 @Entity
 @DiscriminatorValue(value = "company")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {
+		"room", "section" }))
 public class Company extends AccountOwner {
 
 	private static final long serialVersionUID = -8593998936489707393L;
