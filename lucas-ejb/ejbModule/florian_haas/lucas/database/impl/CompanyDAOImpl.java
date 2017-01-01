@@ -31,6 +31,8 @@ public class CompanyDAOImpl extends DAOImpl<Company> implements CompanyDAO {
 					root.get(Company_.parentCompany));
 			getSingularRestriction(Company_.requiredEmployeesCount, requiredEmployeesCount, useRequiredEmployeesCount,
 					requiredEmployeesCountComparator, predicates, builder, root);
+			getSingularRestriction(Company_.requiredEmployeesCount, 0, useAreEmployeesRequired, EnumQueryComparator.GREATHER_THAN, predicates,
+					builder, root);
 
 			return predicates.toArray(new Predicate[predicates.size()]);
 		});
