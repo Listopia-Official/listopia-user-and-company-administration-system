@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+
+import florian_haas.lucas.util.validation.TypeNotNull;
 
 @Entity
 public class Item extends EntityBase {
@@ -12,6 +16,7 @@ public class Item extends EntityBase {
 
 	@Basic(optional = false)
 	@Column(nullable = false, unique = true)
+	@NotNull
 	private String name;
 
 	@Basic(optional = true)
@@ -20,14 +25,20 @@ public class Item extends EntityBase {
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
+	@Min(0)
 	private Integer itemsAvaible = 0;
 
 	@Basic(optional = false)
 	@Column(nullable = false, scale = 7, precision = 38)
+	@NotNull
+	@DecimalMin(value = "0", inclusive = false)
 	private BigDecimal pricePerItem;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "item")
-	private List<PurchaseLog> purchaseLogs = new ArrayList<>();
+	@Valid
+	@NotNull
+	private List<@TypeNotNull PurchaseLog> purchaseLogs = new ArrayList<>();
 
 	Item() {}
 
