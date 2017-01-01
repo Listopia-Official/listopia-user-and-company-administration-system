@@ -56,11 +56,11 @@ public class SalaryData extends EntityBase {
 		return Collections.unmodifiableSet(this.workShifts);
 	}
 
-	public boolean addWorkShift(EnumWorkShift workShift) {
+	public Boolean addWorkShift(EnumWorkShift workShift) {
 		return this.workShifts.add(workShift);
 	}
 
-	public boolean removeWorkShift(EnumWorkShift workShift) {
+	public Boolean removeWorkShift(EnumWorkShift workShift) {
 		return this.workShifts.remove(workShift);
 	}
 
@@ -68,11 +68,11 @@ public class SalaryData extends EntityBase {
 		return Collections.unmodifiableList(attendancedata);
 	}
 
-	public boolean addAttendancedata(SalaryAttendancedata attendancedata) {
+	public Boolean addAttendancedata(SalaryAttendancedata attendancedata) {
 		return this.attendancedata.add(attendancedata);
 	}
 
-	public boolean removeAttendancedata(SalaryAttendancedata attendancedata) {
+	public Boolean removeAttendancedata(SalaryAttendancedata attendancedata) {
 		return this.attendancedata.remove(attendancedata);
 	}
 }

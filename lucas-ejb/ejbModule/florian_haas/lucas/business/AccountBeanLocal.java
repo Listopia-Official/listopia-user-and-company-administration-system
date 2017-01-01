@@ -22,9 +22,9 @@ public interface AccountBeanLocal {
 	public Account transaction(@ValidEntityId(entityClass = Account.class) Long from, @ValidEntityId(entityClass = Account.class) Long to,
 			@ValidTransactionAmount BigDecimal amount, @ShortComment String comment);
 
-	public boolean blockAccount(@ValidEntityId(entityClass = Account.class) Long id);
+	public Boolean blockAccount(@ValidEntityId(entityClass = Account.class) Long id);
 
-	public boolean unblockAccount(@ValidEntityId(entityClass = Account.class) Long id);
+	public Boolean unblockAccount(@ValidEntityId(entityClass = Account.class) Long id);
 
 	public List<Account> findAll();
 

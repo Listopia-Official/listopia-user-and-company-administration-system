@@ -99,7 +99,7 @@ public class Attendancedata extends EntityBase {
 		return Collections.unmodifiableList(activityLogs);
 	}
 
-	public boolean addActivityLog(AttendanceActivityLog log) {
+	public Boolean addActivityLog(AttendanceActivityLog log) {
 		return this.activityLogs.add(log);
 	}
 
@@ -107,7 +107,7 @@ public class Attendancedata extends EntityBase {
 		return Collections.unmodifiableList(attendanceLogs);
 	}
 
-	public boolean addAttendanceLog(AttendanceLog log) {
+	public Boolean addAttendanceLog(AttendanceLog log) {
 		return this.attendanceLogs.add(log);
 	}
 }

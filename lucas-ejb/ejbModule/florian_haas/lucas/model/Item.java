@@ -89,7 +89,7 @@ public class Item extends EntityBase {
 		return purchaseLogs;
 	}
 
-	public boolean addPurchaseLog(PurchaseLog purchaseLog) {
+	public Boolean addPurchaseLog(PurchaseLog purchaseLog) {
 		return this.purchaseLogs.add(purchaseLog);
 	}
 }

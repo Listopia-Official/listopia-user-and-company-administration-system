@@ -86,11 +86,11 @@ public class Company extends AccountOwner {
 		return Collections.unmodifiableList(employees);
 	}
 
-	public boolean addEmployee(Employment employment) {
+	public Boolean addEmployee(Employment employment) {
 		return employees.add(employment);
 	}
 
-	public boolean removeEmployee(Employment employment) {
+	public Boolean removeEmployee(Employment employment) {
 		return employees.remove(employment);
 	}
 
@@ -173,11 +173,11 @@ public class Company extends AccountOwner {
 		return Collections.unmodifiableSet(childCompanies);
 	}
 
-	public boolean addChildCompany(Company childCompany) {
+	public Boolean addChildCompany(Company childCompany) {
 		return this.childCompanies.add(childCompany);
 	}
 
-	public boolean removeChildCompany(Company childCompany) {
+	public Boolean removeChildCompany(Company childCompany) {
 		return this.childCompanies.remove(childCompany);
 	}
 
@@ -189,7 +189,7 @@ public class Company extends AccountOwner {
 		this.requiredEmployeesCount = requiredEmployeesCount;
 	}
 
-	public boolean areEmployeesRequired() {
+	public Boolean areEmployeesRequired() {
 		return requiredEmployeesCount > 0;
 	}
 
@@ -197,11 +197,11 @@ public class Company extends AccountOwner {
 		return Collections.unmodifiableList(taxdata);
 	}
 
-	public boolean addTaxdata(Taxdata taxdata) {
+	public Boolean addTaxdata(Taxdata taxdata) {
 		return this.taxdata.add(taxdata);
 	}
 
-	public boolean removeTaxdata(Taxdata taxdata) {
+	public Boolean removeTaxdata(Taxdata taxdata) {
 		return this.taxdata.remove(taxdata);
 	}
 
@@ -209,7 +209,7 @@ public class Company extends AccountOwner {
 		return Collections.unmodifiableList(purchaseLogs);
 	}
 
-	public boolean addPurchaseLog(PurchaseLog purchaseLog) {
+	public Boolean addPurchaseLog(PurchaseLog purchaseLog) {
 		return this.purchaseLogs.add(purchaseLog);
 	}
 }

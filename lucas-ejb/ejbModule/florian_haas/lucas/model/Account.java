@@ -66,7 +66,7 @@ public class Account extends EntityBase {
 		return Collections.unmodifiableList(transactionLogs);
 	}
 
-	public boolean addTransactionLog(TransactionLog log) {
+	public Boolean addTransactionLog(TransactionLog log) {
 		return transactionLogs.add(log);
 	}
 

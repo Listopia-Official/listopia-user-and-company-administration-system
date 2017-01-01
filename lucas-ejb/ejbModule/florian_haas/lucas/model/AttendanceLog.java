@@ -67,7 +67,7 @@ public class AttendanceLog extends EntityBase {
 		return this.validTimeMissing;
 	}
 
-	public boolean hasMetRequirements() {
+	public Boolean hasMetRequirements() {
 		return (timePresent + validTimeMissing) >= minTimePresent;
 	}
 

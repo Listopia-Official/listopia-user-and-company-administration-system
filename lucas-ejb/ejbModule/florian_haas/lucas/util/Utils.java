@@ -19,23 +19,23 @@ public class Utils {
 		return Collections.unmodifiableMap(tmp);
 	}
 
-	public static boolean isLessThanZero(BigDecimal decimal) {
+	public static Boolean isLessThanZero(BigDecimal decimal) {
 		return decimal.compareTo(BigDecimal.ZERO) < 0;
 	}
 
-	public static boolean isGreatherThanZero(BigDecimal decimal) {
+	public static Boolean isGreatherThanZero(BigDecimal decimal) {
 		return decimal.compareTo(BigDecimal.ZERO) > 0;
 	}
 
-	public static boolean isGreatherEqualZero(BigDecimal decimal) {
+	public static Boolean isGreatherEqualZero(BigDecimal decimal) {
 		return decimal.compareTo(BigDecimal.ZERO) >= 0;
 	}
 
-	public static boolean isLessEqualZero(BigDecimal decimal) {
+	public static Boolean isLessEqualZero(BigDecimal decimal) {
 		return decimal.compareTo(BigDecimal.ZERO) <= 0;
 	}
 
-	public static boolean isZero(BigDecimal decimal) {
+	public static Boolean isZero(BigDecimal decimal) {
 		return decimal.compareTo(BigDecimal.ZERO) == 0;
 	}
 }

@@ -64,7 +64,7 @@ public class Stopwatch {
 		return this.tmpDuration;
 	}
 
-	public boolean isRunning() {
+	public Boolean isRunning() {
 		return this.running;
 	}
 }

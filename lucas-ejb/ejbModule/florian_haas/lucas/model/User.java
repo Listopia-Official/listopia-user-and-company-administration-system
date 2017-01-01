@@ -99,11 +99,11 @@ public class User extends AccountOwner {
 		return Collections.unmodifiableList(this.ranks);
 	}
 
-	public boolean addRank(String rank) {
+	public Boolean addRank(String rank) {
 		return this.ranks.add(rank);
 	}
 
-	public boolean removeRank(String rank) {
+	public Boolean removeRank(String rank) {
 		return this.ranks.remove(rank);
 	}
 
@@ -120,7 +120,7 @@ public class User extends AccountOwner {
 		return Collections.unmodifiableSet(userCards);
 	}
 
-	public boolean addUserCard(UserCard userCard) {
+	public Boolean addUserCard(UserCard userCard) {
 		return this.userCards.add(userCard);
 	}
 
@@ -128,7 +128,7 @@ public class User extends AccountOwner {
 		return Collections.unmodifiableSet(visa);
 	}
 
-	public boolean addVisa(Visa visa) {
+	public Boolean addVisa(Visa visa) {
 		return this.visa.add(visa);
 	}
 
@@ -136,11 +136,11 @@ public class User extends AccountOwner {
 		return Collections.unmodifiableSet(employments);
 	}
 
-	public boolean addEmployment(Employment employment) {
+	public Boolean addEmployment(Employment employment) {
 		return employments.add(employment);
 	}
 
-	public boolean removeEmployment(Employment employment) {
+	public Boolean removeEmployment(Employment employment) {
 		return employments.remove(employment);
 	}
 }

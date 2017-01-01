@@ -20,11 +20,11 @@ public interface UserBeanLocal {
 
 	public User findById(Long userId);
 
-	public List<User> findUsers(Long userId, String forename, String surname, Integer schoolGrade, String schoolClass,
-			EnumUserType userType, String[] ranks, Boolean useUserId, Boolean useForename, Boolean useSurname, Boolean useSchoolGrade,
-			Boolean useSchoolClass, Boolean useUserType, Boolean useRanks, EnumQueryComparator userIdComparator,
-			EnumQueryComparator forenameComparator, EnumQueryComparator surnameComparator, EnumQueryComparator schoolGradeComparator,
-			EnumQueryComparator schoolClassComparator, EnumQueryComparator ranksComparator);
+	public List<User> findUsers(Long userId, String forename, String surname, Integer schoolGrade, String schoolClass, EnumUserType userType,
+			String[] ranks, Boolean useUserId, Boolean useForename, Boolean useSurname, Boolean useSchoolGrade, Boolean useSchoolClass,
+			Boolean useUserType, Boolean useRanks, EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator,
+			EnumQueryComparator surnameComparator, EnumQueryComparator schoolGradeComparator, EnumQueryComparator schoolClassComparator,
+			EnumQueryComparator ranksComparator);
 
 	public User setForename(Long userId, String forename);
 
@@ -40,14 +40,14 @@ public interface UserBeanLocal {
 
 	public User addUserCard(Long userId);
 
-	public boolean blockUserCard(Long userId);
+	public Boolean blockUserCard(Long userId);
 
-	public boolean unblockUserCard(Long userId);
+	public Boolean unblockUserCard(Long userId);
 
 	public User addVisa(Long userId);
 
-	public boolean activateVisa(Long visaId);
+	public Boolean activateVisa(Long visaId);
 
-	public boolean deactivateVisa(Long visaId);
+	public Boolean deactivateVisa(Long visaId);
 
 }
