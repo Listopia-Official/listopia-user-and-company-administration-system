@@ -14,8 +14,12 @@ public interface GlobalDataBeanLocal {
 
 	public Long getMinTimePresent();
 
+	public BigDecimal getMinimumWage();
+
 	public void setSalary(EnumSalaryClass salaryClass, BigDecimal salary);
 
 	public void setMinTimePresent(Long minTimePresent);
+
+	public void setMinimumWage(BigDecimal minimumWage);
 
 }
