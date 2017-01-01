@@ -1,6 +1,7 @@
 package florian_haas.lucas.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class UserCard extends EntityBase {
@@ -9,10 +10,12 @@ public class UserCard extends EntityBase {
 
 	@ManyToOne
 	@JoinColumn(nullable = false)
+	@NotNull
 	private User user;
 
 	@Column(nullable = false)
 	@Basic(optional = false)
+	@NotNull
 	private Boolean blocked = Boolean.FALSE;
 
 	UserCard() {}

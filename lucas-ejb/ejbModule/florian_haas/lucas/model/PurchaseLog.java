@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
+
+import florian_haas.lucas.model.validation.ValidItemPrice;
 
 @Entity
 public class PurchaseLog extends EntityBase {
@@ -12,32 +15,38 @@ public class PurchaseLog extends EntityBase {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(nullable = false)
+	@NotNull
 	private Company company;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(nullable = false)
+	@NotNull
 	private Item item;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
 	private LocalDateTime dateTime;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
 	private EnumPayType payType;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
+	@Min(1)
 	private Integer count;
 
 	@Basic(optional = false)
 	@Column(nullable = false, scale = 7, precision = 38)
+	@ValidItemPrice
 	private BigDecimal currentPrice;
 
 	PurchaseLog() {}
 
-	public PurchaseLog(Company company, LocalDateTime dateTime, Item item, EnumPayType payType, Integer count,
-			BigDecimal currentPrice) {
+	public PurchaseLog(Company company, LocalDateTime dateTime, Item item, EnumPayType payType, Integer count, BigDecimal currentPrice) {
 		this.company = company;
 		this.dateTime = dateTime;
 		this.item = item;

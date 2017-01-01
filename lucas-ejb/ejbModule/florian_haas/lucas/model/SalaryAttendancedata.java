@@ -3,6 +3,7 @@ package florian_haas.lucas.model;
 import java.time.LocalDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class SalaryAttendancedata extends EntityBase {
@@ -11,18 +12,22 @@ public class SalaryAttendancedata extends EntityBase {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(nullable = false)
+	@NotNull
 	private SalaryData salaryData;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
 	private LocalDate date;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
 	private EnumWorkShift workShift;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
 	private Boolean wasPresent = Boolean.FALSE;
 
 	SalaryAttendancedata() {}

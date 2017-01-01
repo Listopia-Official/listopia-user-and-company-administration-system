@@ -3,6 +3,7 @@ package florian_haas.lucas.model;
 import java.time.LocalDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Visa extends EntityBase {
@@ -11,10 +12,12 @@ public class Visa extends EntityBase {
 
 	@ManyToOne
 	@JoinColumn(nullable = false)
+	@NotNull
 	private User user;
 
 	@Column(nullable = false)
 	@Basic(optional = false)
+	@NotNull
 	private Boolean activated = Boolean.FALSE;
 
 	private LocalDate validDay;

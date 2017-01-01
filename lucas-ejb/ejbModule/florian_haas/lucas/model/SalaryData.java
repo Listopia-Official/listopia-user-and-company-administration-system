@@ -3,6 +3,10 @@ package florian_haas.lucas.model;
 import java.util.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import florian_haas.lucas.util.validation.TypeNotNull;
 
 @Entity
 public class SalaryData extends EntityBase {
@@ -11,17 +15,22 @@ public class SalaryData extends EntityBase {
 
 	@OneToOne(mappedBy = "salaryData", optional = false)
 	@JoinColumn(nullable = false)
+	@NotNull
 	private Employment employment;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
 	private EnumSalaryClass salaryClass;
 
 	@ElementCollection
-	private Set<EnumWorkShift> workShifts = new HashSet<>();
+	@NotNull
+	private Set<@TypeNotNull EnumWorkShift> workShifts = new HashSet<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "salaryData")
-	private List<SalaryAttendancedata> attendancedata = new ArrayList<>();
+	@NotNull
+	@Valid
+	private List<@TypeNotNull SalaryAttendancedata> attendancedata = new ArrayList<>();
 
 	SalaryData() {}
 

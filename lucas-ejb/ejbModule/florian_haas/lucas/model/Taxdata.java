@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 @Entity
 public class Taxdata extends EntityBase {
@@ -12,18 +13,23 @@ public class Taxdata extends EntityBase {
 
 	@ManyToOne(optional = false)
 	@JoinColumn(nullable = false)
+	@NotNull
 	private Company company;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
+	@NotNull
 	private LocalDate date;
 
 	@Basic(optional = false)
 	@Column(nullable = false, precision = 38, scale = 7)
+	@NotNull
+	@DecimalMin(value = "0", inclusive = true)
 	private BigDecimal incomings;
 
 	@Basic(optional = false)
 	@Column(nullable = false, precision = 38, scale = 7)
+	@DecimalMin(value = "0", inclusive = true)
 	private BigDecimal outgoings;
 
 	Taxdata() {}

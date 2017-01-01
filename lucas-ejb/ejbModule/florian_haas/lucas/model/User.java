@@ -3,6 +3,10 @@ package florian_haas.lucas.model;
 import java.util.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+
+import florian_haas.lucas.util.validation.TypeNotNull;
 
 @Entity
 @DiscriminatorValue(value = "user")
@@ -12,23 +16,34 @@ public class User extends AccountOwner {
 
 	private String forename;
 	private String surname;
+
+	@Min(1)
 	private Integer schoolGrade;
 	private String schoolClass;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	private List<String> ranks = new ArrayList<>();
+	@NotNull
+	private List<@TypeNotNull String> ranks = new ArrayList<>();
 
 	@OneToOne(cascade = CascadeType.ALL, optional = true, orphanRemoval = true)
+	@Valid
+	@NotNull
 	private Attendancedata attendancedata;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user")
-	private Set<UserCard> userCards = new HashSet<>();
+	@Valid
+	@NotNull
+	private Set<@TypeNotNull UserCard> userCards = new HashSet<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user")
-	private Set<Visa> visa = new HashSet<>();
+	@Valid
+	@NotNull
+	private Set<@TypeNotNull Visa> visa = new HashSet<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user")
-	private Set<Employment> employments = new HashSet<>();
+	@Valid
+	@NotNull
+	private Set<@TypeNotNull Employment> employments = new HashSet<>();
 
 	User() {}
 
