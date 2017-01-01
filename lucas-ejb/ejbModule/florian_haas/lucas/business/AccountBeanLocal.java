@@ -4,29 +4,34 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import javax.ejb.Local;
+import javax.validation.constraints.NotNull;
 
 import florian_haas.lucas.database.EnumQueryComparator;
 import florian_haas.lucas.model.*;
+import florian_haas.lucas.model.validation.*;
 
 @Local
 public interface AccountBeanLocal {
 
-	public Account payIn(Long account, BigDecimal amount, String comment);
+	public Account payIn(@ValidEntityId(entityClass = Account.class) Long account, @ValidTransactionAmount BigDecimal amount,
+			@ShortComment String comment);
 
-	public Account payOut(Long account, BigDecimal amount, String comment);
+	public Account payOut(@ValidEntityId(entityClass = Account.class) Long account, @ValidTransactionAmount BigDecimal amount,
+			@ShortComment String comment);
 
-	public Account transaction(Long from, Long to, BigDecimal amount, String comment);
+	public Account transaction(@ValidEntityId(entityClass = Account.class) Long from, @ValidEntityId(entityClass = Account.class) Long to,
+			@ValidTransactionAmount BigDecimal amount, @ShortComment String comment);
 
-	public boolean blockAccount(Long id);
+	public boolean blockAccount(@ValidEntityId(entityClass = Account.class) Long id);
 
-	public boolean unblockAccount(Long id);
+	public boolean unblockAccount(@ValidEntityId(entityClass = Account.class) Long id);
 
 	public List<Account> findAll();
 
-	public Account findById(Long id);
+	public Account findById(@ValidEntityId(entityClass = Account.class) Long id);
 
-	public List<Account> findAccounts(Long id, EnumAccountOwnerType ownerType, BigDecimal bankBalance, Boolean blocked, Boolean useId,
-			Boolean useOwnerType, Boolean useBankBalance, Boolean useBlocked, EnumQueryComparator idComparator,
-			EnumQueryComparator bankBalanceComparator);
+	public List<Account> findAccounts(@NotNull Long id, @NotNull EnumAccountOwnerType ownerType, @NotNull BigDecimal bankBalance,
+			@NotNull Boolean blocked, @NotNull Boolean useId, @NotNull Boolean useOwnerType, @NotNull Boolean useBankBalance,
+			@NotNull Boolean useBlocked, EnumQueryComparator idComparator, EnumQueryComparator bankBalanceComparator);
 
 }
