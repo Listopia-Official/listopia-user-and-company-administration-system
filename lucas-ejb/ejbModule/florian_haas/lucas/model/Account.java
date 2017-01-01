@@ -8,7 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 import florian_haas.lucas.model.validation.*;
-import florian_haas.lucas.util.validation.NotNullCollection;
+import florian_haas.lucas.util.validation.TypeNotNull;
 
 @Entity
 public class Account extends EntityBase {
@@ -32,9 +32,9 @@ public class Account extends EntityBase {
 	private Boolean blocked = Boolean.FALSE;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "account")
-	@NotNullCollection
 	@Valid
-	private List<TransactionLog> transactionLogs = new ArrayList<>();
+	@NotNull
+	private List<@TypeNotNull TransactionLog> transactionLogs = new ArrayList<>();
 
 	Account() {}
 

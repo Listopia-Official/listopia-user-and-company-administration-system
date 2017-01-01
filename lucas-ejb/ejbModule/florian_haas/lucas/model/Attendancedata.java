@@ -7,7 +7,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import florian_haas.lucas.model.validation.ValidTimeMillis;
-import florian_haas.lucas.util.validation.NotNullCollection;
+import florian_haas.lucas.util.validation.TypeNotNull;
 
 @Entity
 public class Attendancedata extends EntityBase {
@@ -44,14 +44,14 @@ public class Attendancedata extends EntityBase {
 	private Stopwatch timeOut = new Stopwatch();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "attendancedata")
-	@NotNullCollection
+	@NotNull
 	@Valid
-	private List<AttendanceActivityLog> activityLogs = new ArrayList<>();
+	private List<@TypeNotNull AttendanceActivityLog> activityLogs = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "attendancedata")
-	@NotNullCollection
+	@NotNull
 	@Valid
-	private List<AttendanceLog> attendanceLogs = new ArrayList<>();
+	private List<@TypeNotNull AttendanceLog> attendanceLogs = new ArrayList<>();
 
 	Attendancedata() {}
 

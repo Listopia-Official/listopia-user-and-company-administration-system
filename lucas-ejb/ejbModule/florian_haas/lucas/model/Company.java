@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-import florian_haas.lucas.util.validation.NotNullCollection;
+import florian_haas.lucas.util.validation.TypeNotNull;
 
 @Entity
 @DiscriminatorValue(value = "company")
@@ -45,13 +45,13 @@ public class Company extends AccountOwner {
 	private Company parentCompany;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parentCompany")
-	@NotNullCollection
-	private Set<Company> childCompanies = new HashSet<>();
+	@NotNull
+	private Set<@TypeNotNull Company> childCompanies = new HashSet<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "company")
-	@NotNullCollection
+	@NotNull
 	@Valid
-	private List<Employment> employees = new ArrayList<>();
+	private List<@TypeNotNull Employment> employees = new ArrayList<>();
 
 	@Basic(optional = false)
 	@Column(nullable = false)
@@ -60,14 +60,14 @@ public class Company extends AccountOwner {
 	private Integer requiredEmployeesCount = 0;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "company")
-	@NotNullCollection
+	@NotNull
 	@Valid
-	private List<Taxdata> taxdata = new ArrayList<>();
+	private List<@TypeNotNull Taxdata> taxdata = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "company")
-	@NotNullCollection
+	@NotNull
 	@Valid
-	private List<PurchaseLog> purchaseLogs = new ArrayList<>();
+	private List<@TypeNotNull PurchaseLog> purchaseLogs = new ArrayList<>();
 
 	Company() {}
 
