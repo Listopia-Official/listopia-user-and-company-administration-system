@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
+import florian_haas.lucas.model.validation.ValidItemPrice;
 import florian_haas.lucas.util.validation.TypeNotNull;
 
 @Entity
@@ -31,8 +32,7 @@ public class Item extends EntityBase {
 
 	@Basic(optional = false)
 	@Column(nullable = false, scale = 7, precision = 38)
-	@NotNull
-	@DecimalMin(value = "0", inclusive = false)
+	@ValidItemPrice
 	private BigDecimal pricePerItem;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "item")
