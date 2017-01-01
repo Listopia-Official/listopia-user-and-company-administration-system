@@ -8,7 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 import florian_haas.lucas.model.validation.ValidItemPrice;
-import florian_haas.lucas.util.validation.TypeNotNull;
+import florian_haas.lucas.util.validation.*;
 
 @Entity
 public class Item extends EntityBase {
@@ -18,10 +18,12 @@ public class Item extends EntityBase {
 	@Basic(optional = false)
 	@Column(nullable = false, unique = true)
 	@NotNull
+	@NotBlankString
 	private String name;
 
 	@Basic(optional = true)
 	@Column(nullable = true)
+	@NotBlankString
 	private String description;
 
 	@Basic(optional = false)

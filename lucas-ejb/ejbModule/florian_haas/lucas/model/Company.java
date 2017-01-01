@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-import florian_haas.lucas.util.validation.TypeNotNull;
+import florian_haas.lucas.util.validation.*;
 
 @Entity
 @DiscriminatorValue(value = "company")
@@ -17,16 +17,19 @@ public class Company extends AccountOwner {
 	@Basic(optional = false)
 	@Column(nullable = false, unique = true)
 	@NotNull
+	@NotBlankString
 	private String name;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
 	@NotNull
+	@NotBlankString
 	private String description;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
 	@NotNull
+	@NotBlankString
 	private String room;
 
 	@Basic(optional = false)

@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-import florian_haas.lucas.util.validation.TypeNotNull;
+import florian_haas.lucas.util.validation.*;
 
 @Entity
 @DiscriminatorValue(value = "user")
@@ -14,11 +14,16 @@ public class User extends AccountOwner {
 
 	private static final long serialVersionUID = -2632198556827472552L;
 
+	@NotBlankString
 	private String forename;
+
+	@NotBlankString
 	private String surname;
 
 	@Min(1)
 	private Integer schoolGrade;
+
+	@NotBlankString
 	private String schoolClass;
 
 	@ElementCollection(fetch = FetchType.EAGER)
