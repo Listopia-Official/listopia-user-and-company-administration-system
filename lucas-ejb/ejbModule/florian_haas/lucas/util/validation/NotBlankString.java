@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 import javax.validation.*;
 
 @Target({
-		FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, CONSTRUCTOR })
+		FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, CONSTRUCTOR, TYPE_USE })
 @Retention(RUNTIME)
 @Constraint(validatedBy = NotBlankStringValidator.class)
 @Documented
