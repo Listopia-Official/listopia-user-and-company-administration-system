@@ -14,6 +14,8 @@ public interface ReadOnlyDAO<E extends EntityBase> {
 
 	public Class<E> getEntityClass();
 
+	public List<Long> findAllIds();
+
 	public List<E> findAll();
 
 	public E findById(Long id);

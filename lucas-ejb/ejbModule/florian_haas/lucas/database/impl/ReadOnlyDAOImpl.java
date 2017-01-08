@@ -37,6 +37,11 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 	}
 
 	@Override
+	public List<Long> findAllIds() {
+		return manager.createQuery("SELECT e.id FROM " + entityClass.getSimpleName() + " e", Long.class).getResultList();
+	}
+
+	@Override
 	public List<E> findAll() {
 		return readOnlyJPQLQuery("SELECT e FROM " + entityClass.getSimpleName() + " e");
 	}
