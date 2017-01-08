@@ -3,28 +3,31 @@ package florian_haas.lucas.business;
 import java.util.List;
 
 import javax.ejb.Local;
+import javax.validation.constraints.NotNull;
 
 import florian_haas.lucas.database.EnumQueryComparator;
-import florian_haas.lucas.model.Attendancedata;
+import florian_haas.lucas.model.*;
+import florian_haas.lucas.model.validation.ValidEntityId;
 
 @Local
 public interface AttendanceBeanLocal {
 
-	public Boolean scan(Long userCardId);
+	public Boolean scan(@ValidEntityId(entityClass = UserCard.class) Long userCardId);
 
 	public void evaluateAll();
 
 	public List<Attendancedata> findAll();
 
-	public Attendancedata findById(Long id);
+	public Attendancedata findById(@ValidEntityId(entityClass = Attendancedata.class) Long id);
 
-	public Attendancedata findByUserId(Long userId);
+	public Attendancedata findByUserId(@ValidEntityId(entityClass = User.class) Long userId);
 
-	public Attendancedata findByUserCardId(Long userCardId);
+	public Attendancedata findByUserCardId(@ValidEntityId(entityClass = UserCard.class) Long userCardId);
 
-	public List<Attendancedata> findAttendancedata(Long id, Long userId, Long userCardId, Boolean isUserInState, Long timePresentDay,
-			Long validTimeMissing, Boolean useId, Boolean useUserId, Boolean useUserCardId, Boolean useIsUserInState, Boolean useTimePresentDay,
-			Boolean useVaidTimeMissing, EnumQueryComparator idComparator, EnumQueryComparator userIdComparator,
+	public List<Attendancedata> findAttendancedata(@NotNull Long id, @NotNull Long userId, @NotNull Long userCardId, @NotNull Boolean isUserInState,
+			@NotNull Long timePresentDay, @NotNull Long validTimeMissing, @NotNull Boolean useId, @NotNull Boolean useUserId,
+			@NotNull Boolean useUserCardId, @NotNull Boolean useIsUserInState, @NotNull Boolean useTimePresentDay,
+			@NotNull Boolean useVaidTimeMissing, EnumQueryComparator idComparator, EnumQueryComparator userIdComparator,
 			EnumQueryComparator userCardIdComparator, EnumQueryComparator timePresentDayComparator, EnumQueryComparator validTimeMissingComparator);
 
 }

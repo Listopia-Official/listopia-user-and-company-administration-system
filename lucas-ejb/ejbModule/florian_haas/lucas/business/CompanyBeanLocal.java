@@ -5,47 +5,58 @@ import java.time.LocalDate;
 import java.util.List;
 
 import javax.ejb.Local;
+import javax.validation.constraints.*;
 
 import florian_haas.lucas.database.EnumQueryComparator;
 import florian_haas.lucas.model.*;
+import florian_haas.lucas.model.validation.ValidEntityId;
+import florian_haas.lucas.util.validation.*;
 
 @Local
 public interface CompanyBeanLocal {
 
-	public Company createCompany(String name, String description, String room, String section, EnumCompanyType companyType,
-			List<Employment> managers, Integer requiredEmployeesCount);
+	public Company createCompany(@NotNull @NotBlankString String name, @NotNull @NotBlankString String description,
+			@NotNull @NotBlankString String room, @NotNull @Min(value = 0) Integer section, @NotNull EnumCompanyType companyType,
+			List<@TypeNotNull Employment> managers, @NotNull @Min(value = 0) Integer requiredEmployeesCount);
 
 	public List<Company> findAll();
 
-	public Company findById(Long companyId);
+	public Company findById(@ValidEntityId(entityClass = Company.class) Long companyId);
 
-	public List<Company> findCompanies(Long companyId, String name, String description, String room, Integer section,
-			EnumCompanyType companyType, Long parentCompanyId, Integer requiredEmployeesCount, Boolean areEmployeesRequired,
-			Boolean useId, Boolean useName, Boolean useDescription, Boolean useRoom, Boolean useSection, Boolean useCompanyType,
-			Boolean useParentCompanyId, Boolean useRequiredEmployeesCount, Boolean useAreEmployeesRequired,
-			EnumQueryComparator idComparator, EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator,
-			EnumQueryComparator roomComparator, EnumQueryComparator sectionComparator, EnumQueryComparator companyTypeComparator,
-			EnumQueryComparator parentCompanyIdComparator, EnumQueryComparator requiredEmployeesCountComparator);
+	public List<Company> findCompanies(@NotNull Long companyId, @NotNull String name, @NotNull String description, @NotNull String room,
+			@NotNull Integer section, @NotNull EnumCompanyType companyType, @NotNull Long parentCompanyId, @NotNull Integer requiredEmployeesCount,
+			@NotNull Boolean areEmployeesRequired, @NotNull Boolean useId, @NotNull Boolean useName, @NotNull Boolean useDescription,
+			@NotNull Boolean useRoom, @NotNull Boolean useSection, @NotNull Boolean useCompanyType, @NotNull Boolean useParentCompanyId,
+			@NotNull Boolean useRequiredEmployeesCount, @NotNull Boolean useAreEmployeesRequired, EnumQueryComparator idComparator,
+			EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator, EnumQueryComparator roomComparator,
+			EnumQueryComparator sectionComparator, EnumQueryComparator companyTypeComparator, EnumQueryComparator parentCompanyIdComparator,
+			EnumQueryComparator requiredEmployeesCountComparator);
 
-	public Company setName(Long companyId, String name);
+	public Company setName(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String name);
 
-	public Company setDescription(Long companyId, String description);
+	public Company setDescription(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String description);
 
-	public Company setRoom(Long companyId, String room);
+	public Company setRoom(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String room);
 
-	public Company setSection(Long companyId, Integer section);
+	public Company setSection(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @Min(value = 0) Integer section);
 
-	public Company setCompanyType(Long companyId, EnumCompanyType companyType);
+	public Company setCompanyType(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull EnumCompanyType companyType);
 
-	public Company setParentCompany(Long companyId, Long parentCompanyId);
+	public Company setParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId,
+			@ValidEntityId(entityClass = Company.class) Long parentCompanyId);
 
-	public Company setRequiredEmployeesCount(Long companyId, Integer requiredEmployeesCount);
+	public Company setRequiredEmployeesCount(@ValidEntityId(entityClass = Company.class) Long companyId,
+			@NotNull @Min(value = 0) Integer requiredEmployeesCount);
 
-	public Company addTaxdata(Long companyId, LocalDate date, BigDecimal incomings, BigDecimal outgoings);
+	public Company addTaxdata(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull LocalDate date,
+			@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal incomings,
+			@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal outgoings);
 
-	public Taxdata setDate(Long taxdataId, LocalDate date);
+	public Taxdata setDate(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId, @NotNull LocalDate date);
 
-	public Taxdata setIncomings(Long taxdataId, BigDecimal incomings);
+	public Taxdata setIncomings(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId,
+			@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal incomings);
 
-	public Taxdata setOutgoings(Long taxdataId, BigDecimal outgoings);
+	public Taxdata setOutgoings(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId,
+			@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal outgoings);
 }

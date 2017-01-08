@@ -3,35 +3,45 @@ package florian_haas.lucas.business;
 import java.time.LocalDate;
 
 import javax.ejb.Local;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 import florian_haas.lucas.model.*;
+import florian_haas.lucas.model.validation.ValidEntityId;
 
 @Local
 public interface EmploymentBeanLocal {
 
-	public Employment addDefaultEmployment(Long userId, Long companyId, EnumEmployeePosition position);
+	public Employment addDefaultEmployment(@ValidEntityId(entityClass = User.class) Long userId,
+			@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull EnumEmployeePosition position);
 
-	public Employment addAdvancedEmployment(Long userId, Long companyId, EnumEmployeePosition position, EnumSalaryClass salaryClass,
-			EnumWorkShift... workShifts);
+	public Employment addAdvancedEmployment(@ValidEntityId(entityClass = User.class) Long userId,
+			@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull EnumEmployeePosition position, @NotNull EnumSalaryClass salaryClass,
+			@NotEmpty EnumWorkShift... workShifts);
 
-	public void removeEmployment(Long employmentId);
+	public void removeEmployment(@ValidEntityId(entityClass = Employment.class) Long employmentId);
 
-	public Employment setEmployeePosition(Long employmentId, EnumEmployeePosition position);
+	public Employment setEmployeePosition(@ValidEntityId(entityClass = User.class) Long employmentId, @NotNull EnumEmployeePosition position);
 
-	public SalaryData setSalaryClass(Long salaryDataId, EnumSalaryClass salaryClass);
+	public SalaryData setSalaryClass(@ValidEntityId(entityClass = SalaryData.class) Long salaryDataId, @NotNull EnumSalaryClass salaryClass);
 
-	public SalaryData setWorkShifts(Long salaryDataId, EnumWorkShift... workShifts);
+	public SalaryData setWorkShifts(@ValidEntityId(entityClass = SalaryData.class) Long salaryDataId, @NotEmpty EnumWorkShift... workShifts);
 
-	public SalaryData addAttendancedata(Long salaryDataId, LocalDate date, EnumWorkShift workShift, Boolean wasPresent);
+	public SalaryData addAttendancedata(@ValidEntityId(entityClass = SalaryData.class) Long salaryDataId, @NotNull LocalDate date,
+			@NotNull EnumWorkShift workShift, @NotNull Boolean wasPresent);
 
-	public SalaryData setAttendancedataDate(Long attendancedataId, LocalDate date);
+	public SalaryData setAttendancedataDate(@ValidEntityId(entityClass = SalaryAttendancedata.class) Long attendancedataId, @NotNull LocalDate date);
 
-	public SalaryData setAttendancedataShift(Long attendancedataId, EnumWorkShift shift);
+	public SalaryData setAttendancedataShift(@ValidEntityId(entityClass = SalaryAttendancedata.class) Long attendancedataId,
+			@NotNull EnumWorkShift shift);
 
-	public SalaryData setAttendancedataWasPresent(Long attendancedataId, Boolean wasPresent);
+	public SalaryData setAttendancedataWasPresent(@ValidEntityId(entityClass = SalaryAttendancedata.class) Long attendancedataId,
+			@NotNull Boolean wasPresent);
 
-	public SalaryData removeAttendancedata(Long salaryDataId, Long attendancedataKey);
+	public SalaryData removeAttendancedata(@ValidEntityId(entityClass = SalaryData.class) Long salaryDataId,
+			@ValidEntityId(entityClass = SalaryAttendancedata.class) Long attendancedataKey);
 
-	public void paySalary(Company company, LocalDate date, EnumWorkShift shift);
+	public void paySalary(@ValidEntityId(entityClass = Company.class) Company company, @NotNull LocalDate date, @NotNull EnumWorkShift shift);
 
 }
