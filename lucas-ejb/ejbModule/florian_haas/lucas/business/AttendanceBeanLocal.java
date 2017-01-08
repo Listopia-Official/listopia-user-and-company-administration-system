@@ -24,10 +24,9 @@ public interface AttendanceBeanLocal {
 
 	public Attendancedata findByUserCardId(@ValidEntityId(entityClass = UserCard.class) Long userCardId);
 
-	public List<Attendancedata> findAttendancedata(@NotNull Long id, @NotNull Long userId, @NotNull Long userCardId, @NotNull Boolean isUserInState,
-			@NotNull Long timePresentDay, @NotNull Long validTimeMissing, @NotNull Boolean useId, @NotNull Boolean useUserId,
-			@NotNull Boolean useUserCardId, @NotNull Boolean useIsUserInState, @NotNull Boolean useTimePresentDay,
-			@NotNull Boolean useVaidTimeMissing, EnumQueryComparator idComparator, EnumQueryComparator userIdComparator,
-			EnumQueryComparator userCardIdComparator, EnumQueryComparator timePresentDayComparator, EnumQueryComparator validTimeMissingComparator);
+	public List<Attendancedata> findAttendancedata(@NotNull Long id, @NotNull Boolean isUserInState, @NotNull Long timePresentDay,
+			@NotNull Long validTimeMissing, @NotNull Boolean useId, @NotNull Boolean useIsUserInState, @NotNull Boolean useTimePresentDay,
+			@NotNull Boolean useVaidTimeMissing, EnumQueryComparator idComparator, EnumQueryComparator timePresentDayComparator,
+			EnumQueryComparator validTimeMissingComparator);
 
 }
