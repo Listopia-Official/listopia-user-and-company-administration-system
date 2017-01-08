@@ -14,7 +14,7 @@ public interface AttendanceBeanLocal {
 
 	public Boolean scan(@ValidEntityId(entityClass = UserCard.class) Long userCardId);
 
-	public void evaluateAll();
+	public Integer evaluateAll();
 
 	public List<Attendancedata> findAll();
 
