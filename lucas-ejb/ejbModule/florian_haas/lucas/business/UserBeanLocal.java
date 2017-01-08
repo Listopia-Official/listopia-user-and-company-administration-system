@@ -32,9 +32,9 @@ public interface UserBeanLocal {
 			EnumQueryComparator forenameComparator, EnumQueryComparator surnameComparator, EnumQueryComparator schoolGradeComparator,
 			EnumQueryComparator schoolClassComparator, EnumQueryComparator ranksComparator);
 
-	public User setForename(@ValidEntityId(entityClass = User.class) Long userId, String forename);
+	public User setForename(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String forename);
 
-	public User setSurname(@ValidEntityId(entityClass = User.class) Long userId, String surname);
+	public User setSurname(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String surname);
 
 	public User setSchoolGrade(@ValidEntityId(entityClass = User.class) Long userId, @Min(1) Integer schoolGrade);
 
