@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import florian_haas.lucas.model.validation.UniqueValue;
 import florian_haas.lucas.util.validation.TypeNotNull;
 
 @Entity
@@ -29,6 +30,7 @@ public class SalaryData extends EntityBase {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "salaryData")
 	@NotNull
+	@UniqueValue(fieldName = "date")
 	@Valid
 	private List<@TypeNotNull SalaryAttendancedata> attendancedata = new ArrayList<>();
 

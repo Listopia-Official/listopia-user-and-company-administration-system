@@ -1,9 +1,12 @@
 package florian_haas.lucas.model;
 
 import java.time.LocalDate;
+import java.util.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import florian_haas.lucas.util.validation.TypeNotNull;
 
 @Entity
 public class SalaryAttendancedata extends EntityBase {
@@ -20,23 +23,19 @@ public class SalaryAttendancedata extends EntityBase {
 	@NotNull
 	private LocalDate date;
 
-	@Basic(optional = false)
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(nullable = false)
 	@NotNull
-	private EnumWorkShift workShift;
-
-	@Basic(optional = false)
-	@Column(nullable = false)
-	@NotNull
-	private Boolean wasPresent = Boolean.FALSE;
+	private Map<EnumWorkShift, @TypeNotNull Boolean> workShifts = new HashMap<>();
 
 	SalaryAttendancedata() {}
 
-	public SalaryAttendancedata(SalaryData salaryData, LocalDate date, EnumWorkShift workShift, Boolean wasPresent) {
+	public SalaryAttendancedata(SalaryData salaryData, LocalDate date) {
 		this.salaryData = salaryData;
 		this.date = date;
-		this.workShift = workShift;
-		this.wasPresent = wasPresent;
+		salaryData.getWorkShifts().forEach(shift -> {
+			workShifts.put(shift, Boolean.FALSE);
+		});
 	}
 
 	public SalaryData getSalaryData() {
@@ -51,20 +50,14 @@ public class SalaryAttendancedata extends EntityBase {
 		this.date = date;
 	}
 
-	public EnumWorkShift getWorkShift() {
-		return this.workShift;
+	public Map<EnumWorkShift, Boolean> getWorkShifts() {
+		return Collections.unmodifiableMap(this.workShifts);
 	}
 
-	public void setWorkShift(EnumWorkShift workShift) {
-		this.workShift = workShift;
-	}
-
-	public Boolean getWasPresent() {
-		return this.wasPresent;
-	}
-
-	public void setWasPresent(Boolean wasPresent) {
-		this.wasPresent = wasPresent;
+	public void setWasPresent(EnumWorkShift shift, Boolean wasPresent) {
+		if (workShifts.get(shift) != null) {
+			workShifts.replace(shift, wasPresent);
+		}
 	}
 
 }
