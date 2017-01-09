@@ -11,6 +11,7 @@ import javax.validation.executable.*;
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.ValidEntityId;
+import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.util.validation.*;
 
 @Stateless
@@ -70,38 +71,41 @@ public class ItemBean implements ItemBeanLocal {
 	}
 
 	@Override
-	public Item setName(@ValidEntityId(entityClass = Item.class) Long itemId, @NotBlankString String name) {
+	public Boolean setName(@ValidEntityId(entityClass = Item.class) Long itemId, @NotBlankString String name) {
 		Item item = itemDao.findById(itemId);
+		if (item.getName().equals(name)) return Boolean.FALSE;
 		item.setName(name);
-		return item;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public Item setDescription(@ValidEntityId(entityClass = Item.class) Long itemId, @NotBlankString String description) {
+	public Boolean setDescription(@ValidEntityId(entityClass = Item.class) Long itemId, @NotBlankString String description) {
 		Item item = itemDao.findById(itemId);
+		if (item.getDescription().equals(description)) return Boolean.FALSE;
 		item.setDescription(description);
-		return item;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public Item setPricePerItem(@ValidEntityId(entityClass = Item.class) Long itemId, BigDecimal pricePerItem) {
+	public Boolean setPricePerItem(@ValidEntityId(entityClass = Item.class) Long itemId, BigDecimal pricePerItem) {
 		Item item = itemDao.findById(itemId);
+		if (Utils.isEqual(item.getPricePerItem(), pricePerItem)) return Boolean.FALSE;
 		item.setPricePerItem(pricePerItem);
-		return item;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public Item addItemsAvaible(@ValidEntityId(entityClass = Item.class) Long itemId, Integer amount) {
+	public Boolean addItemsAvaible(@ValidEntityId(entityClass = Item.class) Long itemId, Integer amount) {
 		Item item = itemDao.findById(itemId);
 		item.setItemsAvaible(item.getItemsAvaible() + amount);
-		return item;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public Item subItemsAvaible(@ValidEntityId(entityClass = Item.class) Long itemId, Integer amount) {
+	public Boolean subItemsAvaible(@ValidEntityId(entityClass = Item.class) Long itemId, Integer amount) {
 		Item item = itemDao.findById(itemId);
 		item.setItemsAvaible(item.getItemsAvaible() - amount);
-		return item;
+		return Boolean.TRUE;
 	}
 
 }

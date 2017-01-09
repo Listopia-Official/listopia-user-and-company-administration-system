@@ -13,6 +13,7 @@ import javax.validation.executable.*;
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.ValidEntityId;
+import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.util.validation.*;
 
 @Stateless
@@ -64,98 +65,107 @@ public class CompanyBean implements CompanyBeanLocal {
 	}
 
 	@Override
-	public Company setName(@ValidEntityId(entityClass = Company.class) Long companyId, @NotBlankString String name) {
+	public Boolean setName(@ValidEntityId(entityClass = Company.class) Long companyId, @NotBlankString String name) {
 		Company comp = findById(companyId);
+		if (comp.getName().equals(name)) return Boolean.FALSE;
 		comp.setName(name);
-		return comp;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public Company setDescription(@ValidEntityId(entityClass = Company.class) Long companyId, @NotBlankString String description) {
+	public Boolean setDescription(@ValidEntityId(entityClass = Company.class) Long companyId, @NotBlankString String description) {
 		Company comp = companyDao.findById(companyId);
+		if (comp.getDescription().equals(description)) return Boolean.FALSE;
 		comp.setDescription(description);
-		return comp;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public Company setRoom(@ValidEntityId(entityClass = Company.class) Long companyId, @NotBlankString String room) {
+	public Boolean setRoom(@ValidEntityId(entityClass = Company.class) Long companyId, @NotBlankString String room) {
 		Company comp = companyDao.findById(companyId);
+		if (comp.getRoom().equals(room)) return Boolean.FALSE;
 		comp.setRoom(room);
-		return comp;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public Company setSection(@ValidEntityId(entityClass = Company.class) Long companyId, Integer section) {
+	public Boolean setSection(@ValidEntityId(entityClass = Company.class) Long companyId, Integer section) {
 		Company comp = companyDao.findById(companyId);
+		if (comp.getSection().equals(section)) return Boolean.FALSE;
 		comp.setSection(section);
-		return comp;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public Company setCompanyType(@ValidEntityId(entityClass = Company.class) Long companyId, EnumCompanyType companyType) {
+	public Boolean setCompanyType(@ValidEntityId(entityClass = Company.class) Long companyId, EnumCompanyType companyType) {
 		Company comp = companyDao.findById(companyId);
+		if (comp.getCompanyType().equals(companyType)) return Boolean.FALSE;
 		comp.setCompanyType(companyType);
-		return comp;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public Company setParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId,
+	public Boolean setParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId,
 			@ValidEntityId(entityClass = Company.class) Long parentCompanyId) {
 		return setParentCompanyHelper(companyId, parentCompanyId);
 	}
 
 	@Override
-	public Company removeParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId) {
+	public Boolean removeParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId) {
 		return setParentCompanyHelper(companyId, null);
 	}
 
-	private Company setParentCompanyHelper(Long companyId, Long newParentCompany) {
+	private Boolean setParentCompanyHelper(Long companyId, Long newParentCompany) {
 		Company comp = companyDao.findById(companyId);
 		Company parent = newParentCompany != null ? findById(newParentCompany) : null;
+		if (comp.getParentCompany().equals(parent)) return Boolean.FALSE;
 		if (comp.getParentCompany() != null) {
 			Company parent2 = comp.getParentCompany();
 			parent2.removeChildCompany(comp);
 		}
 		comp.setParentCompany(parent);
 		if (parent != null) parent.addChildCompany(comp);
-		return comp;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public Company setRequiredEmployeesCount(@ValidEntityId(entityClass = Company.class) Long companyId, Integer requiredEmployeesCount) {
+	public Boolean setRequiredEmployeesCount(@ValidEntityId(entityClass = Company.class) Long companyId, Integer requiredEmployeesCount) {
 		Company comp = companyDao.findById(companyId);
+		if (comp.getRequiredEmployeesCount().equals(requiredEmployeesCount)) return Boolean.FALSE;
 		comp.setRequiredEmployeesCount(requiredEmployeesCount);
-		return comp;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public Company addTaxdata(@ValidEntityId(entityClass = Company.class) Long companyId, LocalDate date, BigDecimal incomings,
+	public Boolean addTaxdata(@ValidEntityId(entityClass = Company.class) Long companyId, LocalDate date, BigDecimal incomings,
 			BigDecimal outgoings) {
 		Company comp = companyDao.findById(companyId);
 		Taxdata taxdata = new Taxdata(comp, date, incomings, outgoings);
 		comp.addTaxdata(taxdata);
-		return comp;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public void removeTaxdata(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId) {
+	public Boolean removeTaxdata(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId) {
 		Taxdata taxdata = taxdataDao.findById(taxdataId);
 		Company comp = taxdata.getCompany();
-		comp.removeTaxdata(taxdata);
+		return comp.removeTaxdata(taxdata);
 	}
 
 	@Override
-	public Taxdata setIncomings(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId, BigDecimal incomings) {
+	public Boolean setIncomings(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId, BigDecimal incomings) {
 		Taxdata taxdata = taxdataDao.findById(taxdataId);
+		if (Utils.isEqual(taxdata.getIncomings(), incomings)) return Boolean.FALSE;
 		taxdata.setIncomings(incomings);
-		return taxdata;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public Taxdata setOutgoings(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId, BigDecimal outgoings) {
+	public Boolean setOutgoings(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId, BigDecimal outgoings) {
 		Taxdata taxdata = taxdataDao.findById(taxdataId);
+		if (Utils.isEqual(taxdata.getOutgoings(), outgoings)) return Boolean.FALSE;
 		taxdata.setOutgoings(outgoings);
-		return taxdata;
+		return Boolean.TRUE;
 	}
 
 }

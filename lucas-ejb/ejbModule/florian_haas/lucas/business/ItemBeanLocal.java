@@ -26,13 +26,13 @@ public interface ItemBeanLocal {
 			@NotNull Boolean useItemsAvaible, @NotNull Boolean usePricePerItem, EnumQueryComparator idComparator, EnumQueryComparator nameComparator,
 			EnumQueryComparator descriptionComparator, EnumQueryComparator itemsAvaibleComparator, EnumQueryComparator pricePerItemComparator);
 
-	public Item setName(@ValidEntityId(entityClass = Item.class) Long itemId, @NotNull @NotBlankString String name);
+	public Boolean setName(@ValidEntityId(entityClass = Item.class) Long itemId, @NotNull @NotBlankString String name);
 
-	public Item setDescription(@ValidEntityId(entityClass = Item.class) Long itemId, @NotBlankString String description);
+	public Boolean setDescription(@ValidEntityId(entityClass = Item.class) Long itemId, @NotBlankString String description);
 
-	public Item addItemsAvaible(@ValidEntityId(entityClass = Item.class) Long itemId, @NotNull @Min(1) Integer amount);
+	public Boolean addItemsAvaible(@ValidEntityId(entityClass = Item.class) Long itemId, @NotNull @Min(1) Integer amount);
 
-	public Item subItemsAvaible(@ValidEntityId(entityClass = Item.class) Long itemId, @NotNull @Min(1) Integer amount);
+	public Boolean subItemsAvaible(@ValidEntityId(entityClass = Item.class) Long itemId, @NotNull @Min(1) Integer amount);
 
-	public Item setPricePerItem(@ValidEntityId(entityClass = Item.class) Long itemId, @ValidItemPrice BigDecimal pricePerItem);
+	public Boolean setPricePerItem(@ValidEntityId(entityClass = Item.class) Long itemId, @ValidItemPrice BigDecimal pricePerItem);
 }

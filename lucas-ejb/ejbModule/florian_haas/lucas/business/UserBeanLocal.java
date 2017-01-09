@@ -33,24 +33,24 @@ public interface UserBeanLocal {
 			EnumQueryComparator forenameComparator, EnumQueryComparator surnameComparator, EnumQueryComparator schoolGradeComparator,
 			EnumQueryComparator schoolClassComparator, EnumQueryComparator ranksComparator);
 
-	public User setForename(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String forename);
+	public Boolean setForename(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String forename);
 
-	public User setSurname(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String surname);
+	public Boolean setSurname(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String surname);
 
-	public User setSchoolGrade(@ValidEntityId(entityClass = User.class) Long userId, @Min(1) Integer schoolGrade);
+	public Boolean setSchoolGrade(@ValidEntityId(entityClass = User.class) Long userId, @Min(1) Integer schoolGrade);
 
-	public User setSchoolClass(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String schoolClass);
+	public Boolean setSchoolClass(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String schoolClass);
 
-	public User addRank(@ValidEntityId(entityClass = User.class) Long userId, @NotNull @NotBlankString String rank);
+	public Boolean addRank(@ValidEntityId(entityClass = User.class) Long userId, @NotNull @NotBlankString String rank);
 
-	public User removeRank(@ValidEntityId(entityClass = User.class) Long userId, @NotNull @NotBlankString String rank);
+	public Boolean removeRank(@ValidEntityId(entityClass = User.class) Long userId, @NotNull @NotBlankString String rank);
 
-	public User addUserCard(@ValidEntityId(entityClass = User.class) Long userId);
+	public Boolean addUserCard(@ValidEntityId(entityClass = User.class) Long userId);
 
 	public Boolean blockUserCard(@ValidEntityId(entityClass = UserCard.class) Long userCardId);
 
 	public Boolean unblockUserCard(@ValidEntityId(entityClass = UserCard.class) Long userCardId);
 
-	public UserCard setValidDate(@ValidEntityId(entityClass = UserCard.class) Long userCardId, LocalDate validDate);
+	public Boolean setValidDate(@ValidEntityId(entityClass = UserCard.class) Long userCardId, LocalDate validDate);
 
 }

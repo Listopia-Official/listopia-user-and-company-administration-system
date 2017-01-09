@@ -32,33 +32,33 @@ public interface CompanyBeanLocal {
 			EnumQueryComparator sectionComparator, EnumQueryComparator companyTypeComparator, EnumQueryComparator parentCompanyIdComparator,
 			EnumQueryComparator requiredEmployeesCountComparator);
 
-	public Company setName(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String name);
+	public Boolean setName(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String name);
 
-	public Company setDescription(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String description);
+	public Boolean setDescription(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String description);
 
-	public Company setRoom(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String room);
+	public Boolean setRoom(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String room);
 
-	public Company setSection(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @Min(value = 0) Integer section);
+	public Boolean setSection(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @Min(value = 0) Integer section);
 
-	public Company setCompanyType(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull EnumCompanyType companyType);
+	public Boolean setCompanyType(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull EnumCompanyType companyType);
 
-	public Company setParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId,
+	public Boolean setParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId,
 			@ValidEntityId(entityClass = Company.class) Long parentCompanyId);
 
-	public Company removeParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId);
+	public Boolean removeParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId);
 
-	public Company setRequiredEmployeesCount(@ValidEntityId(entityClass = Company.class) Long companyId,
+	public Boolean setRequiredEmployeesCount(@ValidEntityId(entityClass = Company.class) Long companyId,
 			@NotNull @Min(value = 0) Integer requiredEmployeesCount);
 
-	public Company addTaxdata(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull LocalDate date,
+	public Boolean addTaxdata(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull LocalDate date,
 			@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal incomings,
 			@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal outgoings);
 
-	public void removeTaxdata(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId);
+	public Boolean removeTaxdata(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId);
 
-	public Taxdata setIncomings(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId,
+	public Boolean setIncomings(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId,
 			@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal incomings);
 
-	public Taxdata setOutgoings(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId,
+	public Boolean setOutgoings(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId,
 			@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal outgoings);
 }

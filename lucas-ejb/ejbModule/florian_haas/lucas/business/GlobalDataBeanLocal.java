@@ -18,10 +18,10 @@ public interface GlobalDataBeanLocal {
 
 	public BigDecimal getMinimumWage();
 
-	public void setSalary(@NotNull EnumSalaryClass salaryClass, @MinimumWage BigDecimal salary);
+	public Boolean setSalary(@NotNull EnumSalaryClass salaryClass, @MinimumWage BigDecimal salary);
 
-	public void setMinTimePresent(@NotNull @Min(1) Long minTimePresent);
+	public Boolean setMinTimePresent(@NotNull @Min(1) Long minTimePresent);
 
-	public void setMinimumWage(@NotNull @DecimalMin(value = "0", inclusive = false) BigDecimal minimumWage);
+	public Boolean setMinimumWage(@NotNull @DecimalMin(value = "0", inclusive = false) BigDecimal minimumWage);
 
 }

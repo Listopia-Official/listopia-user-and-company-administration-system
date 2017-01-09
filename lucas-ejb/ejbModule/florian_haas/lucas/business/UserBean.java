@@ -69,53 +69,54 @@ public class UserBean implements UserBeanLocal {
 	}
 
 	@Override
-	public User setForename(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String forename) {
+	public Boolean setForename(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String forename) {
 		User user = userDao.findById(userId);
+		if (user.getForename().equals(forename)) return Boolean.FALSE;
 		user.setForename(forename);
-		return user;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public User setSurname(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String surname) {
+	public Boolean setSurname(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String surname) {
 		User user = userDao.findById(userId);
+		if (user.getSurname().equals(surname)) return Boolean.FALSE;
 		user.setSurname(surname);
-		return user;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public User setSchoolGrade(@ValidEntityId(entityClass = User.class) Long userId, Integer schoolGrade) {
+	public Boolean setSchoolGrade(@ValidEntityId(entityClass = User.class) Long userId, Integer schoolGrade) {
 		User user = userDao.findById(userId);
+		if (user.getSchoolGrade().equals(schoolGrade)) return Boolean.FALSE;
 		user.setSchoolGrade(schoolGrade);
-		return user;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public User setSchoolClass(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String schoolClass) {
+	public Boolean setSchoolClass(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String schoolClass) {
 		User user = userDao.findById(userId);
+		if (user.getSchoolClass().equals(schoolClass)) return Boolean.FALSE;
 		user.setSchoolClass(schoolClass);
-		return user;
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public User addRank(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String rank) {
+	public Boolean addRank(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String rank) {
 		User user = userDao.findById(userId);
-		user.addRank(rank);
-		return user;
+		return user.addRank(rank);
 	}
 
 	@Override
-	public User removeRank(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String rank) {
+	public Boolean removeRank(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String rank) {
 		User user = userDao.findById(userId);
-		user.removeRank(rank);
-		return user;
+		return user.removeRank(rank);
 	}
 
 	@Override
-	public User addUserCard(@ValidEntityId(entityClass = User.class) Long userId) {
+	public Boolean addUserCard(@ValidEntityId(entityClass = User.class) Long userId) {
 		User user = userDao.findById(userId);
 		UserCard userCard = new UserCard(user);
-		user.addUserCard(userCard);
-		return user;
+		return user.addUserCard(userCard);
 	}
 
 	@Override
@@ -135,10 +136,11 @@ public class UserBean implements UserBeanLocal {
 	}
 
 	@Override
-	public UserCard setValidDate(@ValidEntityId(entityClass = UserCard.class) Long userCardId, LocalDate validDate) {
+	public Boolean setValidDate(@ValidEntityId(entityClass = UserCard.class) Long userCardId, LocalDate validDate) {
 		UserCard userCard = userCardDao.findById(userCardId);
+		if (userCard.getValidDay().equals(validDate)) return Boolean.FALSE;
 		userCard.setValidDay(validDate);
-		return userCard;
+		return Boolean.TRUE;
 	}
 
 }

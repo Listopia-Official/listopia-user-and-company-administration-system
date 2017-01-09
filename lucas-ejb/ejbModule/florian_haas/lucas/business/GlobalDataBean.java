@@ -10,6 +10,7 @@ import javax.validation.executable.*;
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.MinimumWage;
+import florian_haas.lucas.util.Utils;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -36,18 +37,27 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	}
 
 	@Override
-	public void setSalary(EnumSalaryClass salaryClass, @MinimumWage BigDecimal salary) {
-		newInstance().setSalary(salaryClass, salary);
+	public Boolean setSalary(EnumSalaryClass salaryClass, @MinimumWage BigDecimal salary) {
+		GlobalData newInstance = newInstance();
+		if (Utils.isEqual(newInstance.getSalaries().get(salaryClass), salary)) return Boolean.FALSE;
+		newInstance.setSalary(salaryClass, salary);
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public void setMinTimePresent(Long minTimePresent) {
-		newInstance().setMinTimePresent(minTimePresent);
+	public Boolean setMinTimePresent(Long minTimePresent) {
+		GlobalData newInstance = newInstance();
+		if (newInstance.getMinTimePresent().equals(minTimePresent)) return Boolean.FALSE;
+		newInstance.setMinTimePresent(minTimePresent);
+		return Boolean.TRUE;
 	}
 
 	@Override
-	public void setMinimumWage(BigDecimal minimumWage) {
-		newInstance().setMinimumWage(minimumWage);
+	public Boolean setMinimumWage(BigDecimal minimumWage) {
+		GlobalData newInstance = newInstance();
+		if (Utils.isEqual(newInstance.getMinimumWage(), minimumWage)) return Boolean.FALSE;
+		newInstance.setMinimumWage(minimumWage);
+		return Boolean.TRUE;
 	}
 
 	private GlobalData newInstance() {
