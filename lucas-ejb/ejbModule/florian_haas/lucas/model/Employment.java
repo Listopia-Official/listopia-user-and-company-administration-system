@@ -31,14 +31,16 @@ public class Employment extends EntityBase {
 	Employment() {}
 
 	public Employment(User user, Company company, EnumEmployeePosition position) {
-		this(user, company, position, null);
+		this(user, company, position, null, (EnumWorkShift[]) null);
 	}
 
-	public Employment(User user, Company company, EnumEmployeePosition position, SalaryData salaryData) {
+	public Employment(User user, Company company, EnumEmployeePosition position, EnumSalaryClass salaryClass, EnumWorkShift... workShifts) {
 		this.user = user;
 		this.company = company;
 		this.position = position;
-		this.salaryData = salaryData;
+		if (salaryClass != null && workShifts != null) {
+			this.salaryData = new SalaryData(this, salaryClass, workShifts);
+		}
 	}
 
 	public User getUser() {
