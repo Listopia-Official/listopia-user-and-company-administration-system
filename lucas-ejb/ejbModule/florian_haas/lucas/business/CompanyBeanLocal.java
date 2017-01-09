@@ -45,6 +45,8 @@ public interface CompanyBeanLocal {
 	public Company setParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId,
 			@ValidEntityId(entityClass = Company.class) Long parentCompanyId);
 
+	public Company removeParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId);
+
 	public Company setRequiredEmployeesCount(@ValidEntityId(entityClass = Company.class) Long companyId,
 			@NotNull @Min(value = 0) Integer requiredEmployeesCount);
 
