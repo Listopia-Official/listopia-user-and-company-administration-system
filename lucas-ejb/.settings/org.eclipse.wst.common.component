@@ -2,6 +2,7 @@
     <wb-module deploy-name="lucas-ejb">
         <wb-resource deploy-path="/" source-path="/ejbModule" tag="defaultRootSource"/>
         <wb-resource deploy-path="/" source-path="/metamodel"/>
+        <wb-resource deploy-path="/" source-path="/test"/>
         <property name="java-output-path" value="/lucas-ejb/build/classes"/>
         <property name="ClientProject" value="lucas-ejbClient"/>
         <property name="ClientJARURI" value="lucas-ejbClient.jar"/>
