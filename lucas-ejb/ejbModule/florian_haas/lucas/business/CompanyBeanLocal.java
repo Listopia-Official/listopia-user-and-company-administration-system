@@ -54,7 +54,7 @@ public interface CompanyBeanLocal {
 			@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal incomings,
 			@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal outgoings);
 
-	public Taxdata setDate(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId, @NotNull LocalDate date);
+	public void removeTaxdata(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId);
 
 	public Taxdata setIncomings(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId,
 			@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal incomings);
