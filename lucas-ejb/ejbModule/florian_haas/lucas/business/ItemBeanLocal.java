@@ -30,7 +30,9 @@ public interface ItemBeanLocal {
 
 	public Item setDescription(@ValidEntityId(entityClass = Item.class) Long itemId, @NotBlankString String description);
 
-	public Item setItemsAvaible(@ValidEntityId(entityClass = Item.class) Long itemId, @NotNull @Min(0) Integer itemsAvaible);
+	public Item addItemsAvaible(@ValidEntityId(entityClass = Item.class) Long itemId, @NotNull @Min(1) Integer amount);
+
+	public Item subItemsAvaible(@ValidEntityId(entityClass = Item.class) Long itemId, @NotNull @Min(1) Integer amount);
 
 	public Item setPricePerItem(@ValidEntityId(entityClass = Item.class) Long itemId, @ValidItemPrice BigDecimal pricePerItem);
 }
