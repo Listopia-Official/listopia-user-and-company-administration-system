@@ -12,7 +12,7 @@ public class UserDAOImpl extends DAOImpl<User> implements UserDAO {
 
 	@Override
 	public List<User> findUsers(Long userId, String forename, String surname, Integer schoolGrade, String schoolClass, EnumUserType userType,
-			String[] ranks, Boolean useUserId, Boolean useForename, Boolean useSurname, Boolean useSchoolGrade, Boolean useSchoolClass,
+			List<String> ranks, Boolean useUserId, Boolean useForename, Boolean useSurname, Boolean useSchoolGrade, Boolean useSchoolClass,
 			Boolean useUserType, Boolean useRanks, EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator,
 			EnumQueryComparator surnameComparator, EnumQueryComparator schoolGradeComparator, EnumQueryComparator schoolClassComparator,
 			EnumQueryComparator ranksComparator) {
@@ -46,7 +46,7 @@ public class UserDAOImpl extends DAOImpl<User> implements UserDAO {
 					predicates.add(pred);
 				}
 			}
-			getPluralRestriction(User_.ranks, Arrays.asList(ranks), useRanks, ranksComparator, predicates, builder, root);
+			getPluralRestriction(User_.ranks, ranks, useRanks, ranksComparator, predicates, builder, root);
 
 			return predicates.toArray(new Predicate[predicates.size()]);
 		});
