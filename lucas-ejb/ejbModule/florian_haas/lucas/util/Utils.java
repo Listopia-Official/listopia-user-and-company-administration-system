@@ -38,4 +38,20 @@ public class Utils {
 	public static Boolean isZero(BigDecimal decimal) {
 		return decimal.compareTo(BigDecimal.ZERO) == 0;
 	}
+
+	public static boolean isInRangeInclusive(long start, long end, long value) {
+		return value <= end && value >= start;
+	}
+
+	public static boolean isInRangeExclusive(long start, long end, long value) {
+		return value < end && value > start;
+	}
+
+	public static boolean isInRangeInclusive(int start, int end, int value) {
+		return value <= end && value >= start;
+	}
+
+	public static boolean isInRangeExclusive(int start, int end, int value) {
+		return value < end && value > start;
+	}
 }
