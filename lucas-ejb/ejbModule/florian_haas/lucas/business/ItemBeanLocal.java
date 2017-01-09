@@ -15,7 +15,7 @@ import florian_haas.lucas.util.validation.*;
 public interface ItemBeanLocal {
 
 	public void sell(Map<Long, @TypeNotNull @TypeMin(1) Integer> items, @ValidEntityId(entityClass = Company.class) Long companyId,
-			@NotNull EnumPayType payType);
+			@ValidEntityId(entityClass = Company.class) Long warehouseId, @NotNull EnumPayType payType);
 
 	public List<Item> findAll();
 
