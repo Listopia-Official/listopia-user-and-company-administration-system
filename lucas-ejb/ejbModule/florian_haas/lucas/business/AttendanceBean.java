@@ -80,9 +80,9 @@ public class AttendanceBean implements AttendanceBeanLocal {
 	}
 
 	@Override
-	public Integer evaluateAll() {
+	public List<Long> evaluateAll() {
 		List<Long> ids = attendanceDao.findAllIds();
-		Integer c = 0;
+		List<Long> requirementsNotMet = new ArrayList<>();
 		for (Long id : ids) {
 			Attendancedata attendancedata = attendanceDao.findById(id);
 			if (attendancedata != null) {
@@ -93,13 +93,13 @@ public class AttendanceBean implements AttendanceBeanLocal {
 				AttendanceLog log = new AttendanceLog(attendancedata, LocalDate.now(), attendancedata.getTimePresentDay(),
 						globalData.getMinTimePresent(), attendancedata.getValidTimeMissing());
 				attendancedata.addAttendanceLog(log);
+				attendancedata.setTimePresentDay(0l);
 				if (!log.hasMetRequirements()) {
-					c++;
+					requirementsNotMet.add(attendancedata.getUser().getId());
 				}
 			}
 		}
-		return c;
-
+		return requirementsNotMet;
 	}
 
 	@Override
