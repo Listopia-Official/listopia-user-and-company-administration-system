@@ -52,12 +52,12 @@ public class User extends AccountOwner {
 
 	User() {}
 
-	public User(String forename, String surname, Integer schoolGrade, String schoolClass, String... ranks) {
+	public User(String forename, String surname, Integer schoolGrade, String schoolClass, List<String> ranks) {
 		this.forename = forename;
 		this.surname = surname;
 		this.schoolGrade = schoolGrade;
 		this.schoolClass = schoolClass;
-		this.ranks.addAll(Arrays.asList(ranks));
+		if (ranks != null) this.ranks.addAll(ranks);
 		if (getUserType() != EnumUserType.TEACHER) {
 			attendancedata = new Attendancedata(this);
 		}
