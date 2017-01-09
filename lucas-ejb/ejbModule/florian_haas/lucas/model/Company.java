@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-import florian_haas.lucas.model.validation.ValidTaxdataList;
+import florian_haas.lucas.model.validation.UniqueValue;
 import florian_haas.lucas.util.validation.*;
 
 @Entity
@@ -67,7 +67,7 @@ public class Company extends AccountOwner {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "company")
 	@NotNull
-	@ValidTaxdataList
+	@UniqueValue(fieldName = "date")
 	@Valid
 	private List<@TypeNotNull Taxdata> taxdata = new ArrayList<>();
 

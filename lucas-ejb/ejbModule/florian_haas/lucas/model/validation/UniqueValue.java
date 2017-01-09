@@ -11,13 +11,15 @@ import javax.validation.*;
 		FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, CONSTRUCTOR })
 @Retention(RUNTIME)
 @Constraint(validatedBy = {
-		ValidTaxdataListValidator.class })
+		UniqueValueValidator.class })
 @Documented
-public @interface ValidTaxdataList {
+public @interface UniqueValue {
 
-	String message() default "Invalid taxdata";
+	String message() default "Collection contains elements whose fields are not unique";
 
 	Class<?>[] groups() default {};
 
 	Class<? extends Payload>[] payload() default {};
+
+	String fieldName();
 }
