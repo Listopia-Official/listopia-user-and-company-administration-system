@@ -1,5 +1,7 @@
 package florian_haas.lucas.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -18,6 +20,8 @@ public class UserCard extends EntityBase {
 	@NotNull
 	private Boolean blocked = Boolean.FALSE;
 
+	private LocalDate validDay;
+
 	UserCard() {}
 
 	public UserCard(User user) {
@@ -34,6 +38,14 @@ public class UserCard extends EntityBase {
 
 	public User getUser() {
 		return this.user;
+	}
+
+	public LocalDate getValidDay() {
+		return validDay;
+	}
+
+	public void setValidDay(LocalDate validDay) {
+		this.validDay = validDay;
 	}
 
 }

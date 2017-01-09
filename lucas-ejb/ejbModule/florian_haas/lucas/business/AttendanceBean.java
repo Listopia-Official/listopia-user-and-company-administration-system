@@ -38,16 +38,19 @@ public class AttendanceBean implements AttendanceBeanLocal {
 
 	@Override
 	public Boolean scan(@ValidEntityId(entityClass = UserCard.class) Long userCardId) {
-		User user = userCardDao.findById(userCardId).getUser();
-		if (user.getUserType() != EnumUserType.TEACHER) {
-			Attendancedata attendancedata = user.getAttendancedata();
-			if (attendancedata != null) {
-				if (attendancedata.getIsUserInState() == Boolean.TRUE) {
-					enter(attendancedata);
-				} else if (attendancedata.getIsUserInState() == Boolean.FALSE) {
-					leave(attendancedata);
+		UserCard userCard = userCardDao.findById(userCardId);
+		if (userCard.getBlocked() || (userCard.getValidDay() != null && !userCard.getValidDay().equals(LocalDate.now()))) {
+			User user = userCardDao.findById(userCardId).getUser();
+			if (user.getUserType() != EnumUserType.TEACHER) {
+				Attendancedata attendancedata = user.getAttendancedata();
+				if (attendancedata != null) {
+					if (attendancedata.getIsUserInState() == Boolean.TRUE) {
+						enter(attendancedata);
+					} else if (attendancedata.getIsUserInState() == Boolean.FALSE) {
+						leave(attendancedata);
+					}
+					return Boolean.TRUE;
 				}
-				return Boolean.TRUE;
 			}
 		}
 		return Boolean.FALSE;

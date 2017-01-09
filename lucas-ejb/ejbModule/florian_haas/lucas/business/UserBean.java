@@ -25,10 +25,6 @@ public class UserBean implements UserBeanLocal {
 	@Inject
 	private UserCardDAO userCardDao;
 
-	@JPADAO
-	@Inject
-	private VisaDAO visaDao;
-
 	@Override
 	public User createPupil(@NotBlankString String forename, @NotBlankString String surname, Integer schoolGrade, @NotBlankString String schoolClass,
 			List<@NotBlankString @TypeNotNull String> ranks) {
@@ -139,29 +135,10 @@ public class UserBean implements UserBeanLocal {
 	}
 
 	@Override
-	public User addVisa(@ValidEntityId(entityClass = User.class) Long userId) {
-		User user = userDao.findById(userId);
-		Visa visa = new Visa(user);
-		user.addVisa(visa);
-		return user;
-	}
-
-	@Override
-	public Boolean activateVisa(@ValidEntityId(entityClass = Visa.class) Long visaId) {
-		Visa visa = visaDao.findById(visaId);
-		if (visa.getActivated()) { return Boolean.FALSE; }
-		visa.setActivated(Boolean.TRUE);
-		visa.setValidDay(LocalDate.now());
-		return Boolean.TRUE;
-	}
-
-	@Override
-	public Boolean deactivateVisa(@ValidEntityId(entityClass = Visa.class) Long visaId) {
-		Visa visa = visaDao.findById(visaId);
-		if (!visa.getActivated()) { return Boolean.FALSE; }
-		visa.setActivated(Boolean.FALSE);
-		visa.setValidDay(null);
-		return Boolean.TRUE;
+	public UserCard setValidDate(@ValidEntityId(entityClass = UserCard.class) Long userCardId, LocalDate validDate) {
+		UserCard userCard = userCardDao.findById(userCardId);
+		userCard.setValidDay(validDate);
+		return userCard;
 	}
 
 }

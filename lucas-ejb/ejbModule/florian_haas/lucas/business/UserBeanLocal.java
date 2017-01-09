@@ -1,5 +1,6 @@
 package florian_haas.lucas.business;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -50,10 +51,6 @@ public interface UserBeanLocal {
 
 	public Boolean unblockUserCard(@ValidEntityId(entityClass = UserCard.class) Long userCardId);
 
-	public User addVisa(@ValidEntityId(entityClass = User.class) Long userId);
-
-	public Boolean activateVisa(@ValidEntityId(entityClass = Visa.class) Long visaId);
-
-	public Boolean deactivateVisa(@ValidEntityId(entityClass = Visa.class) Long visaId);
+	public UserCard setValidDate(@ValidEntityId(entityClass = UserCard.class) Long userCardId, LocalDate validDate);
 
 }

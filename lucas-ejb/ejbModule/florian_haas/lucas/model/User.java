@@ -43,11 +43,6 @@ public class User extends AccountOwner {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user")
 	@Valid
 	@NotNull
-	private Set<@TypeNotNull Visa> visa = new HashSet<>();
-
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user")
-	@Valid
-	@NotNull
 	private Set<@TypeNotNull Employment> employments = new HashSet<>();
 
 	User() {}
@@ -127,14 +122,6 @@ public class User extends AccountOwner {
 
 	public Boolean addUserCard(UserCard userCard) {
 		return this.userCards.add(userCard);
-	}
-
-	public Set<Visa> getVisa() {
-		return Collections.unmodifiableSet(visa);
-	}
-
-	public Boolean addVisa(Visa visa) {
-		return this.visa.add(visa);
 	}
 
 	public Set<Employment> getEmployments() {
