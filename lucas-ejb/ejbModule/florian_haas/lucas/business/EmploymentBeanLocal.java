@@ -22,26 +22,24 @@ public interface EmploymentBeanLocal {
 
 	public void removeEmployment(@ValidEntityId(entityClass = Employment.class) Long employmentId);
 
-	public Employment setEmployeePosition(@ValidEntityId(entityClass = User.class) Long employmentId, @NotNull EnumEmployeePosition position);
+	public Boolean setEmployeePosition(@ValidEntityId(entityClass = User.class) Long employmentId, @NotNull EnumEmployeePosition position);
 
-	public SalaryData setSalaryClass(@ValidEntityId(entityClass = SalaryData.class) Long salaryDataId, @NotNull EnumSalaryClass salaryClass);
+	public Boolean setSalaryClass(@ValidEntityId(entityClass = Employment.class) Long employmentId, @NotNull EnumSalaryClass salaryClass);
 
-	public SalaryData setWorkShifts(@ValidEntityId(entityClass = SalaryData.class) Long salaryDataId, @NotEmpty EnumWorkShift... workShifts);
+	public Boolean addWorkShift(@ValidEntityId(entityClass = Employment.class) Long employmentId, @NotEmpty EnumWorkShift workShift);
 
-	public SalaryData addAttendancedata(@ValidEntityId(entityClass = SalaryData.class) Long salaryDataId, @NotNull LocalDate date,
-			@NotNull EnumWorkShift workShift, @NotNull Boolean wasPresent);
+	public Boolean removeWorkShift(@ValidEntityId(entityClass = Employment.class) Long employmentId, @NotEmpty EnumWorkShift workShift);
 
-	public SalaryData setAttendancedataDate(@ValidEntityId(entityClass = SalaryAttendancedata.class) Long attendancedataId, @NotNull LocalDate date);
+	public Boolean addAttendancedata(@ValidEntityId(entityClass = Employment.class) Long employmentId, @NotNull LocalDate date);
 
-	public SalaryData setAttendancedataShift(@ValidEntityId(entityClass = SalaryAttendancedata.class) Long attendancedataId,
-			@NotNull EnumWorkShift shift);
+	public Boolean setAttendancedataDate(@ValidEntityId(entityClass = SalaryAttendancedata.class) Long attendancedataId, @NotNull LocalDate date);
 
-	public SalaryData setAttendancedataWasPresent(@ValidEntityId(entityClass = SalaryAttendancedata.class) Long attendancedataId,
-			@NotNull Boolean wasPresent);
+	public Boolean setAttendancedataWasPresent(@ValidEntityId(entityClass = SalaryAttendancedata.class) Long attendancedataId,
+			@NotNull EnumWorkShift shift, @NotNull Boolean wasPresent);
 
-	public SalaryData removeAttendancedata(@ValidEntityId(entityClass = SalaryData.class) Long salaryDataId,
+	public Boolean removeAttendancedata(@ValidEntityId(entityClass = Employment.class) Long employmentId,
 			@ValidEntityId(entityClass = SalaryAttendancedata.class) Long attendancedataKey);
 
-	public void paySalary(@ValidEntityId(entityClass = Company.class) Company company, @NotNull LocalDate date, @NotNull EnumWorkShift shift);
+	public void paySalary(@ValidEntityId(entityClass = Company.class) Long company, @NotNull LocalDate date, @NotNull EnumWorkShift shift);
 
 }
