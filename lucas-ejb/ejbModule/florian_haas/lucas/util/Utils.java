@@ -19,6 +19,10 @@ public class Utils {
 		return Collections.unmodifiableMap(tmp);
 	}
 
+	public static Boolean isEqual(BigDecimal decimal, BigDecimal decimal2) {
+		return decimal.compareTo(decimal2) == 0;
+	}
+
 	public static Boolean isLessThanZero(BigDecimal decimal) {
 		return decimal.compareTo(BigDecimal.ZERO) < 0;
 	}
