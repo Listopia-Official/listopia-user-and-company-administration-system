@@ -27,5 +27,4 @@ public class AttendancedataDAOImpl extends ReadOnlyDAOImpl<Attendancedata> imple
 			return predicates.toArray(new Predicate[predicates.size()]);
 		});
 	}
-
 }
