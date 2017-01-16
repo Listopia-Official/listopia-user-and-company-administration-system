@@ -76,6 +76,11 @@ public class Company extends AccountOwner {
 	@Valid
 	private List<@TypeNotNull PurchaseLog> purchaseLogs = new ArrayList<>();
 
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "company")
+	@Valid
+	@NotNull
+	private Set<@TypeNotNull CompanyCard> companyCards = new HashSet<>();
+
 	Company() {}
 
 	public Company(String name, String description, String room, Integer section, EnumCompanyType companyType, List<Employment> managers,
@@ -218,5 +223,13 @@ public class Company extends AccountOwner {
 
 	public Boolean addPurchaseLog(PurchaseLog purchaseLog) {
 		return this.purchaseLogs.add(purchaseLog);
+	}
+
+	public Set<CompanyCard> getCompanyCards() {
+		return Collections.unmodifiableSet(companyCards);
+	}
+
+	public Boolean addCompanyCard(CompanyCard companyCard) {
+		return this.companyCards.add(companyCard);
 	}
 }

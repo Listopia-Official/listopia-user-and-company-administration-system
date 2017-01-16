@@ -29,6 +29,10 @@ public class CompanyBean implements CompanyBeanLocal {
 	@JPADAO
 	private TaxdataDAO taxdataDao;
 
+	@Inject
+	@JPADAO
+	private CompanyCardDAO companyCardDao;
+
 	@Resource
 	private Validator validator;
 
@@ -165,6 +169,29 @@ public class CompanyBean implements CompanyBeanLocal {
 		Taxdata taxdata = taxdataDao.findById(taxdataId);
 		if (Utils.isEqual(taxdata.getOutgoings(), outgoings)) return Boolean.FALSE;
 		taxdata.setOutgoings(outgoings);
+		return Boolean.TRUE;
+	}
+
+	@Override
+	public Boolean addCompanyCard(@ValidEntityId(entityClass = Company.class) Long companyId) {
+		Company company = companyDao.findById(companyId);
+		CompanyCard companyCard = new CompanyCard(company);
+		return company.addCompanyCard(companyCard);
+	}
+
+	@Override
+	public Boolean blockCompanyCard(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId) {
+		CompanyCard companyCard = companyCardDao.findById(companyCardId);
+		if (companyCard.getBlocked()) { return Boolean.FALSE; }
+		companyCard.setBlocked(Boolean.TRUE);
+		return Boolean.TRUE;
+	}
+
+	@Override
+	public Boolean unblockCompanyCard(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId) {
+		CompanyCard companyCard = companyCardDao.findById(companyCardId);
+		if (!companyCard.getBlocked()) { return Boolean.FALSE; }
+		companyCard.setBlocked(Boolean.FALSE);
 		return Boolean.TRUE;
 	}
 

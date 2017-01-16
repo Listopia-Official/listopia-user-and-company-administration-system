@@ -61,4 +61,10 @@ public interface CompanyBeanLocal {
 
 	public Boolean setOutgoings(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId,
 			@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal outgoings);
+
+	public Boolean addCompanyCard(@ValidEntityId(entityClass = Company.class) Long companyId);
+
+	public Boolean blockCompanyCard(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId);
+
+	public Boolean unblockCompanyCard(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId);
 }
