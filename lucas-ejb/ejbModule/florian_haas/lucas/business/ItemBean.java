@@ -108,4 +108,11 @@ public class ItemBean implements ItemBeanLocal {
 		return Boolean.TRUE;
 	}
 
+	@Override
+	public Item newItem(@NotBlankString String name, @NotBlankString String description, BigDecimal price, Integer itemsAvaible) {
+		Item item = new Item(name, description, price, itemsAvaible);
+		itemDao.persist(item);
+		return item;
+	}
+
 }
