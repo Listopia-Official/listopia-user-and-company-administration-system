@@ -23,24 +23,40 @@ public class Utils {
 		return decimal.compareTo(decimal2) == 0;
 	}
 
-	public static Boolean isLessThanZero(BigDecimal decimal) {
-		return decimal.compareTo(BigDecimal.ZERO) < 0;
+	public static Boolean isLessThan(BigDecimal decimal, BigDecimal decimal2) {
+		return decimal.compareTo(decimal2) < 0;
 	}
 
-	public static Boolean isGreatherThanZero(BigDecimal decimal) {
-		return decimal.compareTo(BigDecimal.ZERO) > 0;
+	public static Boolean isGreatherThan(BigDecimal decimal, BigDecimal decimal2) {
+		return decimal.compareTo(decimal2) > 0;
 	}
 
-	public static Boolean isGreatherEqualZero(BigDecimal decimal) {
-		return decimal.compareTo(BigDecimal.ZERO) >= 0;
+	public static Boolean isGreatherEqual(BigDecimal decimal, BigDecimal decimal2) {
+		return decimal.compareTo(decimal2) >= 0;
 	}
 
-	public static Boolean isLessEqualZero(BigDecimal decimal) {
-		return decimal.compareTo(BigDecimal.ZERO) <= 0;
+	public static Boolean isLessEqual(BigDecimal decimal, BigDecimal decimal2) {
+		return decimal.compareTo(decimal2) <= 0;
 	}
 
 	public static Boolean isZero(BigDecimal decimal) {
-		return decimal.compareTo(BigDecimal.ZERO) == 0;
+		return isEqual(decimal, BigDecimal.ZERO);
+	}
+
+	public static Boolean isLessThanZero(BigDecimal decimal) {
+		return isLessThan(decimal, BigDecimal.ZERO);
+	}
+
+	public static Boolean isGreatherThanZero(BigDecimal decimal) {
+		return isGreatherThan(decimal, BigDecimal.ZERO);
+	}
+
+	public static Boolean isGreatherEqualZero(BigDecimal decimal) {
+		return isGreatherEqual(decimal, BigDecimal.ZERO);
+	}
+
+	public static Boolean isLessEqualZero(BigDecimal decimal) {
+		return isLessEqual(decimal, BigDecimal.ZERO);
 	}
 
 	public static boolean isInRangeInclusive(long start, long end, long value) {

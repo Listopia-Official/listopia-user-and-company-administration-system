@@ -6,6 +6,7 @@ import javax.ejb.EJB;
 import javax.validation.*;
 
 import florian_haas.lucas.business.GlobalDataBeanLocal;
+import florian_haas.lucas.util.Utils;
 
 public class MinimumWageValidator implements ConstraintValidator<MinimumWage, BigDecimal> {
 
@@ -19,7 +20,7 @@ public class MinimumWageValidator implements ConstraintValidator<MinimumWage, Bi
 	public boolean isValid(BigDecimal arg0, ConstraintValidatorContext arg1) {
 		if (arg0 == null) return true;
 		BigDecimal minimumWage = globalData.getMinimumWage();
-		return arg0.compareTo(minimumWage) >= 0;
+		return Utils.isGreatherEqual(arg0, minimumWage);
 	}
 
 }
