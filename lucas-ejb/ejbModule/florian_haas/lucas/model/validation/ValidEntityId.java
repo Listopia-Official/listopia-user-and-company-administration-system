@@ -18,7 +18,7 @@ import florian_haas.lucas.model.EntityBase;
 @NotNull
 public @interface ValidEntityId {
 
-	String message() default "AccountId doesn't exist!";
+	String message() default "EntityId doesn't exist!";
 
 	Class<?>[] groups() default {};
 
