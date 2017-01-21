@@ -4,13 +4,15 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import javax.annotation.Resource;
 import javax.ejb.*;
 import javax.inject.Inject;
+import javax.validation.*;
 import javax.validation.executable.*;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.ValidEntityId;
+import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.util.validation.*;
 
@@ -28,14 +30,23 @@ public class ItemBean implements ItemBeanLocal {
 	private CompanyDAO companyDao;
 
 	@EJB
+	private GlobalDataBeanLocal globalData;
+
+	@EJB
 	private AccountBeanLocal accountBean;
+
+	@Resource
+	private Validator validator;
 
 	// TODO check for invalid item id's
 	@Override
 	public void sell(Map<Long, @TypeNotNull @TypeMin(1) Integer> items, @ValidEntityId(entityClass = Company.class) Long companyId,
-			@ValidEntityId(entityClass = Company.class) Long warehouseId, EnumPayType payType) {
+			EnumPayType payType) {
 		Company company = companyDao.findById(companyId);
-		Company warehouse = companyDao.findById(warehouseId);
+		GlobalData data = globalData.getInstance();
+		Set<ConstraintViolation<GlobalData>> violations = validator.validate(data, NotNullWarehouseRequired.class);
+		if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
+		Company warehouse = globalData.getWarehouse();
 		items.forEach((itemId, count) -> {
 			Item item = itemDao.findById(itemId);
 			item.setItemsAvaible(item.getItemsAvaible() - count);

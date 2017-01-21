@@ -9,7 +9,7 @@ import javax.validation.executable.*;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.MinimumWage;
+import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.util.Utils;
 
 @Stateless
@@ -20,6 +20,10 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	@JPADAO
 	@Inject
 	private GlobalDataDAO globalDataDao;
+
+	@JPADAO
+	@Inject
+	private CompanyDAO companyDao;
 
 	@Override
 	public Map<EnumSalaryClass, BigDecimal> getSalaries() {
@@ -70,6 +74,28 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 			ret = globalData.get(0);
 		}
 		return ret;
+	}
+
+	@Override
+	public Company getWarehouse() {
+		return newInstance().getWarehouse();
+	}
+
+	@Override
+	public Boolean setWarehouse(@ValidEntityId(entityClass = Company.class) Long companyId) {
+		Company existingCompany = newInstance().getWarehouse();
+		Company company = companyDao.findById(companyId);
+		if (company.equals(existingCompany)) {
+			return Boolean.FALSE;
+		} else {
+			newInstance().setWarehouse(company);
+			return Boolean.TRUE;
+		}
+	}
+
+	@Override
+	public GlobalData getInstance() {
+		return newInstance();
 	}
 
 }

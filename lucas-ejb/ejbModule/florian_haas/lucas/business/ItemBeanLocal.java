@@ -18,7 +18,7 @@ public interface ItemBeanLocal {
 			@NotNull @Min(0) Integer itemsAvaible);
 
 	public void sell(Map<Long, @TypeNotNull @TypeMin(1) Integer> items, @ValidEntityId(entityClass = Company.class) Long companyId,
-			@ValidEntityId(entityClass = Company.class) Long warehouseId, @NotNull EnumPayType payType);
+			@NotNull EnumPayType payType);
 
 	public List<Item> findAll();
 

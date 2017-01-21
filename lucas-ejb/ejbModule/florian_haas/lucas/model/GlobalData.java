@@ -6,7 +6,7 @@ import java.util.*;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import florian_haas.lucas.model.validation.MinimumWage;
+import florian_haas.lucas.model.validation.*;
 
 @Entity
 public class GlobalData extends EntityBase {
@@ -26,6 +26,9 @@ public class GlobalData extends EntityBase {
 	@NotNull
 	@DecimalMin(value = "0", inclusive = false)
 	private BigDecimal minimumWage = new BigDecimal("1.0");
+
+	@NotNull(groups = NotNullWarehouseRequired.class)
+	private Company warehouse;
 
 	public Map<EnumSalaryClass, BigDecimal> getSalaries() {
 		return Collections.unmodifiableMap(salaries);
@@ -49,6 +52,14 @@ public class GlobalData extends EntityBase {
 
 	public void setMinimumWage(BigDecimal minimumWage) {
 		this.minimumWage = minimumWage;
+	}
+
+	public Company getWarehouse() {
+		return warehouse;
+	}
+
+	public void setWarehouse(Company warehouse) {
+		this.warehouse = warehouse;
 	}
 
 }
