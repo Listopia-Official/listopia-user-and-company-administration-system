@@ -38,10 +38,9 @@ public class ItemBean implements ItemBeanLocal {
 	@Resource
 	private Validator validator;
 
-	// TODO check for invalid item id's
 	@Override
-	public void sell(Map<Long, @TypeNotNull @TypeMin(1) Integer> items, @ValidEntityId(entityClass = Company.class) Long companyId,
-			EnumPayType payType) {
+	public void sell(@ValidEntityIdMapKey(entityClass = Item.class) Map<Long, @TypeNotNull @TypeMin(1) Integer> items,
+			@ValidEntityId(entityClass = Company.class) Long companyId, EnumPayType payType) {
 		Company company = companyDao.findById(companyId);
 		GlobalData data = globalData.getInstance();
 		Set<ConstraintViolation<GlobalData>> violations = validator.validate(data, NotNullWarehouseRequired.class);
