@@ -4,7 +4,16 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/ejb-jar_3_2.xsd"
 	version="3.2">
 	<display-name>lucas-ejb</display-name>
+	<interceptors>
+		<interceptor>
+			<interceptor-class>florian_haas.lucas.util.SecurityInterceptor</interceptor-class>
+		</interceptor>
+	</interceptors>
 	<assembly-descriptor>
+		<interceptor-binding>
+			<ejb-name>*</ejb-name>
+			<interceptor-class>florian_haas.lucas.util.SecurityInterceptor</interceptor-class>
+		</interceptor-binding>
 		<application-exception>
 			<exception-class>javax.validation.ConstraintViolationException</exception-class>
 			<rollback>true</rollback>
