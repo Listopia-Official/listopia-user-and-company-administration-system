@@ -13,10 +13,10 @@ import florian_haas.lucas.model.validation.ValidEntityId;
 @Local
 public interface EmploymentBeanLocal {
 
-	public Employment addDefaultEmployment(@ValidEntityId(entityClass = User.class) Long userId,
-			@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull EnumEmployeePosition position);
+	public Long addDefaultEmployment(@ValidEntityId(entityClass = User.class) Long userId, @ValidEntityId(entityClass = Company.class) Long companyId,
+			@NotNull EnumEmployeePosition position);
 
-	public Employment addAdvancedEmployment(@ValidEntityId(entityClass = User.class) Long userId,
+	public Long addAdvancedEmployment(@ValidEntityId(entityClass = User.class) Long userId,
 			@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull EnumEmployeePosition position, @NotNull EnumSalaryClass salaryClass,
 			@NotEmpty EnumWorkShift... workShifts);
 

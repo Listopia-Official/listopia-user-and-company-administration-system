@@ -26,25 +26,25 @@ public class UserBean implements UserBeanLocal {
 	private UserCardDAO userCardDao;
 
 	@Override
-	public User createPupil(@NotBlankString String forename, @NotBlankString String surname, Integer schoolGrade, @NotBlankString String schoolClass,
+	public Long createPupil(@NotBlankString String forename, @NotBlankString String surname, Integer schoolGrade, @NotBlankString String schoolClass,
 			List<@NotBlankString @TypeNotNull String> ranks) {
 		User pupil = new User(forename, surname, schoolGrade, schoolClass, ranks);
 		userDao.persist(pupil);
-		return pupil;
+		return pupil.getId();
 	}
 
 	@Override
-	public User createTeacher(@NotBlankString String forename, @NotBlankString String surname, List<@NotBlankString @TypeNotNull String> ranks) {
+	public Long createTeacher(@NotBlankString String forename, @NotBlankString String surname, List<@NotBlankString @TypeNotNull String> ranks) {
 		User teacher = new User(forename, surname, null, null, ranks);
 		userDao.persist(teacher);
-		return teacher;
+		return teacher.getId();
 	}
 
 	@Override
-	public User createGuest() {
+	public Long createGuest() {
 		User guest = new User(null, null, null, null, null);
 		userDao.persist(guest);
-		return guest;
+		return guest.getId();
 	}
 
 	@Override

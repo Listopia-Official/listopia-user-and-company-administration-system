@@ -13,13 +13,13 @@ import florian_haas.lucas.model.validation.*;
 @Local
 public interface AccountBeanLocal {
 
-	public Account payIn(@ValidEntityId(entityClass = Account.class) Long account, @ValidTransactionAmount BigDecimal amount,
+	public Long payIn(@ValidEntityId(entityClass = Account.class) Long account, @ValidTransactionAmount BigDecimal amount,
 			@ShortComment String comment);
 
-	public Account payOut(@ValidEntityId(entityClass = Account.class) Long account, @ValidTransactionAmount BigDecimal amount,
+	public Long payOut(@ValidEntityId(entityClass = Account.class) Long account, @ValidTransactionAmount BigDecimal amount,
 			@ShortComment String comment);
 
-	public Account transaction(@ValidEntityId(entityClass = Account.class) Long from, @ValidEntityId(entityClass = Account.class) Long to,
+	public Long transaction(@ValidEntityId(entityClass = Account.class) Long from, @ValidEntityId(entityClass = Account.class) Long to,
 			@ValidTransactionAmount BigDecimal amount, @ShortComment String comment);
 
 	public Boolean blockAccount(@ValidEntityId(entityClass = Account.class) Long id);

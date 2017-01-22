@@ -28,22 +28,22 @@ public class AccountBean implements AccountBeanLocal {
 	private Validator validator;
 
 	@Override
-	public Account payIn(@ValidEntityId(entityClass = Account.class) Long id, BigDecimal amount, String comment) {
+	public Long payIn(@ValidEntityId(entityClass = Account.class) Long id, BigDecimal amount, String comment) {
 		return transaction(amount, id, null, comment);
 	}
 
 	@Override
-	public Account payOut(@ValidEntityId(entityClass = Account.class) Long id, BigDecimal amount, String comment) {
+	public Long payOut(@ValidEntityId(entityClass = Account.class) Long id, BigDecimal amount, String comment) {
 		return transaction(amount, id, null, comment);
 	}
 
 	@Override
-	public Account transaction(@ValidEntityId(entityClass = Account.class) Long from, @ValidEntityId(entityClass = Account.class) Long to,
+	public Long transaction(@ValidEntityId(entityClass = Account.class) Long from, @ValidEntityId(entityClass = Account.class) Long to,
 			BigDecimal amount, String comment) {
 		return transaction(amount, from, to, comment);
 	}
 
-	private Account transaction(BigDecimal amount, Long account1Id, Long account2Id, String comment) {
+	private Long transaction(BigDecimal amount, Long account1Id, Long account2Id, String comment) {
 		Account account1 = accountDao.findById(account1Id);
 		Account account2 = null;
 		if (account2Id != null) {
@@ -84,7 +84,7 @@ public class AccountBean implements AccountBeanLocal {
 					account1, transactionAmount, prevBankBalance2, null, comment));
 		}
 		accountDao.getEntityManager().flush();
-		return account1;
+		return account1.getId();
 	}
 
 	@Override

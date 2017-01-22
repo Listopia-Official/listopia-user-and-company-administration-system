@@ -37,11 +37,11 @@ public class CompanyBean implements CompanyBeanLocal {
 	private Validator validator;
 
 	@Override
-	public Company createCompany(@NotBlankString String name, @NotBlankString String description, @NotBlankString String room, Integer section,
+	public Long createCompany(@NotBlankString String name, @NotBlankString String description, @NotBlankString String room, Integer section,
 			EnumCompanyType companyType, List<@TypeNotNull Employment> managers, Integer requiredEmployeesCount) {
 		Company company = new Company(name, description, room, section, companyType, managers, requiredEmployeesCount);
 		companyDao.persist(company);
-		return company;
+		return company.getId();
 	}
 
 	@Override

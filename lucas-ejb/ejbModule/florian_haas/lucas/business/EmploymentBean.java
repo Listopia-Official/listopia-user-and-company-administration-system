@@ -43,18 +43,18 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	private Validator validator;
 
 	@Override
-	public Employment addDefaultEmployment(@ValidEntityId(entityClass = User.class) Long userId,
-			@ValidEntityId(entityClass = Company.class) Long companyId, EnumEmployeePosition position) {
+	public Long addDefaultEmployment(@ValidEntityId(entityClass = User.class) Long userId, @ValidEntityId(entityClass = Company.class) Long companyId,
+			EnumEmployeePosition position) {
 		User user = userDao.findById(userId);
 		Company company = companyDao.findById(companyId);
 		Employment employment = new Employment(user, company, position);
 		user.addEmployment(employment);
 		company.addEmployee(employment);
-		return employment;
+		return employment.getId();
 	}
 
 	@Override
-	public Employment addAdvancedEmployment(@ValidEntityId(entityClass = User.class) Long userId,
+	public Long addAdvancedEmployment(@ValidEntityId(entityClass = User.class) Long userId,
 			@ValidEntityId(entityClass = Company.class) Long companyId, EnumEmployeePosition position, EnumSalaryClass salaryClass,
 			EnumWorkShift... workShifts) {
 		User user = userDao.findById(userId);
@@ -62,7 +62,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 		Employment employment = new Employment(user, company, position, salaryClass, workShifts);
 		user.addEmployment(employment);
 		company.addEmployee(employment);
-		return employment;
+		return employment.getId();
 	}
 
 	@Override
