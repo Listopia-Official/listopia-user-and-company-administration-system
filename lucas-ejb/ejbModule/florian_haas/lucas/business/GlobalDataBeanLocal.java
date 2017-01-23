@@ -30,4 +30,8 @@ public interface GlobalDataBeanLocal {
 
 	public Boolean setWarehouse(@ValidEntityId(entityClass = Company.class) Long companyId);
 
+	public BigDecimal getTransactionLimit();
+
+	public Boolean setTransactionLimit(@NotNull @DecimalMin(value = "0", inclusive = false) BigDecimal transactionLimit);
+
 }

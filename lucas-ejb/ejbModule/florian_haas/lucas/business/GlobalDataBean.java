@@ -98,4 +98,17 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 		return newInstance();
 	}
 
+	@Override
+	public BigDecimal getTransactionLimit() {
+		return newInstance().getTransactionLimit();
+	}
+
+	@Override
+	public Boolean setTransactionLimit(BigDecimal transactionLimit) {
+		GlobalData newInstance = newInstance();
+		if (Utils.isEqual(newInstance.getTransactionLimit(), transactionLimit)) return Boolean.FALSE;
+		newInstance.setTransactionLimit(transactionLimit);
+		return Boolean.TRUE;
+	}
+
 }

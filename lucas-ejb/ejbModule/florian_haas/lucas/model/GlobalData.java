@@ -30,6 +30,10 @@ public class GlobalData extends EntityBase {
 	@NotNull(groups = NotNullWarehouseRequired.class)
 	private Company warehouse;
 
+	@NotNull
+	@DecimalMin(value = "0", inclusive = false)
+	private BigDecimal transactionLimit = new BigDecimal("20.0");
+
 	public Map<EnumSalaryClass, BigDecimal> getSalaries() {
 		return Collections.unmodifiableMap(salaries);
 	}
@@ -60,6 +64,14 @@ public class GlobalData extends EntityBase {
 
 	public void setWarehouse(Company warehouse) {
 		this.warehouse = warehouse;
+	}
+
+	public BigDecimal getTransactionLimit() {
+		return transactionLimit;
+	}
+
+	public void setTransactionLimit(BigDecimal transactionLimit) {
+		this.transactionLimit = transactionLimit;
 	}
 
 }
