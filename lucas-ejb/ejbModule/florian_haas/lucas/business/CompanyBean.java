@@ -33,6 +33,9 @@ public class CompanyBean implements CompanyBeanLocal {
 	@JPADAO
 	private CompanyCardDAO companyCardDao;
 
+	@EJB
+	private AccountBeanLocal accountBean;
+
 	@Resource
 	private Validator validator;
 
@@ -197,6 +200,16 @@ public class CompanyBean implements CompanyBeanLocal {
 		if (!companyCard.getBlocked()) { return Boolean.FALSE; }
 		companyCard.setBlocked(Boolean.FALSE);
 		return Boolean.TRUE;
+	}
+
+	@Override
+	public Long transactionToParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId, BigDecimal amount, String comment) {
+		Company company = companyDao.findById(companyId);
+		if (company.getParentCompany() != null) {
+			Company parent = company.getParentCompany();
+			accountBean.transaction(company.getId(), parent.getId(), amount, comment);
+		}
+		return company.getId();
 	}
 
 }
