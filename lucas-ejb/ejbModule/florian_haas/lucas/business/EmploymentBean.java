@@ -12,7 +12,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.util.Secured;
 
 @Stateless
@@ -21,12 +20,10 @@ import florian_haas.lucas.util.Secured;
 @Secured
 public class EmploymentBean implements EmploymentBeanLocal {
 
-	@Inject
-	@JPADAO
+	@EJB
 	private CompanyBeanLocal companyBean;
 
-	@Inject
-	@JPADAO
+	@EJB
 	private UserBeanLocal userBean;
 
 	@Inject
@@ -49,8 +46,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"employment:createDefault" })
-	public Long addDefaultEmployment(@ValidEntityId(entityClass = User.class) Long userId, @ValidEntityId(entityClass = Company.class) Long companyId,
-			EnumEmployeePosition position) {
+	public Long addDefaultEmployment(Long userId, Long companyId, EnumEmployeePosition position) {
 		User user = userBean.findById(userId);
 		Company company = companyBean.findById(companyId);
 		Employment employment = new Employment(user, company, position);
@@ -62,8 +58,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"employment:createAdvanced" })
-	public Long addAdvancedEmployment(@ValidEntityId(entityClass = User.class) Long userId,
-			@ValidEntityId(entityClass = Company.class) Long companyId, EnumEmployeePosition position, EnumSalaryClass salaryClass,
+	public Long addAdvancedEmployment(Long userId, Long companyId, EnumEmployeePosition position, EnumSalaryClass salaryClass,
 			EnumWorkShift... workShifts) {
 		User user = userBean.findById(userId);
 		Company company = companyBean.findById(companyId);
@@ -76,7 +71,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"employment:remove" })
-	public void removeEmployment(@ValidEntityId(entityClass = Employment.class) Long employmentId) {
+	public void removeEmployment(Long employmentId) {
 		Employment employment = employmentDao.findById(employmentId);
 		Company company = employment.getCompany();
 		User user = employment.getUser();
@@ -87,7 +82,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"employment:setEmployeePosition" })
-	public Boolean setEmployeePosition(@ValidEntityId(entityClass = User.class) Long employmentId, EnumEmployeePosition position) {
+	public Boolean setEmployeePosition(Long employmentId, EnumEmployeePosition position) {
 		Employment employment = employmentDao.findById(employmentId);
 		if (employment.getPosition() == position) return Boolean.FALSE;
 		employment.setPosition(position);
@@ -97,7 +92,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"employment:setSalaryClass" })
-	public Boolean setSalaryClass(@ValidEntityId(entityClass = Employment.class) Long employmentId, EnumSalaryClass salaryClass) {
+	public Boolean setSalaryClass(Long employmentId, EnumSalaryClass salaryClass) {
 		Employment employment = employmentDao.findById(employmentId);
 		if (employment.getSalaryData() != null) {
 			if (employment.getSalaryData().getSalaryClass() == salaryClass) return Boolean.FALSE;
@@ -110,7 +105,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"employment:addWorkShift" })
-	public Boolean addWorkShift(@ValidEntityId(entityClass = Employment.class) Long employmentId, EnumWorkShift workShift) {
+	public Boolean addWorkShift(Long employmentId, EnumWorkShift workShift) {
 		Employment employment = employmentDao.findById(employmentId);
 		if (employment.getSalaryData() != null) { return employment.getSalaryData().addWorkShift(workShift); }
 		return Boolean.FALSE;
@@ -119,7 +114,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"employment:removeWorkShift" })
-	public Boolean removeWorkShift(@ValidEntityId(entityClass = Employment.class) Long employmentId, EnumWorkShift workShift) {
+	public Boolean removeWorkShift(Long employmentId, EnumWorkShift workShift) {
 		Employment employment = employmentDao.findById(employmentId);
 		if (employment.getSalaryData() != null) { return employment.getSalaryData().removeWorkShift(workShift); }
 		return Boolean.FALSE;
@@ -128,7 +123,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"employment:addAttendancedata" })
-	public Boolean addAttendancedata(@ValidEntityId(entityClass = Employment.class) Long employmentId, LocalDate date) {
+	public Boolean addAttendancedata(Long employmentId, LocalDate date) {
 		Employment employment = employmentDao.findById(employmentId);
 		if (employment.getSalaryData() != null) {
 			SalaryData salaryData = employment.getSalaryData();
@@ -141,7 +136,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"employment:setAttendancedataDate" })
-	public Boolean setAttendancedataDate(@ValidEntityId(entityClass = SalaryAttendancedata.class) Long attendancedataId, LocalDate date) {
+	public Boolean setAttendancedataDate(Long attendancedataId, LocalDate date) {
 		SalaryAttendancedata attendancedata = salaryAttendancedataDAO.findById(attendancedataId);
 		if (attendancedata.getDate().equals(date)) return Boolean.FALSE;
 		attendancedata.setDate(date);
@@ -152,8 +147,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"employment:setAttendancedataWasPresent" })
-	public Boolean setAttendancedataWasPresent(@ValidEntityId(entityClass = SalaryAttendancedata.class) Long attendancedataId, EnumWorkShift shift,
-			Boolean wasPresent) {
+	public Boolean setAttendancedataWasPresent(Long attendancedataId, EnumWorkShift shift, Boolean wasPresent) {
 		SalaryAttendancedata attendancedata = salaryAttendancedataDAO.findById(attendancedataId);
 		if (attendancedata.getWorkShifts().containsKey(shift)) {
 			if (attendancedata.getWorkShifts().get(shift) != wasPresent) {
@@ -168,8 +162,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"employment:removeAttendancedata" })
-	public Boolean removeAttendancedata(@ValidEntityId(entityClass = Employment.class) Long employmentId,
-			@ValidEntityId(entityClass = SalaryAttendancedata.class) Long attendancedataKey) {
+	public Boolean removeAttendancedata(Long employmentId, Long attendancedataKey) {
 		Employment employment = employmentDao.findById(employmentId);
 		SalaryAttendancedata attendancedata = salaryAttendancedataDAO.findById(attendancedataKey);
 		if (employment.getSalaryData() != null) return employment.getSalaryData().removeAttendancedata(attendancedata);
@@ -179,7 +172,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"employment:paySalary" })
-	public void paySalary(@ValidEntityId(entityClass = Company.class) Long companyId, LocalDate date, EnumWorkShift shift) {
+	public void paySalary(Long companyId, LocalDate date, EnumWorkShift shift) {
 		Company company = companyBean.findById(companyId);
 		company.getEmployees().forEach(employee -> {
 			if (employee.getSalaryData() != null) {

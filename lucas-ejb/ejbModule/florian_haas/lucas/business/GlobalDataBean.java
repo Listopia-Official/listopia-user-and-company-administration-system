@@ -11,7 +11,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.util.*;
 
 @Stateless
@@ -51,7 +50,7 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"globalData:setSalary" })
-	public Boolean setSalary(EnumSalaryClass salaryClass, @MinimumWage BigDecimal salary) {
+	public Boolean setSalary(EnumSalaryClass salaryClass, BigDecimal salary) {
 		GlobalData newInstance = newInstance();
 		if (Utils.isEqual(newInstance.getSalaries().get(salaryClass), salary)) return Boolean.FALSE;
 		newInstance.setSalary(salaryClass, salary);
@@ -100,7 +99,7 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"globalData:setWarehouse" })
-	public Boolean setWarehouse(@ValidEntityId(entityClass = Company.class) Long companyId) {
+	public Boolean setWarehouse(Long companyId) {
 		Company existingCompany = newInstance().getWarehouse();
 		Company company = companyBean.findById(companyId);
 		if (company.equals(existingCompany)) {

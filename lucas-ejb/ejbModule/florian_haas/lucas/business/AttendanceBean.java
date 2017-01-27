@@ -13,7 +13,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.util.Secured;
 
 @Stateless
@@ -38,7 +37,7 @@ public class AttendanceBean implements AttendanceBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"attendance:scan" })
-	public Boolean scan(@ValidEntityId(entityClass = UserCard.class) Long userCardId) {
+	public Boolean scan(Long userCardId) {
 		UserCard userCard = userBean.findUserCardById(userCardId);
 		if (userCard.getBlocked() || (userCard.getValidDay() != null && !userCard.getValidDay().equals(LocalDate.now()))) {
 			User user = userCard.getUser();
@@ -118,19 +117,19 @@ public class AttendanceBean implements AttendanceBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"attendance:findById" })
-	public Attendancedata findById(@ValidEntityId(entityClass = Attendancedata.class) Long id) {
+	public Attendancedata findById(Long id) {
 		return attendanceDao.findById(id);
 	}
 
 	@Override
-	public Attendancedata findByUserId(@ValidEntityId(entityClass = User.class) Long userId) {
+	public Attendancedata findByUserId(Long userId) {
 		return userBean.findById(userId).getAttendancedata();
 	}
 
 	@Override
 	@RequiresPermissions({
 			"attendancefindByUserCardId" })
-	public Attendancedata findByUserCardId(@ValidEntityId(entityClass = UserCard.class) Long userCardId) {
+	public Attendancedata findByUserCardId(Long userCardId) {
 		return userBean.findUserCardById(userCardId).getUser().getAttendancedata();
 	}
 

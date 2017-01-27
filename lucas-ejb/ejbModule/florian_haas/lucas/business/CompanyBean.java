@@ -14,9 +14,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.util.*;
-import florian_haas.lucas.util.validation.*;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -45,8 +43,8 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:create" })
-	public Long createCompany(@NotBlankString String name, @NotBlankString String description, @NotBlankString String room, Integer section,
-			EnumCompanyType companyType, List<@TypeNotNull Employment> managers, Integer requiredEmployeesCount) {
+	public Long createCompany(String name, String description, String room, Integer section, EnumCompanyType companyType, List<Employment> managers,
+			Integer requiredEmployeesCount) {
 		Company company = new Company(name, description, room, section, companyType, managers, requiredEmployeesCount);
 		if (companyType == EnumCompanyType.STATE) {
 			company.getAccount().setIsProtected(Boolean.TRUE);
@@ -65,7 +63,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:findById" })
-	public Company findById(@ValidEntityId(entityClass = Company.class) Long companyId) {
+	public Company findById(Long companyId) {
 		return companyDao.findById(companyId);
 	}
 
@@ -88,7 +86,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:setName" })
-	public Boolean setName(@ValidEntityId(entityClass = Company.class) Long companyId, @NotBlankString String name) {
+	public Boolean setName(Long companyId, String name) {
 		Company comp = findById(companyId);
 		if (comp.getName().equals(name)) return Boolean.FALSE;
 		comp.setName(name);
@@ -98,7 +96,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:setDescription" })
-	public Boolean setDescription(@ValidEntityId(entityClass = Company.class) Long companyId, @NotBlankString String description) {
+	public Boolean setDescription(Long companyId, String description) {
 		Company comp = companyDao.findById(companyId);
 		if (comp.getDescription().equals(description)) return Boolean.FALSE;
 		comp.setDescription(description);
@@ -108,7 +106,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:setRoom" })
-	public Boolean setRoom(@ValidEntityId(entityClass = Company.class) Long companyId, @NotBlankString String room) {
+	public Boolean setRoom(Long companyId, String room) {
 		Company comp = companyDao.findById(companyId);
 		if (comp.getRoom().equals(room)) return Boolean.FALSE;
 		comp.setRoom(room);
@@ -118,7 +116,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:setSection" })
-	public Boolean setSection(@ValidEntityId(entityClass = Company.class) Long companyId, Integer section) {
+	public Boolean setSection(Long companyId, Integer section) {
 		Company comp = companyDao.findById(companyId);
 		if (comp.getSection().equals(section)) return Boolean.FALSE;
 		comp.setSection(section);
@@ -128,7 +126,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:setCompanyType" })
-	public Boolean setCompanyType(@ValidEntityId(entityClass = Company.class) Long companyId, EnumCompanyType companyType) {
+	public Boolean setCompanyType(Long companyId, EnumCompanyType companyType) {
 		Company comp = companyDao.findById(companyId);
 		if (comp.getCompanyType().equals(companyType)) return Boolean.FALSE;
 		comp.getAccount().setIsProtected(companyType == EnumCompanyType.STATE ? Boolean.TRUE : Boolean.FALSE);
@@ -139,15 +137,14 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:setParentCompany" })
-	public Boolean setParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId,
-			@ValidEntityId(entityClass = Company.class) Long parentCompanyId) {
+	public Boolean setParentCompany(Long companyId, Long parentCompanyId) {
 		return setParentCompanyHelper(companyId, parentCompanyId);
 	}
 
 	@Override
 	@RequiresPermissions({
 			"company:removeParentCompany" })
-	public Boolean removeParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId) {
+	public Boolean removeParentCompany(Long companyId) {
 		return setParentCompanyHelper(companyId, null);
 	}
 
@@ -167,7 +164,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:setRequiredEmployeesCount" })
-	public Boolean setRequiredEmployeesCount(@ValidEntityId(entityClass = Company.class) Long companyId, Integer requiredEmployeesCount) {
+	public Boolean setRequiredEmployeesCount(Long companyId, Integer requiredEmployeesCount) {
 		Company comp = companyDao.findById(companyId);
 		if (comp.getRequiredEmployeesCount().equals(requiredEmployeesCount)) return Boolean.FALSE;
 		comp.setRequiredEmployeesCount(requiredEmployeesCount);
@@ -177,8 +174,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:addTaxdata" })
-	public Boolean addTaxdata(@ValidEntityId(entityClass = Company.class) Long companyId, LocalDate date, BigDecimal incomings,
-			BigDecimal outgoings) {
+	public Boolean addTaxdata(Long companyId, LocalDate date, BigDecimal incomings, BigDecimal outgoings) {
 		Company comp = companyDao.findById(companyId);
 		Taxdata taxdata = new Taxdata(comp, date, incomings, outgoings);
 		comp.addTaxdata(taxdata);
@@ -188,7 +184,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:removeTaxdata" })
-	public Boolean removeTaxdata(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId) {
+	public Boolean removeTaxdata(Long taxdataId) {
 		Taxdata taxdata = taxdataDao.findById(taxdataId);
 		Company comp = taxdata.getCompany();
 		return comp.removeTaxdata(taxdata);
@@ -197,7 +193,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:setIncomings" })
-	public Boolean setIncomings(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId, BigDecimal incomings) {
+	public Boolean setIncomings(Long taxdataId, BigDecimal incomings) {
 		Taxdata taxdata = taxdataDao.findById(taxdataId);
 		if (Utils.isEqual(taxdata.getIncomings(), incomings)) return Boolean.FALSE;
 		taxdata.setIncomings(incomings);
@@ -207,7 +203,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:setOutgoings" })
-	public Boolean setOutgoings(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId, BigDecimal outgoings) {
+	public Boolean setOutgoings(Long taxdataId, BigDecimal outgoings) {
 		Taxdata taxdata = taxdataDao.findById(taxdataId);
 		if (Utils.isEqual(taxdata.getOutgoings(), outgoings)) return Boolean.FALSE;
 		taxdata.setOutgoings(outgoings);
@@ -217,7 +213,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:addCompanyCard" })
-	public Boolean addCompanyCard(@ValidEntityId(entityClass = Company.class) Long companyId) {
+	public Boolean addCompanyCard(Long companyId) {
 		Company company = companyDao.findById(companyId);
 		CompanyCard companyCard = new CompanyCard(company);
 		return company.addCompanyCard(companyCard);
@@ -226,7 +222,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:blockCompanyCard" })
-	public Boolean blockCompanyCard(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId) {
+	public Boolean blockCompanyCard(Long companyCardId) {
 		CompanyCard companyCard = companyCardDao.findById(companyCardId);
 		if (companyCard.getBlocked()) { return Boolean.FALSE; }
 		companyCard.setBlocked(Boolean.TRUE);
@@ -236,7 +232,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:unblockCompanyCard" })
-	public Boolean unblockCompanyCard(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId) {
+	public Boolean unblockCompanyCard(Long companyCardId) {
 		CompanyCard companyCard = companyCardDao.findById(companyCardId);
 		if (!companyCard.getBlocked()) { return Boolean.FALSE; }
 		companyCard.setBlocked(Boolean.FALSE);
@@ -246,7 +242,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"company:transactionToParentCompany" })
-	public Long transactionToParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId, BigDecimal amount, String comment) {
+	public Long transactionToParentCompany(Long companyId, BigDecimal amount, String comment) {
 		Company company = companyDao.findById(companyId);
 		if (company.getParentCompany() != null) {
 			Company parent = company.getParentCompany();

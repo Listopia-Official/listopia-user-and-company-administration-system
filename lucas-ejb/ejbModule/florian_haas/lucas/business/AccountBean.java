@@ -15,7 +15,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.*;
+import florian_haas.lucas.model.validation.UnblockedAccountRequiredValidationGroup;
 import florian_haas.lucas.util.*;
 
 @Stateless
@@ -40,22 +40,21 @@ public class AccountBean implements AccountBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"account:payIn" })
-	public Long payIn(@ValidEntityId(entityClass = Account.class) Long id, BigDecimal amount, String comment) {
+	public Long payIn(Long id, BigDecimal amount, String comment) {
 		return transaction(amount, id, null, comment);
 	}
 
 	@Override
 	@RequiresPermissions({
 			"account:payOut" })
-	public Long payOut(@ValidEntityId(entityClass = Account.class) Long id, BigDecimal amount, String comment) {
+	public Long payOut(Long id, BigDecimal amount, String comment) {
 		return transaction(amount, id, null, comment);
 	}
 
 	@Override
 	@RequiresPermissions({
 			"account:transaction" })
-	public Long transaction(@ValidEntityId(entityClass = Account.class) Long from, @ValidEntityId(entityClass = Account.class) Long to,
-			BigDecimal amount, String comment) {
+	public Long transaction(Long from, Long to, BigDecimal amount, String comment) {
 		return transaction(amount, from, to, comment);
 	}
 
@@ -116,7 +115,7 @@ public class AccountBean implements AccountBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"account:block" })
-	public Boolean blockAccount(@ValidEntityId(entityClass = Account.class) Long id) {
+	public Boolean blockAccount(Long id) {
 		Account account = accountDao.findById(id);
 		if (account.getBlocked() == Boolean.TRUE) {
 			return Boolean.FALSE;
@@ -129,7 +128,7 @@ public class AccountBean implements AccountBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"account:unblock" })
-	public Boolean unblockAccount(@ValidEntityId(entityClass = Account.class) Long id) {
+	public Boolean unblockAccount(Long id) {
 		Account account = accountDao.findById(id);
 		if (account.getBlocked() == Boolean.TRUE) {
 			account.setBlocked(Boolean.FALSE);
@@ -142,7 +141,7 @@ public class AccountBean implements AccountBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"account:protect" })
-	public Boolean protect(@ValidEntityId(entityClass = Account.class) Long id) {
+	public Boolean protect(Long id) {
 		Account account = accountDao.findById(id);
 		if (account.getIsProtected() == Boolean.FALSE) {
 			account.setIsProtected(Boolean.TRUE);
@@ -155,7 +154,7 @@ public class AccountBean implements AccountBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"account:unprotect" })
-	public Boolean unprotect(@ValidEntityId(entityClass = Account.class) Long id) {
+	public Boolean unprotect(Long id) {
 		Account account = accountDao.findById(id);
 		if (account.getIsProtected() == Boolean.TRUE) {
 			account.setIsProtected(Boolean.FALSE);
@@ -175,7 +174,7 @@ public class AccountBean implements AccountBeanLocal {
 	@Override
 	@RequiresPermissions({
 			"account:findById" })
-	public Account findById(@ValidEntityId(entityClass = Account.class) Long id) {
+	public Account findById(Long id) {
 		return accountDao.findById(id);
 	}
 
