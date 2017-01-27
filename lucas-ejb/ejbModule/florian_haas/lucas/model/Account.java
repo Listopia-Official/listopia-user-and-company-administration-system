@@ -31,6 +31,11 @@ public class Account extends EntityBase {
 	@NotNull
 	private Boolean blocked = Boolean.FALSE;
 
+	@Basic(optional = false)
+	@Column(nullable = false)
+	@NotNull
+	private Boolean isProtected = Boolean.FALSE;
+
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "account")
 	@Valid
 	@NotNull
@@ -68,6 +73,14 @@ public class Account extends EntityBase {
 
 	public Boolean addTransactionLog(TransactionLog log) {
 		return transactionLogs.add(log);
+	}
+
+	public Boolean getIsProtected() {
+		return isProtected;
+	}
+
+	public void setIsProtected(Boolean isProtected) {
+		this.isProtected = isProtected;
 	}
 
 }

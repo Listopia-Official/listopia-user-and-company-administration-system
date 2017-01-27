@@ -40,6 +40,9 @@ public class CompanyBean implements CompanyBeanLocal {
 	public Long createCompany(@NotBlankString String name, @NotBlankString String description, @NotBlankString String room, Integer section,
 			EnumCompanyType companyType, List<@TypeNotNull Employment> managers, Integer requiredEmployeesCount) {
 		Company company = new Company(name, description, room, section, companyType, managers, requiredEmployeesCount);
+		if (companyType == EnumCompanyType.STATE) {
+			company.getAccount().setIsProtected(Boolean.TRUE);
+		}
 		companyDao.persist(company);
 		return company.getId();
 	}
@@ -104,6 +107,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	public Boolean setCompanyType(@ValidEntityId(entityClass = Company.class) Long companyId, EnumCompanyType companyType) {
 		Company comp = companyDao.findById(companyId);
 		if (comp.getCompanyType().equals(companyType)) return Boolean.FALSE;
+		comp.getAccount().setIsProtected(companyType == EnumCompanyType.STATE ? Boolean.TRUE : Boolean.FALSE);
 		comp.setCompanyType(companyType);
 		return Boolean.TRUE;
 	}

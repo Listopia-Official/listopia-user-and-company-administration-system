@@ -26,12 +26,17 @@ public interface AccountBeanLocal {
 
 	public Boolean unblockAccount(@ValidEntityId(entityClass = Account.class) Long id);
 
+	public Boolean protect(@ValidEntityId(entityClass = Account.class) Long id);
+
+	public Boolean unprotect(@ValidEntityId(entityClass = Account.class) Long id);
+
 	public List<Account> findAll();
 
 	public Account findById(@ValidEntityId(entityClass = Account.class) Long id);
 
 	public List<Account> findAccounts(@NotNull Long id, @NotNull EnumAccountOwnerType ownerType, @NotNull BigDecimal bankBalance,
-			@NotNull Boolean blocked, @NotNull Boolean useId, @NotNull Boolean useOwnerType, @NotNull Boolean useBankBalance,
-			@NotNull Boolean useBlocked, EnumQueryComparator idComparator, EnumQueryComparator bankBalanceComparator);
+			@NotNull Boolean blocked, @NotNull Boolean isProtected, @NotNull Boolean useId, @NotNull Boolean useOwnerType,
+			@NotNull Boolean useBankBalance, @NotNull Boolean useBlocked, @NotNull Boolean useIsProtected, EnumQueryComparator idComparator,
+			EnumQueryComparator bankBalanceComparator);
 
 }
