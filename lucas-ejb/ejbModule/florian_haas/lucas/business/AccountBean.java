@@ -10,34 +10,50 @@ import javax.inject.Inject;
 import javax.validation.*;
 import javax.validation.executable.*;
 
+import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.*;
-import florian_haas.lucas.util.Utils;
+import florian_haas.lucas.util.*;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 @ValidateOnExecution(type = ExecutableType.IMPLICIT)
+@Secured
 public class AccountBean implements AccountBeanLocal {
 
 	@Inject
 	@JPADAO
 	private AccountDAO accountDao;
 
+	@EJB
+	private GlobalDataBeanLocal globalData;
+
+	@EJB
+	private LoginBeanLocal loginBean;
+
 	@Resource
 	private Validator validator;
 
 	@Override
+	@RequiresPermissions({
+			"account:payIn" })
 	public Long payIn(@ValidEntityId(entityClass = Account.class) Long id, BigDecimal amount, String comment) {
 		return transaction(amount, id, null, comment);
 	}
 
 	@Override
+	@RequiresPermissions({
+			"account:payOut" })
 	public Long payOut(@ValidEntityId(entityClass = Account.class) Long id, BigDecimal amount, String comment) {
 		return transaction(amount, id, null, comment);
 	}
 
 	@Override
+	@RequiresPermissions({
+			"account:transaction" })
 	public Long transaction(@ValidEntityId(entityClass = Account.class) Long from, @ValidEntityId(entityClass = Account.class) Long to,
 			BigDecimal amount, String comment) {
 		return transaction(amount, from, to, comment);
@@ -49,6 +65,16 @@ public class AccountBean implements AccountBeanLocal {
 		if (account2Id != null) {
 			account2 = accountDao.findById(account2Id);
 		}
+
+		if (account1.getIsProtected() && !loginBean.getSubject().isPermitted("account:transactionFromProtected")) throw new AuthorizationException(
+				loginBean.getSubject().getPrincipal() + " is not permitted to start a transaction from a protected account");
+
+		if (account2 != null && account2.getIsProtected() && !loginBean.getSubject().isPermitted("account:transactionToProtected"))
+			throw new AuthorizationException(
+					loginBean.getSubject().getPrincipal() + " is not permitted to start a transaction to a protected account");
+
+		if (Utils.isGreatherThan(amount, globalData.getTransactionLimit()) && !loginBean.getSubject().isPermitted("account:ignoreTransactionLimit"))
+			throw new AuthorizationException(loginBean.getSubject().getPrincipal() + " is not permitted to ignore transaction limit");
 
 		Set<ConstraintViolation<Account>> violations = validator.validate(account1, UnblockedAccountRequiredValidationGroup.class);
 		if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
@@ -88,6 +114,8 @@ public class AccountBean implements AccountBeanLocal {
 	}
 
 	@Override
+	@RequiresPermissions({
+			"account:block" })
 	public Boolean blockAccount(@ValidEntityId(entityClass = Account.class) Long id) {
 		Account account = accountDao.findById(id);
 		if (account.getBlocked() == Boolean.TRUE) {
@@ -99,6 +127,8 @@ public class AccountBean implements AccountBeanLocal {
 	}
 
 	@Override
+	@RequiresPermissions({
+			"account:unblock" })
 	public Boolean unblockAccount(@ValidEntityId(entityClass = Account.class) Long id) {
 		Account account = accountDao.findById(id);
 		if (account.getBlocked() == Boolean.TRUE) {
@@ -110,21 +140,52 @@ public class AccountBean implements AccountBeanLocal {
 	}
 
 	@Override
+	@RequiresPermissions({
+			"account:protect" })
+	public Boolean protect(@ValidEntityId(entityClass = Account.class) Long id) {
+		Account account = accountDao.findById(id);
+		if (account.getIsProtected() == Boolean.FALSE) {
+			account.setIsProtected(Boolean.TRUE);
+			return Boolean.TRUE;
+		} else {
+			return Boolean.FALSE;
+		}
+	}
+
+	@Override
+	@RequiresPermissions({
+			"account:unprotect" })
+	public Boolean unprotect(@ValidEntityId(entityClass = Account.class) Long id) {
+		Account account = accountDao.findById(id);
+		if (account.getIsProtected() == Boolean.TRUE) {
+			account.setIsProtected(Boolean.FALSE);
+			return Boolean.TRUE;
+		} else {
+			return Boolean.FALSE;
+		}
+	}
+
+	@Override
+	@RequiresPermissions({
+			"account:findAll" })
 	public List<Account> findAll() {
 		return accountDao.findAll();
 	}
 
 	@Override
+	@RequiresPermissions({
+			"account:findById" })
 	public Account findById(@ValidEntityId(entityClass = Account.class) Long id) {
 		return accountDao.findById(id);
 	}
 
 	@Override
-	public List<Account> findAccounts(Long id, EnumAccountOwnerType ownerType, BigDecimal bankBalance, Boolean blocked, Boolean useId,
-			Boolean useOwnerType, Boolean useBankBalance, Boolean useBlocked, EnumQueryComparator idComparator,
+	@RequiresPermissions({
+			"account:findDynamic" })
+	public List<Account> findAccounts(Long id, EnumAccountOwnerType ownerType, BigDecimal bankBalance, Boolean blocked, Boolean isProtected,
+			Boolean useId, Boolean useOwnerType, Boolean useBankBalance, Boolean useBlocked, Boolean useProtected, EnumQueryComparator idComparator,
 			EnumQueryComparator bankBalanceComparator) {
-		return accountDao.findAccounts(id, ownerType, bankBalance, blocked, useId, useOwnerType, useBankBalance, useBlocked, idComparator,
-				bankBalanceComparator);
+		return accountDao.findAccounts(id, ownerType, bankBalance, blocked, isProtected, useId, useOwnerType, useBankBalance, useBlocked,
+				useProtected, idComparator, bankBalanceComparator);
 	}
-
 }
