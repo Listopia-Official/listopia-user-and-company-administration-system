@@ -25,9 +25,8 @@ public class ItemBean implements ItemBeanLocal {
 	@Inject
 	private ItemDAO itemDao;
 
-	@JPADAO
-	@Inject
-	private CompanyDAO companyDao;
+	@EJB
+	private CompanyBeanLocal companyBean;
 
 	@EJB
 	private GlobalDataBeanLocal globalData;
@@ -41,7 +40,7 @@ public class ItemBean implements ItemBeanLocal {
 	@Override
 	public void sell(@ValidEntityIdMapKey(entityClass = Item.class) Map<Long, @TypeNotNull @TypeMin(1) Integer> items,
 			@ValidEntityId(entityClass = Company.class) Long companyId, EnumPayType payType) {
-		Company company = companyDao.findById(companyId);
+		Company company = companyBean.findById(companyId);
 		GlobalData data = globalData.getInstance();
 		Set<ConstraintViolation<GlobalData>> violations = validator.validate(data, NotNullWarehouseRequired.class);
 		if (!violations.isEmpty()) throw new ConstraintViolationException(violations);

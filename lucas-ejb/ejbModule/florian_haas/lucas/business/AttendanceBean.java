@@ -22,13 +22,8 @@ public class AttendanceBean implements AttendanceBeanLocal {
 	@JPADAO
 	private AttendancedataDAO attendanceDao;
 
-	@Inject
-	@JPADAO
-	private UserCardDAO userCardDao;
-
-	@Inject
-	@JPADAO
-	private UserDAO userDao;
+	@EJB
+	private UserBeanLocal userBean;
 
 	@EJB
 	private GlobalDataBeanLocal globalData;
@@ -38,9 +33,9 @@ public class AttendanceBean implements AttendanceBeanLocal {
 
 	@Override
 	public Boolean scan(@ValidEntityId(entityClass = UserCard.class) Long userCardId) {
-		UserCard userCard = userCardDao.findById(userCardId);
+		UserCard userCard = userBean.findUserCardById(userCardId);
 		if (userCard.getBlocked() || (userCard.getValidDay() != null && !userCard.getValidDay().equals(LocalDate.now()))) {
-			User user = userCardDao.findById(userCardId).getUser();
+			User user = userCard.getUser();
 			if (user.getUserType() != EnumUserType.TEACHER) {
 				Attendancedata attendancedata = user.getAttendancedata();
 				if (attendancedata != null) {
@@ -117,12 +112,12 @@ public class AttendanceBean implements AttendanceBeanLocal {
 
 	@Override
 	public Attendancedata findByUserId(@ValidEntityId(entityClass = User.class) Long userId) {
-		return userDao.findById(userId).getAttendancedata();
+		return userBean.findById(userId).getAttendancedata();
 	}
 
 	@Override
 	public Attendancedata findByUserCardId(@ValidEntityId(entityClass = UserCard.class) Long userCardId) {
-		return userCardDao.findById(userCardId).getUser().getAttendancedata();
+		return userBean.findUserCardById(userCardId).getUser().getAttendancedata();
 	}
 
 	@Override

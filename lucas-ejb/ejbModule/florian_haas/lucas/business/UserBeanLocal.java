@@ -26,6 +26,8 @@ public interface UserBeanLocal {
 
 	public User findById(@ValidEntityId(entityClass = User.class) Long userId);
 
+	public UserCard findUserCardById(@ValidEntityId(entityClass = UserCard.class) Long userCardId);
+
 	public List<User> findUsers(@NotNull Long userId, @NotNull String forename, @NotNull String surname, @NotNull Integer schoolGrade,
 			@NotNull String schoolClass, @NotNull EnumUserType userType, @NotNull List<@NotBlankString @TypeNotNull String> ranks,
 			@NotNull Boolean useUserId, @NotNull Boolean useForename, @NotNull Boolean useSurname, @NotNull Boolean useSchoolGrade,

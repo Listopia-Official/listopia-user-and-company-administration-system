@@ -143,4 +143,9 @@ public class UserBean implements UserBeanLocal {
 		return Boolean.TRUE;
 	}
 
+	@Override
+	public UserCard findUserCardById(@ValidEntityId(entityClass = UserCard.class) Long userCardId) {
+		return userCardDao.findById(userCardId);
+	}
+
 }

@@ -19,11 +19,11 @@ public class EmploymentBean implements EmploymentBeanLocal {
 
 	@Inject
 	@JPADAO
-	private CompanyDAO companyDao;
+	private CompanyBeanLocal companyBean;
 
 	@Inject
 	@JPADAO
-	private UserDAO userDao;
+	private UserBeanLocal userBean;
 
 	@Inject
 	@JPADAO
@@ -45,8 +45,8 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@Override
 	public Long addDefaultEmployment(@ValidEntityId(entityClass = User.class) Long userId, @ValidEntityId(entityClass = Company.class) Long companyId,
 			EnumEmployeePosition position) {
-		User user = userDao.findById(userId);
-		Company company = companyDao.findById(companyId);
+		User user = userBean.findById(userId);
+		Company company = companyBean.findById(companyId);
 		Employment employment = new Employment(user, company, position);
 		user.addEmployment(employment);
 		company.addEmployee(employment);
@@ -57,8 +57,8 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	public Long addAdvancedEmployment(@ValidEntityId(entityClass = User.class) Long userId,
 			@ValidEntityId(entityClass = Company.class) Long companyId, EnumEmployeePosition position, EnumSalaryClass salaryClass,
 			EnumWorkShift... workShifts) {
-		User user = userDao.findById(userId);
-		Company company = companyDao.findById(companyId);
+		User user = userBean.findById(userId);
+		Company company = companyBean.findById(companyId);
 		Employment employment = new Employment(user, company, position, salaryClass, workShifts);
 		user.addEmployment(employment);
 		company.addEmployee(employment);
@@ -152,7 +152,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 
 	@Override
 	public void paySalary(@ValidEntityId(entityClass = Company.class) Long companyId, LocalDate date, EnumWorkShift shift) {
-		Company company = companyDao.findById(companyId);
+		Company company = companyBean.findById(companyId);
 		company.getEmployees().forEach(employee -> {
 			if (employee.getSalaryData() != null) {
 				SalaryData salaryData = employee.getSalaryData();
