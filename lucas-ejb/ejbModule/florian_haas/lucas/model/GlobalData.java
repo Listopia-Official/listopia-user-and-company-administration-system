@@ -23,6 +23,8 @@ public class GlobalData extends EntityBase {
 	@Min(1)
 	private Long minTimePresent = 171_000L;
 
+	@Basic(optional = false)
+	@Column(nullable = false, scale = 7, precision = 38)
 	@NotNull
 	@DecimalMin(value = "0", inclusive = false)
 	private BigDecimal minimumWage = new BigDecimal("1.0");
@@ -30,6 +32,8 @@ public class GlobalData extends EntityBase {
 	@NotNull(groups = NotNullWarehouseRequired.class)
 	private Company warehouse;
 
+	@Basic(optional = false)
+	@Column(nullable = false, scale = 7, precision = 38)
 	@NotNull
 	@DecimalMin(value = "0", inclusive = false)
 	private BigDecimal transactionLimit = new BigDecimal("20.0");

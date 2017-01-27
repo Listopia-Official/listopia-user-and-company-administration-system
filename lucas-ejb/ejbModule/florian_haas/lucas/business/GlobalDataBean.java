@@ -21,9 +21,8 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	@Inject
 	private GlobalDataDAO globalDataDao;
 
-	@JPADAO
-	@Inject
-	private CompanyDAO companyDao;
+	@EJB
+	private CompanyBeanLocal companyBean;
 
 	@Override
 	public Map<EnumSalaryClass, BigDecimal> getSalaries() {
@@ -84,7 +83,7 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	@Override
 	public Boolean setWarehouse(@ValidEntityId(entityClass = Company.class) Long companyId) {
 		Company existingCompany = newInstance().getWarehouse();
-		Company company = companyDao.findById(companyId);
+		Company company = companyBean.findById(companyId);
 		if (company.equals(existingCompany)) {
 			return Boolean.FALSE;
 		} else {
