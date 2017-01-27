@@ -10,15 +10,18 @@ import javax.inject.Inject;
 import javax.validation.*;
 import javax.validation.executable.*;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.*;
-import florian_haas.lucas.util.Utils;
+import florian_haas.lucas.util.*;
 import florian_haas.lucas.util.validation.*;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 @ValidateOnExecution(type = ExecutableType.IMPLICIT)
+@Secured
 public class ItemBean implements ItemBeanLocal {
 
 	@JPADAO
@@ -38,6 +41,8 @@ public class ItemBean implements ItemBeanLocal {
 	private Validator validator;
 
 	@Override
+	@RequiresPermissions({
+			"item:sell" })
 	public void sell(@ValidEntityIdMapKey(entityClass = Item.class) Map<Long, @TypeNotNull @TypeMin(1) Integer> items,
 			@ValidEntityId(entityClass = Company.class) Long companyId, EnumPayType payType) {
 		Company company = companyBean.findById(companyId);
@@ -61,16 +66,22 @@ public class ItemBean implements ItemBeanLocal {
 	}
 
 	@Override
+	@RequiresPermissions({
+			"item:findAll" })
 	public List<Item> findAll() {
 		return itemDao.findAll();
 	}
 
 	@Override
+	@RequiresPermissions({
+			"item:findById" })
 	public Item findById(@ValidEntityId(entityClass = Item.class) Long itemId) {
 		return itemDao.findById(itemId);
 	}
 
 	@Override
+	@RequiresPermissions({
+			"item:findDynamic" })
 	public List<Item> findItems(Long id, String name, String description, Integer itemsAvaible, BigDecimal pricePerItem, Boolean useId,
 			Boolean useName, Boolean useDescription, Boolean useItemsAvaible, Boolean usePricePerItem, EnumQueryComparator idComparator,
 			EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator, EnumQueryComparator itemsAvaibleComparator,
@@ -80,6 +91,8 @@ public class ItemBean implements ItemBeanLocal {
 	}
 
 	@Override
+	@RequiresPermissions({
+			"item:setName" })
 	public Boolean setName(@ValidEntityId(entityClass = Item.class) Long itemId, @NotBlankString String name) {
 		Item item = itemDao.findById(itemId);
 		if (item.getName().equals(name)) return Boolean.FALSE;
@@ -88,6 +101,8 @@ public class ItemBean implements ItemBeanLocal {
 	}
 
 	@Override
+	@RequiresPermissions({
+			"item:setDescription" })
 	public Boolean setDescription(@ValidEntityId(entityClass = Item.class) Long itemId, @NotBlankString String description) {
 		Item item = itemDao.findById(itemId);
 		if (item.getDescription().equals(description)) return Boolean.FALSE;
@@ -96,6 +111,8 @@ public class ItemBean implements ItemBeanLocal {
 	}
 
 	@Override
+	@RequiresPermissions({
+			"item:setPricePerItem" })
 	public Boolean setPricePerItem(@ValidEntityId(entityClass = Item.class) Long itemId, BigDecimal pricePerItem) {
 		Item item = itemDao.findById(itemId);
 		if (Utils.isEqual(item.getPricePerItem(), pricePerItem)) return Boolean.FALSE;
@@ -104,6 +121,8 @@ public class ItemBean implements ItemBeanLocal {
 	}
 
 	@Override
+	@RequiresPermissions({
+			"item:addItemsAvaible" })
 	public Boolean addItemsAvaible(@ValidEntityId(entityClass = Item.class) Long itemId, Integer amount) {
 		Item item = itemDao.findById(itemId);
 		item.setItemsAvaible(item.getItemsAvaible() + amount);
@@ -111,6 +130,8 @@ public class ItemBean implements ItemBeanLocal {
 	}
 
 	@Override
+	@RequiresPermissions({
+			"item:subItemsAvaible" })
 	public Boolean subItemsAvaible(@ValidEntityId(entityClass = Item.class) Long itemId, Integer amount) {
 		Item item = itemDao.findById(itemId);
 		item.setItemsAvaible(item.getItemsAvaible() - amount);
@@ -118,6 +139,8 @@ public class ItemBean implements ItemBeanLocal {
 	}
 
 	@Override
+	@RequiresPermissions({
+			"item:create" })
 	public Long newItem(@NotBlankString String name, @NotBlankString String description, BigDecimal price, Integer itemsAvaible) {
 		Item item = new Item(name, description, price, itemsAvaible);
 		itemDao.persist(item);

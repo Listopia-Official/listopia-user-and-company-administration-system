@@ -9,13 +9,17 @@ import javax.inject.Inject;
 import javax.validation.*;
 import javax.validation.executable.*;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.ValidEntityId;
+import florian_haas.lucas.util.Secured;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 @ValidateOnExecution(type = ExecutableType.IMPLICIT)
+@Secured
 public class AttendanceBean implements AttendanceBeanLocal {
 
 	@Inject
@@ -32,6 +36,8 @@ public class AttendanceBean implements AttendanceBeanLocal {
 	private Validator validator;
 
 	@Override
+	@RequiresPermissions({
+			"attendance:scan" })
 	public Boolean scan(@ValidEntityId(entityClass = UserCard.class) Long userCardId) {
 		UserCard userCard = userBean.findUserCardById(userCardId);
 		if (userCard.getBlocked() || (userCard.getValidDay() != null && !userCard.getValidDay().equals(LocalDate.now()))) {
@@ -78,6 +84,8 @@ public class AttendanceBean implements AttendanceBeanLocal {
 	}
 
 	@Override
+	@RequiresPermissions({
+			"attendance:evaluateAll" })
 	public List<Long> evaluateAll() {
 		List<Long> ids = attendanceDao.findAllIds();
 		List<Long> requirementsNotMet = new ArrayList<>();
@@ -101,11 +109,15 @@ public class AttendanceBean implements AttendanceBeanLocal {
 	}
 
 	@Override
+	@RequiresPermissions({
+			"attendance:findAll" })
 	public List<Attendancedata> findAll() {
 		return attendanceDao.findAll();
 	}
 
 	@Override
+	@RequiresPermissions({
+			"attendance:findById" })
 	public Attendancedata findById(@ValidEntityId(entityClass = Attendancedata.class) Long id) {
 		return attendanceDao.findById(id);
 	}
@@ -116,11 +128,15 @@ public class AttendanceBean implements AttendanceBeanLocal {
 	}
 
 	@Override
+	@RequiresPermissions({
+			"attendancefindByUserCardId" })
 	public Attendancedata findByUserCardId(@ValidEntityId(entityClass = UserCard.class) Long userCardId) {
 		return userBean.findUserCardById(userCardId).getUser().getAttendancedata();
 	}
 
 	@Override
+	@RequiresPermissions({
+			"attendance:findDynamic" })
 	public List<Attendancedata> findAttendancedata(Long id, Boolean isUserInState, Long timePresentDay, Long validTimeMissing, Boolean useId,
 			Boolean useIsUserInState, Boolean useTimePresentDay, Boolean useVaidTimeMissing, EnumQueryComparator idComparator,
 			EnumQueryComparator timePresentDayComparator, EnumQueryComparator validTimeMissingComparator) {
