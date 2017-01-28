@@ -13,6 +13,9 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.jsf</url-pattern>
 	</servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>main.jsf</welcome-file>
+	</welcome-file-list>
 	<context-param>
 		<param-name>javax.faces.WEBAPP_RESOURCES_DIRECTORY</param-name>
 		<param-value>/WEB-INF/resources</param-value>
@@ -24,6 +27,10 @@
 		<filter-name>shiroFilter</filter-name>
 		<filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
 	</filter>
+	<context-param>
+		<param-name>shiroConfigLocations</param-name>
+		<param-value>classpath:florian_haas/lucas/shiro.ini</param-value>
+	</context-param>
 	<filter-mapping>
 		<filter-name>shiroFilter</filter-name>
 		<url-pattern>/*</url-pattern>
