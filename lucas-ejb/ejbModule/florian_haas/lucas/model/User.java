@@ -32,7 +32,6 @@ public class User extends AccountOwner {
 
 	@OneToOne(cascade = CascadeType.ALL, optional = true, orphanRemoval = true)
 	@Valid
-	@NotNull
 	private Attendancedata attendancedata;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user")
