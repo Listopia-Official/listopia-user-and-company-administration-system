@@ -14,7 +14,8 @@ import org.apache.shiro.subject.Subject;
 
 /*
  * The code of this interceptor was taken from:
- * http://balusc.omnifaces.org/2013/01/apache-shiro-is-it-ready-for-java-ee-6.html
+ * http://balusc.omnifaces.org/2013/01/apache-shiro-is-it-ready-for-java-ee-6.html Some
+ * modifications were done.
  */
 @Interceptor
 @Secured
@@ -28,21 +29,20 @@ public class SecurityInterceptor implements Serializable {
 		Class<?> parentClass = context.getTarget().getClass();
 		Method method = context.getMethod();
 
-		if (!subject.isAuthenticated() && hasAnnotation(parentClass, method,
-				RequiresAuthentication.class)) { throw new UnauthenticatedException("Authentication required"); }
+		if (hasAnnotation(parentClass, method, RequiresAuthentication.class)
+				&& !subject.isAuthenticated()) { throw new UnauthenticatedException("Authentication required"); }
 
-		if (subject.getPrincipal() != null
-				&& hasAnnotation(parentClass, method, RequiresGuest.class)) { throw new UnauthenticatedException("Guest required"); }
+		if (hasAnnotation(parentClass, method, RequiresGuest.class)
+				&& subject.getPrincipal() != null) { throw new UnauthenticatedException("Guest required"); }
 
-		if (subject.getPrincipal() == null
-				&& hasAnnotation(parentClass, method, RequiresUser.class)) { throw new UnauthenticatedException("User required"); }
+		if (hasAnnotation(parentClass, method, RequiresUser.class)
+				&& subject.getPrincipal() == null) { throw new UnauthenticatedException("User required"); }
 
 		RequiresRoles roles = getAnnotation(parentClass, method, RequiresRoles.class);
 
 		if (roles != null) {
 			subject.checkRoles(Arrays.asList(roles.value()));
 		}
-
 		RequiresPermissions permissions = getAnnotation(parentClass, method, RequiresPermissions.class);
 
 		if (permissions != null) {
