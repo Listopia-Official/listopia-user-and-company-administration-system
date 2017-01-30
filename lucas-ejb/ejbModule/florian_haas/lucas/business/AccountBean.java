@@ -65,14 +65,17 @@ public class AccountBean implements AccountBeanLocal {
 			account2 = accountDao.findById(account2Id);
 		}
 
-		if (account1.getIsProtected() && !loginBean.getSubject().isPermitted("account:transactionFromProtected")) throw new AuthorizationException(
-				loginBean.getSubject().getPrincipal() + " is not permitted to start a transaction from a protected account");
+		if (account1.getIsProtected() && !loginBean.getSubject().isPermitted(ACCOUNT_TRANSACTION_FROM_PROTECTED.getPermissionString()))
+			throw new AuthorizationException(
+					loginBean.getSubject().getPrincipal() + " is not permitted to start a transaction from a protected account");
 
-		if (account2 != null && account2.getIsProtected() && !loginBean.getSubject().isPermitted("account:transactionToProtected"))
+		if (account2 != null && account2.getIsProtected()
+				&& !loginBean.getSubject().isPermitted(ACCOUNT_TRANSACTION_TO_PROTECTED.getPermissionString()))
 			throw new AuthorizationException(
 					loginBean.getSubject().getPrincipal() + " is not permitted to start a transaction to a protected account");
 
-		if (Utils.isGreatherThan(amount, globalData.getTransactionLimit()) && !loginBean.getSubject().isPermitted("account:ignoreTransactionLimit"))
+		if (Utils.isGreatherThan(amount, globalData.getTransactionLimit())
+				&& !loginBean.getSubject().isPermitted(ACCOUNT_IGNORE_TRANSACTION_LIMIT.getPermissionString()))
 			throw new AuthorizationException(loginBean.getSubject().getPrincipal() + " is not permitted to ignore transaction limit");
 
 		Set<ConstraintViolation<Account>> violations = validator.validate(account1, UnblockedAccountRequiredValidationGroup.class);
