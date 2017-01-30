@@ -101,7 +101,12 @@ public enum EnumPermission {
 	USER_BLOCK_USER_CARD(USER, "blockUSerCard"),
 	USER_UNBLOCK_USER_CARD(USER, "unblockUserCard"),
 	USER_SET_VALID_DATE(USER, "setValidDate"),
-	USER_FIND_USER_CARD_BY_ID(USER, "findUSerCardById"),;
+	USER_FIND_USER_CARD_BY_ID(USER, "findUSerCardById"),
+
+	LOGIN_CREATE_RAW_LOGIN_USER(LOGIN, "createRawLoginUser"),
+	LOGIN_CREATE_REGISTERED_LOGIN_USER(LOGIN, "createRegisteredLoginUser"),
+	LOGIN_CHANGE_PASSWORD(LOGIN, "changePassword"),
+	LOGIN_NEW_PASSWORD(LOGIN, "newPassword");
 
 	private String permissionString;
 

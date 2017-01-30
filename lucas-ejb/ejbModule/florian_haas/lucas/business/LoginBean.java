@@ -1,5 +1,7 @@
 package florian_haas.lucas.business;
 
+import static florian_haas.lucas.security.EnumPermission.*;
+
 import java.util.Arrays;
 
 import javax.ejb.*;
@@ -9,12 +11,11 @@ import javax.validation.executable.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.*;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.security.Secured;
+import florian_haas.lucas.security.*;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -41,22 +42,18 @@ public class LoginBean implements LoginBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"login:getSubject" })
 	public Subject getSubject() {
 		return SecurityUtils.getSubject();
 	}
 
 	@Override
-	@RequiresPermissions({
-			"login:createRawLoginUser" })
+	@RequiresPermissions(LOGIN_CREATE_RAW_LOGIN_USER)
 	public Long newLoginUser(String username, char[] password) {
 		return newLoginUserHelper(username, password, null);
 	}
 
 	@Override
-	@RequiresPermissions({
-			"login:createRegisteredLoginUser" })
+	@RequiresPermissions(LOGIN_CREATE_REGISTERED_LOGIN_USER)
 	public Long newLoginUser(Long user, char[] password) {
 		return newLoginUserHelper(Long.toString(user), password, userBean.findById(user));
 	}
@@ -71,38 +68,27 @@ public class LoginBean implements LoginBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"login:changePassword" })
+	@RequiresPermissions(LOGIN_CHANGE_PASSWORD)
 	public Boolean changePassword(Long loginUserId, char[] oldPassword, char[] newPassword) {
 		return changePasswordHelper(loginUserId, oldPassword, newPassword);
 	}
 
 	@Override
-	@RequiresPermissions({
-			"login:newPassword" })
+	@RequiresPermissions(LOGIN_NEW_PASSWORD)
 	public Boolean newPassword(Long loginUserId, char[] newPassword) {
 		return changePasswordHelper(loginUserId, null, newPassword);
 	}
 
 	private Boolean changePasswordHelper(Long loginUserId, char[] oldPassword, char[] newPassword) {
-		// PasswordService passwordService = new DefaultPasswordService();
-		// LoginUser user = loginUserDao.findById(loginUserId);
-		// String oldHashedPassword = null;
-		// if (oldPassword != null) {
-		// oldHashedPassword = passwordService.enc
-		// Arrays.fill(oldPassword, 'c');
-		// }
-		// String salt = randomSalt();
-		// String newHashedPassword = new Sha512Hash(newPassword, salt).toHex();
-		// Arrays.fill(newPassword, 'c');
-		//
-		// if (!user.getHashedPassword().equals(newHashedPassword)) {
-		// if (oldPassword == null || (oldPassword != null &&
-		// user.getHashedPassword().equals(oldHashedPassword))) {
-		// user.setHashedPassword(newHashedPassword, salt);
-		// return Boolean.TRUE;
-		// }
-		// }
+		PasswordService passwordService = new DefaultPasswordService();
+		LoginUser user = loginUserDao.findById(loginUserId);
+		String newEncryptedPassword = passwordService.encryptPassword(newPassword);
+		Arrays.fill(newPassword, 'c');
+		if (oldPassword == null || (oldPassword != null && passwordService.passwordsMatch(oldPassword, user.getHashedPassword()))) {
+			Arrays.fill(oldPassword, 'c');
+			user.setHashedPassword(newEncryptedPassword);
+			return Boolean.TRUE;
+		}
 		return Boolean.FALSE;
 	}
 
