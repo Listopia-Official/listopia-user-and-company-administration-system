@@ -2,7 +2,15 @@ package florian_haas.lucas.security;
 
 public enum EnumPermissionModule {
 
-	ACCOUNT("account");
+	ACCOUNT("account"),
+	ATTENDANCE("attendance"),
+	COMPANY("company"),
+	EMPLOYMENT("employment"),
+	ENTITY("entity"),
+	GLOBAL_DATA("globalData"),
+	ITEM("item"),
+	LOGIN("login"),
+	USER("user");
 
 	private String moduleName;
 

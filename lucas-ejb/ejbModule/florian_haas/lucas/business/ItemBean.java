@@ -1,5 +1,7 @@
 package florian_haas.lucas.business;
 
+import static florian_haas.lucas.security.EnumPermission.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -10,12 +12,11 @@ import javax.inject.Inject;
 import javax.validation.*;
 import javax.validation.executable.*;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.NotNullWarehouseRequired;
-import florian_haas.lucas.util.*;
+import florian_haas.lucas.security.*;
+import florian_haas.lucas.util.Utils;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -40,8 +41,7 @@ public class ItemBean implements ItemBeanLocal {
 	private Validator validator;
 
 	@Override
-	@RequiresPermissions({
-			"item:sell" })
+	@RequiresPermissions(ITEM_SELL)
 	public void sell(Map<Long, Integer> items, Long companyId, EnumPayType payType) {
 		Company company = companyBean.findById(companyId);
 		GlobalData data = globalData.getInstance();
@@ -64,22 +64,19 @@ public class ItemBean implements ItemBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"item:findAll" })
+	@RequiresPermissions(ITEM_FIND_ALL)
 	public List<Item> findAll() {
 		return itemDao.findAll();
 	}
 
 	@Override
-	@RequiresPermissions({
-			"item:findById" })
+	@RequiresPermissions(ITEM_FIND_BY_ID)
 	public Item findById(Long itemId) {
 		return itemDao.findById(itemId);
 	}
 
 	@Override
-	@RequiresPermissions({
-			"item:findDynamic" })
+	@RequiresPermissions(ITEM_FIND_DYNAMIC)
 	public List<Item> findItems(Long id, String name, String description, Integer itemsAvaible, BigDecimal pricePerItem, Boolean useId,
 			Boolean useName, Boolean useDescription, Boolean useItemsAvaible, Boolean usePricePerItem, EnumQueryComparator idComparator,
 			EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator, EnumQueryComparator itemsAvaibleComparator,
@@ -89,8 +86,7 @@ public class ItemBean implements ItemBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"item:setName" })
+	@RequiresPermissions(ITEM_SET_NAME)
 	public Boolean setName(Long itemId, String name) {
 		Item item = itemDao.findById(itemId);
 		if (item.getName().equals(name)) return Boolean.FALSE;
@@ -99,8 +95,7 @@ public class ItemBean implements ItemBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"item:setDescription" })
+	@RequiresPermissions(ITEM_SET_DESCRIPTION)
 	public Boolean setDescription(Long itemId, String description) {
 		Item item = itemDao.findById(itemId);
 		if (item.getDescription().equals(description)) return Boolean.FALSE;
@@ -109,8 +104,7 @@ public class ItemBean implements ItemBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"item:setPricePerItem" })
+	@RequiresPermissions(ITEM_SET_PRICE_PER_ITEM)
 	public Boolean setPricePerItem(Long itemId, BigDecimal pricePerItem) {
 		Item item = itemDao.findById(itemId);
 		if (Utils.isEqual(item.getPricePerItem(), pricePerItem)) return Boolean.FALSE;
@@ -119,8 +113,7 @@ public class ItemBean implements ItemBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"item:addItemsAvaible" })
+	@RequiresPermissions(ITEM_ADD_ITEMS_AVAIBLE)
 	public Boolean addItemsAvaible(Long itemId, Integer amount) {
 		Item item = itemDao.findById(itemId);
 		item.setItemsAvaible(item.getItemsAvaible() + amount);
@@ -128,8 +121,7 @@ public class ItemBean implements ItemBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"item:subItemsAvaible" })
+	@RequiresPermissions(ITEM_SUB_ITEMS_AVAIBLE)
 	public Boolean subItemsAvaible(Long itemId, Integer amount) {
 		Item item = itemDao.findById(itemId);
 		item.setItemsAvaible(item.getItemsAvaible() - amount);
@@ -137,8 +129,7 @@ public class ItemBean implements ItemBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"item:create" })
+	@RequiresPermissions(ITEM_CREATE)
 	public Long newItem(String name, String description, BigDecimal price, Integer itemsAvaible) {
 		Item item = new Item(name, description, price, itemsAvaible);
 		itemDao.persist(item);

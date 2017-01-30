@@ -1,13 +1,13 @@
 package florian_haas.lucas.business;
 
+import static florian_haas.lucas.security.EnumPermission.ENTITY_EXISTS;
+
 import javax.ejb.*;
 import javax.persistence.*;
 import javax.validation.executable.*;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-
 import florian_haas.lucas.model.EntityBase;
-import florian_haas.lucas.util.Secured;
+import florian_haas.lucas.security.*;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -19,8 +19,7 @@ public class EntityBean implements EntityBeanLocal {
 	private EntityManager manager;
 
 	@Override
-	@RequiresPermissions({
-			"entity:exists" })
+	@RequiresPermissions(ENTITY_EXISTS)
 	public Boolean exists(Long id, Class<? extends EntityBase> entityClass) {
 		return manager.createQuery("SELECT COUNT(e.id) FROM " + entityClass.getSimpleName() + " e WHERE e.id=:id", Long.class).getSingleResult() > 0;
 	}

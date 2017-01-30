@@ -1,5 +1,7 @@
 package florian_haas.lucas.business;
 
+import static florian_haas.lucas.security.EnumPermission.*;
+
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -7,11 +9,10 @@ import javax.ejb.*;
 import javax.inject.Inject;
 import javax.validation.executable.*;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.util.*;
+import florian_haas.lucas.security.*;
+import florian_haas.lucas.util.Utils;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -27,29 +28,25 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	private CompanyBeanLocal companyBean;
 
 	@Override
-	@RequiresPermissions({
-			"globalData:getSalaries" })
+	@RequiresPermissions(GLOBAL_DATA_GET_SALARIES)
 	public Map<EnumSalaryClass, BigDecimal> getSalaries() {
 		return newInstance().getSalaries();
 	}
 
 	@Override
-	@RequiresPermissions({
-			"globalData:getMinTimePresent" })
+	@RequiresPermissions(GLOBAL_DATA_GET_MIN_TIME_PRESENT)
 	public Long getMinTimePresent() {
 		return newInstance().getMinTimePresent();
 	}
 
 	@Override
-	@RequiresPermissions({
-			"globalData:getMinimumWage" })
+	@RequiresPermissions(GLOBAL_DATA_GET_MINIMUM_WAGE)
 	public BigDecimal getMinimumWage() {
 		return newInstance().getMinimumWage();
 	}
 
 	@Override
-	@RequiresPermissions({
-			"globalData:setSalary" })
+	@RequiresPermissions(GLOBAL_DATA_SET_SALARY)
 	public Boolean setSalary(EnumSalaryClass salaryClass, BigDecimal salary) {
 		GlobalData newInstance = newInstance();
 		if (Utils.isEqual(newInstance.getSalaries().get(salaryClass), salary)) return Boolean.FALSE;
@@ -58,8 +55,7 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"globalData:setMinTimePresent" })
+	@RequiresPermissions(GLOBAL_DATA_SET_MIN_TIME_PRESENT)
 	public Boolean setMinTimePresent(Long minTimePresent) {
 		GlobalData newInstance = newInstance();
 		if (newInstance.getMinTimePresent().equals(minTimePresent)) return Boolean.FALSE;
@@ -68,8 +64,7 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"globalData:setMinimumWage" })
+	@RequiresPermissions(GLOBAL_DATA_SET_MINIMUM_WAGE)
 	public Boolean setMinimumWage(BigDecimal minimumWage) {
 		GlobalData newInstance = newInstance();
 		if (Utils.isEqual(newInstance.getMinimumWage(), minimumWage)) return Boolean.FALSE;
@@ -90,15 +85,13 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"globalData:getWarehouse" })
+	@RequiresPermissions(GLOBAL_DATA_GET_WAREHOUSE)
 	public Company getWarehouse() {
 		return newInstance().getWarehouse();
 	}
 
 	@Override
-	@RequiresPermissions({
-			"globalData:setWarehouse" })
+	@RequiresPermissions(GLOBAL_DATA_SET_WAREHOUSE)
 	public Boolean setWarehouse(Long companyId) {
 		Company existingCompany = newInstance().getWarehouse();
 		Company company = companyBean.findById(companyId);
@@ -111,22 +104,19 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"globalData:getInstance" })
+	@RequiresPermissions(GLOBAL_DATA_GET_INSTANCE)
 	public GlobalData getInstance() {
 		return newInstance();
 	}
 
 	@Override
-	@RequiresPermissions({
-			"globalData:getTransactionLimit" })
+	@RequiresPermissions(GLOBAL_DATA_GET_TRANSACTION_LIMIT)
 	public BigDecimal getTransactionLimit() {
 		return newInstance().getTransactionLimit();
 	}
 
 	@Override
-	@RequiresPermissions({
-			"globalData:setTransactionLimit" })
+	@RequiresPermissions(GLOBAL_DATA_SET_TRANSACTION_LIMIT)
 	public Boolean setTransactionLimit(BigDecimal transactionLimit) {
 		GlobalData newInstance = newInstance();
 		if (Utils.isEqual(newInstance.getTransactionLimit(), transactionLimit)) return Boolean.FALSE;

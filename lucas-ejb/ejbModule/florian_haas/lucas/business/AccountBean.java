@@ -1,5 +1,7 @@
 package florian_haas.lucas.business;
 
+import static florian_haas.lucas.security.EnumPermission.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -11,12 +13,12 @@ import javax.validation.*;
 import javax.validation.executable.*;
 
 import org.apache.shiro.authz.AuthorizationException;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.UnblockedAccountRequiredValidationGroup;
-import florian_haas.lucas.util.*;
+import florian_haas.lucas.security.*;
+import florian_haas.lucas.util.Utils;
 
 @Stateless
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -38,22 +40,20 @@ public class AccountBean implements AccountBeanLocal {
 	private Validator validator;
 
 	@Override
-	@RequiresPermissions({
-			"account:payIn" })
+	@RequiresPermissions(ACCOUNT_PAY_IN)
+
 	public Long payIn(Long id, BigDecimal amount, String comment) {
 		return transaction(amount, id, null, comment);
 	}
 
 	@Override
-	@RequiresPermissions({
-			"account:payOut" })
+	@RequiresPermissions(ACCOUNT_PAY_OUT)
 	public Long payOut(Long id, BigDecimal amount, String comment) {
 		return transaction(amount, id, null, comment);
 	}
 
 	@Override
-	@RequiresPermissions({
-			"account:transaction" })
+	@RequiresPermissions(ACCOUNT_TRANSACTION)
 	public Long transaction(Long from, Long to, BigDecimal amount, String comment) {
 		return transaction(amount, from, to, comment);
 	}
@@ -113,8 +113,7 @@ public class AccountBean implements AccountBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"account:block" })
+	@RequiresPermissions(ACCOUNT_BLOCK)
 	public Boolean blockAccount(Long id) {
 		Account account = accountDao.findById(id);
 		if (account.getBlocked() == Boolean.TRUE) {
@@ -126,8 +125,7 @@ public class AccountBean implements AccountBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"account:unblock" })
+	@RequiresPermissions(ACCOUNT_UNBLOCK)
 	public Boolean unblockAccount(Long id) {
 		Account account = accountDao.findById(id);
 		if (account.getBlocked() == Boolean.TRUE) {
@@ -139,8 +137,7 @@ public class AccountBean implements AccountBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"account:protect" })
+	@RequiresPermissions(ACCOUNT_PROTECT)
 	public Boolean protect(Long id) {
 		Account account = accountDao.findById(id);
 		if (account.getIsProtected() == Boolean.FALSE) {
@@ -152,8 +149,7 @@ public class AccountBean implements AccountBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"account:unprotect" })
+	@RequiresPermissions(ACCOUNT_UNPROTECT)
 	public Boolean unprotect(Long id) {
 		Account account = accountDao.findById(id);
 		if (account.getIsProtected() == Boolean.TRUE) {
@@ -165,22 +161,19 @@ public class AccountBean implements AccountBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions({
-			"account:findAll" })
+	@RequiresPermissions(ACCOUNT_FIND_ALL)
 	public List<Account> findAll() {
 		return accountDao.findAll();
 	}
 
 	@Override
-	@RequiresPermissions({
-			"account:findById" })
+	@RequiresPermissions(ACCOUNT_FIND_BY_ID)
 	public Account findById(Long id) {
 		return accountDao.findById(id);
 	}
 
 	@Override
-	@RequiresPermissions({
-			"account:findDynamic" })
+	@RequiresPermissions(ACCOUNT_FIND_DYNAMIC)
 	public List<Account> findAccounts(Long id, EnumAccountOwnerType ownerType, BigDecimal bankBalance, Boolean blocked, Boolean isProtected,
 			Boolean useId, Boolean useOwnerType, Boolean useBankBalance, Boolean useBlocked, Boolean useProtected, EnumQueryComparator idComparator,
 			EnumQueryComparator bankBalanceComparator) {
