@@ -14,6 +14,11 @@
 			<ejb-name>*</ejb-name>
 			<interceptor-class>florian_haas.lucas.util.SecurityInterceptor</interceptor-class>
 		</interceptor-binding>
+		<application-exception> 
+			<exception-class>org.apache.shiro.ShiroException</exception-class>
+			<rollback>true</rollback>
+			<inherited>true</inherited>
+		</application-exception>
 		<application-exception>
 			<exception-class>javax.validation.ConstraintViolationException</exception-class>
 			<rollback>true</rollback>
