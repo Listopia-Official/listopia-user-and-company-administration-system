@@ -1,4 +1,4 @@
-package florian_haas.lucas.util;
+package florian_haas.lucas.security;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -46,7 +46,7 @@ public class SecurityInterceptor implements Serializable {
 		RequiresPermissions permissions = getAnnotation(parentClass, method, RequiresPermissions.class);
 
 		if (permissions != null) {
-			subject.checkPermissions(permissions.value());
+			subject.checkPermissions(EnumPermission.getPermissionStringsFromArray(permissions.value()));
 		}
 
 		return context.proceed();

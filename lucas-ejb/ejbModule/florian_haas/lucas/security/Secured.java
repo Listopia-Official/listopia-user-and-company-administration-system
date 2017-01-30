@@ -1,4 +1,4 @@
-package florian_haas.lucas.util;
+package florian_haas.lucas.security;
 
 import java.lang.annotation.*;
 
