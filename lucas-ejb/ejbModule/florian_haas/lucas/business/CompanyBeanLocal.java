@@ -9,7 +9,7 @@ import javax.validation.constraints.*;
 
 import florian_haas.lucas.database.EnumQueryComparator;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.*;
+import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.util.validation.*;
 
 @Local
@@ -67,7 +67,4 @@ public interface CompanyBeanLocal {
 	public Boolean blockCompanyCard(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId);
 
 	public Boolean unblockCompanyCard(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId);
-
-	public Long transactionToParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId, @ValidTransactionAmount BigDecimal amount,
-			@ShortComment String comment);
 }
