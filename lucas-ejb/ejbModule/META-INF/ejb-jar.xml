@@ -6,13 +6,13 @@
 	<display-name>lucas-ejb</display-name>
 	<interceptors>
 		<interceptor>
-			<interceptor-class>florian_haas.lucas.util.SecurityInterceptor</interceptor-class>
+			<interceptor-class>florian_haas.lucas.security.SecurityInterceptor</interceptor-class>
 		</interceptor>
 	</interceptors>
 	<assembly-descriptor>
 		<interceptor-binding>
 			<ejb-name>*</ejb-name>
-			<interceptor-class>florian_haas.lucas.util.SecurityInterceptor</interceptor-class>
+			<interceptor-class>florian_haas.lucas.security.SecurityInterceptor</interceptor-class>
 		</interceptor-binding>
 		<application-exception> 
 			<exception-class>org.apache.shiro.ShiroException</exception-class>
