@@ -55,4 +55,6 @@ public interface UserBeanLocal {
 
 	public Boolean setValidDate(@ValidEntityId(entityClass = UserCard.class) Long userCardId, LocalDate validDate);
 
+	public Boolean setImage(@ValidEntityId(entityClass = UserCard.class) Long userId, byte[] image);
+
 }

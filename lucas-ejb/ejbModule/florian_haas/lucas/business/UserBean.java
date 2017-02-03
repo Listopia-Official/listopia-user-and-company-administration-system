@@ -3,7 +3,7 @@ package florian_haas.lucas.business;
 import static florian_haas.lucas.security.EnumPermission.*;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 
 import javax.ejb.*;
 import javax.inject.Inject;
@@ -11,6 +11,7 @@ import javax.validation.executable.*;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
+import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.security.*;
 
 @Stateless
@@ -164,6 +165,15 @@ public class UserBean implements UserBeanLocal {
 	@RequiresPermissions(USER_FIND_USER_CARD_BY_ID)
 	public UserCard findUserCardById(Long userCardId) {
 		return userCardDao.findById(userCardId);
+	}
+
+	@Override
+	@RequiresPermissions(USER_SET_IMAGE)
+	public Boolean setImage(@ValidEntityId(entityClass = UserCard.class) Long userId, byte[] image) {
+		User user = userDao.findById(userId);
+		if (Arrays.equals(user.getImage(), image)) return Boolean.FALSE;
+		user.setImage(image);
+		return Boolean.TRUE;
 	}
 
 }

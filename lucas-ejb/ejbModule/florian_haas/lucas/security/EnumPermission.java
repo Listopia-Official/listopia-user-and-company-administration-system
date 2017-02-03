@@ -102,6 +102,7 @@ public enum EnumPermission {
 	USER_UNBLOCK_USER_CARD(USER, "unblockUserCard"),
 	USER_SET_VALID_DATE(USER, "setValidDate"),
 	USER_FIND_USER_CARD_BY_ID(USER, "findUSerCardById"),
+	USER_SET_IMAGE(USER, "setImage"),
 
 	LOGIN_CREATE_RAW_LOGIN_USER(LOGIN, "createRawLoginUser"),
 	LOGIN_CREATE_REGISTERED_LOGIN_USER(LOGIN, "createRegisteredLoginUser"),

@@ -26,6 +26,10 @@ public class User extends AccountOwner {
 	@NotBlankString
 	private String schoolClass;
 
+	@Lob
+	@Basic(fetch = FetchType.LAZY)
+	private byte[] image;
+
 	@ElementCollection(fetch = FetchType.EAGER)
 	@NotNull
 	private List<@TypeNotNull String> ranks = new ArrayList<>();
@@ -133,5 +137,13 @@ public class User extends AccountOwner {
 
 	public Boolean removeEmployment(Employment employment) {
 		return employments.remove(employment);
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 }
