@@ -13,6 +13,14 @@
 		<!--<h:outputStylesheet library="css" name="styles.css" /> -->
 		<!-- <f:loadBundle basename="messages" var="msg" /> -->
 	</h:head>
+	<h:form>
+		<p:toolbar rendered="#{not loginBean.anonymous}">
+			<p:toolbarGroup align="right">
+				<p:commandButton value="Logout" action="#{loginBean.logout}"
+					ajax="false" />
+			</p:toolbarGroup>
+		</p:toolbar>
+	</h:form>
 	<ui:insert name="content" />
 	<p:separator />
 	<h:outputText value="(C) Florian Haas, 2016" style="color: gray;" />

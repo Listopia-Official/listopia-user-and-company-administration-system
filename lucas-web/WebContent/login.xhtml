@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="siteTemplate.xhtml">
+	<ui:define name="content">
+		<h:form id="login">
+			<h2>Login:</h2>
+			<p:messages globalOnly="true" showDetail="true" showSummary="true"
+				closable="true" />
+			<p:panelGrid columns="3" styleClass="ui-noborder" id="grid">
+				<p:outputLabel for="username" value="Username:" />
+				<p:inputText id="username" />
+				<p:message for="username" />
+				<p:outputLabel for="password" value="Password:" />
+				<p:password id="password" />
+				<p:message for="password" />
+				<p:commandButton value="Login"
+					ajax="false" />
+			</p:panelGrid>
+			 #{shiroLoginFailure}
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
