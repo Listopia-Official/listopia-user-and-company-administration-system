@@ -109,6 +109,7 @@ public class LoginBean implements LoginBeanLocal {
 				role.addPermission(permission);
 			});
 		}
+		loginUserRoleDao.persist(role);
 		return role.getId();
 	}
 
