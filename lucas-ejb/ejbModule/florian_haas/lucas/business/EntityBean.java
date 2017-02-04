@@ -21,7 +21,8 @@ public class EntityBean implements EntityBeanLocal {
 	@Override
 	@RequiresPermissions(ENTITY_EXISTS)
 	public Boolean exists(Long id, Class<? extends EntityBase> entityClass) {
-		return manager.createQuery("SELECT COUNT(e.id) FROM " + entityClass.getSimpleName() + " e WHERE e.id=:id", Long.class).getSingleResult() > 0;
+		return manager.createQuery("SELECT COUNT(e.id) FROM " + entityClass.getSimpleName() + " e WHERE e.id=" + id, Long.class)
+				.getSingleResult() > 0;
 	}
 
 }
