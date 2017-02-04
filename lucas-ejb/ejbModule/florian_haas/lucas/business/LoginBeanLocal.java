@@ -1,6 +1,6 @@
 package florian_haas.lucas.business;
 
-import java.util.Set;
+import java.util.*;
 
 import javax.ejb.Local;
 import javax.validation.constraints.NotNull;
@@ -47,4 +47,8 @@ public interface LoginBeanLocal {
 	public Boolean removePermission(@ValidEntityId(entityClass = LoginUserRole.class) Long roleId, @NotBlank String permission);
 
 	public LoginUserRole findLoginUserRoleById(@ValidEntityId(entityClass = LoginUserRole.class) Long roleId);
+
+	public List<LoginUserRole> findAllLoginUserRoles();
+
+	public List<LoginUser> findAllLoginUsers();
 }

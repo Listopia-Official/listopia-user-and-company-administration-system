@@ -153,4 +153,14 @@ public class LoginBean implements LoginBeanLocal {
 		return loginUserRoleDao.findById(roleId);
 	}
 
+	@Override
+	public List<LoginUserRole> findAllLoginUserRoles() {
+		return loginUserRoleDao.findAll();
+	}
+
+	@Override
+	public List<LoginUser> findAllLoginUsers() {
+		return loginUserDao.findAll();
+	}
+
 }
