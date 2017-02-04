@@ -26,7 +26,8 @@ public class LoginUser extends EntityBase {
 	@OneToOne
 	private User user;
 
-	@OneToMany
+	@OneToMany(cascade = {
+			CascadeType.PERSIST, CascadeType.REFRESH })
 	@NotNull
 	private Set<@TypeNotNull LoginUserRole> roles = new HashSet<>();
 

@@ -2,7 +2,7 @@ package florian_haas.lucas.business;
 
 import static florian_haas.lucas.security.EnumPermission.*;
 
-import java.util.Arrays;
+import java.util.*;
 
 import javax.ejb.*;
 import javax.inject.Inject;
@@ -26,6 +26,10 @@ public class LoginBean implements LoginBeanLocal {
 	@Inject
 	@JPADAO
 	private LoginUserDAO loginUserDao;
+
+	@Inject
+	@JPADAO
+	private LoginUserRoleDAO loginUserRoleDao;
 
 	@EJB
 	private UserBeanLocal userBean;
@@ -90,6 +94,63 @@ public class LoginBean implements LoginBeanLocal {
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;
+	}
+
+	@Override
+	public LoginUser findLoginUserById(Long id) {
+		return loginUserDao.findById(id);
+	}
+
+	@Override
+	public Long newLoginUserRole(String name, Set<String> permissions) {
+		LoginUserRole role = new LoginUserRole(name);
+		if (permissions != null) {
+			permissions.forEach(permission -> {
+				role.addPermission(permission);
+			});
+		}
+		return role.getId();
+	}
+
+	@Override
+	public Boolean addLoginUserRole(Long userId, Long roleId) {
+		LoginUser user = loginUserDao.findById(userId);
+		LoginUserRole role = loginUserRoleDao.findById(roleId);
+		return user.addRole(role);
+	}
+
+	@Override
+	public Boolean removeLoginUserRole(Long userId, Long roleId) {
+		LoginUser user = loginUserDao.findById(userId);
+		LoginUserRole role = loginUserRoleDao.findById(roleId);
+		return user.removeRole(role);
+	}
+
+	@Override
+	public Boolean setRoleName(Long roleId, String name) {
+		LoginUserRole role = loginUserRoleDao.findById(roleId);
+		if (!role.getName().equals(name)) {
+			role.setName(name);
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
+	@Override
+	public Boolean addPermission(Long roleId, String permission) {
+		LoginUserRole role = loginUserRoleDao.findById(roleId);
+		return role.addPermission(permission);
+	}
+
+	@Override
+	public Boolean removePermission(Long roleId, String permission) {
+		LoginUserRole role = loginUserRoleDao.findById(roleId);
+		return role.removePermission(permission);
+	}
+
+	@Override
+	public LoginUserRole findLoginUserRoleById(Long roleId) {
+		return loginUserRoleDao.findById(roleId);
 	}
 
 }
