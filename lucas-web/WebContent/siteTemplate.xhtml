@@ -9,12 +9,15 @@
 	<h:head>
 		<meta http-equiv="text/html; charset=UTF-8" />
 		<!-- <h:outputText value="#{msg['lucas.application.title']}" /> -->
-		<title>LUCAS WIP</title>
+		<title>LUCAS Techdemo</title>
 		<!--<h:outputStylesheet library="css" name="styles.css" /> -->
 		<!-- <f:loadBundle basename="messages" var="msg" /> -->
 	</h:head>
 	<h:form>
 		<p:toolbar rendered="#{not loginBean.anonymous}">
+		<p:toolbarGroup align="left">
+		<h:outputText value="Welcome, #{loginBean.loggedInUsername}"/>
+		</p:toolbarGroup>
 			<p:toolbarGroup align="right">
 				<p:commandButton value="Logout" action="#{loginBean.logout}"
 					ajax="false" />

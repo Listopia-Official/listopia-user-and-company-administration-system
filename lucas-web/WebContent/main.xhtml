@@ -7,7 +7,17 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 <ui:composition template="siteTemplate.xhtml">
 	<ui:define name="content">
-		Content!
+		<h:form>
+			<p:messages globalOnly="true" showDetail="true" showSummary="true"
+				showIcon="true" closable="true" autoUpdate="true" />
+			<p:panelGrid columns="3">
+				<p:commandButton value="Create new Login User"
+					action="#{testBean.newUser}" />
+				<p:password id="passwordInput" value="#{testBean.password}"
+					feedback="true" converter="lucas:StringChar[]Converter" />
+				<p:message for="passwordInput" />
+			</p:panelGrid>
+		</h:form>
 	</ui:define>
 </ui:composition>
 </html>
