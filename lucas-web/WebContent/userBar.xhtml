@@ -1,0 +1,15 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	<h:form>
+		<p:toolbar styleClass="toolbar">
+			<p:toolbarGroup align="right">
+				<p:commandButton
+					value="#{msg['lucas.application.userBar.logoutButton.name']}"
+					title="#{msg['lucas.application.userBar.logoutButton.tooltip']}"
+					action="#{loginBean.logout}" />
+			</p:toolbarGroup>
+		</p:toolbar>
+	</h:form>
+</ui:composition>
