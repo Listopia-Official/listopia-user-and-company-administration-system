@@ -176,4 +176,10 @@ public class UserBean implements UserBeanLocal {
 		return Boolean.TRUE;
 	}
 
+	@Override
+	@RequiresPermissions(USER_GET_IMAGE_FROM_ID)
+	public byte[] getImage(@ValidEntityId(entityClass = User.class) Long userId) {
+		return userDao.getImageFromId(userId);
+	}
+
 }

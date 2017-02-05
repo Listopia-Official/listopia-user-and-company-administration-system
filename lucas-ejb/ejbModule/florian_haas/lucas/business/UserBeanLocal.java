@@ -57,4 +57,6 @@ public interface UserBeanLocal {
 
 	public Boolean setImage(@ValidEntityId(entityClass = UserCard.class) Long userId, byte[] image);
 
+	public byte[] getImage(@ValidEntityId(entityClass = User.class) Long userId);
+
 }

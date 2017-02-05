@@ -52,4 +52,10 @@ public class UserDAOImpl extends DAOImpl<User> implements UserDAO {
 		});
 	}
 
+	@Override
+	public byte[] getImageFromId(Long userId) {
+		List<byte[]> results = readOnlyJPQLQuery("SELECT image from User u where u.id=?1", byte[].class, userId);
+		return results.isEmpty() || results == null ? null : results.get(0);
+	}
+
 }
