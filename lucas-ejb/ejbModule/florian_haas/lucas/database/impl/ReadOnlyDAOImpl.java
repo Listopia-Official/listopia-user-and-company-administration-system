@@ -62,12 +62,16 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 		return entity;
 	}
 
-	public List<E> readOnlyJPQLQuery(String jpql, Object... params) {
-		TypedQuery<E> query = manager.createQuery(jpql, entityClass);
+	public <T> List<T> readOnlyJPQLQuery(String jpql, Class<T> typeClass, Object... params) {
+		TypedQuery<T> query = manager.createQuery(jpql, typeClass);
 		for (int i = 0; i < params.length; i++) {
 			query.setParameter(i + 1, params[i]);
 		}
 		return query.getResultList();
+	}
+
+	public List<E> readOnlyJPQLQuery(String jpql, Object... params) {
+		return readOnlyJPQLQuery(jpql, entityClass, params);
 	}
 
 	public List<E> readOnlyCriteriaQuery(TriFunction<CriteriaQuery<E>, Root<E>, CriteriaBuilder, Predicate[]> restrictions) {
