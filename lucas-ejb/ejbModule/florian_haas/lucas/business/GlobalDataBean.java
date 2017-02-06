@@ -124,4 +124,19 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 		return Boolean.TRUE;
 	}
 
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_GET_CURRENCY_SYMBOL)
+	public String getCurrencySymbol() {
+		return newInstance().getCurrencySymbol();
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_SET_CURRENCY_SYMBOL)
+	public Boolean setCurrencySymbol(String currencySymbol) {
+		GlobalData newInstance = newInstance();
+		if (newInstance.getCurrencySymbol().equals(currencySymbol)) return Boolean.FALSE;
+		newInstance.setCurrencySymbol(currencySymbol);
+		return Boolean.TRUE;
+	}
+
 }

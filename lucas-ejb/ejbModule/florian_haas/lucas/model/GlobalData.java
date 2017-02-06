@@ -6,6 +6,8 @@ import java.util.*;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import florian_haas.lucas.model.validation.*;
 
 @Entity
@@ -37,6 +39,10 @@ public class GlobalData extends EntityBase {
 	@NotNull
 	@DecimalMin(value = "0", inclusive = false)
 	private BigDecimal transactionLimit = new BigDecimal("20.0");
+
+	@Basic(optional = false)
+	@NotBlank
+	private String currencySymbol = "L";
 
 	public Map<EnumSalaryClass, BigDecimal> getSalaries() {
 		return Collections.unmodifiableMap(salaries);
@@ -76,6 +82,14 @@ public class GlobalData extends EntityBase {
 
 	public void setTransactionLimit(BigDecimal transactionLimit) {
 		this.transactionLimit = transactionLimit;
+	}
+
+	public String getCurrencySymbol() {
+		return currencySymbol;
+	}
+
+	public void setCurrencySymbol(String currencySymbol) {
+		this.currencySymbol = currencySymbol;
 	}
 
 }

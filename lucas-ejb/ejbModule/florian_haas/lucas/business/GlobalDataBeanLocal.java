@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.ejb.Local;
 import javax.validation.constraints.*;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.*;
 
@@ -20,6 +22,10 @@ public interface GlobalDataBeanLocal {
 
 	public BigDecimal getMinimumWage();
 
+	public BigDecimal getTransactionLimit();
+
+	public String getCurrencySymbol();
+
 	public Boolean setSalary(@NotNull EnumSalaryClass salaryClass, @MinimumWage BigDecimal salary);
 
 	public Boolean setMinTimePresent(@NotNull @Min(1) Long minTimePresent);
@@ -30,8 +36,8 @@ public interface GlobalDataBeanLocal {
 
 	public Boolean setWarehouse(@ValidEntityId(entityClass = Company.class) Long companyId);
 
-	public BigDecimal getTransactionLimit();
-
 	public Boolean setTransactionLimit(@NotNull @DecimalMin(value = "0", inclusive = false) BigDecimal transactionLimit);
+
+	public Boolean setCurrencySymbol(@NotBlank String currencySymbol);
 
 }
