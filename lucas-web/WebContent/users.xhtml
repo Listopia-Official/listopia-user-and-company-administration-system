@@ -27,12 +27,49 @@
 			<span class="ui-separator"> <span
 				class="ui-icon ui-icon-grip-dotted-vertical" />
 			</span>
+			<p:commandButton
+				value="#{msg['lucas.application.userScreen.editUserButton.name']}"
+				title="#{msg['lucas.application.userScreen.editUserButton.tooltip']}"
+				icon="fa fa-edit" />
+			<p:commandButton
+				value="#{msg['lucas.application.userScreen.imageManagerButton.name']}"
+				title="#{msg['lucas.application.userScreen.imageManagerButton.tooltip']}"
+				icon="fa fa-image" />
+			<p:commandButton
+				value="#{msg['lucas.application.userScreen.userCardManagerButton.name']}"
+				title="#{msg['lucas.application.userScreen.userCardManagerButton.tooltip']}"
+				icon="fa fa-credit-card" />
+			<span class="ui-separator"> <span
+				class="ui-icon ui-icon-grip-dotted-vertical" />
+			</span>
+			<p:commandButton
+				value="#{msg['lucas.application.userScreen.profileButton.name']}"
+				title="#{msg['lucas.application.userScreen.profileButton.tooltip']}"
+				icon="fa fa-info-circle" />
+			<span class="ui-separator"> <span
+				class="ui-icon ui-icon-grip-dotted-vertical" />
+			</span>
+			<p:commandButton icon="fa fa-user-times"
+				value="#{msg['lucas.application.userScreen.removeUserButton.name']}"
+				title="#{msg['lucas.application.userScreen.removeUserButton.tooltip']}" />
 		</p:toolbarGroup>
 	</ui:define>
 	<ui:define name="searchCriteria">
 
 	</ui:define>
 	<ui:define name="searchResults">
-		<p:tab title="Search Results"></p:tab>
+		<p:tab title="Search Results">
+			<p:dataTable draggableColumns="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {GlobalSelection}"
+				rowSelectMode="add">
+				<p:column headerText="Id:"></p:column>
+				<p:column headerText="Forename:"></p:column>
+				<p:column headerText="Surname:"></p:column>
+				<p:column headerText="User Type:"></p:column>
+				<p:column headerText="School Grade:"></p:column>
+				<p:column headerText="School Class:"></p:column>
+				<p:column headerText="Ranks:"></p:column>
+			</p:dataTable>
+		</p:tab>
 	</ui:define>
 </ui:composition>
