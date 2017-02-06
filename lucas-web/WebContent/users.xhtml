@@ -1,0 +1,38 @@
+<ui:composition template="/dataTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:define name="pageTitle">
+		<h:outputText value="#{msg['lucas.application.userScreen.title']}" />
+	</ui:define>
+	<ui:define name="buttonArea">
+		<p:toolbarGroup>
+			<p:commandButton
+				value="#{msg['lucas.application.userScreen.newPupilButton.name']}"
+				title="#{msg['lucas.application.userScreen.newPupilButton.tooltip']}"
+				icon="fa fa-user-plus">
+			</p:commandButton>
+			<p:commandButton
+				value="#{msg['lucas.application.userScreen.newTeacherButton.name']}"
+				title="#{msg['lucas.application.userScreen.newTeacherButton.tooltip']}"
+				icon="fa fa-user-plus">
+			</p:commandButton>
+			<p:commandButton
+				value="#{msg['lucas.application.userScreen.newGuestButton.name']}"
+				title="#{msg['lucas.application.userScreen.newGuestButton.tooltip']}"
+				icon="fa fa-user-plus">
+			</p:commandButton>
+			<span class="ui-separator"> <span
+				class="ui-icon ui-icon-grip-dotted-vertical" />
+			</span>
+		</p:toolbarGroup>
+	</ui:define>
+	<ui:define name="searchCriteria">
+
+	</ui:define>
+	<ui:define name="searchResults">
+		<p:tab title="Search Results"></p:tab>
+	</ui:define>
+</ui:composition>

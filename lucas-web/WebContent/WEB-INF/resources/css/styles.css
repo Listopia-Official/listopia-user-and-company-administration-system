@@ -1,5 +1,46 @@
 @CHARSET "UTF-8";
 
 .toolbar {
-	margin-bottom: 5px;
+	margin-bottom: 7px;
+}
+
+.left {
+	text-align: left;
+}
+
+.center {
+	text-align: center;
+}
+
+.right {
+	text-align: right;
+}
+
+.userBarPanelGrid {
+	width: 100% !important;
+}
+
+.userBarRow {
+	background: inherit;
+}
+
+.userBarCell {
+	padding: 0px !important;
+	width: 33.3333333% !important;
+}
+
+.noFloat {
+	float: none !important;
+}
+
+/*
+* Font-Awesome fix
+*/
+.ui-widget .ui-icon.fa, .ui-icon.fa {
+	background-image: none;
+	text-indent: 0px;
+	background-repeat: no-repeat;
+	display: block;
+	overflow: visible;
+	text-indent: 0px;
 }

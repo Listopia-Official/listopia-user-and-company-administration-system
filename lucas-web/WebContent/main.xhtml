@@ -4,17 +4,60 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:define name="pageTitle">
+		<h:outputText value="#{msg['lucas.application.mainScreen.title']}" />
+	</ui:define>
 	<ui:define name="content">
 		<h:form>
 			<p:messages globalOnly="true" showDetail="true" showSummary="true"
 				showIcon="true" closable="true" autoUpdate="true" />
-			<p:panelGrid columns="3" styleClass="ui-noborder">
-				<p:commandButton value="Create new Login User"
-					action="#{testBean.newUser}" />
-				<p:password id="passwordInput" value="#{testBean.password}"
-					feedback="true" converter="lucas:StringChar[]Converter" />
-				<p:message for="passwordInput" />
-			</p:panelGrid>
+			<p:menu toggleable="true">
+				<p:submenu
+					label="#{msg['lucas.application.mainScreen.navigationMenu.communicationSubmenu.name']}">
+					<p:menuitem disabled="true"
+						value="#{msg['lucas.application.mainScreen.navigationMenu.communicationSubmenu.chatMenuItem.name']}" />
+					<p:menuitem disabled="true"
+						value="#{msg['lucas.application.mainScreen.navigationMenu.communicationSubmenu.notificationsMenuItem.name']}" />
+				</p:submenu>
+				<p:submenu
+					label="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.name']}">
+					<p:menuitem
+						value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.usersMenuItem.name']}"
+						outcome="/users.xhtml" />
+					<p:menuitem disabled="true"
+						value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.companiesMenuItem.name']}" />
+					<p:menuitem disabled="true"
+						value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.employmentsMenuItem.name']}" />
+				</p:submenu>
+				<p:submenu
+					label="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.name']}">
+					<p:menuitem disabled="true"
+						value="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.scanMenuItem.name']}" />
+					<p:menuitem disabled="true"
+						value="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.visaMenuItem.name']}" />
+					<p:menuitem disabled="true"
+						value="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.attendancedataMenuItem.name']}" />
+				</p:submenu>
+				<p:submenu
+					label="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.name']}">
+					<p:menuitem disabled="true"
+						value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.accountsMenuItem.name']}" />
+					<p:menuitem disabled="true"
+						value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.taxdataItem.name']}" />
+				</p:submenu>
+				<p:submenu
+					label="#{msg['lucas.application.mainScreen.navigationMenu.warehouseSubmenu.name']}">
+					<p:menuitem disabled="true"
+						value="#{msg['lucas.application.mainScreen.navigationMenu.warehouseSubmenu.itemsMenuItem.name']}" />
+				</p:submenu>
+				<p:submenu
+					label="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.name']}">
+					<p:menuitem disabled="true"
+						value="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.logindataMenuItem.name']}" />
+					<p:menuitem disabled="true"
+						value="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.globaldataItem.name']}" />
+				</p:submenu>
+			</p:menu>
 		</h:form>
 	</ui:define>
 </ui:composition>
