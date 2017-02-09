@@ -53,6 +53,11 @@ public class GlobalData extends EntityBase {
 	@NotNull
 	private Integer maxGrade = 12;
 
+	@Basic(optional = false)
+	@Min(1)
+	@NotNull
+	private Long maxIdleTime = 300000l;
+
 	public Map<EnumSalaryClass, BigDecimal> getSalaries() {
 		return Collections.unmodifiableMap(salaries);
 	}
@@ -115,6 +120,14 @@ public class GlobalData extends EntityBase {
 
 	public void setMaxGrade(Integer maxGrade) {
 		this.maxGrade = maxGrade;
+	}
+
+	public Long getMaxIdleTime() {
+		return maxIdleTime;
+	}
+
+	public void setMaxIdleTime(Long maxIdleTime) {
+		this.maxIdleTime = maxIdleTime;
 	}
 
 }

@@ -169,4 +169,19 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 		return Boolean.TRUE;
 	}
 
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_GET_MAX_IDLE_TIME)
+	public Long getMaxIdleTime() {
+		return newInstance().getMaxIdleTime();
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_SET_MAX_IDLE_TIME)
+	public Boolean setMaxIdleTime(Long maxIdleTime) {
+		GlobalData newInstance = newInstance();
+		if (newInstance.getMaxIdleTime().equals(maxIdleTime)) return Boolean.FALSE;
+		newInstance.setMaxIdleTime(maxIdleTime);
+		return Boolean.TRUE;
+	}
+
 }

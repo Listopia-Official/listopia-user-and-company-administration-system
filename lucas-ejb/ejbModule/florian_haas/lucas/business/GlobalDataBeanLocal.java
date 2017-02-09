@@ -30,6 +30,8 @@ public interface GlobalDataBeanLocal {
 
 	public Integer getMaxGrade();
 
+	public Long getMaxIdleTime();
+
 	public Boolean setSalary(@NotNull EnumSalaryClass salaryClass, @MinimumWage BigDecimal salary);
 
 	public Boolean setMinTimePresent(@NotNull @Min(1) Long minTimePresent);
@@ -47,5 +49,7 @@ public interface GlobalDataBeanLocal {
 	public Boolean setMinGrade(@NotNull @Min(1) Integer minGrade);
 
 	public Boolean setMaxGrade(@NotNull Integer maxGrade);
+
+	public Boolean setMaxIdleTime(@NotNull @Min(1) Long maxIdleTime);
 
 }
