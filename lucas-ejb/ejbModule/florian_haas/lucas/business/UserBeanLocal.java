@@ -8,13 +8,13 @@ import javax.validation.constraints.*;
 
 import florian_haas.lucas.database.EnumQueryComparator;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.ValidEntityId;
+import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.util.validation.*;
 
 @Local
 public interface UserBeanLocal {
 
-	public Long createPupil(@NotNull @NotBlankString String forename, @NotNull @NotBlankString String surname, @NotNull @Min(1) Integer schoolGrade,
+	public Long createPupil(@NotNull @NotBlankString String forename, @NotNull @NotBlankString String surname, @ValidGrade Integer schoolGrade,
 			@NotNull @NotBlankString String schoolClass, List<@NotBlankString @TypeNotNull String> ranks);
 
 	public Long createTeacher(@NotNull @NotBlankString String forename, @NotNull @NotBlankString String surname,

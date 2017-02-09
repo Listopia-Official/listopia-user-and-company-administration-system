@@ -26,6 +26,10 @@ public interface GlobalDataBeanLocal {
 
 	public String getCurrencySymbol();
 
+	public Integer getMinGrade();
+
+	public Integer getMaxGrade();
+
 	public Boolean setSalary(@NotNull EnumSalaryClass salaryClass, @MinimumWage BigDecimal salary);
 
 	public Boolean setMinTimePresent(@NotNull @Min(1) Long minTimePresent);
@@ -39,5 +43,9 @@ public interface GlobalDataBeanLocal {
 	public Boolean setTransactionLimit(@NotNull @DecimalMin(value = "0", inclusive = false) BigDecimal transactionLimit);
 
 	public Boolean setCurrencySymbol(@NotBlank String currencySymbol);
+
+	public Boolean setMinGrade(@NotNull @Min(1) Integer minGrade);
+
+	public Boolean setMaxGrade(@NotNull Integer maxGrade);
 
 }

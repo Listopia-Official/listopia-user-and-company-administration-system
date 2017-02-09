@@ -44,6 +44,15 @@ public class GlobalData extends EntityBase {
 	@NotBlank
 	private String currencySymbol = "L";
 
+	@Basic(optional = false)
+	@NotNull
+	@Min(1)
+	private Integer minGrade = 5;
+
+	@Basic(optional = false)
+	@NotNull
+	private Integer maxGrade = 12;
+
 	public Map<EnumSalaryClass, BigDecimal> getSalaries() {
 		return Collections.unmodifiableMap(salaries);
 	}
@@ -90,6 +99,22 @@ public class GlobalData extends EntityBase {
 
 	public void setCurrencySymbol(String currencySymbol) {
 		this.currencySymbol = currencySymbol;
+	}
+
+	public Integer getMinGrade() {
+		return minGrade;
+	}
+
+	public void setMinGrade(Integer minGrade) {
+		this.minGrade = minGrade;
+	}
+
+	public Integer getMaxGrade() {
+		return maxGrade;
+	}
+
+	public void setMaxGrade(Integer maxGrade) {
+		this.maxGrade = maxGrade;
 	}
 
 }
