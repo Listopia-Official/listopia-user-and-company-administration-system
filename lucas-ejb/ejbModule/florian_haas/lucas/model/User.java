@@ -4,7 +4,7 @@ import java.util.*;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 
 import florian_haas.lucas.util.validation.*;
 
@@ -20,11 +20,7 @@ public class User extends AccountOwner {
 	@NotBlankString
 	private String surname;
 
-	@Min(1)
-	private Integer schoolGrade;
-
-	@NotBlankString
-	private String schoolClass;
+	private EnumSchoolClass schoolClass;
 
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
@@ -50,10 +46,9 @@ public class User extends AccountOwner {
 
 	User() {}
 
-	public User(String forename, String surname, Integer schoolGrade, String schoolClass, List<String> ranks) {
+	public User(String forename, String surname, EnumSchoolClass schoolClass, List<String> ranks) {
 		this.forename = forename;
 		this.surname = surname;
-		this.schoolGrade = schoolGrade;
 		this.schoolClass = schoolClass;
 		if (ranks != null) this.ranks.addAll(ranks);
 		if (getUserType() != EnumUserType.TEACHER) {
@@ -78,23 +73,14 @@ public class User extends AccountOwner {
 	}
 
 	public EnumUserType getUserType() {
-		return (forename == null && surname == null ? EnumUserType.GUEST
-				: (schoolGrade == null && schoolClass == null ? EnumUserType.TEACHER : EnumUserType.PUPIL));
+		return (forename == null && surname == null ? EnumUserType.GUEST : (schoolClass == null ? EnumUserType.TEACHER : EnumUserType.PUPIL));
 	}
 
-	public Integer getSchoolGrade() {
-		return this.schoolGrade;
-	}
-
-	public void setSchoolGrade(Integer schoolGrade) {
-		this.schoolGrade = schoolGrade;
-	}
-
-	public String getSchoolClass() {
+	public EnumSchoolClass getSchoolClass() {
 		return this.schoolClass;
 	}
 
-	public void setSchoolClass(String schoolClass) {
+	public void setSchoolClass(EnumSchoolClass schoolClass) {
 		this.schoolClass = schoolClass;
 	}
 

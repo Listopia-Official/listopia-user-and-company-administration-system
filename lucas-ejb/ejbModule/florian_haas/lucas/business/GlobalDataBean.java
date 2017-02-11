@@ -140,36 +140,6 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions(GLOBAL_DATA_GET_MIN_GRADE)
-	public Integer getMinGrade() {
-		return newInstance().getMinGrade();
-	}
-
-	@Override
-	@RequiresPermissions(GLOBAL_DATA_GET_MAX_GRADE)
-	public Integer getMaxGrade() {
-		return newInstance().getMaxGrade();
-	}
-
-	@Override
-	@RequiresPermissions(GLOBAL_DATA_SET_MIN_GRADE)
-	public Boolean setMinGrade(Integer minGrade) {
-		GlobalData newInstance = newInstance();
-		if (newInstance.getMinGrade().equals(minGrade)) return Boolean.FALSE;
-		newInstance.setMinGrade(minGrade);
-		return Boolean.TRUE;
-	}
-
-	@Override
-	@RequiresPermissions(GLOBAL_DATA_SET_MAX_GRADE)
-	public Boolean setMaxGrade(Integer maxGrade) {
-		GlobalData newInstance = newInstance();
-		if (newInstance.getMaxGrade().equals(maxGrade)) return Boolean.FALSE;
-		newInstance.setMaxGrade(maxGrade);
-		return Boolean.TRUE;
-	}
-
-	@Override
 	@RequiresPermissions(GLOBAL_DATA_GET_MAX_IDLE_TIME)
 	public Long getMaxIdleTime() {
 		return newInstance().getMaxIdleTime();

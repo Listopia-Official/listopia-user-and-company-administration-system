@@ -30,8 +30,8 @@ public class UserBean implements UserBeanLocal {
 
 	@Override
 	@RequiresPermissions(USER_CREATE_PUPIL)
-	public Long createPupil(String forename, String surname, Integer schoolGrade, String schoolClass, List<String> ranks) {
-		User pupil = new User(forename, surname, schoolGrade, schoolClass, ranks);
+	public Long createPupil(String forename, String surname, EnumSchoolClass schoolClass, List<String> ranks) {
+		User pupil = new User(forename, surname, schoolClass, ranks);
 		userDao.persist(pupil);
 		return pupil.getId();
 	}
@@ -39,7 +39,7 @@ public class UserBean implements UserBeanLocal {
 	@Override
 	@RequiresPermissions(USER_CREATE_TEACHER)
 	public Long createTeacher(String forename, String surname, List<String> ranks) {
-		User teacher = new User(forename, surname, null, null, ranks);
+		User teacher = new User(forename, surname, null, ranks);
 		userDao.persist(teacher);
 		return teacher.getId();
 	}
@@ -47,7 +47,7 @@ public class UserBean implements UserBeanLocal {
 	@Override
 	@RequiresPermissions(USER_CREATE_GUEST)
 	public Long createGuest() {
-		User guest = new User(null, null, null, null, null);
+		User guest = new User(null, null, null, null);
 		userDao.persist(guest);
 		return guest.getId();
 	}
@@ -66,14 +66,12 @@ public class UserBean implements UserBeanLocal {
 
 	@Override
 	@RequiresPermissions(USER_FIND_DYNAMIC)
-	public List<User> findUsers(Long userId, String forename, String surname, Integer schoolGrade, String schoolClass, EnumUserType userType,
-			List<String> ranks, Boolean useUserId, Boolean useForename, Boolean useSurname, Boolean useSchoolGrade, Boolean useSchoolClass,
-			Boolean useUserType, Boolean useRanks, EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator,
-			EnumQueryComparator surnameComparator, EnumQueryComparator schoolGradeComparator, EnumQueryComparator schoolClassComparator,
-			EnumQueryComparator ranksComparator) {
-		return userDao.findUsers(userId, forename, surname, schoolGrade, schoolClass, userType, ranks, useUserId, useForename, useSurname,
-				useSchoolGrade, useSchoolClass, useUserType, useRanks, userIdComparator, forenameComparator, surnameComparator, schoolGradeComparator,
-				schoolClassComparator, ranksComparator);
+	public List<User> findUsers(Long userId, String forename, String surname, List<EnumSchoolClass> schoolClasses, EnumUserType userType,
+			List<String> ranks, Boolean useUserId, Boolean useForename, Boolean useSurname, Boolean useSchoolClass, Boolean useUserType,
+			Boolean useRanks, EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator, EnumQueryComparator surnameComparator,
+			EnumQueryComparator schoolClassComparator, EnumQueryComparator ranksComparator) {
+		return userDao.findUsers(userId, forename, surname, schoolClasses, userType, ranks, useUserId, useForename, useSurname, useSchoolClass,
+				useUserType, useRanks, userIdComparator, forenameComparator, surnameComparator, schoolClassComparator, ranksComparator);
 	}
 
 	@Override
@@ -95,17 +93,8 @@ public class UserBean implements UserBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions(USER_SET_SCHOOL_GRADE)
-	public Boolean setSchoolGrade(Long userId, Integer schoolGrade) {
-		User user = userDao.findById(userId);
-		if (user.getSchoolGrade().equals(schoolGrade)) return Boolean.FALSE;
-		user.setSchoolGrade(schoolGrade);
-		return Boolean.TRUE;
-	}
-
-	@Override
 	@RequiresPermissions(USER_SET_SCHOOL_CLASS)
-	public Boolean setSchoolClass(Long userId, String schoolClass) {
+	public Boolean setSchoolClass(Long userId, EnumSchoolClass schoolClass) {
 		User user = userDao.findById(userId);
 		if (user.getSchoolClass().equals(schoolClass)) return Boolean.FALSE;
 		user.setSchoolClass(schoolClass);

@@ -45,15 +45,6 @@ public class GlobalData extends EntityBase {
 	private String currencySymbol = "L";
 
 	@Basic(optional = false)
-	@NotNull
-	@Min(1)
-	private Integer minGrade = 5;
-
-	@Basic(optional = false)
-	@NotNull
-	private Integer maxGrade = 12;
-
-	@Basic(optional = false)
 	@Min(1)
 	@NotNull
 	private Long maxIdleTime = 300000l;
@@ -104,22 +95,6 @@ public class GlobalData extends EntityBase {
 
 	public void setCurrencySymbol(String currencySymbol) {
 		this.currencySymbol = currencySymbol;
-	}
-
-	public Integer getMinGrade() {
-		return minGrade;
-	}
-
-	public void setMinGrade(Integer minGrade) {
-		this.minGrade = minGrade;
-	}
-
-	public Integer getMaxGrade() {
-		return maxGrade;
-	}
-
-	public void setMaxGrade(Integer maxGrade) {
-		this.maxGrade = maxGrade;
 	}
 
 	public Long getMaxIdleTime() {
