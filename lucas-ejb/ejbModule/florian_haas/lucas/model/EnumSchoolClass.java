@@ -50,7 +50,7 @@ public enum EnumSchoolClass {
 
 	private EnumSchoolClass() {
 		this.grade = Integer.parseInt(this.name().substring(1, this.name().length()));
-		this.schoolClass = Character.toString(this.name().charAt(0));
+		this.schoolClass = Character.toString(this.name().charAt(0)).toLowerCase();
 	}
 
 	public Integer getGrade() {
