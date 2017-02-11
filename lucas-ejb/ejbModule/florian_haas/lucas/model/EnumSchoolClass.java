@@ -61,6 +61,11 @@ public enum EnumSchoolClass {
 		return this.schoolClass;
 	}
 
+	@Override
+	public String toString() {
+		return this.grade.toString() + this.schoolClass;
+	}
+
 	public static Set<EnumSchoolClass> getMatchingClasses(Integer schoolGrade, String schoolClass) {
 		Set<EnumSchoolClass> ret = new HashSet<>();
 		for (EnumSchoolClass value : EnumSchoolClass.values()) {
