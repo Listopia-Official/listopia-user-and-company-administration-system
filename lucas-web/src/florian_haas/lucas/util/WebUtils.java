@@ -1,7 +1,12 @@
 package florian_haas.lucas.util;
 
+import java.util.*;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.validation.*;
+
+import org.apache.shiro.ShiroException;
 
 public class WebUtils {
 
@@ -9,35 +14,35 @@ public class WebUtils {
 		addMessage(FacesMessage.SEVERITY_INFO, message);
 	}
 
-	public static void addInformationMessage(String message, Object... params) {
-		addMessage(FacesMessage.SEVERITY_INFO, message, params);
+	public static void addTranslatedInformationMessage(String message, Object... params) {
+		addTranslatedMessage(FacesMessage.SEVERITY_INFO, message, params);
 	}
 
 	public static void addWarningMessage(String message) {
 		addMessage(FacesMessage.SEVERITY_WARN, message);
 	}
 
-	public static void addWarningMessage(String message, Object... params) {
-		addMessage(FacesMessage.SEVERITY_WARN, message, params);
+	public static void addTranslatedWarningMessage(String message, Object... params) {
+		addTranslatedMessage(FacesMessage.SEVERITY_WARN, message, params);
 	}
 
 	public static void addErrorMessage(String message) {
 		addMessage(FacesMessage.SEVERITY_ERROR, message);
 	}
 
-	public static void addErrorMessage(String message, Object... params) {
-		addMessage(FacesMessage.SEVERITY_ERROR, message, params);
+	public static void addTranslatedErrorMessage(String message, Object... params) {
+		addTranslatedMessage(FacesMessage.SEVERITY_ERROR, message, params);
 	}
 
 	public static void addFatalMessage(String message) {
 		addMessage(FacesMessage.SEVERITY_FATAL, message);
 	}
 
-	public static void addFatalMessage(String message, Object... params) {
-		addMessage(FacesMessage.SEVERITY_FATAL, message, params);
+	public static void addTranslatedFatalMessage(String message, Object... params) {
+		addTranslatedMessage(FacesMessage.SEVERITY_FATAL, message, params);
 	}
 
-	private static void addMessage(FacesMessage.Severity severity, String key, Object... params) {
+	private static void addTranslatedMessage(FacesMessage.Severity severity, String key, Object... params) {
 		addMessage(severity, getTranslatedMessage(key, params));
 	}
 
@@ -61,8 +66,30 @@ public class WebUtils {
 				String.class);
 	}
 
-	public static void executeTask() {
-
+	public static void executeTask(FailableTask task, String successMessageKey, String warnMessageKey, String failMessageKey, Object... argParams) {
+		List<Object> paramsList = new ArrayList<>();
+		paramsList.addAll(Arrays.asList(argParams));
+		Object[] params = paramsList.toArray();
+		try {
+			boolean success = task.executeTask(paramsList);
+			params = paramsList.toArray();
+			if (success) {
+				WebUtils.addTranslatedInformationMessage(successMessageKey, params);
+			} else {
+				WebUtils.addTranslatedInformationMessage(warnMessageKey, params);
+			}
+		}
+		catch (ConstraintViolationException e) {
+			for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
+				WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + violation.getMessage());
+			}
+		}
+		catch (ShiroException e2) {
+			WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + getTranslatedMessage("lucas.application.message.accessDenied"));
+		}
+		catch (Exception e3) {
+			WebUtils.addFatalMessage(getTranslatedMessage(failMessageKey, params) + e3.getLocalizedMessage());
+		}
 	}
 
 }
