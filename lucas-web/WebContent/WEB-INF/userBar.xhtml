@@ -33,7 +33,6 @@
 							</p:menuButton>
 						</p:column>
 					</p:row>
-
 				</p:panelGrid>
 			</p:toolbarGroup>
 		</p:toolbar>
@@ -41,4 +40,6 @@
 			<p:ajax event="idle" listener="#{loginBean.logout}" />
 		</p:idleMonitor>
 	</h:form>
+	<p:messages globalOnly="true" showDetail="true" showIcon="true"
+		showSummary="true" closable="true" autoUpdate="true" />
 </ui:composition>
