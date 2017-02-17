@@ -45,8 +45,18 @@ public enum EnumSchoolClass {
 	D12,
 	E12;
 
-	private Integer grade;
-	private String schoolClass;
+	private final Integer grade;
+	private final String schoolClass;
+
+	private static final List<Integer> grades = new ArrayList<>();
+	private static final List<String> classes = new ArrayList<>();
+
+	static {
+		for (EnumSchoolClass value : EnumSchoolClass.values()) {
+			grades.add(value.grade);
+			classes.add(value.schoolClass);
+		}
+	}
 
 	private EnumSchoolClass() {
 		this.grade = Integer.parseInt(this.name().substring(1, this.name().length()));
@@ -78,6 +88,14 @@ public enum EnumSchoolClass {
 			}
 		}
 		return ret;
+	}
+
+	public static List<Integer> getGrades() {
+		return Collections.unmodifiableList(grades);
+	}
+
+	public static List<String> getClasses() {
+		return Collections.unmodifiableList(classes);
 	}
 
 }
