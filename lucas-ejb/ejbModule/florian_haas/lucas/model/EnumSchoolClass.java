@@ -1,6 +1,10 @@
 package florian_haas.lucas.model;
 
 import java.util.*;
+import java.util.function.Predicate;
+
+import florian_haas.lucas.database.EnumQueryComparator;
+import florian_haas.lucas.util.Utils;
 
 public enum EnumSchoolClass {
 
@@ -76,13 +80,59 @@ public enum EnumSchoolClass {
 		return this.grade.toString() + this.schoolClass;
 	}
 
-	public static Set<EnumSchoolClass> getMatchingClasses(Integer schoolGrade, String schoolClass) {
+	private static <T extends Comparable<? super T>> Predicate<T> getPredicateFromQueryComparator(EnumQueryComparator comparator,
+			EnumQueryComparator[] possibleValues, T val) {
+		Predicate<T> ret = val::equals;
+		if (comparator != null && Arrays.asList(possibleValues).contains(comparator)) {
+			switch (comparator) {
+				case EQUAL:
+				case LIKE:
+				case MEMBER_OF:
+				case NOT_LIKE:
+				case NOT_MEMBER_OF:
+					break;
+				case GREATER_EQUAL:
+					ret = (arg) -> {
+						return Utils.isGreatherEqual(val, arg);
+					};
+					break;
+				case GREATER_THAN:
+					ret = (arg) -> {
+						return Utils.isGreatherThan(val, arg);
+					};
+					break;
+				case LESS_EQUAL:
+					ret = (arg) -> {
+						return Utils.isLessEqual(val, arg);
+					};
+					break;
+				case LESS_THAN:
+					ret = (arg) -> {
+						return Utils.isLessThan(val, arg);
+					};
+					break;
+				case NOT_EQUAL:
+					ret = (arg) -> {
+						return !arg.equals(val);
+					};
+					break;
+			}
+		}
+		return ret;
+	}
+
+	public static Set<EnumSchoolClass> getMatchingClasses(Integer schoolGrade, String schoolClass, EnumQueryComparator schoolGradeComparator,
+			EnumQueryComparator schoolClassComparator) {
 		Set<EnumSchoolClass> ret = new HashSet<>();
 		for (EnumSchoolClass value : EnumSchoolClass.values()) {
+			Predicate<Integer> gradePred = getPredicateFromQueryComparator(schoolGradeComparator, EnumQueryComparator.getNumericComparators(),
+					value.getGrade());
+			Predicate<String> schoolClassPred = getPredicateFromQueryComparator(schoolClassComparator, EnumQueryComparator.getNumericComparators(),
+					value.getSchoolClass());
 			if (schoolGrade != null && schoolClass != null) {
-				if ((schoolGrade != null && schoolClass != null && value.getGrade().equals(schoolClass) && value.getSchoolClass().equals(schoolClass))
-						|| (schoolGrade != null && schoolClass == null && value.getGrade().equals(schoolGrade))
-						|| (schoolGrade == null && schoolClass != null && value.getSchoolClass().equals(schoolClass))) {
+				if ((schoolGrade != null && schoolClass != null && gradePred.test(schoolGrade) && schoolClassPred.test(schoolClass))
+						|| (schoolGrade != null && schoolClass == null && gradePred.test(schoolGrade))
+						|| (schoolGrade == null && schoolClass != null && schoolClassPred.test(schoolClass))) {
 					ret.add(value);
 				}
 			}
