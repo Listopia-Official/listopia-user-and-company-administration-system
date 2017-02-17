@@ -17,4 +17,9 @@ public enum EnumQueryComparator {
 		return new EnumQueryComparator[] {
 				EQUAL, NOT_EQUAL, GREATER_THAN, LESS_THAN, GREATER_EQUAL, LESS_EQUAL, LIKE, NOT_LIKE };
 	}
+
+	public static EnumQueryComparator[] getLogicComparators() {
+		return new EnumQueryComparator[] {
+				EQUAL, NOT_EQUAL };
+	}
 }

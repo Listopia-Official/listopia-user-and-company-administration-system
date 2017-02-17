@@ -30,4 +30,8 @@ public class EnumBean implements Serializable {
 		return EnumQueryComparator.getArrayComparators();
 	}
 
+	public EnumQueryComparator[] getLogicComparators() {
+		return EnumQueryComparator.getLogicComparators();
+	}
+
 }

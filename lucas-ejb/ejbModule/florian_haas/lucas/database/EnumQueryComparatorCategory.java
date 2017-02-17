@@ -2,7 +2,7 @@ package florian_haas.lucas.database;
 
 public enum EnumQueryComparatorCategory {
 
-	NUMERIC, TEXT, ARRAY;
+	NUMERIC, TEXT, ARRAY, LOGIC;
 
 	public EnumQueryComparator[] getComparators() {
 		switch (EnumQueryComparatorCategory.valueOf(this.name())) {
@@ -12,6 +12,8 @@ public enum EnumQueryComparatorCategory {
 				return EnumQueryComparator.getNumericComparators();
 			case TEXT:
 				return EnumQueryComparator.getTextComparators();
+			case LOGIC:
+				return EnumQueryComparator.getLogicComparators();
 			default:
 				return null;
 		}
