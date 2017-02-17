@@ -121,9 +121,9 @@ public enum EnumSchoolClass {
 		return ret;
 	}
 
-	public static Set<EnumSchoolClass> getMatchingClasses(Integer schoolGrade, String schoolClass, EnumQueryComparator schoolGradeComparator,
+	public static List<EnumSchoolClass> getMatchingClasses(Integer schoolGrade, String schoolClass, EnumQueryComparator schoolGradeComparator,
 			EnumQueryComparator schoolClassComparator) {
-		Set<EnumSchoolClass> ret = new HashSet<>();
+		List<EnumSchoolClass> ret = new ArrayList<>();
 		for (EnumSchoolClass value : EnumSchoolClass.values()) {
 			Predicate<Integer> gradePred = getPredicateFromQueryComparator(schoolGradeComparator, EnumQueryComparator.getNumericComparators(),
 					value.getGrade());
