@@ -52,8 +52,8 @@ public enum EnumSchoolClass {
 	private final Integer grade;
 	private final String schoolClass;
 
-	private static final List<Integer> grades = new ArrayList<>();
-	private static final List<String> classes = new ArrayList<>();
+	private static final Set<Integer> grades = new HashSet<>();
+	private static final Set<String> classes = new HashSet<>();
 
 	static {
 		for (EnumSchoolClass value : EnumSchoolClass.values()) {
@@ -140,12 +140,12 @@ public enum EnumSchoolClass {
 		return ret;
 	}
 
-	public static List<Integer> getGrades() {
-		return Collections.unmodifiableList(grades);
+	public static Collection<Integer> getGrades() {
+		return Collections.unmodifiableSet(grades);
 	}
 
-	public static List<String> getClasses() {
-		return Collections.unmodifiableList(classes);
+	public static Collection<String> getClasses() {
+		return Collections.unmodifiableSet(classes);
 	}
 
 }
