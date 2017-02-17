@@ -97,9 +97,9 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 				} else {
 					return builder.equal(comparableExpression, value);
 				}
-			case GREATHER_EQUAL:
+			case GREATER_EQUAL:
 				return builder.greaterThanOrEqualTo(comparableExpression, value);
-			case GREATHER_THAN:
+			case GREATER_THAN:
 				return builder.greaterThan(comparableExpression, value);
 			case LESS_EQUAL:
 				return builder.lessThanOrEqualTo(comparableExpression, value);
