@@ -11,7 +11,7 @@
 			responsive="true" modal="true" widgetVar="createPupilDialog">
 			<h:form id="createPupilDialogForm">
 				<div class="ui-fluid">
-					<p:panelGrid styleClass="width33">
+					<p:panelGrid>
 						<p:row>
 							<p:column>
 								<p:outputLabel
@@ -60,7 +60,7 @@
 								<p:selectOneMenu id="schoolClassSelectOneMenu"
 									value="#{userBean.createPupilDialogSchoolClass}"
 									title="#{msg['lucas.application.userScreen.createPupilDialog.schoolClassSelectOne.tooltip']}">
-									<f:selectItems value="#{userBean.enumSchoolClassValues}"
+									<f:selectItems value="#{enumBean.enumSchoolClassValues}"
 										var="class" itemLabel="#{class.toString()}" />
 								</p:selectOneMenu>
 							</p:column>
@@ -98,7 +98,10 @@
 							<p:column>
 								<p:commandButton
 									value="#{msg['lucas.application.userScreen.createPupilDialog.editRankButton.name']}"
-									title="#{msg['lucas.application.userScreen.createPupilDialog.editRankButton.tooltip']}" />
+									title="#{msg['lucas.application.userScreen.createPupilDialog.editRankButton.tooltip']}"
+									action="#{userBean.editCreatePupilDialogSelectedRank}"
+									process="createPupilDialogForm:ranksDataList @this"
+									update="createPupilDialogForm:ranksDataList createPupilDialogForm:rankInputText" />
 							</p:column>
 							<p:column>
 								<p:commandButton
