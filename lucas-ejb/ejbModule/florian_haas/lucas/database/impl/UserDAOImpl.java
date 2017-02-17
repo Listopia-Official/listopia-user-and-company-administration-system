@@ -14,14 +14,14 @@ public class UserDAOImpl extends DAOImpl<User> implements UserDAO {
 	public List<User> findUsers(Long userId, String forename, String surname, List<EnumSchoolClass> schoolClasses, EnumUserType userType,
 			List<String> ranks, Boolean useUserId, Boolean useForename, Boolean useSurname, Boolean useSchoolClass, Boolean useUserType,
 			Boolean useRanks, EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator, EnumQueryComparator surnameComparator,
-			EnumQueryComparator schoolClassComparator, EnumQueryComparator ranksComparator) {
+			EnumQueryComparator ranksComparator) {
 		return readOnlyCriteriaQuery((query, root, builder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 
 			getSingularRestriction(User_.id, userId, useUserId, userIdComparator, predicates, builder, root);
 			getSingularRestriction(User_.forename, forename, useForename, forenameComparator, predicates, builder, root);
 			getSingularRestriction(User_.surname, surname, useSurname, surnameComparator, predicates, builder, root);
-			getSingularRestrictionCollection(User_.schoolClass, schoolClasses, useSchoolClass, schoolClassComparator, predicates, builder, root);
+			getSingularRestrictionCollection(User_.schoolClass, schoolClasses, useSchoolClass, null, predicates, builder, root);
 			if (useUserType) {
 				Predicate pred = null;
 				switch (userType) {
