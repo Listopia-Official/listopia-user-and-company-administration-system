@@ -69,9 +69,9 @@ public class UserBean implements UserBeanLocal {
 	public List<User> findUsers(Long userId, String forename, String surname, List<EnumSchoolClass> schoolClasses, EnumUserType userType,
 			List<String> ranks, Boolean useUserId, Boolean useForename, Boolean useSurname, Boolean useSchoolClass, Boolean useUserType,
 			Boolean useRanks, EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator, EnumQueryComparator surnameComparator,
-			EnumQueryComparator ranksComparator) {
+			EnumQueryComparator searchUserTypeComparator, EnumQueryComparator ranksComparator) {
 		return userDao.findUsers(userId, forename, surname, schoolClasses, userType, ranks, useUserId, useForename, useSurname, useSchoolClass,
-				useUserType, useRanks, userIdComparator, forenameComparator, surnameComparator, ranksComparator);
+				useUserType, useRanks, userIdComparator, forenameComparator, surnameComparator, searchUserTypeComparator, ranksComparator);
 	}
 
 	@Override

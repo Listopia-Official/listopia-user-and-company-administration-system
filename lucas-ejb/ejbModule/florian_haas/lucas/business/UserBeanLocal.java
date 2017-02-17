@@ -33,7 +33,7 @@ public interface UserBeanLocal {
 			@NotNull List<@NotBlankString @TypeNotNull String> ranks, @NotNull Boolean useUserId, @NotNull Boolean useForename,
 			@NotNull Boolean useSurname, @NotNull Boolean useSchoolClass, @NotNull Boolean useUserType, @NotNull Boolean useRanks,
 			EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator, EnumQueryComparator surnameComparator,
-			EnumQueryComparator ranksComparator);
+			EnumQueryComparator searchUserTypeComparator, EnumQueryComparator ranksComparator);
 
 	public Boolean setForename(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String forename);
 
