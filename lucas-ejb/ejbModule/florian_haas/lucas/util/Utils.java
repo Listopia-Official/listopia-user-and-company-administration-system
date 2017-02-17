@@ -19,24 +19,24 @@ public class Utils {
 		return Collections.unmodifiableMap(tmp);
 	}
 
-	public static Boolean isEqual(BigDecimal decimal, BigDecimal decimal2) {
-		return decimal.compareTo(decimal2) == 0;
+	public static <T extends Comparable<? super T>> Boolean isEqual(T comp1, T comp2) {
+		return comp1.compareTo(comp2) == 0;
 	}
 
-	public static Boolean isLessThan(BigDecimal decimal, BigDecimal decimal2) {
-		return decimal.compareTo(decimal2) < 0;
+	public static <T extends Comparable<? super T>> Boolean isLessThan(T comp1, T comp2) {
+		return comp1.compareTo(comp2) < 0;
 	}
 
-	public static Boolean isGreatherThan(BigDecimal decimal, BigDecimal decimal2) {
-		return decimal.compareTo(decimal2) > 0;
+	public static <T extends Comparable<? super T>> Boolean isGreatherThan(T comp1, T comp2) {
+		return comp1.compareTo(comp2) > 0;
 	}
 
-	public static Boolean isGreatherEqual(BigDecimal decimal, BigDecimal decimal2) {
-		return decimal.compareTo(decimal2) >= 0;
+	public static <T extends Comparable<? super T>> Boolean isGreatherEqual(T comp1, T comp2) {
+		return comp1.compareTo(comp2) >= 0;
 	}
 
-	public static Boolean isLessEqual(BigDecimal decimal, BigDecimal decimal2) {
-		return decimal.compareTo(decimal2) <= 0;
+	public static <T extends Comparable<? super T>> Boolean isLessEqual(T comp1, T comp2) {
+		return comp1.compareTo(comp2) <= 0;
 	}
 
 	public static Boolean isZero(BigDecimal decimal) {
