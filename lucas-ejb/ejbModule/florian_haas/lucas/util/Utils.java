@@ -1,5 +1,6 @@
 package florian_haas.lucas.util;
 
+import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -73,5 +74,14 @@ public class Utils {
 
 	public static boolean isInRangeExclusive(int start, int end, int value) {
 		return value < end && value > start;
+	}
+
+	public static <T> Class<T> getClassFromArgs(Class<?> clazz) {
+		return getClassFromArgs(clazz, 0);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> Class<T> getClassFromArgs(Class<?> clazz, int arg) {
+		return (Class<T>) ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[arg];
 	}
 }
