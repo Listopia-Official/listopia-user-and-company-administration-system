@@ -129,9 +129,9 @@ public enum EnumSchoolClass {
 			EnumQueryComparator schoolClassComparator) {
 		List<EnumSchoolClass> ret = new ArrayList<>();
 		for (EnumSchoolClass value : EnumSchoolClass.values()) {
-			Predicate<Integer> gradePred = getPredicateFromQueryComparator(schoolGradeComparator, EnumQueryComparator.getNumericComparators(),
+			Predicate<Integer> gradePred = getPredicateFromQueryComparator(schoolGradeComparator, EnumQueryComparator.NUMERIC_COMPARATORS,
 					value.getGrade());
-			Predicate<String> schoolClassPred = getPredicateFromQueryComparator(schoolClassComparator, EnumQueryComparator.getNumericComparators(),
+			Predicate<String> schoolClassPred = getPredicateFromQueryComparator(schoolClassComparator, EnumQueryComparator.NUMERIC_COMPARATORS,
 					value.getSchoolClass());
 			if (schoolGrade != null && schoolClass != null) {
 				if ((schoolGrade != null && schoolClass != null && gradePred.test(schoolGrade) && schoolClassPred.test(schoolClass))

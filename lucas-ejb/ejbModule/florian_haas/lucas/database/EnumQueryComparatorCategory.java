@@ -7,13 +7,13 @@ public enum EnumQueryComparatorCategory {
 	public EnumQueryComparator[] getComparators() {
 		switch (EnumQueryComparatorCategory.valueOf(this.name())) {
 			case ARRAY:
-				return EnumQueryComparator.getArrayComparators();
+				return EnumQueryComparator.ARRAY_COMPARATORS;
 			case NUMERIC:
-				return EnumQueryComparator.getNumericComparators();
+				return EnumQueryComparator.NUMERIC_COMPARATORS;
 			case TEXT:
-				return EnumQueryComparator.getTextComparators();
+				return EnumQueryComparator.TEXT_COMPARATORS;
 			case LOGIC:
-				return EnumQueryComparator.getLogicComparators();
+				return EnumQueryComparator.LOGIC_COMPARATORS;
 			default:
 				return null;
 		}
