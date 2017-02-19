@@ -44,8 +44,7 @@ public abstract class EnumConverter<E extends Enum<E>> extends javax.faces.conve
 		if ((context == null) || (component == null)) throw new NullPointerException();
 		value = value.trim();
 
-		if (value == null || value.trim().isEmpty()
-				|| value.equals(WebUtils.getTranslatedMessage(MESSAGE_PREFIX + messageName + "." + MESSAGE_NULL_KEY)))
+		if (value == null || value.isEmpty() || value.equals(WebUtils.getTranslatedMessage(MESSAGE_PREFIX + messageName + "." + MESSAGE_NULL_KEY)))
 			return null;
 
 		try {
