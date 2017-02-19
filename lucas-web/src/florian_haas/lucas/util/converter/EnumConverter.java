@@ -1,5 +1,7 @@
 package florian_haas.lucas.util.converter;
 
+import java.lang.reflect.Field;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
@@ -15,9 +17,16 @@ public abstract class EnumConverter<E extends Enum<E>> extends javax.faces.conve
 	protected final String messageName;
 
 	// Better solution?
-	protected EnumConverter() {
-		super(Utils.getClassFromArgs(EnumConverter.class));
-		this.enumClass = Utils.getClassFromArgs(EnumConverter.class);
+	protected EnumConverter() throws Exception {
+		this.enumClass = Utils.getClassFromArgs(this.getClass());
+		try {
+			Field targetClass = javax.faces.convert.EnumConverter.class.getDeclaredField("targetClass");
+			targetClass.setAccessible(true);
+			targetClass.set(this, enumClass);
+		}
+		catch (Exception e) {
+			throw e;
+		}
 		String enumClassName = this.enumClass.getSimpleName();
 		char firstChar = enumClassName.charAt(0);
 		this.messageName = this.enumClass.getSimpleName().replace(firstChar, Character.toLowerCase(firstChar));
