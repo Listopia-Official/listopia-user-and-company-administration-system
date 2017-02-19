@@ -1,6 +1,5 @@
 package florian_haas.lucas.database.impl;
 
-import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -11,7 +10,7 @@ import javax.persistence.metamodel.*;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.EntityBase;
-import florian_haas.lucas.util.TriFunction;
+import florian_haas.lucas.util.*;
 
 @Named
 public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyDAO<E> {
@@ -21,9 +20,8 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 
 	protected final Class<E> entityClass;
 
-	@SuppressWarnings("unchecked")
 	protected ReadOnlyDAOImpl() {
-		entityClass = (Class<E>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+		entityClass = Utils.getClassFromArgs(this.getClass());
 	}
 
 	@Override
