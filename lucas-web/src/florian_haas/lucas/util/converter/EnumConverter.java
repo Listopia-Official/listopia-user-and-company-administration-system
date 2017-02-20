@@ -36,7 +36,8 @@ public abstract class EnumConverter<E extends Enum<E>> extends javax.faces.conve
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		String enumString = super.getAsString(context, component, value);
 		if (enumString.trim().isEmpty()) enumString = MESSAGE_NULL_KEY;
-		return WebUtils.getTranslatedMessage(MESSAGE_PREFIX + messageName + "." + enumString);
+		String ret = getTranslatedName(enumString);
+		return ret;
 	}
 
 	@Override
@@ -47,13 +48,33 @@ public abstract class EnumConverter<E extends Enum<E>> extends javax.faces.conve
 		if (value == null || value.isEmpty() || value.equals(WebUtils.getTranslatedMessage(MESSAGE_PREFIX + messageName + "." + MESSAGE_NULL_KEY)))
 			return null;
 
-		try {
-			return Enum.valueOf(enumClass, value);
+		Enum<E> matchingEnum = null;
+
+		for (Enum<E> enumValue : getEnumValues()) {
+			String translatedName = getTranslatedName(enumValue.name());
+			if (value.equals(translatedName)) {
+				matchingEnum = enumValue;
+			}
 		}
-		catch (IllegalArgumentException iae) {
-			throw new ConverterException(
-					this.getClass().getName() + ": Could not convert value \"" + value + "\"to enum fron class \"" + enumClass.getName() + "\"");
+
+		if (matchingEnum == null) {
+			try {
+				matchingEnum = Enum.valueOf(enumClass, value);
+			}
+			catch (IllegalArgumentException e) {
+				throw new ConverterException(
+						this.getClass().getName() + ": Could not convert value \"" + value + "\"to enum from class \"" + enumClass.getName() + "\"");
+			}
 		}
+		return matchingEnum;
+	}
+
+	private String getTranslatedName(String enumString) {
+		return WebUtils.getTranslatedMessage(MESSAGE_PREFIX + messageName + "." + enumString);
+	}
+
+	private Enum<E>[] getEnumValues() {
+		return enumClass.getEnumConstants();
 	}
 
 }
