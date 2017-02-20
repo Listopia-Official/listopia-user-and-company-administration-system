@@ -5,29 +5,33 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="content">
-		<p:toolbar
-			style="width:99%!important;margin-left:auto;margin-right:auto;margin-top:10px!important"
-			styleClass="toolbar">
-			<ui:insert name="buttonArea" />
-		</p:toolbar>
-		<p:accordionPanel multiple="true" id="dataAccorditionPanel">
-			<p:tab>
-				<f:facet name="title">
-					<h:outputText styleClass="fa fa-search" />
-					<p:spacer width="5px" />
-					<h:outputText
-						value="#{msg['lucas.application.dataTemplate.searchCriteria.name']}" />
-				</f:facet>
-				<ui:insert name="searchCriteria" />
-			</p:tab>
-			<p:tab>
-				<f:facet name="title">
-					<h:outputText styleClass="fa fa-database" />
-					<p:spacer width="5px" />
-					<ui:insert name="searchResultsTitle" />
-				</f:facet>
-				<ui:insert name="searchResults" />
-			</p:tab>
-		</p:accordionPanel>
+		<div class="dataArea">
+			<p:toolbar
+				style="width:99%!important;margin-left:auto;margin-right:auto;margin-top:10px!important"
+				styleClass="toolbar">
+				<ui:insert name="buttonArea" />
+			</p:toolbar>
+			<p:accordionPanel multiple="true" id="dataAccorditionPanel"
+				activeIndex="0,1">
+				<p:tab>
+					<f:facet name="title">
+						<h:outputText styleClass="fa fa-search" />
+						<p:spacer width="5px" />
+						<h:outputText
+							value="#{msg['lucas.application.dataTemplate.searchCriteria.name']}" />
+					</f:facet>
+					<ui:insert name="searchCriteria" />
+				</p:tab>
+				<p:tab>
+					<f:facet name="title">
+						<h:outputText styleClass="fa fa-database" />
+						<p:spacer width="5px" />
+						<h:outputText
+							value="#{msg['lucas.application.dataTemplate.searchResults.name1']}#{searchResults}#{msg['lucas.application.dataTemplate.searchResults.name2']}" />
+					</f:facet>
+					<ui:insert name="searchResults" />
+				</p:tab>
+			</p:accordionPanel>
+		</div>
 	</ui:define>
 </ui:composition>

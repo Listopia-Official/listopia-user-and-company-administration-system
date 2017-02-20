@@ -14,7 +14,7 @@
 								outcome="/main.xhtml" />
 						</p:column>
 						<p:column styleClass="userBarCell center">
-							<ui:insert name="pageTitle" />
+							<h:outputText value="#{pageTitle}" />
 						</p:column>
 						<p:column styleClass="userBarCell right">
 							<p:graphicImage value="#{loginBean.image}" width="42px"
