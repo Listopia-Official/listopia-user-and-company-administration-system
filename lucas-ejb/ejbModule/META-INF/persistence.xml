@@ -21,11 +21,11 @@
 		<class>florian_haas.lucas.model.Taxdata</class>
 		<class>florian_haas.lucas.model.SalaryAttendancedata</class>
 		<properties>
-			<property name="javax.persistence.schema-generation.database.action" value="none"/>
-			<property name="javax.persistence.schema-generation.create-database-schemas" value="false"/>
-			<property name="javax.persistence.schema-generation.scripts.action" value="none"/>
+			<property name="javax.persistence.schema-generation.database.action" value="create"/>
+			<property name="javax.persistence.schema-generation.scripts.action" value="create"/>
 			<property name="javax.persistence.schema-generation.scripts.create-target" value="E:\JavaEE\scripts\scripts.sql"/>
 			<property name="javax.persistence.schema-generation.scripts.drop-target" value="E:\JavaEE\scripts\scripts.sql"/>
+			<property name="javax.persistence.schema-generation.create-database-schemas" value="true"/>
 		</properties>
 	</persistence-unit>
 </persistence>
