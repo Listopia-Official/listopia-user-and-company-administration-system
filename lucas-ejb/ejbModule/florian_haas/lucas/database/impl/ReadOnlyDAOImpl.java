@@ -124,18 +124,18 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 		}
 	}
 
-	protected final <T extends Comparable<? super T>> List<Predicate> getSingularRestrictionCollection(SingularAttribute<? super E, T> attribute,
-			Collection<T> values, EnumQueryComparator comparator, CriteriaBuilder builder, Path<E> path) {
-		List<Predicate> predicates = new ArrayList<>();
-		values.forEach(value -> {
-			predicates.add(this.getSingularRestriction(attribute, value, comparator, builder, path));
-		});
-		return predicates;
+	protected final <T extends Comparable<? super T>> Predicate getSingularRestrictionCollection(SingularAttribute<? super E, T> attribute,
+			List<T> values, EnumQueryComparator comparator, CriteriaBuilder builder, Path<E> path) {
+		Predicate[] predicates = new Predicate[values.size()];
+		for (int i = 0; i < values.size(); i++) {
+			predicates[i] = this.getSingularRestriction(attribute, values.get(i), comparator, builder, path);
+		}
+		return builder.or(predicates);
 	}
 
-	protected final <T extends Comparable<? super T>> void getSingularRestrictionCollection(SingularAttribute<? super E, T> attribute,
-			Collection<T> values, Boolean useValue, EnumQueryComparator comparator, List<Predicate> list, CriteriaBuilder builder, Path<E> path) {
-		if (useValue) list.addAll(getSingularRestrictionCollection(attribute, values, comparator, builder, path));
+	protected final <T extends Comparable<? super T>> void getSingularRestrictionCollection(SingularAttribute<? super E, T> attribute, List<T> values,
+			Boolean useValue, EnumQueryComparator comparator, List<Predicate> list, CriteriaBuilder builder, Path<E> path) {
+		if (useValue) list.add(getSingularRestrictionCollection(attribute, values, comparator, builder, path));
 
 	}
 
