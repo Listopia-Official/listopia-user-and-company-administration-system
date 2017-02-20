@@ -1,0 +1,11 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<p:blockUI block="#{block}" trigger="#{trigger}">
+		<p:graphicImage name="images/ajaxloadingbar.gif"
+			style="margin-right:12px; vertical-align:center;margin-top:auto;" />
+		<h:outputText value="Please wait..." style="white-space: nowrap" />
+	</p:blockUI>
+</ui:composition>
