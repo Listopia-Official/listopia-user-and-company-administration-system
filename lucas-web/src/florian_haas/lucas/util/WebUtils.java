@@ -66,22 +66,24 @@ public class WebUtils {
 				String.class);
 	}
 
-	public static void executeTask(FailableTask task, String successMessageKey, String warnMessageKey, String failMessageKey, Object... argParams) {
+	public static boolean executeTask(FailableTask task, String successMessageKey, String warnMessageKey, String failMessageKey,
+			Object... argParams) {
+		boolean success = false;
 		List<Object> paramsList = new ArrayList<>();
 		paramsList.addAll(Arrays.asList(argParams));
 		Object[] params = paramsList.toArray();
 		try {
-			boolean success = task.executeTask(paramsList);
+			success = task.executeTask(paramsList);
 			params = paramsList.toArray();
-			if (success) {
+			if (success && successMessageKey != null) {
 				WebUtils.addTranslatedInformationMessage(successMessageKey, params);
-			} else {
+			} else if (warnMessageKey != null) {
 				WebUtils.addTranslatedInformationMessage(warnMessageKey, params);
 			}
 		}
 		catch (ConstraintViolationException e) {
 			for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
-				WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + violation.getMessage());
+				WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + violation.getPropertyPath() + " " + violation.getMessage());
 			}
 		}
 		catch (ShiroException e2) {
@@ -90,6 +92,7 @@ public class WebUtils {
 		catch (Exception e3) {
 			WebUtils.addFatalMessage(getTranslatedMessage(failMessageKey, params) + e3.getLocalizedMessage());
 		}
+		return success;
 	}
 
 }
