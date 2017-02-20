@@ -55,6 +55,8 @@ public enum EnumSchoolClass {
 	public static final Set<Integer> GRADES;
 	public static final Set<String> CLASSES;
 
+	public static final EnumSchoolClass[] ALL_VALUES = EnumSchoolClass.values();
+
 	static {
 		Set<Integer> tmpGrades = new HashSet<>();
 		Set<String> tmpClasses = new HashSet<>();
