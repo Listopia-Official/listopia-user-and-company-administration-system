@@ -130,12 +130,12 @@ public enum EnumSchoolClass {
 	public static List<EnumSchoolClass> getMatchingClasses(Integer schoolGrade, String schoolClass, EnumQueryComparator schoolGradeComparator,
 			EnumQueryComparator schoolClassComparator) {
 		List<EnumSchoolClass> ret = new ArrayList<>();
-		for (EnumSchoolClass value : EnumSchoolClass.values()) {
-			Predicate<Integer> gradePred = getPredicateFromQueryComparator(schoolGradeComparator, EnumQueryComparator.NUMERIC_COMPARATORS,
-					value.getGrade());
-			Predicate<String> schoolClassPred = getPredicateFromQueryComparator(schoolClassComparator, EnumQueryComparator.NUMERIC_COMPARATORS,
-					value.getSchoolClass());
-			if (schoolGrade != null && schoolClass != null) {
+		if (schoolClass != null || schoolGrade != null) {
+			for (EnumSchoolClass value : EnumSchoolClass.values()) {
+				Predicate<Integer> gradePred = getPredicateFromQueryComparator(schoolGradeComparator, EnumQueryComparator.NUMERIC_COMPARATORS,
+						value.getGrade());
+				Predicate<String> schoolClassPred = getPredicateFromQueryComparator(schoolClassComparator, EnumQueryComparator.NUMERIC_COMPARATORS,
+						value.getSchoolClass());
 				if ((schoolGrade != null && schoolClass != null && gradePred.test(schoolGrade) && schoolClassPred.test(schoolClass))
 						|| (schoolGrade != null && schoolClass == null && gradePred.test(schoolGrade))
 						|| (schoolGrade == null && schoolClass != null && schoolClassPred.test(schoolClass))) {
