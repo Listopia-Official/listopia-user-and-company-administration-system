@@ -76,3 +76,7 @@
 .checkbox {
 	margin-right: 4px;
 }
+
+.ui-splitbutton-menubutton{
+	right: initial!important;
+}
