@@ -6,11 +6,13 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="content">
 		<div class="dataArea">
-			<p:toolbar
-				style="width:99%!important;margin-left:auto;margin-right:auto;margin-top:10px!important"
-				styleClass="toolbar">
-				<ui:insert name="buttonArea" />
-			</p:toolbar>
+			<h:form>
+				<p:toolbar
+					style="width:99%!important;margin-left:auto;margin-right:auto;margin-top:10px!important"
+					styleClass="toolbar">
+					<ui:insert name="buttonArea" />
+				</p:toolbar>
+			</h:form>
 			<p:accordionPanel multiple="true" id="dataAccorditionPanel"
 				activeIndex="0,1">
 				<p:tab>
