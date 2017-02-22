@@ -77,6 +77,10 @@
 	margin-right: 4px;
 }
 
-.ui-splitbutton-menubutton{
-	right: initial!important;
+.ui-splitbutton-menubutton {
+	right: initial !important;
+}
+
+.ui-accordion .ui-accordion-header {
+	margin-top: 5px!important;
 }
