@@ -6,6 +6,7 @@
 	<p:blockUI block="#{block}" trigger="#{trigger}">
 		<p:graphicImage name="images/ajaxloadingbar.gif"
 			style="margin-right:12px; vertical-align:center;margin-top:auto;" />
-		<h:outputText value="Please wait..." style="white-space: nowrap" />
+		<h:outputText value="#{msg['lucas.application.blockUI.waitMessage']}"
+			style="white-space: nowrap" />
 	</p:blockUI>
 </ui:composition>
