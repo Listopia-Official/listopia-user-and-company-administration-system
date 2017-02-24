@@ -36,8 +36,7 @@ public abstract class EnumConverter<E extends Enum<E>> extends javax.faces.conve
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		String enumString = super.getAsString(context, component, value);
 		if (enumString.trim().isEmpty()) enumString = MESSAGE_NULL_KEY;
-		String ret = getTranslatedName(enumString);
-		return ret;
+		return getTranslatedName(enumString);
 	}
 
 	@Override
