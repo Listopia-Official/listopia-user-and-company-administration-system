@@ -27,6 +27,9 @@ public class LoginBean {
 	@EJB
 	private UserBeanLocal userBean;
 
+	@EJB
+	private GlobalDataBeanLocal globalDataBean;
+
 	public Boolean getIsUserInDatabase() {
 		return !getIsAnonymous() && getDBUsername() != null;
 	}
@@ -100,8 +103,8 @@ public class LoginBean {
 		}
 	}
 
-	public String getIdleTimeout() {
-		return "300000";
+	public Long getIdleTimeout() {
+		return globalDataBean.getMaxIdleTime();
 	}
 
 }
