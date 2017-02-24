@@ -60,7 +60,9 @@
 								<p:selectOneMenu id="schoolClassSelectOneMenu"
 									value="#{userBean.createPupilDialogSchoolClass}"
 									title="#{msg['lucas.application.userScreen.createPupilDialog.schoolClassSelectOne.tooltip']}">
-									<f:selectItems value="#{EnumSchoolClass.ALL_VALUES}" />
+									<f:selectItems value="#{EnumSchoolClass.ALL_VALUES}"
+										var="class" itemValue="#{class}"
+										itemLabel="#{converterBean.convertEnum(class)}" />
 								</p:selectOneMenu>
 							</p:column>
 						</p:row>
