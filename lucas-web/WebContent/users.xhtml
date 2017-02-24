@@ -4,72 +4,371 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
-	<ui:define name="pageTitle">
-		<h:outputText value="#{msg['lucas.application.userScreen.title']}" />
+	<ui:param name="pageTitle"
+		value="#{msg['lucas.application.userScreen.title']}" />
+	<ui:define name="dialogs">
+		<ui:include src="/WEB-INF/createPupilDialog.xhtml" />
+		<ui:include src="/WEB-INF/createTeacherDialog.xhtml" />
+		<ui:include src="/WEB-INF/createGuestDialog.xhtml" />
+	</ui:define>
+	<ui:define name="otherContent">
+		<p:importConstants type="florian_haas.lucas.model.EnumSchoolClass" />
+		<p:importEnum type="florian_haas.lucas.model.EnumUserType" />
+		<p:importEnum type="florian_haas.lucas.database.EnumQueryComparator" />
+		<p:importConstants
+			type="florian_haas.lucas.database.EnumQueryComparator" />
 	</ui:define>
 	<ui:define name="buttonArea">
 		<p:toolbarGroup>
-			<p:commandButton
-				value="#{msg['lucas.application.userScreen.newPupilButton.name']}"
-				title="#{msg['lucas.application.userScreen.newPupilButton.tooltip']}"
-				icon="fa fa-user-plus">
-			</p:commandButton>
-			<p:commandButton
-				value="#{msg['lucas.application.userScreen.newTeacherButton.name']}"
-				title="#{msg['lucas.application.userScreen.newTeacherButton.tooltip']}"
-				icon="fa fa-user-plus">
-			</p:commandButton>
-			<p:commandButton
-				value="#{msg['lucas.application.userScreen.newGuestButton.name']}"
-				title="#{msg['lucas.application.userScreen.newGuestButton.tooltip']}"
-				icon="fa fa-user-plus">
-			</p:commandButton>
+			<p:splitButton icon="fa fa-user-plus"
+				value="#{msg['lucas.application.userScreen.createUserButton.name']}"
+				title="#{msg['lucas.application.userScreen.createUserButton.tooltip']}"
+				update="createPupilDialogForm" process="@this"
+				oncomplete="PF('createPupilDialog').show()"
+				actionListener="#{userBean.resetCreatePupilDialog}">
+				<p:resetInput target="createPupilDialogForm" clearModel="true" />
+				<p:menuitem icon="fa fa-user"
+					value="#{msg['lucas.application.userScreen.newPupilButton.name']}"
+					update="createPupilDialogForm" process="@this"
+					actionListener="#{userBean.resetCreatePupilDialog}"
+					title="#{msg['lucas.application.userScreen.newPupilButton.tooltip']}"
+					oncomplete="PF('createPupilDialog').show()">
+					<p:resetInput target="createPupilDialogForm" clearModel="true" />
+				</p:menuitem>
+				<p:menuitem icon="fa fa-user-md"
+					value="#{msg['lucas.application.userScreen.newTeacherButton.name']}"
+					update="createTeacherDialogForm" process="@this"
+					actionListener="#{userBean.resetCreateTeacherDialog}"
+					title="#{msg['lucas.application.userScreen.newTeacherButton.tooltip']}"
+					oncomplete="PF('createTeacherDialog').show()">
+					<p:resetInput target="createTeacherDialogForm" clearModel="true" />
+				</p:menuitem>
+				<p:menuitem icon="fa fa-group"
+					value="#{msg['lucas.application.userScreen.newGuestButton.name']}"
+					update="createGuestDialogForm" process="@this"
+					title="#{msg['lucas.application.userScreen.newGuestButton.tooltip']}"
+					oncomplete="PF('createGuestDialog').show()">
+					<p:resetInput target="createGuestDialogForm" clearModel="true" />
+				</p:menuitem>
+				<p:separator />
+				<p:menuitem
+					value="#{msg['lucas.application.userScreen.importPupilsButton.name']}"
+					icon="fa fa-file-excel-o"
+					title="#{msg['lucas.application.userScreen.importPupilsButton.tooltip']}" />
+				<p:menuitem
+					value="#{msg['lucas.application.userScreen.importTeachersButton.name']}"
+					icon="fa fa-file-excel-o"
+					title="#{msg['lucas.application.userScreen.importTeachersButton.tooltip']}" />
+			</p:splitButton>
 			<span class="ui-separator"> <span
 				class="ui-icon ui-icon-grip-dotted-vertical" />
 			</span>
 			<p:commandButton
 				value="#{msg['lucas.application.userScreen.editUserButton.name']}"
 				title="#{msg['lucas.application.userScreen.editUserButton.tooltip']}"
-				icon="fa fa-edit" />
+				icon="fa fa-edit" disabled="#{userBean.selectedUsers.size() != 1}" />
 			<p:commandButton
 				value="#{msg['lucas.application.userScreen.imageManagerButton.name']}"
 				title="#{msg['lucas.application.userScreen.imageManagerButton.tooltip']}"
-				icon="fa fa-image" />
+				icon="fa fa-image" disabled="#{userBean.selectedUsers.size() != 1}" />
 			<p:commandButton
 				value="#{msg['lucas.application.userScreen.userCardManagerButton.name']}"
 				title="#{msg['lucas.application.userScreen.userCardManagerButton.tooltip']}"
-				icon="fa fa-credit-card" />
+				icon="fa fa-credit-card"
+				disabled="#{userBean.selectedUsers.size() != 1}" />
 			<span class="ui-separator"> <span
 				class="ui-icon ui-icon-grip-dotted-vertical" />
 			</span>
 			<p:commandButton
 				value="#{msg['lucas.application.userScreen.profileButton.name']}"
 				title="#{msg['lucas.application.userScreen.profileButton.tooltip']}"
-				icon="fa fa-info-circle" />
+				icon="fa fa-info-circle"
+				disabled="#{userBean.selectedUsers.size() != 1}" />
 			<span class="ui-separator"> <span
 				class="ui-icon ui-icon-grip-dotted-vertical" />
 			</span>
 			<p:commandButton icon="fa fa-user-times"
 				value="#{msg['lucas.application.userScreen.removeUserButton.name']}"
-				title="#{msg['lucas.application.userScreen.removeUserButton.tooltip']}" />
+				title="#{msg['lucas.application.userScreen.removeUserButton.tooltip']}"
+				disabled="#{userBean.selectedUsers.size() &lt;= 0}" />
 		</p:toolbarGroup>
 	</ui:define>
 	<ui:define name="searchCriteria">
-
+		<div class="ui-fluid">
+			<h:form id="userSearchCriteriaForm">
+				<p:panelGrid>
+					<p:row>
+						<p:column>
+							<p:selectBooleanCheckbox id="searchUserIdSelectBooleanCheckbox"
+								styleClass="checkbox" value="#{userBean.useSearchUserId}"
+								title="#{msg['lucas.application.userScreen.searchUserIdSelectBooleanCheckbox.tooltip']}">
+								<p:ajax event="change"
+									update="userSearchCriteriaForm:searchUserIdInputNumber userSearchCriteriaForm:searchUserIdComparator"
+									process="@this" />
+							</p:selectBooleanCheckbox>
+							<p:outputLabel for="searchUserIdSelectBooleanCheckbox"
+								value="#{msg['lucas.application.userScreen.searchUserIdSelectBooleanCheckbox.name']}"
+								title="#{msg['lucas.application.userScreen.searchUserIdSelectBooleanCheckbox.tooltip']}" />
+						</p:column>
+						<p:column>
+							<p:selectBooleanCheckbox
+								id="searchUserForenameSelectBooleanCheckbox"
+								styleClass="checkbox" value="#{userBean.useSearchUserForename}"
+								title="#{msg['lucas.application.userScreen.searchUserForenameSelectBooleanCheckbox.tooltip']}">
+								<p:ajax event="change"
+									update="userSearchCriteriaForm:searchUserForenameInputText userSearchCriteriaForm:searchUserForenameComparator"
+									process="@this" />
+							</p:selectBooleanCheckbox>
+							<p:outputLabel for="searchUserForenameSelectBooleanCheckbox"
+								value="#{msg['lucas.application.userScreen.searchUserForenameSelectBooleanCheckbox.name']}"
+								title="#{msg['lucas.application.userScreen.searchUserForenameSelectBooleanCheckbox.tooltip']}" />
+						</p:column>
+						<p:column>
+							<p:selectBooleanCheckbox
+								id="searchUserSurnameSelectBooleanCheckbox"
+								styleClass="checkbox" value="#{userBean.useSearchUserSurname}"
+								title="#{msg['lucas.application.userScreen.searchUserSurnameSelectBooleanCheckbox.tooltip']}">
+								<p:ajax event="change"
+									update="userSearchCriteriaForm:searchUserSurnameInputText userSearchCriteriaForm:searchUserSurnameComparator"
+									process="@this" />
+							</p:selectBooleanCheckbox>
+							<p:outputLabel for="searchUserSurnameSelectBooleanCheckbox"
+								value="#{msg['lucas.application.userScreen.searchUserSurnameSelectBooleanCheckbox.name']}"
+								title="#{msg['lucas.application.userScreen.searchUserSurnameSelectBooleanCheckbox.tooltip']}" />
+						</p:column>
+						<p:column>
+							<p:selectBooleanCheckbox id="searchUserTypeSelectBooleanCheckbox"
+								styleClass="checkbox" value="#{userBean.useSearchUserType}"
+								title="#{msg['lucas.application.userScreen.searchUserTypeSelectBooleanCheckbox.tooltip']}">
+								<p:ajax event="change"
+									update="userSearchCriteriaForm:searchUserTypeSelectOneMenu userSearchCriteriaForm:searchUserTypeComparator"
+									process="@this" />
+							</p:selectBooleanCheckbox>
+							<p:outputLabel for="searchUserTypeSelectBooleanCheckbox"
+								value="#{msg['lucas.application.userScreen.searchUserTypeSelectBooleanCheckbox.name']}"
+								title="#{msg['lucas.application.userScreen.searchUserTypeSelectBooleanCheckbox.tooltip']}" />
+						</p:column>
+						<p:column>
+							<p:selectBooleanCheckbox
+								id="searchUserSchoolGradeSelectBooleanCheckbox"
+								styleClass="checkbox"
+								value="#{userBean.useSearchUserSchoolGrade}"
+								title="#{msg['lucas.application.userScreen.searchUserSchoolGradeSelectBooleanCheckbox.tooltip']}">
+								<p:ajax event="change"
+									update="userSearchCriteriaForm:searchUserSchoolGradeSelectOneMenu userSearchCriteriaForm:searchUserSchoolGradeComparator"
+									process="@this" />
+							</p:selectBooleanCheckbox>
+							<p:outputLabel for="searchUserSchoolGradeSelectBooleanCheckbox"
+								value="#{msg['lucas.application.userScreen.searchUserSchoolGradeSelectBooleanCheckbox.name']}"
+								title="#{msg['lucas.application.userScreen.searchUserSchoolGradeSelectBooleanCheckbox.tooltip']}" />
+						</p:column>
+						<p:column>
+							<p:selectBooleanCheckbox
+								id="searchUserSchoolClassSelectBooleanCheckbox"
+								styleClass="checkbox"
+								value="#{userBean.useSearchUserSchoolClass}"
+								title="#{msg['lucas.application.userScreen.searchUserSchoolClassSelectBooleanCheckbox.tooltip']}">
+								<p:ajax event="change"
+									update="userSearchCriteriaForm:searchUserSchoolClassSelectOneMenu userSearchCriteriaForm:searchUserSchoolClassComparator"
+									process="@this" />
+							</p:selectBooleanCheckbox>
+							<p:outputLabel for="searchUserSchoolClassSelectBooleanCheckbox"
+								value="#{msg['lucas.application.userScreen.searchUserSchoolClassSelectBooleanCheckbox.name']}"
+								title="#{msg['lucas.application.userScreen.searchUserSchoolClassSelectBooleanCheckbox.tooltip']}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<p:selectOneMenu id="searchUserIdComparator"
+								disabled="#{not userBean.useSearchUserId}"
+								value="#{userBean.searchUserIdComparator}"
+								title="#{msg['lucas.application.userScreen.searchUserIdComparator.tooltip']}">
+								<f:selectItems
+									value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+									var="comparator" itemValue="#{comparator}"
+									itemLabel="#{converterBean.convertEnum(comparator)}" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<p:selectOneMenu id="searchUserForenameComparator"
+								disabled="#{not userBean.useSearchUserForename}"
+								title="#{msg['lucas.application.userScreen.searchUserForenameComparator.tooltip']}"
+								value="#{userBean.searchUserForenameComparator}">
+								<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
+									var="comparator" itemValue="#{comparator}"
+									itemLabel="#{converterBean.convertEnum(comparator)}" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<p:selectOneMenu id="searchUserSurnameComparator"
+								disabled="#{not userBean.useSearchUserSurname}"
+								title="#{msg['lucas.application.userScreen.searchUserSurnameComparator.tooltip']}"
+								value="#{userBean.searchUserSurnameComparator}">
+								<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
+									var="comparator" itemValue="#{comparator}"
+									itemLabel="#{converterBean.convertEnum(comparator)}" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<p:selectOneMenu id="searchUserTypeComparator"
+								disabled="#{not userBean.useSearchUserType}"
+								title="#{msg['lucas.application.userScreen.searchUserTypeComparator.tooltip']}"
+								value="#{userBean.searchUserTypeComparator}">
+								<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
+									var="comparator" itemValue="#{comparator}"
+									itemLabel="#{converterBean.convertEnum(comparator)}" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<p:selectOneMenu id="searchUserSchoolGradeComparator"
+								disabled="#{not userBean.useSearchUserSchoolGrade}"
+								title="#{msg['lucas.application.userScreen.searchUserSchoolGradeComparator.tooltip']}"
+								value="#{userBean.searchUserSchoolGradeComparator}">
+								<f:selectItems
+									value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+									var="comparator" itemValue="#{comparator}"
+									itemLabel="#{converterBean.convertEnum(comparator)}" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<p:selectOneMenu id="searchUserSchoolClassComparator"
+								disabled="#{not userBean.useSearchUserSchoolClass}"
+								title="#{msg['lucas.application.userScreen.searchUserSchoolClassComparator.tooltip']}"
+								value="#{userBean.searchUserSchoolClassComparator}">
+								<f:selectItems
+									value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+									var="comparator" itemValue="#{comparator}"
+									itemLabel="#{converterBean.convertEnum(comparator)}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<p:inputNumber value="#{userBean.searchUserId}" minValue="0"
+								decimalPlaces="0" id="searchUserIdInputNumber"
+								disabled="#{not userBean.useSearchUserId}" />
+						</p:column>
+						<p:column>
+							<p:inputText value="#{userBean.searchUserForename}"
+								id="searchUserForenameInputText"
+								disabled="#{not userBean.useSearchUserForename}" />
+						</p:column>
+						<p:column>
+							<p:inputText value="#{userBean.searchUserSurname}"
+								id="searchUserSurnameInputText"
+								disabled="#{not userBean.useSearchUserSurname}" />
+						</p:column>
+						<p:column>
+							<p:selectOneMenu value="#{userBean.searchUserType}"
+								id="searchUserTypeSelectOneMenu"
+								disabled="#{not userBean.useSearchUserType}">
+								<f:selectItems value="#{EnumUserType.ALL_VALUES}" var="userType"
+									itemValue="#{userType}"
+									itemLabel="#{converterBean.convertEnum(userType)}" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<p:selectOneMenu value="#{userBean.searchUserSchoolGrade}"
+								id="searchUserSchoolGradeSelectOneMenu"
+								disabled="#{not userBean.useSearchUserSchoolGrade}">
+								<f:selectItems value="#{EnumSchoolClass.GRADES}" />
+							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<p:selectOneMenu value="#{userBean.searchUserSchoolClass}"
+								id="searchUserSchoolClassSelectOneMenu"
+								disabled="#{not userBean.useSearchUserSchoolClass}">
+								<f:selectItems value="#{EnumSchoolClass.CLASSES}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<p:commandButton id="searchButton"
+								value="#{msg['lucas.application.userScreen.searchButton.name']}"
+								title="#{msg['lucas.application.userScreen.searchButton.tooltip']}"
+								styleClass="blockAllTrigger" icon="fa fa-search"
+								action="#{userBean.searchUsers}" process="@form"
+								update="dataAccorditionPanel:userSearchResultsForm:userSearchResultsTable @form dataAccorditionPanel" />
+						</p:column>
+						<ui:include src="/WEB-INF/blockUI.xhtml">
+							<ui:param name="block" value="@(.dataArea)" />
+							<ui:param name="trigger" value="@(.blockAllTrigger)" />
+						</ui:include>
+					</p:row>
+				</p:panelGrid>
+			</h:form>
+		</div>
 	</ui:define>
+	<ui:param name="searchResults"
+		value="#{userBean.searchUserResults.size()}" />
 	<ui:define name="searchResults">
-		<p:tab title="Search Results">
-			<p:dataTable draggableColumns="true"
-				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {GlobalSelection}"
-				rowSelectMode="add">
-				<p:column headerText="Id:"></p:column>
-				<p:column headerText="Forename:"></p:column>
-				<p:column headerText="Surname:"></p:column>
-				<p:column headerText="User Type:"></p:column>
-				<p:column headerText="School Grade:"></p:column>
-				<p:column headerText="School Class:"></p:column>
-				<p:column headerText="Ranks:"></p:column>
+		<h:form id="userSearchResultsForm">
+			<p:dataTable id="userSearchResultsTable"
+				value="#{userBean.searchUserResults}" var="user" rowKey="#{user.id}"
+				selection="#{userBean.selectedUsers}" rows="10"
+				draggableColumns="true" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {AdditionalComponents}"
+				currentPageReportTemplate="#{msg['lucas.application.userScreen.userSearchResultsTable.currentPageReport1']} {currentPage}#{msg['lucas.application.userScreen.userSearchResultsTable.currentPageReport2']} {totalPages}"
+				rowsPerPageTemplate="10,20,50,75,100,200,500,750,1000"
+				rowSelectMode="add"
+				emptyMessage="#{msg['lucas.application.userScreen.userSearchResultsTable.noResults']}">
+				<f:facet name="{AdditionalComponents}">
+					<p:commandButton id="searchUserColumnToggler" type="button"
+						value="#{msg['lucas.application.userScreen.userSearchResultsTable.searchUserColumnToggler.name']}"
+						icon="fa fa-calculator"
+						title="#{msg['lucas.application.userScreen.userSearchResultsTable.searchUserColumnToggler.tooltip']}" />
+					<p:columnToggler datasource="userSearchResultsTable"
+						trigger="searchUserColumnToggler">
+						<p:ajax event="toggle" listener="#{userBean.onToggle}" />
+					</p:columnToggler>
+				</f:facet>
+				<p:ajax event="rowUnselectCheckbox" update="@(.toolbar)" />
+				<p:ajax event="rowSelectCheckbox" update="@(.toolbar)" />
+				<p:ajax event="rowUnselect" update="@(.toolbar)" />
+				<p:ajax event="rowSelect" update="@(.toolbar)" />
+				<p:column selectionMode="multiple" toggleable="false"
+					style="width:16px;text-align:center" exportable="false" />
+				<p:column
+					headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.idColumn.name']}"
+					sortBy="#{user.id}"
+					visible="#{userBean.resultsDatatableColumns[0]}">
+					<h:outputText value="#{user.id}" />
+				</p:column>
+				<p:column
+					headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.forenameColumn.name']}"
+					sortBy="#{user.forename}"
+					visible="#{userBean.resultsDatatableColumns[1]}">
+					<h:outputText value="#{user.forename}"
+						converter="lucas:NullStringConverter" />
+				</p:column>
+				<p:column
+					headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.surnameColumn.name']}"
+					sortBy="#{user.surname}"
+					visible="#{userBean.resultsDatatableColumns[2]}">
+					<h:outputText value="#{user.surname}"
+						converter="lucas:NullStringConverter" />
+				</p:column>
+				<p:column
+					headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.userTypeColumn.name']}"
+					sortBy="#{user.userType}"
+					visible="#{userBean.resultsDatatableColumns[3]}">
+					<h:outputText value="#{user.userType}" />
+				</p:column>
+				<p:column
+					headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.schoolClassColumn.name']}"
+					sortBy="#{user.schoolClass}"
+					visible="#{userBean.resultsDatatableColumns[4]}">
+					<h:outputText
+						value="#{converterBean.convertEnum(user.schoolClass)}" />
+				</p:column>
+				<p:column
+					headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.ranksColumn.name']}"
+					visible="#{userBean.resultsDatatableColumns[5]}">
+					<h:outputText value="#{user.ranks}"
+						converter="lucas:ranksConverter" escape="false" />
+				</p:column>
 			</p:dataTable>
-		</p:tab>
+		</h:form>
 	</ui:define>
 </ui:composition>
