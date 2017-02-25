@@ -56,7 +56,7 @@ public class WebUtils {
 	public static String getTranslatedMessage(String key, Object... params) {
 		String message = getTranslatedMessage(key);
 		for (int i = 0; i < params.length; i++) {
-			message = message.replaceAll("\\?" + i, params[i].toString());
+			if (params[i] != null) message = message.replaceAll("\\?" + i, params[i].toString());
 		}
 		return message;
 	}
