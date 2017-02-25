@@ -73,7 +73,7 @@ public class User extends AccountOwner {
 	}
 
 	public EnumUserType getUserType() {
-		return (forename == null && surname == null ? EnumUserType.GUEST : (schoolClass == null ? EnumUserType.TEACHER : EnumUserType.PUPIL));
+		return (forename == null || surname == null ? EnumUserType.GUEST : (schoolClass == null ? EnumUserType.TEACHER : EnumUserType.PUPIL));
 	}
 
 	public EnumSchoolClass getSchoolClass() {

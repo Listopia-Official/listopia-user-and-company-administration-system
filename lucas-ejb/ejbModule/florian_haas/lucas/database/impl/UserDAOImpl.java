@@ -26,8 +26,7 @@ public class UserDAOImpl extends DAOImpl<User> implements UserDAO {
 				Predicate pred = null;
 				switch (userType) {
 					case GUEST:
-						pred = builder.and(builder.isNull(root.get(User_.forename)), builder.isNull(root.get(User_.surname)),
-								builder.isNull(root.get(User_.schoolClass)));
+						pred = builder.or(builder.isNull(root.get(User_.forename)), builder.isNull(root.get(User_.surname)));
 						break;
 					case PUPIL:
 						pred = builder.and(builder.isNotNull(root.get(User_.forename)), builder.isNotNull(root.get(User_.surname)),
