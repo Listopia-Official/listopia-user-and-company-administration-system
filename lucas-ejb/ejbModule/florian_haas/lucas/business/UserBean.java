@@ -78,7 +78,7 @@ public class UserBean implements UserBeanLocal {
 	@RequiresPermissions(USER_SET_FORENAME)
 	public Boolean setForename(Long userId, String forename) {
 		User user = userDao.findById(userId);
-		if (user.getForename().equals(forename)) return Boolean.FALSE;
+		if (user.getForename() != null && user.getForename().equals(forename)) return Boolean.FALSE;
 		user.setForename(forename);
 		return Boolean.TRUE;
 	}
@@ -87,7 +87,7 @@ public class UserBean implements UserBeanLocal {
 	@RequiresPermissions(USER_SET_SURNAME)
 	public Boolean setSurname(Long userId, String surname) {
 		User user = userDao.findById(userId);
-		if (user.getSurname().equals(surname)) return Boolean.FALSE;
+		if (user.getSurname() != null && user.getSurname().equals(surname)) return Boolean.FALSE;
 		user.setSurname(surname);
 		return Boolean.TRUE;
 	}
