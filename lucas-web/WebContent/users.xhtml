@@ -10,6 +10,7 @@
 		<ui:include src="/WEB-INF/createPupilDialog.xhtml" />
 		<ui:include src="/WEB-INF/createTeacherDialog.xhtml" />
 		<ui:include src="/WEB-INF/createGuestDialog.xhtml" />
+		<ui:include src="/WEB-INF/editUserDialog.xhtml" />
 	</ui:define>
 	<ui:define name="otherContent">
 		<p:importConstants type="florian_haas.lucas.model.EnumSchoolClass" />
@@ -66,6 +67,8 @@
 			<p:commandButton
 				value="#{msg['lucas.application.userScreen.editUserButton.name']}"
 				title="#{msg['lucas.application.userScreen.editUserButton.tooltip']}"
+				update="editUserDialogForm" process="@this"
+				action="#{userBean.initEditUserDialog}" oncomplete="PF('editUserDialog').show()"
 				icon="fa fa-edit" disabled="#{userBean.selectedUsers.size() != 1}" />
 			<p:commandButton
 				value="#{msg['lucas.application.userScreen.imageManagerButton.name']}"
@@ -289,7 +292,7 @@
 								title="#{msg['lucas.application.userScreen.searchButton.tooltip']}"
 								styleClass="blockAllTrigger" icon="fa fa-search"
 								action="#{userBean.searchUsers}" process="@form"
-								update="dataAccorditionPanel:userSearchResultsForm:userSearchResultsTable @form dataAccorditionPanel" />
+								update="dataAccorditionPanel:userSearchResultsForm:userSearchResultsTable @form dataAccorditionPanel @(.toolbar)" />
 						</p:column>
 						<ui:include src="/WEB-INF/blockUI.xhtml">
 							<ui:param name="block" value="@(.dataArea)" />
