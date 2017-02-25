@@ -96,7 +96,7 @@ public class UserBean implements UserBeanLocal {
 	@RequiresPermissions(USER_SET_SCHOOL_CLASS)
 	public Boolean setSchoolClass(Long userId, EnumSchoolClass schoolClass) {
 		User user = userDao.findById(userId);
-		if (user.getSchoolClass().equals(schoolClass)) return Boolean.FALSE;
+		if (user.getSchoolClass() != null && user.getSchoolClass().equals(schoolClass)) return Boolean.FALSE;
 		user.setSchoolClass(schoolClass);
 		return Boolean.TRUE;
 	}
