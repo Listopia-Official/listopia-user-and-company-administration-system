@@ -10,46 +10,148 @@ import org.apache.shiro.ShiroException;
 
 public class WebUtils {
 
-	public static void addInformationMessage(String message) {
-		addMessage(FacesMessage.SEVERITY_INFO, message);
+	public static final String DEFAULT_MESSAGE_COMPONENT_ID = "defaultMessage";
+
+	public static final String GROWL_MESSAGE_COMPONENT_ID = "growlMessage";
+
+	public static final String STICKY_GROWL_MESSAGE_COMPONENT_ID = "stickyGrowlMessage";
+
+	public static void addDefaultInformationMessage(String message) {
+		addInformationMessage(message, DEFAULT_MESSAGE_COMPONENT_ID);
 	}
 
-	public static void addTranslatedInformationMessage(String message, Object... params) {
-		addTranslatedMessage(FacesMessage.SEVERITY_INFO, message, params);
+	public static void addDefaultTranslatedInformationMessage(String message, Object... params) {
+		addTranslatedInformationMessage(message, DEFAULT_MESSAGE_COMPONENT_ID, params);
 	}
 
-	public static void addWarningMessage(String message) {
-		addMessage(FacesMessage.SEVERITY_WARN, message);
+	public static void addDefaultWarningMessage(String message) {
+		addWarningMessage(message, DEFAULT_MESSAGE_COMPONENT_ID);
 	}
 
-	public static void addTranslatedWarningMessage(String message, Object... params) {
-		addTranslatedMessage(FacesMessage.SEVERITY_WARN, message, params);
+	public static void addDefaultTranslatedWarningMessage(String message, Object... params) {
+		addTranslatedWarningMessage(message, DEFAULT_MESSAGE_COMPONENT_ID, params);
 	}
 
-	public static void addErrorMessage(String message) {
-		addMessage(FacesMessage.SEVERITY_ERROR, message);
+	public static void addDefaultErrorMessage(String message) {
+		addErrorMessage(message, DEFAULT_MESSAGE_COMPONENT_ID);
 	}
 
-	public static void addTranslatedErrorMessage(String message, Object... params) {
-		addTranslatedMessage(FacesMessage.SEVERITY_ERROR, message, params);
+	public static void addDefaultTranslatedErrorMessage(String message, Object... params) {
+		addTranslatedErrorMessage(message, DEFAULT_MESSAGE_COMPONENT_ID, params);
 	}
 
-	public static void addFatalMessage(String message) {
-		addMessage(FacesMessage.SEVERITY_FATAL, message);
+	public static void addDefaultFatalMessage(String message) {
+		addFatalMessage(message, DEFAULT_MESSAGE_COMPONENT_ID);
 	}
 
-	public static void addTranslatedFatalMessage(String message, Object... params) {
-		addTranslatedMessage(FacesMessage.SEVERITY_FATAL, message, params);
+	public static void addDefaultTranslatedFatalMessage(String message, Object... params) {
+		addTranslatedFatalMessage(message, DEFAULT_MESSAGE_COMPONENT_ID, params);
 	}
 
-	private static void addTranslatedMessage(FacesMessage.Severity severity, String key, Object... params) {
-		addMessage(severity, getTranslatedMessage(key, params));
+	public static void addGrowlInformationMessage(String message) {
+		addInformationMessage(message, GROWL_MESSAGE_COMPONENT_ID);
 	}
 
-	private static void addMessage(FacesMessage.Severity severity, String message) {
+	public static void addGrowlTranslatedInformationMessage(String message, Object... params) {
+		addTranslatedInformationMessage(message, GROWL_MESSAGE_COMPONENT_ID, params);
+	}
+
+	public static void addGrowlWarningMessage(String message) {
+		addWarningMessage(message, GROWL_MESSAGE_COMPONENT_ID);
+	}
+
+	public static void addGrowlTranslatedWarningMessage(String message, Object... params) {
+		addTranslatedWarningMessage(message, GROWL_MESSAGE_COMPONENT_ID, params);
+	}
+
+	public static void addGrowlErrorMessage(String message) {
+		addErrorMessage(message, GROWL_MESSAGE_COMPONENT_ID);
+	}
+
+	public static void addGrowlTranslatedErrorMessage(String message, Object... params) {
+		addTranslatedErrorMessage(message, GROWL_MESSAGE_COMPONENT_ID, params);
+	}
+
+	public static void addGrowlFatalMessage(String message) {
+		addFatalMessage(message, GROWL_MESSAGE_COMPONENT_ID);
+	}
+
+	public static void addGrowlTranslatedFatalMessage(String message, Object... params) {
+		addTranslatedFatalMessage(message, GROWL_MESSAGE_COMPONENT_ID, params);
+	}
+
+	public static void addStickyGrowlInformationMessage(String message) {
+		addInformationMessage(message, STICKY_GROWL_MESSAGE_COMPONENT_ID);
+	}
+
+	public static void addStickyGrowlTranslatedInformationMessage(String message, Object... params) {
+		addTranslatedInformationMessage(message, STICKY_GROWL_MESSAGE_COMPONENT_ID, params);
+	}
+
+	public static void addStickyGrowlWarningMessage(String message) {
+		addWarningMessage(message, STICKY_GROWL_MESSAGE_COMPONENT_ID);
+	}
+
+	public static void addStickyGrowlTranslatedWarningMessage(String message, Object... params) {
+		addTranslatedWarningMessage(message, STICKY_GROWL_MESSAGE_COMPONENT_ID, params);
+	}
+
+	public static void addStickyGrowlErrorMessage(String message) {
+		addErrorMessage(message, STICKY_GROWL_MESSAGE_COMPONENT_ID);
+	}
+
+	public static void addStickyGrowlTranslatedErrorMessage(String message, Object... params) {
+		addTranslatedErrorMessage(message, STICKY_GROWL_MESSAGE_COMPONENT_ID, params);
+	}
+
+	public static void addStickyGrowlFatalMessage(String message) {
+		addFatalMessage(message, STICKY_GROWL_MESSAGE_COMPONENT_ID);
+	}
+
+	public static void addStickyGrowlTranslatedFatalMessage(String message, Object... params) {
+		addTranslatedFatalMessage(message, STICKY_GROWL_MESSAGE_COMPONENT_ID, params);
+	}
+
+	private static void addInformationMessage(String message, String clientComponent) {
+		addMessage(FacesMessage.SEVERITY_INFO, message, clientComponent);
+	}
+
+	private static void addTranslatedInformationMessage(String message, String clientComponent, Object... params) {
+		addTranslatedMessage(FacesMessage.SEVERITY_INFO, message, clientComponent, params);
+	}
+
+	private static void addWarningMessage(String message, String clientComponent) {
+		addMessage(FacesMessage.SEVERITY_WARN, message, clientComponent);
+	}
+
+	private static void addTranslatedWarningMessage(String message, String clientComponent, Object... params) {
+		addTranslatedMessage(FacesMessage.SEVERITY_WARN, message, clientComponent, params);
+	}
+
+	private static void addErrorMessage(String message, String clientComponent) {
+		addMessage(FacesMessage.SEVERITY_ERROR, message, clientComponent);
+	}
+
+	private static void addTranslatedErrorMessage(String message, String clientComponent, Object... params) {
+		addTranslatedMessage(FacesMessage.SEVERITY_ERROR, message, clientComponent, params);
+	}
+
+	private static void addFatalMessage(String message, String clientComponent) {
+		addMessage(FacesMessage.SEVERITY_FATAL, message, clientComponent);
+	}
+
+	private static void addTranslatedFatalMessage(String message, String clientComponent, Object... params) {
+		addTranslatedMessage(FacesMessage.SEVERITY_FATAL, message, clientComponent, params);
+	}
+
+	private static void addTranslatedMessage(FacesMessage.Severity severity, String key, String clientComponent, Object... params) {
+		addMessage(severity, getTranslatedMessage(key, params), clientComponent);
+	}
+
+	private static void addMessage(FacesMessage.Severity severity, String message, String clientComponent) {
 		String titlePrefix = severity == FacesMessage.SEVERITY_WARN ? "warn"
 				: severity == FacesMessage.SEVERITY_ERROR ? "error" : severity == FacesMessage.SEVERITY_FATAL ? "fatal" : "info";
-		FacesContext.getCurrentInstance().addMessage(null,
+		FacesContext.getCurrentInstance().addMessage(clientComponent,
 				new FacesMessage(severity, getTranslatedMessage("lucas.application.message." + titlePrefix), message));
 	}
 
@@ -76,21 +178,23 @@ public class WebUtils {
 			success = task.executeTask(paramsList);
 			params = paramsList.toArray();
 			if (success && successMessageKey != null) {
-				WebUtils.addTranslatedInformationMessage(successMessageKey, params);
+				WebUtils.addDefaultTranslatedInformationMessage(successMessageKey, params);
 			} else if (warnMessageKey != null) {
-				WebUtils.addTranslatedInformationMessage(warnMessageKey, params);
+				WebUtils.addDefaultTranslatedInformationMessage(warnMessageKey, params);
 			}
 		}
 		catch (ConstraintViolationException e) {
 			for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
-				WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + violation.getPropertyPath() + " " + violation.getMessage());
+				WebUtils.addDefaultErrorMessage(
+						getTranslatedMessage(failMessageKey, params) + violation.getPropertyPath() + " " + violation.getMessage());
 			}
 		}
 		catch (ShiroException e2) {
-			WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + getTranslatedMessage("lucas.application.message.accessDenied"));
+			WebUtils.addDefaultErrorMessage(
+					getTranslatedMessage(failMessageKey, params) + getTranslatedMessage("lucas.application.message.accessDenied"));
 		}
 		catch (Exception e3) {
-			WebUtils.addFatalMessage(getTranslatedMessage(failMessageKey, params) + e3.getLocalizedMessage());
+			WebUtils.addDefaultFatalMessage(getTranslatedMessage(failMessageKey, params) + e3.getLocalizedMessage());
 		}
 		return success;
 	}

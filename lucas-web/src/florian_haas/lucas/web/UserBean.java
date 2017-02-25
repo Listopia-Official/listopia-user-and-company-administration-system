@@ -239,7 +239,7 @@ public class UserBean implements Serializable {
 				createdGuests++;
 			}
 		}
-		WebUtils.addTranslatedInformationMessage("lucas.application.userScreen.createGuest.message.success", createdGuests);
+		WebUtils.addDefaultTranslatedInformationMessage("lucas.application.userScreen.createGuest.message.success", createdGuests);
 	}
 
 	/*
