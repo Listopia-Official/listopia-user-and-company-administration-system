@@ -40,6 +40,8 @@
 			<p:ajax event="idle" listener="#{loginBean.logout}" />
 		</p:idleMonitor>
 	</h:form>
+	<p:growl for="stickyGrowlMessage" showDetail="true" showSummary="true" globalOnly="true" autoUpdate="true" sticky="true"/>
+	<p:growl for="growlMessage" showDetail="true" showSummary="true" globalOnly="true" autoUpdate="true" life="10000"/>
 	<p:messages globalOnly="true" showDetail="true" showIcon="true"
 		showSummary="true" closable="true" autoUpdate="true" />
 </ui:composition>
