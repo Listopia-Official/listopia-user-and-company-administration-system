@@ -42,10 +42,11 @@ public abstract class EnumConverter<E extends Enum<E>> extends javax.faces.conve
 	@Override
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
 		if ((context == null) || (component == null)) throw new NullPointerException();
-		value = value.trim();
 
 		if (value == null || value.isEmpty() || value.equals(WebUtils.getTranslatedMessage(MESSAGE_PREFIX + messageName + "." + MESSAGE_NULL_KEY)))
 			return null;
+
+		value = value.trim();
 
 		Enum<E> matchingEnum = null;
 
