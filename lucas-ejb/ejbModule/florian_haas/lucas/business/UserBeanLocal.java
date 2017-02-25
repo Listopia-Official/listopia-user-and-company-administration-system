@@ -38,7 +38,7 @@ public interface UserBeanLocal {
 
 	public Boolean setSurname(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String surname);
 
-	public Boolean setSchoolClass(@ValidEntityId(entityClass = User.class) Long userId, @NotNull EnumSchoolClass schoolClass);
+	public Boolean setSchoolClass(@ValidEntityId(entityClass = User.class) Long userId, EnumSchoolClass schoolClass);
 
 	public Boolean addRank(@ValidEntityId(entityClass = User.class) Long userId, @NotNull @NotBlankString String rank);
 
