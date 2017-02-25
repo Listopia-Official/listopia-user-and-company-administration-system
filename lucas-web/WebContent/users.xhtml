@@ -68,8 +68,9 @@
 				value="#{msg['lucas.application.userScreen.editUserButton.name']}"
 				title="#{msg['lucas.application.userScreen.editUserButton.tooltip']}"
 				update="editUserDialogForm" process="@this"
-				action="#{userBean.initEditUserDialog}" oncomplete="PF('editUserDialog').show()"
-				icon="fa fa-edit" disabled="#{userBean.selectedUsers.size() != 1}" />
+				action="#{userBean.initEditUserDialog}"
+				oncomplete="PF('editUserDialog').show()" icon="fa fa-edit"
+				disabled="#{userBean.selectedUsers.size() != 1}" />
 			<p:commandButton
 				value="#{msg['lucas.application.userScreen.imageManagerButton.name']}"
 				title="#{msg['lucas.application.userScreen.imageManagerButton.tooltip']}"
@@ -326,6 +327,7 @@
 						<p:ajax event="toggle" listener="#{userBean.onToggle}" />
 					</p:columnToggler>
 				</f:facet>
+				<p:ajax event="toggleSelect" update="@(.toolbar)" />
 				<p:ajax event="rowUnselectCheckbox" update="@(.toolbar)" />
 				<p:ajax event="rowSelectCheckbox" update="@(.toolbar)" />
 				<p:ajax event="rowUnselect" update="@(.toolbar)" />
