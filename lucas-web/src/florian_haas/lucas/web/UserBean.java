@@ -491,6 +491,7 @@ public class UserBean implements Serializable {
 					useSearchUserSchoolGrade || useSearchUserSchoolClass, useSearchUserType, Boolean.FALSE, searchUserIdComparator,
 					searchUserForenameComparator, searchUserSurnameComparator, searchUserTypeComparator, null);
 			searchUserResults.clear();
+			selectedUsers.clear();
 			searchUserResults.addAll(results);
 			params.add(results.size());
 			return true;
@@ -527,8 +528,147 @@ public class UserBean implements Serializable {
 	 * -------------------- Edit User Dialog Start --------------------
 	 */
 
+	@NotBlankString
+	private String editUserDialogForename;
+
+	@NotBlankString
+	private String editUserDialogSurname;
+
+	private EnumSchoolClass editUserDialogSchoolClass;
+
+	@NotBlank
+	private String editUserDialogTmpRank = null;
+
+	private String editUserDialogSelectedRank = null;
+
+	private List<@TypeNotNull @NotBlankString String> editUserDialogRanks = new ArrayList<>();
+
+	private User selectedUser;
+
+	public String getEditUserDialogForename() {
+		return editUserDialogForename;
+	}
+
+	public void setEditUserDialogForename(String editUserDialogForename) {
+		this.editUserDialogForename = editUserDialogForename;
+	}
+
+	public String getEditUserDialogSurname() {
+		return editUserDialogSurname;
+	}
+
+	public void setEditUserDialogSurname(String editUserDialogSurname) {
+		this.editUserDialogSurname = editUserDialogSurname;
+	}
+
+	public EnumSchoolClass getEditUserDialogSchoolClass() {
+		return editUserDialogSchoolClass;
+	}
+
+	public void setEditUserDialogSchoolClass(EnumSchoolClass editUserDialogSchoolClass) {
+		this.editUserDialogSchoolClass = editUserDialogSchoolClass;
+	}
+
+	public String getEditUserDialogTmpRank() {
+		return editUserDialogTmpRank;
+	}
+
+	public void setEditUserDialogTmpRank(String editUserDialogTmpRank) {
+		this.editUserDialogTmpRank = editUserDialogTmpRank;
+	}
+
+	public void resetEditUserDialogTmpRank() {
+		editUserDialogTmpRank = null;
+	}
+
+	public String getEditUserDialogSelectedRank() {
+		return editUserDialogSelectedRank;
+	}
+
+	public void setEditUserDialogSelectedRank(String editUserDialogSelectedRank) {
+		this.editUserDialogSelectedRank = editUserDialogSelectedRank;
+	}
+
+	public List<@TypeNotNull @NotBlankString String> getEditUserDialogRanks() {
+		return editUserDialogRanks;
+	}
+
+	public void setEditUserDialogRanks(List<@TypeNotNull @NotBlankString String> editUserDialogRanks) {
+		this.editUserDialogRanks = editUserDialogRanks;
+	}
+
+	public void editEditUserDialogSelectedRank() {
+		if (editUserDialogSelectedRank != null) {
+			this.editUserDialogRanks.remove(editUserDialogSelectedRank);
+			this.editUserDialogTmpRank = editUserDialogSelectedRank;
+			editUserDialogSelectedRank = null;
+		}
+	}
+
+	public EnumUserType computeUserType() {
+		return (editUserDialogForename == null || editUserDialogSurname == null ? EnumUserType.GUEST
+				: (editUserDialogSchoolClass == null ? EnumUserType.TEACHER : EnumUserType.PUPIL));
+	}
+
+	public void initEditUserDialog() {
+		if (!this.selectedUsers.isEmpty()) {
+			selectedUser = this.selectedUsers.get(0);
+			this.editUserDialogForename = selectedUser.getForename();
+			this.editUserDialogSurname = selectedUser.getSurname();
+			this.editUserDialogSchoolClass = selectedUser.getSchoolClass();
+			this.editUserDialogRanks.clear();
+			this.editUserDialogRanks.addAll(selectedUser.getRanks());
+			this.editUserDialogTmpRank = null;
+			this.editUserDialogSelectedRank = null;
+		}
+	}
+
+	public void editUser() {
+		if (selectedUser != null) {
+			EnumUserType computedUserType = computeUserType();
+			String basicKey = "lucas.application.userScreen.editUser.message.edit";
+			String part2 = null;
+			switch (computedUserType) {
+				case PUPIL:
+					part2 = "Pupil";
+					break;
+				case TEACHER:
+					part2 = "Teacher";
+					break;
+				case GUEST:
+				default:
+					part2 = "Guest";
+					break;
+			}
+			basicKey = basicKey.concat(part2);
+			WebUtils.executeTask(params -> {
+				Long id = selectedUser.getId();
+				userBean.setForename(id, editUserDialogForename);
+				userBean.setSurname(id, editUserDialogSurname);
+				userBean.setSchoolClass(id, editUserDialogSchoolClass);
+				User tmp = userBean.findById(id);
+				editUserDialogRanks.forEach(rank -> {
+					if (!tmp.getRanks().contains(rank)) {
+						userBean.addRank(id, rank);
+					}
+				});
+				tmp.getRanks().forEach(rank -> {
+					if (!editUserDialogRanks.contains(rank)) {
+						userBean.removeRank(id, rank);
+					}
+				});
+
+				if (computedUserType != EnumUserType.GUEST) {
+					params.add(editUserDialogForename);
+					params.add(editUserDialogSurname);
+					if (computedUserType == EnumUserType.PUPIL) params.add(editUserDialogSchoolClass);
+				}
+				return true;
+			}, basicKey + ".success", null, "lucas.application.userScreen.editUser.message.fail", selectedUser.getId());
+		}
+	}
+
 	/*
 	 * -------------------- Edit User Dialog End --------------------
 	 */
-
 }
