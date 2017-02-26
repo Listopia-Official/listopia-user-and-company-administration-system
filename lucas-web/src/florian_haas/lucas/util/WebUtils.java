@@ -114,35 +114,35 @@ public class WebUtils {
 		addTranslatedFatalMessage(message, STICKY_GROWL_MESSAGE_COMPONENT_ID, params);
 	}
 
-	private static void addInformationMessage(String message, String clientComponent) {
+	public static void addInformationMessage(String message, String clientComponent) {
 		addMessage(FacesMessage.SEVERITY_INFO, message, clientComponent);
 	}
 
-	private static void addTranslatedInformationMessage(String message, String clientComponent, Object... params) {
+	public static void addTranslatedInformationMessage(String message, String clientComponent, Object... params) {
 		addTranslatedMessage(FacesMessage.SEVERITY_INFO, message, clientComponent, params);
 	}
 
-	private static void addWarningMessage(String message, String clientComponent) {
+	public static void addWarningMessage(String message, String clientComponent) {
 		addMessage(FacesMessage.SEVERITY_WARN, message, clientComponent);
 	}
 
-	private static void addTranslatedWarningMessage(String message, String clientComponent, Object... params) {
+	public static void addTranslatedWarningMessage(String message, String clientComponent, Object... params) {
 		addTranslatedMessage(FacesMessage.SEVERITY_WARN, message, clientComponent, params);
 	}
 
-	private static void addErrorMessage(String message, String clientComponent) {
+	public static void addErrorMessage(String message, String clientComponent) {
 		addMessage(FacesMessage.SEVERITY_ERROR, message, clientComponent);
 	}
 
-	private static void addTranslatedErrorMessage(String message, String clientComponent, Object... params) {
+	public static void addTranslatedErrorMessage(String message, String clientComponent, Object... params) {
 		addTranslatedMessage(FacesMessage.SEVERITY_ERROR, message, clientComponent, params);
 	}
 
-	private static void addFatalMessage(String message, String clientComponent) {
+	public static void addFatalMessage(String message, String clientComponent) {
 		addMessage(FacesMessage.SEVERITY_FATAL, message, clientComponent);
 	}
 
-	private static void addTranslatedFatalMessage(String message, String clientComponent, Object... params) {
+	public static void addTranslatedFatalMessage(String message, String clientComponent, Object... params) {
 		addTranslatedMessage(FacesMessage.SEVERITY_FATAL, message, clientComponent, params);
 	}
 
