@@ -11,7 +11,6 @@ import javax.validation.executable.*;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.security.*;
 
 @Stateless
@@ -158,7 +157,7 @@ public class UserBean implements UserBeanLocal {
 
 	@Override
 	@RequiresPermissions(USER_SET_IMAGE)
-	public Boolean setImage(@ValidEntityId(entityClass = UserCard.class) Long userId, byte[] image) {
+	public Boolean setImage(Long userId, byte[] image) {
 		User user = userDao.findById(userId);
 		if (Arrays.equals(user.getImage(), image)) return Boolean.FALSE;
 		user.setImage(image);
@@ -167,7 +166,7 @@ public class UserBean implements UserBeanLocal {
 
 	@Override
 	@RequiresPermissions(USER_GET_IMAGE_FROM_ID)
-	public byte[] getImage(@ValidEntityId(entityClass = User.class) Long userId) {
+	public byte[] getImage(Long userId) {
 		return userDao.getImageFromId(userId);
 	}
 
