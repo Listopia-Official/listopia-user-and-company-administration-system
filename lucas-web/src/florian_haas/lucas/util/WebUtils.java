@@ -226,7 +226,7 @@ public class WebUtils {
 	}
 
 	public static StreamedContent getDataAsStreamedContent(InputStream data, String mime) {
-		if (data != null) { return new DefaultStreamedContent(data, mime); }
+		if (data != null) return new DefaultStreamedContent(data, mime);
 		return null;
 	}
 
