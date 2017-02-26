@@ -1,5 +1,6 @@
 package florian_haas.lucas.util;
 
+import java.io.*;
 import java.util.*;
 
 import javax.faces.application.FacesMessage;
@@ -7,6 +8,7 @@ import javax.faces.context.FacesContext;
 import javax.validation.*;
 
 import org.apache.shiro.ShiroException;
+import org.primefaces.model.*;
 
 public class WebUtils {
 
@@ -197,6 +199,35 @@ public class WebUtils {
 			WebUtils.addDefaultFatalMessage(getTranslatedMessage(failMessageKey, params) + e3.getLocalizedMessage());
 		}
 		return success;
+	}
+
+	public static final String JPEG_MIME = "image/jpeg";
+
+	public static final String SVG_MIME = "image/svg+xml";
+
+	public static StreamedContent getJPEGImage(InputStream data) {
+		return getDataAsStreamedContent(data, JPEG_MIME);
+	}
+
+	public static StreamedContent getJPEGImage(byte[] data) {
+		return getDataAsStreamedContent(data, JPEG_MIME);
+	}
+
+	public static StreamedContent getSVGImage(byte[] data) {
+		return getDataAsStreamedContent(data, SVG_MIME);
+	}
+
+	public static StreamedContent getSVGImage(InputStream data) {
+		return getDataAsStreamedContent(data, SVG_MIME);
+	}
+
+	public static StreamedContent getDataAsStreamedContent(byte[] data, String mime) {
+		return getDataAsStreamedContent(new ByteArrayInputStream(data), mime);
+	}
+
+	public static StreamedContent getDataAsStreamedContent(InputStream data, String mime) {
+		if (data != null) { return new DefaultStreamedContent(data, mime); }
+		return null;
 	}
 
 }

@@ -1,6 +1,6 @@
 package florian_haas.lucas.web;
 
-import java.io.*;
+import java.io.IOException;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -10,9 +10,11 @@ import javax.inject.Named;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.CollectionUtils;
-import org.primefaces.model.*;
+import org.primefaces.model.StreamedContent;
 
 import florian_haas.lucas.business.*;
+import florian_haas.lucas.security.EnumPermission;
+import florian_haas.lucas.util.WebUtils;
 
 @Named
 @RequestScoped
@@ -74,23 +76,21 @@ public class LoginBean {
 	}
 
 	public StreamedContent getImage() {
-		InputStream in = null;
-		String mime = null;
+		StreamedContent ret = null;
 		Long id = getUserId();
-		if (id != null) {
-			byte[] img = userBean.getImage(id);
-			if (img != null) {
-				in = new ByteArrayInputStream(img);
-				mime = "image/png";
+		if (id != null && SecurityUtils.getSubject().isPermitted(EnumPermission.USER_GET_IMAGE_FROM_ID.getPermissionString())) {
+			try {
+				ret = WebUtils.getJPEGImage(userBean.getImage(id));
+			}
+			catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
-		if (in == null && mime == null) {
-			in = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/WEB-INF/resources/images/user_male.svg");
-			if (in != null) {
-				mime = "image/svg+xml";
-			}
+		if (ret == null) {
+			ret = WebUtils.getSVGImage(
+					FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/WEB-INF/resources/images/user_male.svg"));
 		}
-		return in != null && mime != null ? new DefaultStreamedContent(in, mime) : null;
+		return ret;
 	}
 
 	public void logout() {
