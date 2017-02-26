@@ -255,12 +255,12 @@
 						<p:column>
 							<p:inputText value="#{userBean.searchUserForename}"
 								id="searchUserForenameInputText"
-								disabled="#{not userBean.useSearchUserForename}" />
+								disabled="#{not userBean.useSearchUserForename}" converter="lucas:nullStringConverterNoText"/>
 						</p:column>
 						<p:column>
 							<p:inputText value="#{userBean.searchUserSurname}"
 								id="searchUserSurnameInputText"
-								disabled="#{not userBean.useSearchUserSurname}" />
+								disabled="#{not userBean.useSearchUserSurname}" converter="lucas:nullStringConverterNoText"/>
 						</p:column>
 						<p:column>
 							<p:selectOneMenu value="#{userBean.searchUserType}"
