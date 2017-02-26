@@ -222,7 +222,7 @@ public class WebUtils {
 	}
 
 	public static StreamedContent getDataAsStreamedContent(byte[] data, String mime) {
-		return getDataAsStreamedContent(new ByteArrayInputStream(data), mime);
+		return getDataAsStreamedContent(data != null ? new ByteArrayInputStream(data) : null, mime);
 	}
 
 	public static StreamedContent getDataAsStreamedContent(InputStream data, String mime) {
