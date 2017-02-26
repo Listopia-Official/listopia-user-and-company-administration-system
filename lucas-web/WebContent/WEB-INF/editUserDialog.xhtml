@@ -69,7 +69,8 @@
 									styleClass="theta"
 									value="#{userBean.editUserDialogSchoolClass}"
 									title="#{msg['lucas.application.userScreen.editUserDialog.schoolClassSelectOne.tooltip']}">
-									<f:selectItem itemValue="#{null}" itemLabel="None" />
+									<f:selectItem itemValue="#{null}"
+										itemLabel="#{msg['lucas.application.userScreen.editUserDialog.schoolClassSelectOne.noSchoolClass']}" />
 									<f:selectItems value="#{EnumSchoolClass.ALL_VALUES}"
 										var="class" itemValue="#{class}"
 										itemLabel="#{converterBean.convertEnum(class)}" />
@@ -78,67 +79,67 @@
 								</p:selectOneMenu>
 							</p:column>
 						</p:row>
-							<p:row>
-								<p:column>
-									<p:outputLabel id="rankOutputLabel" for="rankInputText"
-										value="#{msg['lucas.application.userScreen.editUserDialog.rankInputText.name']}"
-										title="#{msg['lucas.application.userScreen.editUserDialog.rankInputText.tooltip']}" />
-								</p:column>
-								<p:column colspan="2">
-									<p:message id="rankInputMessage"
-										for="editUserDialogForm:rankInputText" />
-								</p:column>
-							</p:row>
-							<p:row>
-								<p:column colspan="3">
-									<p:inputText id="rankInputText"
-										value="#{userBean.editUserDialogTmpRank}"
-										title="#{msg['lucas.application.userScreen.editUserDialog.rankInputText.tooltip']}" />
-								</p:column>
-							</p:row>
-							<p:row>
-								<p:column>
-									<p:commandButton
-										value="#{msg['lucas.application.userScreen.editUserDialog.addRankButton.name']}"
-										title="#{msg['lucas.application.userScreen.editUserDialog.addRankButton.tooltip']}"
-										process="rankInputText @this"
-										update="editUserDialogForm:ranksDataList rankOutputLabel rankInputText rankInputMessage"
-										action="#{userBean.resetEditUserDialogTmpRank}">
-										<p:collector value="#{userBean.editUserDialogTmpRank}"
-											addTo="#{userBean.editUserDialogRanks}" unique="true" />
-									</p:commandButton>
-								</p:column>
-								<p:column>
-									<p:commandButton
-										value="#{msg['lucas.application.userScreen.editUserDialog.editRankButton.name']}"
-										title="#{msg['lucas.application.userScreen.editUserDialog.editRankButton.tooltip']}"
-										action="#{userBean.editEditUserDialogSelectedRank}"
-										process="editUserDialogForm:ranksDataList @this"
-										update="editUserDialogForm:ranksDataList editUserDialogForm:rankInputText" />
-								</p:column>
-								<p:column>
-									<p:commandButton
-										value="#{msg['lucas.application.userScreen.editUserDialog.removeRankButton.name']}"
-										title="#{msg['lucas.application.userScreen.editUserDialog.removeRankButton.tooltip']}"
-										process="editUserDialogForm:ranksDataList @this"
-										update="editUserDialogForm:ranksDataList">
-										<p:collector removeFrom="#{userBean.editUserDialogRanks}"
-											value="#{userBean.editUserDialogSelectedRank}" />
-									</p:commandButton>
-								</p:column>
-							</p:row>
-							<p:row>
-								<p:column colspan="3">
-									<p:selectOneListbox id="ranksDataList" var="rank"
-										value="#{userBean.editUserDialogSelectedRank}"
-										style="min-height:100px">
-										<f:selectItems value="#{userBean.editUserDialogRanks}" />
-										<p:column>
-											<h:outputText value="#{rank}" />
-										</p:column>
-									</p:selectOneListbox>
-								</p:column>
-							</p:row>
+						<p:row>
+							<p:column>
+								<p:outputLabel id="rankOutputLabel" for="rankInputText"
+									value="#{msg['lucas.application.userScreen.editUserDialog.rankInputText.name']}"
+									title="#{msg['lucas.application.userScreen.editUserDialog.rankInputText.tooltip']}" />
+							</p:column>
+							<p:column colspan="2">
+								<p:message id="rankInputMessage"
+									for="editUserDialogForm:rankInputText" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="3">
+								<p:inputText id="rankInputText"
+									value="#{userBean.editUserDialogTmpRank}"
+									title="#{msg['lucas.application.userScreen.editUserDialog.rankInputText.tooltip']}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:commandButton
+									value="#{msg['lucas.application.userScreen.editUserDialog.addRankButton.name']}"
+									title="#{msg['lucas.application.userScreen.editUserDialog.addRankButton.tooltip']}"
+									process="rankInputText @this"
+									update="editUserDialogForm:ranksDataList rankOutputLabel rankInputText rankInputMessage"
+									action="#{userBean.resetEditUserDialogTmpRank}">
+									<p:collector value="#{userBean.editUserDialogTmpRank}"
+										addTo="#{userBean.editUserDialogRanks}" unique="true" />
+								</p:commandButton>
+							</p:column>
+							<p:column>
+								<p:commandButton
+									value="#{msg['lucas.application.userScreen.editUserDialog.editRankButton.name']}"
+									title="#{msg['lucas.application.userScreen.editUserDialog.editRankButton.tooltip']}"
+									action="#{userBean.editEditUserDialogSelectedRank}"
+									process="editUserDialogForm:ranksDataList @this"
+									update="editUserDialogForm:ranksDataList editUserDialogForm:rankInputText" />
+							</p:column>
+							<p:column>
+								<p:commandButton
+									value="#{msg['lucas.application.userScreen.editUserDialog.removeRankButton.name']}"
+									title="#{msg['lucas.application.userScreen.editUserDialog.removeRankButton.tooltip']}"
+									process="editUserDialogForm:ranksDataList @this"
+									update="editUserDialogForm:ranksDataList">
+									<p:collector removeFrom="#{userBean.editUserDialogRanks}"
+										value="#{userBean.editUserDialogSelectedRank}" />
+								</p:commandButton>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="3">
+								<p:selectOneListbox id="ranksDataList" var="rank"
+									value="#{userBean.editUserDialogSelectedRank}"
+									style="min-height:100px">
+									<f:selectItems value="#{userBean.editUserDialogRanks}" />
+									<p:column>
+										<h:outputText value="#{rank}" />
+									</p:column>
+								</p:selectOneListbox>
+							</p:column>
+						</p:row>
 						<p:row>
 							<p:column colspan="3">
 								<p:inputText readonly="true"
