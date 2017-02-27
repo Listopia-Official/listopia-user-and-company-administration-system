@@ -11,6 +11,7 @@ import javax.validation.executable.*;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
+import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.security.*;
 
 @Stateless
@@ -168,6 +169,13 @@ public class UserBean implements UserBeanLocal {
 	@RequiresPermissions(USER_GET_IMAGE_FROM_ID)
 	public byte[] getImage(Long userId) {
 		return userDao.getImageFromId(userId);
+	}
+
+	@Override
+	@RequiresPermissions(USER_GET_USER_CARDS)
+	public Set<UserCard> getUserCards(@ValidEntityId(entityClass = User.class) Long userId) {
+		User user = userDao.findById(userId);
+		return user.getUserCards();
 	}
 
 }

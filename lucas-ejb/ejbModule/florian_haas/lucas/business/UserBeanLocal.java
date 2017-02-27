@@ -1,7 +1,7 @@
 package florian_haas.lucas.business;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 
 import javax.ejb.Local;
 import javax.validation.constraints.NotNull;
@@ -43,6 +43,8 @@ public interface UserBeanLocal {
 	public Boolean addRank(@ValidEntityId(entityClass = User.class) Long userId, @NotNull @NotBlankString String rank);
 
 	public Boolean removeRank(@ValidEntityId(entityClass = User.class) Long userId, @NotNull @NotBlankString String rank);
+
+	public Set<UserCard> getUserCards(@ValidEntityId(entityClass = User.class) Long userId);
 
 	public Boolean addUserCard(@ValidEntityId(entityClass = User.class) Long userId);
 

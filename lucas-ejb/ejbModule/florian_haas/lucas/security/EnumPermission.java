@@ -111,6 +111,7 @@ public enum EnumPermission {
 	USER_FIND_USER_CARD_BY_ID(USER, "findUSerCardById"),
 	USER_SET_IMAGE(USER, "setImage"),
 	USER_GET_IMAGE_FROM_ID(USER, "getImageFromId"),
+	USER_GET_USER_CARDS(USER, "getUserCards"),
 
 	LOGIN_CREATE_RAW_LOGIN_USER(LOGIN, "createRawLoginUser"),
 	LOGIN_CREATE_REGISTERED_LOGIN_USER(LOGIN, "createRegisteredLoginUser"),
