@@ -4,4 +4,4 @@ import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.UserCard;
 
 @JPADAO
-public class UserCardDAOImpl extends ReadOnlyDAOImpl<UserCard> implements UserCardDAO {}
+public class UserCardDAOImpl extends DAOImpl<UserCard> implements UserCardDAO {}

@@ -120,6 +120,7 @@ public class UserBean implements UserBeanLocal {
 	public Long addUserCard(Long userId) {
 		User user = userDao.findById(userId);
 		UserCard userCard = new UserCard(user);
+		userCardDao.persist(userCard);
 		user.addUserCard(userCard);
 		return userCard.getId();
 	}
@@ -128,7 +129,7 @@ public class UserBean implements UserBeanLocal {
 	@RequiresPermissions(USER_BLOCK_USER_CARD)
 	public Boolean blockUserCard(Long userCardId) {
 		UserCard userCard = userCardDao.findById(userCardId);
-		if (userCard.getBlocked()) { return Boolean.FALSE; }
+		if (userCard.getBlocked()) return Boolean.FALSE;
 		userCard.setBlocked(Boolean.TRUE);
 		return Boolean.TRUE;
 	}
@@ -137,7 +138,7 @@ public class UserBean implements UserBeanLocal {
 	@RequiresPermissions(USER_UNBLOCK_USER_CARD)
 	public Boolean unblockUserCard(Long userCardId) {
 		UserCard userCard = userCardDao.findById(userCardId);
-		if (!userCard.getBlocked()) { return Boolean.FALSE; }
+		if (!userCard.getBlocked()) return Boolean.FALSE;
 		userCard.setBlocked(Boolean.FALSE);
 		return Boolean.TRUE;
 	}
