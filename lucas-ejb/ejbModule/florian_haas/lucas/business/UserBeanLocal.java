@@ -29,10 +29,10 @@ public interface UserBeanLocal {
 	public UserCard findUserCardById(@ValidEntityId(entityClass = UserCard.class) Long userCardId);
 
 	public List<User> findUsers(@NotNull Long userId, String forename, String surname, @NotNull List<@TypeNotNull EnumSchoolClass> schoolClasses,
-			@NotNull EnumUserType userType, @NotNull List<@NotBlankString @TypeNotNull String> ranks, @NotNull Boolean useUserId,
-			@NotNull Boolean useForename, @NotNull Boolean useSurname, @NotNull Boolean useSchoolClass, @NotNull Boolean useUserType,
-			@NotNull Boolean useRanks, EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator,
-			EnumQueryComparator surnameComparator, EnumQueryComparator searchUserTypeComparator, EnumQueryComparator ranksComparator);
+			@NotNull EnumUserType userType, List<@NotBlankString @TypeNotNull String> ranks, @NotNull Boolean useUserId, @NotNull Boolean useForename,
+			@NotNull Boolean useSurname, @NotNull Boolean useSchoolClass, @NotNull Boolean useUserType, @NotNull Boolean useRanks,
+			EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator, EnumQueryComparator surnameComparator,
+			EnumQueryComparator searchUserTypeComparator, EnumQueryComparator ranksComparator);
 
 	public Boolean setForename(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String forename);
 
