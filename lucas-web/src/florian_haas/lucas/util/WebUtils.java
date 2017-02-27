@@ -3,6 +3,7 @@ package florian_haas.lucas.util;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
+import java.util.function.Consumer;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -174,6 +175,13 @@ public class WebUtils {
 
 	public static boolean executeTask(FailableTask task, String successMessageKey, String warnMessageKey, String failMessageKey,
 			Object... argParams) {
+		return executeTask(task, successMessageKey, warnMessageKey, failMessageKey, WebUtils::addDefaultInformationMessage,
+				WebUtils::addDefaultWarningMessage, WebUtils::addDefaultErrorMessage, WebUtils::addDefaultFatalMessage, argParams);
+	}
+
+	public static boolean executeTask(FailableTask task, String successMessageKey, String warnMessageKey, String failMessageKey,
+			Consumer<String> informationMessageConsumer, Consumer<String> warnMessageConsumer, Consumer<String> errorMessageConsumer,
+			Consumer<String> fatalMessageConsumer, Object... argParams) {
 		boolean success = false;
 		List<Object> paramsList = new ArrayList<>();
 		paramsList.addAll(Arrays.asList(argParams));
@@ -182,25 +190,26 @@ public class WebUtils {
 			success = task.executeTask(paramsList);
 			params = paramsList.toArray();
 			if (success && successMessageKey != null) {
-				WebUtils.addDefaultTranslatedInformationMessage(successMessageKey, params);
+				informationMessageConsumer.accept(WebUtils.getTranslatedMessage(successMessageKey, params));
 			} else if (warnMessageKey != null) {
-				WebUtils.addDefaultTranslatedInformationMessage(warnMessageKey, params);
+				warnMessageConsumer.accept(WebUtils.getTranslatedMessage(warnMessageKey, params));
 			}
 		}
 		catch (ConstraintViolationException e) {
 			for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
-				WebUtils.addDefaultErrorMessage(
-						getTranslatedMessage(failMessageKey, params) + violation.getPropertyPath() + " " + violation.getMessage());
+				errorMessageConsumer
+						.accept(getTranslatedMessage(failMessageKey, params) + violation.getPropertyPath() + " " + violation.getMessage());
 			}
 		}
 		catch (ShiroException e2) {
-			WebUtils.addDefaultErrorMessage(
-					getTranslatedMessage(failMessageKey, params) + getTranslatedMessage("lucas.application.message.accessDenied"));
+			errorMessageConsumer
+					.accept(getTranslatedMessage(failMessageKey, params) + getTranslatedMessage("lucas.application.message.accessDenied"));
 		}
 		catch (Exception e3) {
-			WebUtils.addDefaultFatalMessage(getTranslatedMessage(failMessageKey, params) + e3.getLocalizedMessage());
+			fatalMessageConsumer.accept(getTranslatedMessage(failMessageKey, params) + e3.getLocalizedMessage());
 		}
 		return success;
+
 	}
 
 	public static final String JPEG_MIME = "image/jpeg";
