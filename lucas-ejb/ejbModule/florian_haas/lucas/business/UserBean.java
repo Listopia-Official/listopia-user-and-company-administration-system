@@ -117,10 +117,11 @@ public class UserBean implements UserBeanLocal {
 
 	@Override
 	@RequiresPermissions(USER_ADD_USER_CARD)
-	public Boolean addUserCard(Long userId) {
+	public Long addUserCard(Long userId) {
 		User user = userDao.findById(userId);
 		UserCard userCard = new UserCard(user);
-		return user.addUserCard(userCard);
+		user.addUserCard(userCard);
+		return userCard.getId();
 	}
 
 	@Override

@@ -46,7 +46,7 @@ public interface UserBeanLocal {
 
 	public Set<UserCard> getUserCards(@ValidEntityId(entityClass = User.class) Long userId);
 
-	public Boolean addUserCard(@ValidEntityId(entityClass = User.class) Long userId);
+	public Long addUserCard(@ValidEntityId(entityClass = User.class) Long userId);
 
 	public Boolean blockUserCard(@ValidEntityId(entityClass = UserCard.class) Long userCardId);
 
