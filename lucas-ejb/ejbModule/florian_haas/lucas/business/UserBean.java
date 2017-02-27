@@ -126,6 +126,17 @@ public class UserBean implements UserBeanLocal {
 	}
 
 	@Override
+	@RequiresPermissions(USER_REMOVE_USER_CARD)
+	public Boolean removeUserCard(@ValidEntityId(entityClass = UserCard.class) Long userCardId) {
+		UserCard card = userCardDao.findById(userCardId);
+		Boolean removed = card.getUser().removeUserCard(card);
+		if (removed) {
+			userCardDao.delete(card);
+		}
+		return removed;
+	}
+
+	@Override
 	@RequiresPermissions(USER_BLOCK_USER_CARD)
 	public Boolean blockUserCard(Long userCardId) {
 		UserCard userCard = userCardDao.findById(userCardId);

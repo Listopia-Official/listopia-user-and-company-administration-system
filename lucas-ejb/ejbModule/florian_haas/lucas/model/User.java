@@ -113,6 +113,10 @@ public class User extends AccountOwner {
 		return this.userCards.add(userCard);
 	}
 
+	public Boolean removeUserCard(UserCard userCard) {
+		return this.userCards.remove(userCard);
+	}
+
 	public Set<Employment> getEmployments() {
 		return Collections.unmodifiableSet(employments);
 	}
