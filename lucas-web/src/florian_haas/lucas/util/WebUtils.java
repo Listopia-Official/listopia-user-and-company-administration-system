@@ -1,10 +1,12 @@
 package florian_haas.lucas.util;
 
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.imageio.ImageIO;
 import javax.validation.*;
 
 import org.apache.shiro.ShiroException;
@@ -203,6 +205,8 @@ public class WebUtils {
 
 	public static final String JPEG_MIME = "image/jpeg";
 
+	public static final String JPEG_TYPE = "JPEG";
+
 	public static final String SVG_MIME = "image/svg+xml";
 
 	public static StreamedContent getJPEGImage(InputStream data) {
@@ -228,6 +232,21 @@ public class WebUtils {
 	public static StreamedContent getDataAsStreamedContent(InputStream data, String mime) {
 		if (data != null) return new DefaultStreamedContent(data, mime);
 		return null;
+	}
+
+	public static BufferedImage getBufferedImageFromBytes(byte[] data) throws Exception {
+		BufferedImage ret = null;
+		ByteArrayInputStream in = new ByteArrayInputStream(data);
+		ret = ImageIO.read(new ByteArrayInputStream(data));
+		in.close();
+		return ret;
+	}
+
+	public static byte[] convertBufferedImageToBytes(BufferedImage image, String type) throws Exception {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ImageIO.write(image, type, out);
+		out.close();
+		return out.toByteArray();
 	}
 
 }
