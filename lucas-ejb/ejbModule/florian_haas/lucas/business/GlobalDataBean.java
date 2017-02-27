@@ -154,4 +154,34 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 		return Boolean.TRUE;
 	}
 
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_SET_MAX_USER_IMAGE_WIDTH)
+	public Boolean setMaxUserImageWidth(Integer maxUserImageWidth) {
+		GlobalData newInstance = newInstance();
+		if (newInstance.getMaxUserImageWidth().equals(maxUserImageWidth)) return Boolean.FALSE;
+		newInstance.setMaxUserImageWidth(maxUserImageWidth);
+		return Boolean.TRUE;
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_SET_MAX_USER_IMAGE_HEIGHT)
+	public Boolean setMaxUserImageHeight(Integer maxUserImageHeight) {
+		GlobalData newInstance = newInstance();
+		if (newInstance.getMaxUserImageHeight().equals(maxUserImageHeight)) return Boolean.FALSE;
+		newInstance.setMaxUserImageHeight(maxUserImageHeight);
+		return Boolean.TRUE;
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_GET_MAX_USER_IMAGE_WIDTH)
+	public Integer getMaxUserImageWidth() {
+		return newInstance().getMaxUserImageWidth();
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_GET_MAX_USER_IMAGE_HEIGHT)
+	public Integer getMaxUserImageHeight() {
+		return newInstance().getMaxUserImageHeight();
+	}
+
 }

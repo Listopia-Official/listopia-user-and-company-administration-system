@@ -28,6 +28,10 @@ public interface GlobalDataBeanLocal {
 
 	public Long getMaxIdleTime();
 
+	public Integer getMaxUserImageWidth();
+
+	public Integer getMaxUserImageHeight();
+
 	public Boolean setSalary(@NotNull EnumSalaryClass salaryClass, @MinimumWage BigDecimal salary);
 
 	public Boolean setMinTimePresent(@NotNull @Min(1) Long minTimePresent);
@@ -43,5 +47,9 @@ public interface GlobalDataBeanLocal {
 	public Boolean setCurrencySymbol(@NotBlank String currencySymbol);
 
 	public Boolean setMaxIdleTime(@NotNull @Min(1) Long maxIdleTime);
+
+	public Boolean setMaxUserImageWidth(@NotNull @Min(50) Integer maxUserImageWidth);
+
+	public Boolean setMaxUserImageHeight(@NotNull @Min(50) Integer maxUserImageHeight);
 
 }

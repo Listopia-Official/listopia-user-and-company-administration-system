@@ -49,6 +49,16 @@ public class GlobalData extends EntityBase {
 	@NotNull
 	private Long maxIdleTime = 300000l;
 
+	@Basic(optional = false)
+	@NotNull
+	@Min(50)
+	private Integer maxUserImageWidth = 300;
+
+	@Basic(optional = false)
+	@NotNull
+	@Min(50)
+	private Integer maxUserImageHeight = 300;
+
 	public Map<EnumSalaryClass, BigDecimal> getSalaries() {
 		return Collections.unmodifiableMap(salaries);
 	}
@@ -103,6 +113,22 @@ public class GlobalData extends EntityBase {
 
 	public void setMaxIdleTime(Long maxIdleTime) {
 		this.maxIdleTime = maxIdleTime;
+	}
+
+	public Integer getMaxUserImageWidth() {
+		return maxUserImageWidth;
+	}
+
+	public void setMaxUserImageWidth(Integer maxUserImageWidth) {
+		this.maxUserImageWidth = maxUserImageWidth;
+	}
+
+	public Integer getMaxUserImageHeight() {
+		return maxUserImageHeight;
+	}
+
+	public void setMaxUserImageHeight(Integer maxUserImageHeight) {
+		this.maxUserImageHeight = maxUserImageHeight;
 	}
 
 }
