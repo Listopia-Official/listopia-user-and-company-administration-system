@@ -11,6 +11,7 @@
 		<ui:include src="/WEB-INF/createTeacherDialog.xhtml" />
 		<ui:include src="/WEB-INF/createGuestDialog.xhtml" />
 		<ui:include src="/WEB-INF/editUserDialog.xhtml" />
+		<ui:include src="/WEB-INF/imageManagerDialog.xhtml" />
 	</ui:define>
 	<ui:define name="otherContent">
 		<p:importConstants type="florian_haas.lucas.model.EnumSchoolClass" />
@@ -74,7 +75,10 @@
 			<p:commandButton
 				value="#{msg['lucas.application.userScreen.imageManagerButton.name']}"
 				title="#{msg['lucas.application.userScreen.imageManagerButton.tooltip']}"
-				icon="fa fa-image" disabled="#{userBean.selectedUsers.size() != 1}" />
+				update="imageManagerDialogForm" process="@this"
+				action="#{userBean.initImageManagerDialog}"
+				oncomplete="PF('imageManagerDialog').show()" icon="fa fa-image"
+				disabled="#{userBean.selectedUsers.size() != 1}" />
 			<p:commandButton
 				value="#{msg['lucas.application.userScreen.userCardManagerButton.name']}"
 				title="#{msg['lucas.application.userScreen.userCardManagerButton.tooltip']}"
@@ -255,12 +259,14 @@
 						<p:column>
 							<p:inputText value="#{userBean.searchUserForename}"
 								id="searchUserForenameInputText"
-								disabled="#{not userBean.useSearchUserForename}" converter="lucas:nullStringConverterNoText"/>
+								disabled="#{not userBean.useSearchUserForename}"
+								converter="lucas:nullStringConverterNoText" />
 						</p:column>
 						<p:column>
 							<p:inputText value="#{userBean.searchUserSurname}"
 								id="searchUserSurnameInputText"
-								disabled="#{not userBean.useSearchUserSurname}" converter="lucas:nullStringConverterNoText"/>
+								disabled="#{not userBean.useSearchUserSurname}"
+								converter="lucas:nullStringConverterNoText" />
 						</p:column>
 						<p:column>
 							<p:selectOneMenu value="#{userBean.searchUserType}"

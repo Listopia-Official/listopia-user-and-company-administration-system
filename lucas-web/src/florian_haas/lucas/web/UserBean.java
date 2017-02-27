@@ -1,5 +1,6 @@
 package florian_haas.lucas.web;
 
+import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.*;
 
@@ -9,10 +10,10 @@ import javax.inject.Named;
 import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.primefaces.event.ToggleEvent;
-import org.primefaces.model.Visibility;
+import org.primefaces.event.*;
+import org.primefaces.model.*;
 
-import florian_haas.lucas.business.UserBeanLocal;
+import florian_haas.lucas.business.*;
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
@@ -27,6 +28,9 @@ public class UserBean implements Serializable {
 
 	@EJB
 	private UserBeanLocal userBean;
+
+	@EJB
+	private GlobalDataBeanLocal globalDataBean;
 
 	/*
 	 * -------------------- Create Pupil Dialog Start --------------------
@@ -543,7 +547,7 @@ public class UserBean implements Serializable {
 
 	private List<@TypeNotNull @NotBlankString String> editUserDialogRanks = new ArrayList<>();
 
-	private User selectedUser;
+	private User editUserDialogSelectedUser;
 
 	public String getEditUserDialogForename() {
 		return editUserDialogForename;
@@ -612,19 +616,19 @@ public class UserBean implements Serializable {
 
 	public void initEditUserDialog() {
 		if (!this.selectedUsers.isEmpty()) {
-			selectedUser = this.selectedUsers.get(0);
-			this.editUserDialogForename = selectedUser.getForename();
-			this.editUserDialogSurname = selectedUser.getSurname();
-			this.editUserDialogSchoolClass = selectedUser.getSchoolClass();
+			editUserDialogSelectedUser = this.selectedUsers.get(0);
+			this.editUserDialogForename = editUserDialogSelectedUser.getForename();
+			this.editUserDialogSurname = editUserDialogSelectedUser.getSurname();
+			this.editUserDialogSchoolClass = editUserDialogSelectedUser.getSchoolClass();
 			this.editUserDialogRanks.clear();
-			this.editUserDialogRanks.addAll(selectedUser.getRanks());
+			this.editUserDialogRanks.addAll(editUserDialogSelectedUser.getRanks());
 			this.editUserDialogTmpRank = null;
 			this.editUserDialogSelectedRank = null;
 		}
 	}
 
 	public void editUser() {
-		if (selectedUser != null) {
+		if (editUserDialogSelectedUser != null) {
 			EnumUserType computedUserType = computeUserType();
 			String basicKey = "lucas.application.userScreen.editUser.message.edit";
 			String part2 = null;
@@ -642,7 +646,7 @@ public class UserBean implements Serializable {
 			}
 			basicKey = basicKey.concat(part2);
 			WebUtils.executeTask(params -> {
-				Long id = selectedUser.getId();
+				Long id = editUserDialogSelectedUser.getId();
 				userBean.setForename(id, editUserDialogForename);
 				userBean.setSurname(id, editUserDialogSurname);
 				userBean.setSchoolClass(id, editUserDialogSchoolClass);
@@ -664,11 +668,91 @@ public class UserBean implements Serializable {
 					if (computedUserType == EnumUserType.PUPIL) params.add(editUserDialogSchoolClass);
 				}
 				return true;
-			}, basicKey + ".success", null, "lucas.application.userScreen.editUser.message.fail", selectedUser.getId());
+			}, basicKey + ".success", null, "lucas.application.userScreen.editUser.message.fail", editUserDialogSelectedUser.getId());
 		}
 	}
 
 	/*
 	 * -------------------- Edit User Dialog End --------------------
 	 */
+
+	/*
+	 * -------------------- Image Manager Dialog Start --------------------
+	 */
+
+	private String imageManagerDialogDisplayImageAsBase64 = null;
+
+	private byte[] imageManagerDialogUploadedImage = null;
+
+	private User imageManagerDialogSelectedUser;
+
+	public static final String IMAGE_DIALOG_MESSAGES_ID = "imageManagerDialogMessages";
+
+	public Long getImageManagerDialogCurrentUserId() {
+		return imageManagerDialogSelectedUser.getId();
+	}
+
+	public String getImageManagerDialogDisplayImageAsBase64() {
+		return this.imageManagerDialogDisplayImageAsBase64;
+	}
+
+	public User getImageManagerDialogSelectedUser() {
+		return this.imageManagerDialogSelectedUser;
+	}
+
+	public Integer getMaxUserImageWidth() {
+		return globalDataBean.getMaxUserImageWidth();
+	}
+
+	public Integer getMaxUserImageHeight() {
+		return globalDataBean.getMaxUserImageHeight();
+	}
+
+	public void initImageManagerDialog() {
+		if (!this.selectedUsers.isEmpty()) {
+			imageManagerDialogSelectedUser = this.selectedUsers.get(0);
+			imageManagerDialogUploadedImage = null;
+			byte[] currentImage = userBean.getImage(imageManagerDialogSelectedUser.getId());
+			imageManagerDialogDisplayImageAsBase64 = currentImage != null ? Base64.getEncoder().encodeToString(currentImage) : null;
+		}
+	}
+
+	public void onImageUpload(FileUploadEvent event) {
+		final UploadedFile file = event.getFile();
+		WebUtils.executeTask(params -> {
+			if (file.getContentType().equals(WebUtils.JPEG_MIME)) {
+				imageManagerDialogUploadedImage = file.getContents();
+				BufferedImage image = WebUtils.getBufferedImageFromBytes(imageManagerDialogUploadedImage);
+				image = WebUtils.getBufferedImage(
+						image.getScaledInstance(getMaxUserImageWidth(), getMaxUserImageHeight(), BufferedImage.SCALE_SMOOTH),
+						BufferedImage.TYPE_INT_RGB);
+				imageManagerDialogUploadedImage = WebUtils.convertBufferedImageToBytes(image, WebUtils.JPEG_TYPE);
+				imageManagerDialogDisplayImageAsBase64 = Base64.getEncoder().encodeToString(imageManagerDialogUploadedImage);
+				return true;
+			}
+			return false;
+		}, "lucas.application.userScreen.uploadUserImage.message.success", "lucas.application.userScreen.uploadUserImage.message.warn",
+				"lucas.application.userScreen.uploadUserImage.message.fail", (key) -> {
+					WebUtils.addInformationMessage(key, IMAGE_DIALOG_MESSAGES_ID);
+				}, (key) -> {
+					WebUtils.addWarningMessage(key, IMAGE_DIALOG_MESSAGES_ID);
+				}, (key) -> {
+					WebUtils.addErrorMessage(key, IMAGE_DIALOG_MESSAGES_ID);
+				}, (key) -> {
+					WebUtils.addFatalMessage(key, IMAGE_DIALOG_MESSAGES_ID);
+				}, file.getFileName());
+	}
+
+	public void onSave() {
+		WebUtils.executeTask(params -> {
+			return userBean.setImage(imageManagerDialogSelectedUser.getId(), imageManagerDialogUploadedImage);
+		}, "lucas.application.userScreen.changeUserImage.message.success", "lucas.application.userScreen.changeUserImage.message.warn",
+				"lucas.application.userScreen.changeUserImage.message.fail",
+				WebUtils.getAsString(imageManagerDialogSelectedUser, "lucas:userStringConverter"));
+	}
+
+	/*
+	 * -------------------- Image Manager Dialog End --------------------
+	 */
+
 }
