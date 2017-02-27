@@ -1,8 +1,10 @@
 package florian_haas.lucas.util;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 import java.util.function.Consumer;
 
 import javax.faces.application.FacesMessage;
@@ -256,6 +258,14 @@ public class WebUtils {
 		ImageIO.write(image, type, out);
 		out.close();
 		return out.toByteArray();
+	}
+
+	public static BufferedImage getBufferedImage(Image image, int type) {
+		BufferedImage tmp = new BufferedImage(image.getWidth(null), image.getHeight(null), type);
+		Graphics g = tmp.createGraphics();
+		g.drawImage(image, 0, 0, null);
+		g.dispose();
+		return tmp;
 	}
 
 }
