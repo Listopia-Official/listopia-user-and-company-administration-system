@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.imageio.ImageIO;
 import javax.validation.*;
@@ -266,6 +267,11 @@ public class WebUtils {
 		g.drawImage(image, 0, 0, null);
 		g.dispose();
 		return tmp;
+	}
+
+	public static String getAsString(Object object, String converterId) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		return context.getApplication().createConverter(converterId).getAsString(context, UIComponent.getCurrentComponent(context), object);
 	}
 
 }
