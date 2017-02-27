@@ -14,7 +14,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/all-themes-1.0.10.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/primefaces-6.0_modified.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/primefaces-6.1.RC1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/lucas-ejb"/>
 	<classpathentry kind="lib" path="/lucas-ejb/lib/commons-beanutils-1.8.3.jar"/>
 	<classpathentry kind="lib" path="/lucas-ejb/lib/commons-logging-1.2.jar"/>
