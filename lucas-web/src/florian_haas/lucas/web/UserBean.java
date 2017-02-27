@@ -307,7 +307,6 @@ public class UserBean implements Serializable {
 	@NotNull
 	private Boolean useSearchUserRanks = Boolean.FALSE;
 
-	@NotNull
 	private List<@TypeNotNull @NotBlankString String> searchUserRanks = new ArrayList<>();
 
 	@QueryComparator(category = EnumQueryComparatorCategory.ARRAY)
@@ -492,8 +491,8 @@ public class UserBean implements Serializable {
 							useSearchUserSchoolClass ? searchUserSchoolClass : null, searchUserSchoolGradeComparator,
 							searchUserSchoolClassComparator),
 					searchUserType, searchUserRanks, useSearchUserId, useSearchUserForename, useSearchUserSurname,
-					useSearchUserSchoolGrade || useSearchUserSchoolClass, useSearchUserType, Boolean.FALSE, searchUserIdComparator,
-					searchUserForenameComparator, searchUserSurnameComparator, searchUserTypeComparator, null);
+					useSearchUserSchoolGrade || useSearchUserSchoolClass, useSearchUserType, useSearchUserRanks, searchUserIdComparator,
+					searchUserForenameComparator, searchUserSurnameComparator, searchUserTypeComparator, searchUserRanksComparator);
 			searchUserResults.clear();
 			selectedUsers.clear();
 			searchUserResults.addAll(results);

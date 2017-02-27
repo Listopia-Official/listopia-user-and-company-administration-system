@@ -184,6 +184,17 @@
 								value="#{msg['lucas.application.userScreen.searchUserSchoolClassSelectBooleanCheckbox.name']}"
 								title="#{msg['lucas.application.userScreen.searchUserSchoolClassSelectBooleanCheckbox.tooltip']}" />
 						</p:column>
+						<p:column>
+							<p:selectBooleanCheckbox
+								id="searchUserRanksSelectBooleanCheckbox" styleClass="checkbox"
+								value="#{userBean.useSearchUserRanks}" title="Title">
+								<p:ajax event="change"
+									update="userSearchCriteriaForm:searchUserRanksComparator userSearchCriteriaForm:searchUserRanksChips"
+									process="@this" />
+							</p:selectBooleanCheckbox>
+							<p:outputLabel for="searchUserRanksSelectBooleanCheckbox"
+								value="Ranks:" title="title" />
+						</p:column>
 					</p:row>
 					<p:row>
 						<p:column>
@@ -249,6 +260,15 @@
 									itemLabel="#{converterBean.convertEnum(comparator)}" />
 							</p:selectOneMenu>
 						</p:column>
+						<p:column>
+							<p:selectOneMenu id="searchUserRanksComparator"
+								disabled="#{not userBean.useSearchUserRanks}" title="Title"
+								value="#{userBean.searchUserRanksComparator}">
+								<f:selectItems value="#{EnumQueryComparator.ARRAY_COMPARATORS}"
+									var="comparator" itemValue="#{comparator}"
+									itemLabel="#{converterBean.convertEnum(comparator)}" />
+							</p:selectOneMenu>
+						</p:column>
 					</p:row>
 					<p:row>
 						<p:column>
@@ -290,6 +310,12 @@
 								disabled="#{not userBean.useSearchUserSchoolClass}">
 								<f:selectItems value="#{EnumSchoolClass.CLASSES}" />
 							</p:selectOneMenu>
+						</p:column>
+						<p:column>
+							<p:chips id="searchUserRanksChips"
+								value="#{userBean.searchUserRanks}"
+								disabled="#{not userBean.useSearchUserRanks}" />
+							<p:message for="searchUserRanksChips" />
 						</p:column>
 					</p:row>
 					<p:row>
