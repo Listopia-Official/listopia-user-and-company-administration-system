@@ -152,7 +152,8 @@
 							<p:column>
 								<p:commandButton
 									process="@this forenameInputText surnameInputText schoolClassSelectOneMenu ranksDataList"
-									update="@form" action="#{userBean.editUser}"
+									update="@form dataAccorditionPanel:userSearchResultsForm:userSearchResultsTable @(.toolbar)"
+									action="#{userBean.editUser}"
 									value="#{msg['lucas.application.userScreen.editUserDialog.saveChangesButton.name']}"
 									title="#{msg['lucas.application.userScreen.editUserDialog.saveChangesButton.tooltip']}"
 									oncomplete="if (args &amp;&amp; !args.validationFailed){PF('editUserDialog').hide()}" />

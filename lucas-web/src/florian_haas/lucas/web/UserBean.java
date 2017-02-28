@@ -645,7 +645,10 @@ public class UserBean implements Serializable {
 						userBean.removeRank(id, rank);
 					}
 				});
+				User tmp2 = userBean.findById(id);
 				params.add(WebUtils.getAsString(tmp, "lucas:userStringConverter"));
+				Collections.replaceAll(searchUserResults, editUserDialogSelectedUser, tmp2);
+				Collections.replaceAll(selectedUsers, editUserDialogSelectedUser, tmp2);
 				return true;
 			}, "lucas.application.userScreen.editUser.message.success", null, "lucas.application.userScreen.editUser.message.fail");
 		}
