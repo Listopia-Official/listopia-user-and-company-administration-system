@@ -1,4 +1,4 @@
-<ui:composition template="/WEB-INF/dataTemplate.xhtml"
+<ui:composition template="/WEB-INF/web/template/dataTemplate.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -7,12 +7,12 @@
 	<ui:param name="pageTitle"
 		value="#{msg['lucas.application.userScreen.title']}" />
 	<ui:define name="dialogs">
-		<ui:include src="/WEB-INF/createPupilDialog.xhtml" />
-		<ui:include src="/WEB-INF/createTeacherDialog.xhtml" />
-		<ui:include src="/WEB-INF/createGuestDialog.xhtml" />
-		<ui:include src="/WEB-INF/editUserDialog.xhtml" />
-		<ui:include src="/WEB-INF/imageManagerDialog.xhtml" />
-		<ui:include src="/WEB-INF/userCardManagerDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/users/createPupilDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/users/createTeacherDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/users/createGuestDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/users/editUserDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/users/imageManagerDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/users/userCardManagerDialog.xhtml" />
 	</ui:define>
 	<ui:define name="otherContent">
 		<p:importConstants type="florian_haas.lucas.model.EnumSchoolClass" />
@@ -331,7 +331,7 @@
 								action="#{userBean.searchUsers}" process="@form"
 								update="dataAccorditionPanel:userSearchResultsForm:userSearchResultsTable @form dataAccorditionPanel @(.toolbar)" />
 						</p:column>
-						<ui:include src="/WEB-INF/blockUI.xhtml">
+						<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
 							<ui:param name="block" value="@(.dataArea)" />
 							<ui:param name="trigger" value="@(.blockAllTrigger)" />
 						</ui:include>
