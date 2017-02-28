@@ -2,6 +2,7 @@ package florian_haas.lucas.util;
 
 import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
+import java.time.*;
 import java.util.*;
 
 public class Utils {
@@ -83,5 +84,21 @@ public class Utils {
 	@SuppressWarnings("unchecked")
 	public static <T> Class<T> getClassFromArgs(Class<?> clazz, int arg) {
 		return (Class<T>) ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[arg];
+	}
+
+	public static Date asDate(LocalDate localDate) {
+		return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+	}
+
+	public static Date asDate(LocalDateTime localDateTime) {
+		return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+	}
+
+	public static LocalDate asLocalDate(Date date) {
+		return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+	}
+
+	public static LocalDateTime asLocalDateTime(Date date) {
+		return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
 	}
 }
