@@ -10,9 +10,19 @@
 				<h1>
 					<h:outputText value="#{msg['lucas.application.login.heading']}" />
 				</h1>
-				<p:messages globalOnly="true" showDetail="true" showSummary="true"
-					closable="true" />
 				<p:panelGrid styleClass="ui-noborder">
+					<p:row>
+						<p:column colspan="2">
+							<ui:fragment rendered="#{not empty shiroLoginFailure}">
+								<div aria-live="polite"
+									class="ui-message ui-message-error ui-widget ui-corner-all">
+									<span class="ui-message-error-icon" />
+									<h:outputText styleClass="ui-message-error-detail"
+										value="#{msg['lucas.application.login.loginFailureMessage']}" />
+								</div>
+							</ui:fragment>
+						</p:column>
+					</p:row>
 					<p:row>
 						<p:column>
 							<p:outputLabel for="usernameInputText"
@@ -44,8 +54,7 @@
 						</p:column>
 					</p:row>
 				</p:panelGrid>
-			 #{shiroLoginFailure}
-		</h:form>
+			</h:form>
 		</div>
 	</ui:define>
 </ui:composition>
