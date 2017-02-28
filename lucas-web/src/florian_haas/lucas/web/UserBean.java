@@ -2,6 +2,7 @@ package florian_haas.lucas.web;
 
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
+import java.time.*;
 import java.util.*;
 
 import javax.ejb.EJB;
@@ -17,7 +18,7 @@ import florian_haas.lucas.business.*;
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.util.WebUtils;
+import florian_haas.lucas.util.*;
 import florian_haas.lucas.util.validation.*;
 
 @Named("userBean")
@@ -752,6 +753,207 @@ public class UserBean implements Serializable {
 
 	/*
 	 * -------------------- Image Manager Dialog End --------------------
+	 */
+
+	/*
+	 * -------------------- User Card Manager Dialog Start --------------------
+	 */
+
+	private User userCardManagerDialogSelectedUser;
+
+	private List<UserCard> userCardManagerDialogSelectedUserCards = new ArrayList<>();
+
+	private List<UserCard> userCardManagerDialogUserCards = new ArrayList<>();
+
+	private Date userCardManagerDialogValidDate = Date.from(Instant.now());
+
+	public static final String USER_CARD_MANAGER_DIALOG_MESSAGES_ID = "userCardManagerDialogMessages";
+
+	public List<UserCard> getUserCardManagerDialogUserCards() {
+		return this.userCardManagerDialogUserCards;
+	}
+
+	public List<UserCard> getUserCardManagerDialogSelectedUserCards() {
+		return this.userCardManagerDialogSelectedUserCards;
+	}
+
+	public void setUserCardManagerDialogSelectedUserCards(List<UserCard> userCardManagerDialogSelectedUserCards) {
+		this.userCardManagerDialogSelectedUserCards = userCardManagerDialogSelectedUserCards;
+	}
+
+	public User getUserCardManagerDialogSelectedUser() {
+		return this.userCardManagerDialogSelectedUser;
+	}
+
+	public Date getUserCardManagerDialogValidDate() {
+		return userCardManagerDialogValidDate;
+	}
+
+	public void setUserCardManagerDialogValidDate(Date userCardManagerDialogValidDate) {
+		this.userCardManagerDialogValidDate = userCardManagerDialogValidDate;
+	}
+
+	public void initUserCardManagerDialog() {
+		if (!selectedUsers.isEmpty()) {
+			userCardManagerDialogSelectedUser = selectedUsers.get(0);
+			userCardManagerDialogSelectedUserCards.clear();
+			userCardManagerDialogUserCards.clear();
+			userCardManagerDialogValidDate = Date.from(Instant.now());
+			userCardManagerDialogUserCards.addAll(userBean.getUserCards(userCardManagerDialogSelectedUser.getId()));
+		}
+	}
+
+	public void userCardManagerDialogNewUserCard() {
+		if (userCardManagerDialogSelectedUser != null) {
+			WebUtils.executeTask(params -> {
+				Long id = userBean.addUserCard(userCardManagerDialogSelectedUser.getId());
+				userCardManagerDialogUserCards.add(userBean.findUserCardById(id));
+				params.add(id);
+				return true;
+			}, "lucas.application.userScreen.createUserCard.success", null, "lucas.application.userScreen.createUserCard.fail", message -> {
+				WebUtils.addInformationMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+			}, message -> {
+				WebUtils.addWarningMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+			}, message -> {
+				WebUtils.addErrorMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+			}, message -> {
+				WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+			}, WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter"));
+		}
+	}
+
+	public void userCardManagerDialogBlockUserCards() {
+		for (UserCard card : userCardManagerDialogSelectedUserCards) {
+			Long id = card.getId();
+			if (WebUtils.executeTask(params -> {
+				params.add(id);
+				return userBean.blockUserCard(id);
+			}, "lucas.application.userScreen.blockUserCard.success", "lucas.application.userScreen.blockUserCard.warn",
+					"lucas.application.userScreen.blockUserCard.fail", message -> {
+						WebUtils.addInformationMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+					}, message -> {
+						WebUtils.addWarningMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+					}, message -> {
+						WebUtils.addErrorMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+					}, message -> {
+						WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+					}, WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter"))) {
+				UserCard newCard = userBean.findUserCardById(id);
+				Collections.replaceAll(userCardManagerDialogSelectedUserCards, card, newCard);
+				Collections.replaceAll(userCardManagerDialogUserCards, card, newCard);
+			}
+		}
+	}
+
+	public void userCardManagerDialogUnblockUserCards() {
+		for (UserCard card : userCardManagerDialogSelectedUserCards) {
+			Long id = card.getId();
+			if (WebUtils.executeTask(params -> {
+				params.add(id);
+				return userBean.unblockUserCard(id);
+			}, "lucas.application.userScreen.unblockUserCard.success", "lucas.application.userScreen.unblockUserCard.warn",
+					"lucas.application.userScreen.unblockUserCard.fail", message -> {
+						WebUtils.addInformationMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+					}, message -> {
+						WebUtils.addWarningMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+					}, message -> {
+						WebUtils.addErrorMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+					}, message -> {
+						WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+					}, WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter"))) {
+				UserCard newCard = userBean.findUserCardById(id);
+				Collections.replaceAll(userCardManagerDialogSelectedUserCards, card, newCard);
+				Collections.replaceAll(userCardManagerDialogUserCards, card, newCard);
+			}
+		}
+	}
+
+	public void initUserCardManagerDialogSetValidDayOverlay() {
+		if (!userCardManagerDialogSelectedUserCards.isEmpty()) {
+			LocalDate validDay = userCardManagerDialogSelectedUserCards.get(0).getValidDay();
+			this.userCardManagerDialogValidDate = validDay != null ? Utils.asDate(validDay) : Date.from(Instant.now());
+		}
+	}
+
+	public void userCardManagerDialogSetValidDay() {
+		for (UserCard card : userCardManagerDialogSelectedUserCards) {
+			Long id = card.getId();
+			if (WebUtils.executeTask(params -> {
+				params.add(card.getId());
+				params.add(userCardManagerDialogValidDate);
+				params.add(card.getValidDay());
+				return userBean.setValidDate(id, Utils.asLocalDate(userCardManagerDialogValidDate));
+			}, "lucas.application.userScreen.setValidDay.success", "lucas.application.userScreen.setValidDay.warn",
+					"lucas.application.userScreen.setValidDay.fail", message -> {
+						WebUtils.addInformationMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+					}, message -> {
+						WebUtils.addWarningMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+					}, message -> {
+						WebUtils.addErrorMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+					}, message -> {
+						WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+					})) {
+				UserCard newCard = userBean.findUserCardById(id);
+				Collections.replaceAll(userCardManagerDialogSelectedUserCards, card, newCard);
+				Collections.replaceAll(userCardManagerDialogUserCards, card, newCard);
+			}
+		}
+	}
+
+	public void userCardManagerDialogRemoveValidDay() {
+		for (UserCard card : userCardManagerDialogSelectedUserCards) {
+			Long id = card.getId();
+			if (WebUtils.executeTask(params -> {
+				params.add(card.getId());
+				return userBean.setValidDate(id, null);
+			}, "lucas.application.userScreen.removeValidDay.success", "lucas.application.userScreen.removeValidDay.warn",
+					"lucas.application.userScreen.removeValidDay.fail", message -> {
+						WebUtils.addInformationMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+					}, message -> {
+						WebUtils.addWarningMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+					}, message -> {
+						WebUtils.addErrorMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+					}, message -> {
+						WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+					})) {
+				UserCard newCard = userBean.findUserCardById(id);
+				Collections.replaceAll(userCardManagerDialogSelectedUserCards, card, newCard);
+				Collections.replaceAll(userCardManagerDialogUserCards, card, newCard);
+			}
+		}
+	}
+
+	public void userCardManagerDialogRemoveUserCards() {
+		if (!userCardManagerDialogSelectedUserCards.isEmpty()) {
+			ListIterator<UserCard> it = userCardManagerDialogSelectedUserCards.listIterator();
+			while (it.hasNext()) {
+				WebUtils.executeTask(params -> {
+					UserCard userCard = it.next();
+					Long id = userCard.getId();
+					Boolean removed = userBean.removeUserCard(id);
+					if (removed) {
+						userCardManagerDialogUserCards.remove(userCard);
+						it.remove();
+					}
+					params.add(id);
+					return removed;
+				}, "lucas.application.userScreen.deleteUserCard.success", "lucas.application.userScreen.deleteUserCard.warn",
+						"lucas.application.userScreen.deleteUserCard.fail", message -> {
+							WebUtils.addInformationMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+						}, message -> {
+							WebUtils.addWarningMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+						}, message -> {
+							WebUtils.addErrorMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+						}, message -> {
+							WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+						}, WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter"));
+
+			}
+		}
+	}
+
+	/*
+	 * -------------------- User Cardö Manager Dialog End --------------------
 	 */
 
 }

@@ -12,6 +12,7 @@
 		<ui:include src="/WEB-INF/createGuestDialog.xhtml" />
 		<ui:include src="/WEB-INF/editUserDialog.xhtml" />
 		<ui:include src="/WEB-INF/imageManagerDialog.xhtml" />
+		<ui:include src="/WEB-INF/userCardManagerDialog.xhtml" />
 	</ui:define>
 	<ui:define name="otherContent">
 		<p:importConstants type="florian_haas.lucas.model.EnumSchoolClass" />
@@ -82,6 +83,9 @@
 			<p:commandButton
 				value="#{msg['lucas.application.userScreen.userCardManagerButton.name']}"
 				title="#{msg['lucas.application.userScreen.userCardManagerButton.tooltip']}"
+				update="userCardManagerDialogForm" process="@this"
+				action="#{userBean.initUserCardManagerDialog}"
+				oncomplete="PF('userCardManagerDialog').show()"
 				icon="fa fa-credit-card"
 				disabled="#{userBean.selectedUsers.size() != 1}" />
 			<span class="ui-separator"> <span
