@@ -107,11 +107,11 @@ public class UserBean implements Serializable {
 
 	public void createPupil() {
 		WebUtils.executeTask((params) -> {
-			Long id = userBean.createPupil(createPupilDialogForename, createPupilDialogSurname, createPupilDialogSchoolClass, createPupilDialogRanks);
-			params.add(id);
+			params.add(WebUtils.getAsString(userBean.findById(
+					userBean.createPupil(createPupilDialogForename, createPupilDialogSurname, createPupilDialogSchoolClass, createPupilDialogRanks)),
+					"lucas:userStringConverter"));
 			return true;
-		}, "lucas.application.userScreen.createPupil.message.success", null, "lucas.application.userScreen.createPupil.message.error",
-				createPupilDialogForename, createPupilDialogSurname, createPupilDialogSchoolClass);
+		}, "lucas.application.userScreen.createPupil.message.success", null, "lucas.application.userScreen.createPupil.message.error");
 	}
 
 	public void resetCreatePupilDialog() {
@@ -194,11 +194,11 @@ public class UserBean implements Serializable {
 
 	public void createTeacher() {
 		WebUtils.executeTask((params) -> {
-			Long id = userBean.createTeacher(createTeacherDialogForename, createTeacherDialogSurname, createTeacherDialogRanks);
-			params.add(id);
+			params.add(WebUtils.getAsString(
+					userBean.findById(userBean.createTeacher(createTeacherDialogForename, createTeacherDialogSurname, createTeacherDialogRanks)),
+					"lucas:userStringConverter"));
 			return true;
-		}, "lucas.application.userScreen.createTeacher.message.success", null, "lucas.application.userScreen.createTeacher.message.error",
-				createTeacherDialogForename, createTeacherDialogSurname);
+		}, "lucas.application.userScreen.createTeacher.message.success", null, "lucas.application.userScreen.createTeacher.message.error");
 	}
 
 	public void resetCreateTeacherDialog() {
@@ -629,22 +629,6 @@ public class UserBean implements Serializable {
 
 	public void editUser() {
 		if (editUserDialogSelectedUser != null) {
-			EnumUserType computedUserType = computeUserType();
-			String basicKey = "lucas.application.userScreen.editUser.message.edit";
-			String part2 = null;
-			switch (computedUserType) {
-				case PUPIL:
-					part2 = "Pupil";
-					break;
-				case TEACHER:
-					part2 = "Teacher";
-					break;
-				case GUEST:
-				default:
-					part2 = "Guest";
-					break;
-			}
-			basicKey = basicKey.concat(part2);
 			WebUtils.executeTask(params -> {
 				Long id = editUserDialogSelectedUser.getId();
 				userBean.setForename(id, editUserDialogForename);
@@ -661,14 +645,9 @@ public class UserBean implements Serializable {
 						userBean.removeRank(id, rank);
 					}
 				});
-
-				if (computedUserType != EnumUserType.GUEST) {
-					params.add(editUserDialogForename);
-					params.add(editUserDialogSurname);
-					if (computedUserType == EnumUserType.PUPIL) params.add(editUserDialogSchoolClass);
-				}
+				params.add(WebUtils.getAsString(tmp, "lucas:userStringConverter"));
 				return true;
-			}, basicKey + ".success", null, "lucas.application.userScreen.editUser.message.fail", editUserDialogSelectedUser.getId());
+			}, "lucas.application.userScreen.editUser.message.success", null, "lucas.application.userScreen.editUser.message.fail");
 		}
 	}
 
