@@ -158,7 +158,8 @@ public class UserBean implements UserBeanLocal {
 	@RequiresPermissions(USER_SET_VALID_DATE)
 	public Boolean setValidDate(Long userCardId, LocalDate validDate) {
 		UserCard userCard = userCardDao.findById(userCardId);
-		if (userCard.getValidDay() != null && userCard.getValidDay().equals(validDate)) return Boolean.FALSE;
+		if (userCard.getValidDay() != null && userCard.getValidDay().equals(validDate) || userCard.getValidDay() == null && validDate == null)
+			return Boolean.FALSE;
 		userCard.setValidDay(validDate);
 		return Boolean.TRUE;
 	}
