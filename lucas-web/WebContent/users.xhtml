@@ -354,7 +354,13 @@
 				rowSelectMode="add"
 				emptyMessage="#{msg['lucas.application.userScreen.userSearchResultsTable.noResults']}">
 				<f:facet name="{AdditionalComponents}">
+					<p:commandButton icon="fa fa-refresh" styleClass="blockAllTrigger"
+						update="userSearchResultsTable"
+						disabled="#{userBean.searchUserResults.size() &lt;= 0}"
+						title="#{msg['lucas.application.userScreen.userSearchResultsTable.refreshButton.tooltip']}"
+						action="#{userBean.refreshUsers}" />
 					<p:commandButton id="searchUserColumnToggler" type="button"
+						style="float:right"
 						value="#{msg['lucas.application.userScreen.userSearchResultsTable.searchUserColumnToggler.name']}"
 						icon="fa fa-calculator"
 						title="#{msg['lucas.application.userScreen.userSearchResultsTable.searchUserColumnToggler.tooltip']}" />

@@ -502,6 +502,14 @@ public class UserBean implements Serializable {
 		}, "lucas.application.userScreen.searchUser.message.success", null, "lucas.application.userScreen.searchUser.message.error");
 	}
 
+	public void refreshUsers() {
+		WebUtils.executeTask((params) -> {
+			WebUtils.refreshEntities(searchUserResults, selectedUsers, userBean::findById);
+			params.add(searchUserResults.size());
+			return true;
+		}, "lucas.application.userScreen.refreshUsers.success", null, "lucas.application.userScreen.refreshUsers.fail");
+	}
+
 	public List<User> getSearchUserResults() {
 		return searchUserResults;
 	}
@@ -932,6 +940,22 @@ public class UserBean implements Serializable {
 
 			}
 		}
+	}
+
+	public void userCardManagerDialogRefreshUserCards() {
+		WebUtils.executeTask((params) -> {
+			WebUtils.refreshEntities(userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, userBean::findUserCardById);
+			params.add(userCardManagerDialogUserCards.size());
+			return true;
+		}, "lucas.application.userScreen.refreshUserCards.success", null, "lucas.application.userScreen.refreshUserCards.fail", message -> {
+			WebUtils.addInformationMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+		}, message -> {
+			WebUtils.addWarningMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+		}, message -> {
+			WebUtils.addErrorMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+		}, message -> {
+			WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+		});
 	}
 
 	/*

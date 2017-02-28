@@ -121,6 +121,19 @@
 								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
 						</p:confirmDialog>
 					</p:toolbarGroup>
+					<p:toolbarGroup align="right">
+						<p:commandButton icon="fa fa-refresh"
+							id="userCardManagerRefreshTableButton"
+							update="userCardManagerDialogUserCardTable"
+							disabled="#{userBean.userCardManagerDialogUserCards.size() &lt;= 0}"
+							title="#{msg['lucas.application.userScreen.userCardManagerDialog.refreshTableButton.tooltip']}"
+							action="#{userBean.userCardManagerDialogRefreshUserCards}" />
+						<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
+							<ui:param name="block" value="userCardManagerDialogUserCardTable" />
+							<ui:param name="trigger"
+								value="userCardManagerRefreshTableButton" />
+						</ui:include>
+					</p:toolbarGroup>
 				</p:toolbar>
 				<p:messages for="userCardManagerDialogMessages" showDetail="true"
 					showIcon="true" showSummary="true" closable="true"

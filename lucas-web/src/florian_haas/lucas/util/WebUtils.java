@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.*;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -15,6 +15,8 @@ import javax.validation.*;
 
 import org.apache.shiro.ShiroException;
 import org.primefaces.model.*;
+
+import florian_haas.lucas.model.EntityBase;
 
 public class WebUtils {
 
@@ -272,6 +274,17 @@ public class WebUtils {
 	public static String getAsString(Object object, String converterId) {
 		FacesContext context = FacesContext.getCurrentInstance();
 		return context.getApplication().createConverter(converterId).getAsString(context, UIComponent.getCurrentComponent(context), object);
+	}
+
+	public static <E extends EntityBase> void refreshEntities(List<E> entityList, List<E> selectedEntities, Function<Long, E> entityDao) {
+		for (int i = 0; i < entityList.size(); i++) {
+			E tmp = entityList.get(i);
+			E refreshed = entityDao.apply(tmp.getId());
+			entityList.set(i, refreshed);
+			if (selectedEntities.contains(tmp)) {
+				selectedEntities.set(selectedEntities.indexOf(tmp), refreshed);
+			}
+		}
 	}
 
 }
