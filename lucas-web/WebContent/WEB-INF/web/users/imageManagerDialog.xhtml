@@ -45,7 +45,13 @@
 						<p:row>
 							<p:column colspan="2">
 								<p:fileUpload allowTypes="/jpeg|jpg/" sizeLimit="1000000"
-									fileUploadListener="#{userBean.onImageUpload}" update="@form" />
+									fileUploadListener="#{userBean.onImageUpload}" update="@form"
+									cancelLabel="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.cancelLabel']}"
+									uploadLabel="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.uploadLabel']}"
+									label="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.chooseLabel']}"
+									invalidFileMessage="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.invalidFileMessage']}"
+									invalidSizeMessage="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.invalidFileSizeMessage']}"
+									fileLimitMessage="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.fileLimitMessage']}" />
 							</p:column>
 						</p:row>
 						<p:row>
