@@ -13,7 +13,8 @@
 					<ui:insert name="buttonArea" />
 				</p:toolbar>
 			</h:form>
-			<p:accordionPanel multiple="true" id="dataAccorditionPanel" activeIndex="0,1">
+			<p:accordionPanel multiple="true" id="dataAccorditionPanel"
+				activeIndex="0,1">
 				<p:tab>
 					<f:facet name="title">
 						<h:outputText styleClass="fa fa-search" />
@@ -33,6 +34,10 @@
 					<ui:insert name="searchResults" />
 				</p:tab>
 			</p:accordionPanel>
+			<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
+				<ui:param name="block" value="@(.dataArea)" />
+				<ui:param name="trigger" value="@(.blockAllTrigger)" />
+			</ui:include>
 		</div>
 	</ui:define>
 </ui:composition>
