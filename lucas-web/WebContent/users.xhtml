@@ -344,9 +344,9 @@
 		value="#{userBean.searchUserResults.size()}" />
 	<ui:define name="searchResults">
 		<h:form id="userSearchResultsForm">
-			<p:dataTable id="userSearchResultsTable"
-				value="#{userBean.searchUserResults}" var="user" rowKey="#{user.id}"
-				selection="#{userBean.selectedUsers}" rows="10"
+			<p:dataTable id="userSearchResultsTable" resizableColumns="true"
+				liveResize="true" value="#{userBean.searchUserResults}" var="user"
+				rowKey="#{user.id}" selection="#{userBean.selectedUsers}" rows="10"
 				draggableColumns="true" paginator="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {AdditionalComponents}"
 				currentPageReportTemplate="#{msg['lucas.application.userScreen.userSearchResultsTable.currentPageReport1']} {currentPage} #{msg['lucas.application.userScreen.userSearchResultsTable.currentPageReport2']} {totalPages}"
