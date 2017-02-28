@@ -47,10 +47,11 @@
 									title="#{msg['lucas.application.userScreen.createGuestDialog.cancelButton.tooltip']}"
 									oncomplete="PF('createGuestDialog').hide()">
 								</p:commandButton>
-								<p:blockUI block="createGuestDialogForm"
-									trigger="createGuestDialogForm:createGuestButton">
-									<p:graphicImage name="images/ajaxloadingbar.gif" />
-								</p:blockUI>
+								<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
+									<ui:param name="block" value="createGuestDialogForm" />
+									<ui:param name="trigger"
+										value="createGuestDialogForm:createGuestButton" />
+								</ui:include>
 							</p:column>
 						</p:row>
 					</p:panelGrid>
