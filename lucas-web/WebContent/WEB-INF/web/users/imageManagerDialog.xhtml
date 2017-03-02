@@ -4,75 +4,74 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.userScreen.imageManagerDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="imageManagerDialog" />
+	<ui:param name="formId" value="imageManagerDialogForm" />
 	<ui:define name="dialogContent">
-		<p:dialog id="imageManagerDialog"
-			header="#{msg['lucas.application.userScreen.imageManagerDialog.title']}"
-			closable="false" draggable="false" dynamic="true" resizable="false"
-			responsive="true" modal="true" widgetVar="imageManagerDialog">
-			<h:form id="imageManagerDialogForm">
-				<div class="ui-fluid">
-					<p:panelGrid>
-						<p:row>
-							<p:column styleClass="center" colspan="2">
-								<h:outputText
-									value="#{msg['lucas.application.userScreen.imageManagerDialog.userLabel1']}"
-									style="font-weight:bold" />
-								<h:outputText value="#{userBean.imageManagerDialogSelectedUser}"
-									converter="lucas:userStringConverter" style="font-weight:bold" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="2">
-								<p:messages for="imageManagerDialogMessages" autoUpdate="true"
-									showDetail="true" showIcon="true" showSummary="true"
-									closable="true" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="2" styleClass="center">
-								<ui:fragment
-									rendered="#{not empty userBean.imageManagerDialogDisplayImageAsBase64}">
-									<img
-										src="data:image/jpeg;base64,#{userBean.imageManagerDialogDisplayImageAsBase64}"
-										width="#{userBean.maxUserImageWidth}"
-										height="#{userBean.maxUserImageHeight}" />
-								</ui:fragment>
-								<h:outputText
-									value="#{msg['lucas.application.userScreen.imageManagerDialog.noImage']}"
-									rendered="#{empty userBean.imageManagerDialogDisplayImageAsBase64}" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="2">
-								<p:fileUpload allowTypes="/jpeg|jpg/" sizeLimit="1000000"
-									fileUploadListener="#{userBean.onImageUpload}" update="@form"
-									cancelLabel="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.cancelLabel']}"
-									uploadLabel="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.uploadLabel']}"
-									label="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.chooseLabel']}"
-									invalidFileMessage="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.invalidFileMessage']}"
-									invalidSizeMessage="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.invalidFileSizeMessage']}"
-									fileLimitMessage="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.fileLimitMessage']}" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column>
-								<p:commandButton process="@this" id="saveImagesButton"
-									action="#{userBean.onSave}" update="@form"
-									value="#{msg['lucas.application.userScreen.imageManagerDialog.saveButton.name']}"
-									title="#{msg['lucas.application.userScreen.imageManagerDialog.saveButton.tooltip']}"
-									oncomplete="if (args &amp;&amp; !args.validationFailed){PF('imageManagerDialog').hide()}" />
-							</p:column>
-							<p:column>
-								<p:commandButton
-									value="#{msg['lucas.application.userScreen.imageManagerDialog.cancelButton.name']}"
-									title="#{msg['lucas.application.userScreen.imageManagerDialog.cancelButton.tooltip']}"
-									oncomplete="PF('imageManagerDialog').hide()">
-								</p:commandButton>
-							</p:column>
-						</p:row>
-					</p:panelGrid>
-				</div>
-			</h:form>
-		</p:dialog>
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column styleClass="center" colspan="2">
+						<h:outputText
+							value="#{msg['lucas.application.userScreen.imageManagerDialog.userLabel1']}"
+							style="font-weight:bold" />
+						<h:outputText value="#{userBean.imageManagerDialogSelectedUser}"
+							converter="lucas:userStringConverter" style="font-weight:bold" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:messages for="imageManagerDialogMessages" autoUpdate="true"
+							showDetail="true" showIcon="true" showSummary="true"
+							closable="true" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2" styleClass="center">
+						<ui:fragment
+							rendered="#{not empty userBean.imageManagerDialogDisplayImageAsBase64}">
+							<img
+								src="data:image/jpeg;base64,#{userBean.imageManagerDialogDisplayImageAsBase64}"
+								width="#{userBean.maxUserImageWidth}"
+								height="#{userBean.maxUserImageHeight}" />
+						</ui:fragment>
+						<h:outputText
+							value="#{msg['lucas.application.userScreen.imageManagerDialog.noImage']}"
+							rendered="#{empty userBean.imageManagerDialogDisplayImageAsBase64}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:fileUpload allowTypes="/jpeg|jpg/" sizeLimit="1000000"
+							fileUploadListener="#{userBean.onImageUpload}" update="@form"
+							cancelLabel="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.cancelLabel']}"
+							uploadLabel="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.uploadLabel']}"
+							label="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.chooseLabel']}"
+							invalidFileMessage="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.invalidFileMessage']}"
+							invalidSizeMessage="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.invalidFileSizeMessage']}"
+							fileLimitMessage="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.fileLimitMessage']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton process="@this" id="saveImagesButton"
+							action="#{userBean.onSave}" update="@form"
+							value="#{msg['lucas.application.userScreen.imageManagerDialog.saveButton.name']}"
+							title="#{msg['lucas.application.userScreen.imageManagerDialog.saveButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('imageManagerDialog').hide()}" />
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this"
+							value="#{msg['lucas.application.userScreen.imageManagerDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.userScreen.imageManagerDialog.cancelButton.tooltip']}"
+							oncomplete="PF('imageManagerDialog').hide()" immediate="true">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
 	</ui:define>
 </ui:composition>

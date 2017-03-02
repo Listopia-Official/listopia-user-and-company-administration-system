@@ -4,150 +4,149 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.userScreen.createPupilDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="createPupilDialog" />
+	<ui:param name="formId" value="createPupilDialogForm" />
 	<ui:define name="dialogContent">
-		<p:dialog id="createPupilDialog"
-			header="#{msg['lucas.application.userScreen.createPupilDialog.title']}"
-			closable="false" draggable="false" dynamic="true" resizable="false"
-			responsive="true" modal="true" widgetVar="createPupilDialog">
-			<h:form id="createPupilDialogForm">
-				<div class="ui-fluid">
-					<p:panelGrid>
-						<p:row>
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.userScreen.createPupilDialog.forenameInputText.name']}"
+							title="#{msg['lucas.application.userScreen.createPupilDialog.forenameInputText.tooltip']}"
+							for="forenameInputText" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="forenameInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputText id="forenameInputText"
+							value="#{userBean.createPupilDialogForename}"
+							title="#{msg['lucas.application.userScreen.createPupilDialog.forenameInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.userScreen.createPupilDialog.surnameInputText.name']}"
+							title="#{msg['lucas.application.userScreen.createPupilDialog.surnameInputText.tooltip']}"
+							for="surnameInputText" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="surnameInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputText id="surnameInputText"
+							value="#{userBean.createPupilDialogSurname}"
+							title="#{msg['lucas.application.userScreen.createPupilDialog.surnameInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:outputLabel
+							value="#{msg['lucas.application.userScreen.createPupilDialog.schoolClassSelectOne.name']}"
+							title="#{msg['lucas.application.userScreen.createPupilDialog.schoolClassSelectOne.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:selectOneMenu id="schoolClassSelectOneMenu"
+							value="#{userBean.createPupilDialogSchoolClass}"
+							title="#{msg['lucas.application.userScreen.createPupilDialog.schoolClassSelectOne.tooltip']}">
+							<f:selectItems value="#{EnumSchoolClass.ALL_VALUES}" var="class"
+								itemValue="#{class}"
+								itemLabel="#{converterBean.convertEnum(class)}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel id="rankOutputLabel" for="rankInputText"
+							value="#{msg['lucas.application.userScreen.createPupilDialog.rankInputText.name']}"
+							title="#{msg['lucas.application.userScreen.createPupilDialog.rankInputText.tooltip']}" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message id="rankInputMessage"
+							for="createPupilDialogForm:rankInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputText id="rankInputText"
+							value="#{userBean.createPupilDialogTmpRank}"
+							title="#{msg['lucas.application.userScreen.createPupilDialog.rankInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							value="#{msg['lucas.application.userScreen.createPupilDialog.addRankButton.name']}"
+							title="#{msg['lucas.application.userScreen.createPupilDialog.addRankButton.tooltip']}"
+							process="rankInputText @this"
+							update="createPupilDialogForm:ranksDataList rankOutputLabel rankInputText rankInputMessage"
+							action="#{userBean.resetCreatePupilDialogTmpRank}">
+							<p:collector value="#{userBean.createPupilDialogTmpRank}"
+								addTo="#{userBean.createPupilDialogRanks}" unique="true" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton
+							value="#{msg['lucas.application.userScreen.createPupilDialog.editRankButton.name']}"
+							title="#{msg['lucas.application.userScreen.createPupilDialog.editRankButton.tooltip']}"
+							action="#{userBean.editCreatePupilDialogSelectedRank}"
+							process="createPupilDialogForm:ranksDataList @this"
+							update="createPupilDialogForm:ranksDataList createPupilDialogForm:rankInputText" />
+					</p:column>
+					<p:column>
+						<p:commandButton
+							value="#{msg['lucas.application.userScreen.createPupilDialog.removeRankButton.name']}"
+							title="#{msg['lucas.application.userScreen.createPupilDialog.removeRankButton.tooltip']}"
+							process="createPupilDialogForm:ranksDataList @this"
+							update="createPupilDialogForm:ranksDataList">
+							<p:collector removeFrom="#{userBean.createPupilDialogRanks}"
+								value="#{userBean.createPupilDialogSelectedRank}" />
+						</p:commandButton>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:selectOneListbox id="ranksDataList" var="rank"
+							value="#{userBean.createPupilDialogSelectedRank}"
+							style="min-height:100px">
+							<f:selectItems value="#{userBean.createPupilDialogRanks}" />
 							<p:column>
-								<p:outputLabel
-									value="#{msg['lucas.application.userScreen.createPupilDialog.forenameInputText.name']}"
-									title="#{msg['lucas.application.userScreen.createPupilDialog.forenameInputText.tooltip']}"
-									for="forenameInputText" />
+								<h:outputText value="#{rank}" />
 							</p:column>
-							<p:column colspan="2">
-								<p:message for="forenameInputText" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:inputText id="forenameInputText"
-									value="#{userBean.createPupilDialogForename}"
-									title="#{msg['lucas.application.userScreen.createPupilDialog.forenameInputText.tooltip']}" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column>
-								<p:outputLabel
-									value="#{msg['lucas.application.userScreen.createPupilDialog.surnameInputText.name']}"
-									title="#{msg['lucas.application.userScreen.createPupilDialog.surnameInputText.tooltip']}"
-									for="surnameInputText" />
-							</p:column>
-							<p:column colspan="2">
-								<p:message for="surnameInputText" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:inputText id="surnameInputText"
-									value="#{userBean.createPupilDialogSurname}"
-									title="#{msg['lucas.application.userScreen.createPupilDialog.surnameInputText.tooltip']}" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:outputLabel
-									value="#{msg['lucas.application.userScreen.createPupilDialog.schoolClassSelectOne.name']}"
-									title="#{msg['lucas.application.userScreen.createPupilDialog.schoolClassSelectOne.tooltip']}" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:selectOneMenu id="schoolClassSelectOneMenu"
-									value="#{userBean.createPupilDialogSchoolClass}"
-									title="#{msg['lucas.application.userScreen.createPupilDialog.schoolClassSelectOne.tooltip']}">
-									<f:selectItems value="#{EnumSchoolClass.ALL_VALUES}"
-										var="class" itemValue="#{class}"
-										itemLabel="#{converterBean.convertEnum(class)}" />
-								</p:selectOneMenu>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column>
-								<p:outputLabel id="rankOutputLabel" for="rankInputText"
-									value="#{msg['lucas.application.userScreen.createPupilDialog.rankInputText.name']}"
-									title="#{msg['lucas.application.userScreen.createPupilDialog.rankInputText.tooltip']}" />
-							</p:column>
-							<p:column colspan="2">
-								<p:message id="rankInputMessage"
-									for="createPupilDialogForm:rankInputText" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:inputText id="rankInputText"
-									value="#{userBean.createPupilDialogTmpRank}"
-									title="#{msg['lucas.application.userScreen.createPupilDialog.rankInputText.tooltip']}" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column>
-								<p:commandButton
-									value="#{msg['lucas.application.userScreen.createPupilDialog.addRankButton.name']}"
-									title="#{msg['lucas.application.userScreen.createPupilDialog.addRankButton.tooltip']}"
-									process="rankInputText @this"
-									update="createPupilDialogForm:ranksDataList rankOutputLabel rankInputText rankInputMessage"
-									action="#{userBean.resetCreatePupilDialogTmpRank}">
-									<p:collector value="#{userBean.createPupilDialogTmpRank}"
-										addTo="#{userBean.createPupilDialogRanks}" unique="true" />
-								</p:commandButton>
-							</p:column>
-							<p:column>
-								<p:commandButton
-									value="#{msg['lucas.application.userScreen.createPupilDialog.editRankButton.name']}"
-									title="#{msg['lucas.application.userScreen.createPupilDialog.editRankButton.tooltip']}"
-									action="#{userBean.editCreatePupilDialogSelectedRank}"
-									process="createPupilDialogForm:ranksDataList @this"
-									update="createPupilDialogForm:ranksDataList createPupilDialogForm:rankInputText" />
-							</p:column>
-							<p:column>
-								<p:commandButton
-									value="#{msg['lucas.application.userScreen.createPupilDialog.removeRankButton.name']}"
-									title="#{msg['lucas.application.userScreen.createPupilDialog.removeRankButton.tooltip']}"
-									process="createPupilDialogForm:ranksDataList @this"
-									update="createPupilDialogForm:ranksDataList">
-									<p:collector removeFrom="#{userBean.createPupilDialogRanks}"
-										value="#{userBean.createPupilDialogSelectedRank}" />
-								</p:commandButton>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:selectOneListbox id="ranksDataList" var="rank"
-									value="#{userBean.createPupilDialogSelectedRank}"
-									style="min-height:100px">
-									<f:selectItems value="#{userBean.createPupilDialogRanks}" />
-									<p:column>
-										<h:outputText value="#{rank}" />
-									</p:column>
-								</p:selectOneListbox>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column>
-								<p:commandButton
-									process="@this forenameInputText surnameInputText schoolClassSelectOneMenu ranksDataList"
-									update="@form" action="#{userBean.createPupil}"
-									value="#{msg['lucas.application.userScreen.createPupilDialog.createPupilButton.name']}"
-									title="#{msg['lucas.application.userScreen.createPupilDialog.createPupilButton.tooltip']}"
-									oncomplete="if (args &amp;&amp; !args.validationFailed){PF('createPupilDialog').hide()}" />
-							</p:column>
-							<p:column />
-							<p:column>
-								<p:commandButton
-									value="#{msg['lucas.application.userScreen.createPupilDialog.cancelButton.name']}"
-									title="#{msg['lucas.application.userScreen.createPupilDialog.cancelButton.tooltip']}"
-									oncomplete="PF('createPupilDialog').hide()">
-								</p:commandButton>
-							</p:column>
-						</p:row>
-					</p:panelGrid>
-				</div>
-			</h:form>
-		</p:dialog>
+						</p:selectOneListbox>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this forenameInputText surnameInputText schoolClassSelectOneMenu ranksDataList"
+							update="@form" action="#{userBean.createPupil}"
+							value="#{msg['lucas.application.userScreen.createPupilDialog.createPupilButton.name']}"
+							title="#{msg['lucas.application.userScreen.createPupilDialog.createPupilButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('createPupilDialog').hide()}" />
+					</p:column>
+					<p:column />
+					<p:column>
+						<p:commandButton process="@this" immediate="true"
+							value="#{msg['lucas.application.userScreen.createPupilDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.userScreen.createPupilDialog.cancelButton.tooltip']}"
+							oncomplete="PF('createPupilDialog').hide()">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
 	</ui:define>
 </ui:composition>

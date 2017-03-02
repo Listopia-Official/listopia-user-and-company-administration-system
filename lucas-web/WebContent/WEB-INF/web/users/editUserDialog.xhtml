@@ -4,172 +4,170 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.userScreen.editUserDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="editUserDialog" />
+	<ui:param name="formId" value="editUserDialogForm" />
 	<ui:define name="dialogContent">
-		<p:dialog id="editUserDialog"
-			header="#{msg['lucas.application.userScreen.editUserDialog.title']}"
-			closable="false" draggable="false" dynamic="true" resizable="false"
-			responsive="true" modal="true" widgetVar="editUserDialog">
-			<h:form id="editUserDialogForm">
-				<div class="ui-fluid">
-					<p:panelGrid>
-						<p:row>
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.userScreen.editUserDialog.forenameInputText.name']}"
+							title="#{msg['lucas.application.userScreen.editUserDialog.forenameInputText.tooltip']}"
+							for="forenameInputText" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="forenameInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputText id="forenameInputText"
+							converter="lucas:nullStringConverterNoText"
+							value="#{userBean.editUserDialogForename}"
+							title="#{msg['lucas.application.userScreen.editUserDialog.forenameInputText.tooltip']}">
+							<p:ajax event="keyup" delay="50" update="@(.userTypeOutput)"
+								process="@this" />
+						</p:inputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.userScreen.editUserDialog.surnameInputText.name']}"
+							title="#{msg['lucas.application.userScreen.editUserDialog.surnameInputText.tooltip']}"
+							for="surnameInputText" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="surnameInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputText id="surnameInputText"
+							converter="lucas:nullStringConverterNoText"
+							value="#{userBean.editUserDialogSurname}"
+							title="#{msg['lucas.application.userScreen.editUserDialog.surnameInputText.tooltip']}">
+							<p:ajax event="keyup" delay="50" update="@(.userTypeOutput)"
+								process="@this" />
+						</p:inputText>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:outputLabel
+							value="#{msg['lucas.application.userScreen.editUserDialog.schoolClassSelectOne.name']}"
+							title="#{msg['lucas.application.userScreen.editUserDialog.schoolClassSelectOne.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:selectOneMenu id="schoolClassSelectOneMenu" styleClass="theta"
+							value="#{userBean.editUserDialogSchoolClass}"
+							title="#{msg['lucas.application.userScreen.editUserDialog.schoolClassSelectOne.tooltip']}">
+							<f:selectItem itemValue="#{null}"
+								itemLabel="#{msg['lucas.application.userScreen.editUserDialog.schoolClassSelectOne.noSchoolClass']}" />
+							<f:selectItems value="#{EnumSchoolClass.ALL_VALUES}" var="class"
+								itemValue="#{class}"
+								itemLabel="#{converterBean.convertEnum(class)}" />
+							<p:ajax event="change" update="@(.userTypeOutput)"
+								process="@this" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel id="rankOutputLabel" for="rankInputText"
+							value="#{msg['lucas.application.userScreen.editUserDialog.rankInputText.name']}"
+							title="#{msg['lucas.application.userScreen.editUserDialog.rankInputText.tooltip']}" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message id="rankInputMessage"
+							for="editUserDialogForm:rankInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputText id="rankInputText"
+							value="#{userBean.editUserDialogTmpRank}"
+							title="#{msg['lucas.application.userScreen.editUserDialog.rankInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							value="#{msg['lucas.application.userScreen.editUserDialog.addRankButton.name']}"
+							title="#{msg['lucas.application.userScreen.editUserDialog.addRankButton.tooltip']}"
+							process="rankInputText @this"
+							update="editUserDialogForm:ranksDataList rankOutputLabel rankInputText rankInputMessage"
+							action="#{userBean.resetEditUserDialogTmpRank}">
+							<p:collector value="#{userBean.editUserDialogTmpRank}"
+								addTo="#{userBean.editUserDialogRanks}" unique="true" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton
+							value="#{msg['lucas.application.userScreen.editUserDialog.editRankButton.name']}"
+							title="#{msg['lucas.application.userScreen.editUserDialog.editRankButton.tooltip']}"
+							action="#{userBean.editEditUserDialogSelectedRank}"
+							process="editUserDialogForm:ranksDataList @this"
+							update="editUserDialogForm:ranksDataList editUserDialogForm:rankInputText" />
+					</p:column>
+					<p:column>
+						<p:commandButton
+							value="#{msg['lucas.application.userScreen.editUserDialog.removeRankButton.name']}"
+							title="#{msg['lucas.application.userScreen.editUserDialog.removeRankButton.tooltip']}"
+							process="editUserDialogForm:ranksDataList @this"
+							update="editUserDialogForm:ranksDataList">
+							<p:collector removeFrom="#{userBean.editUserDialogRanks}"
+								value="#{userBean.editUserDialogSelectedRank}" />
+						</p:commandButton>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:selectOneListbox id="ranksDataList" var="rank"
+							value="#{userBean.editUserDialogSelectedRank}"
+							style="min-height:100px">
+							<f:selectItems value="#{userBean.editUserDialogRanks}" />
 							<p:column>
-								<p:outputLabel
-									value="#{msg['lucas.application.userScreen.editUserDialog.forenameInputText.name']}"
-									title="#{msg['lucas.application.userScreen.editUserDialog.forenameInputText.tooltip']}"
-									for="forenameInputText" />
+								<h:outputText value="#{rank}" />
 							</p:column>
-							<p:column colspan="2">
-								<p:message for="forenameInputText" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:inputText id="forenameInputText"
-									converter="lucas:nullStringConverterNoText"
-									value="#{userBean.editUserDialogForename}"
-									title="#{msg['lucas.application.userScreen.editUserDialog.forenameInputText.tooltip']}">
-									<p:ajax event="keyup" delay="50" update="@(.userTypeOutput)"
-										process="@this" />
-								</p:inputText>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column>
-								<p:outputLabel
-									value="#{msg['lucas.application.userScreen.editUserDialog.surnameInputText.name']}"
-									title="#{msg['lucas.application.userScreen.editUserDialog.surnameInputText.tooltip']}"
-									for="surnameInputText" />
-							</p:column>
-							<p:column colspan="2">
-								<p:message for="surnameInputText" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:inputText id="surnameInputText"
-									converter="lucas:nullStringConverterNoText"
-									value="#{userBean.editUserDialogSurname}"
-									title="#{msg['lucas.application.userScreen.editUserDialog.surnameInputText.tooltip']}">
-									<p:ajax event="keyup" delay="50" update="@(.userTypeOutput)"
-										process="@this" />
-								</p:inputText>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:outputLabel
-									value="#{msg['lucas.application.userScreen.editUserDialog.schoolClassSelectOne.name']}"
-									title="#{msg['lucas.application.userScreen.editUserDialog.schoolClassSelectOne.tooltip']}" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:selectOneMenu id="schoolClassSelectOneMenu"
-									styleClass="theta"
-									value="#{userBean.editUserDialogSchoolClass}"
-									title="#{msg['lucas.application.userScreen.editUserDialog.schoolClassSelectOne.tooltip']}">
-									<f:selectItem itemValue="#{null}"
-										itemLabel="#{msg['lucas.application.userScreen.editUserDialog.schoolClassSelectOne.noSchoolClass']}" />
-									<f:selectItems value="#{EnumSchoolClass.ALL_VALUES}"
-										var="class" itemValue="#{class}"
-										itemLabel="#{converterBean.convertEnum(class)}" />
-									<p:ajax event="change" update="@(.userTypeOutput)"
-										process="@this" />
-								</p:selectOneMenu>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column>
-								<p:outputLabel id="rankOutputLabel" for="rankInputText"
-									value="#{msg['lucas.application.userScreen.editUserDialog.rankInputText.name']}"
-									title="#{msg['lucas.application.userScreen.editUserDialog.rankInputText.tooltip']}" />
-							</p:column>
-							<p:column colspan="2">
-								<p:message id="rankInputMessage"
-									for="editUserDialogForm:rankInputText" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:inputText id="rankInputText"
-									value="#{userBean.editUserDialogTmpRank}"
-									title="#{msg['lucas.application.userScreen.editUserDialog.rankInputText.tooltip']}" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column>
-								<p:commandButton
-									value="#{msg['lucas.application.userScreen.editUserDialog.addRankButton.name']}"
-									title="#{msg['lucas.application.userScreen.editUserDialog.addRankButton.tooltip']}"
-									process="rankInputText @this"
-									update="editUserDialogForm:ranksDataList rankOutputLabel rankInputText rankInputMessage"
-									action="#{userBean.resetEditUserDialogTmpRank}">
-									<p:collector value="#{userBean.editUserDialogTmpRank}"
-										addTo="#{userBean.editUserDialogRanks}" unique="true" />
-								</p:commandButton>
-							</p:column>
-							<p:column>
-								<p:commandButton
-									value="#{msg['lucas.application.userScreen.editUserDialog.editRankButton.name']}"
-									title="#{msg['lucas.application.userScreen.editUserDialog.editRankButton.tooltip']}"
-									action="#{userBean.editEditUserDialogSelectedRank}"
-									process="editUserDialogForm:ranksDataList @this"
-									update="editUserDialogForm:ranksDataList editUserDialogForm:rankInputText" />
-							</p:column>
-							<p:column>
-								<p:commandButton
-									value="#{msg['lucas.application.userScreen.editUserDialog.removeRankButton.name']}"
-									title="#{msg['lucas.application.userScreen.editUserDialog.removeRankButton.tooltip']}"
-									process="editUserDialogForm:ranksDataList @this"
-									update="editUserDialogForm:ranksDataList">
-									<p:collector removeFrom="#{userBean.editUserDialogRanks}"
-										value="#{userBean.editUserDialogSelectedRank}" />
-								</p:commandButton>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:selectOneListbox id="ranksDataList" var="rank"
-									value="#{userBean.editUserDialogSelectedRank}"
-									style="min-height:100px">
-									<f:selectItems value="#{userBean.editUserDialogRanks}" />
-									<p:column>
-										<h:outputText value="#{rank}" />
-									</p:column>
-								</p:selectOneListbox>
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:inputText readonly="true"
-									placeholder="#{msg['lucas.application.userScreen.editUserDialog.userTypeDisplayInputText.name']}#{converterBean.convertEnum(userBean.computeUserType())}"
-									styleClass="userTypeOutput"
-									title="#{msg['lucas.application.userScreen.editUserDialog.userTypeDisplayInputText.tooltip']}" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column>
-								<p:commandButton
-									process="@this forenameInputText surnameInputText schoolClassSelectOneMenu ranksDataList"
-									update="@form dataAccorditionPanel:userSearchResultsForm:userSearchResultsTable @(.toolbar)"
-									action="#{userBean.editUser}"
-									value="#{msg['lucas.application.userScreen.editUserDialog.saveChangesButton.name']}"
-									title="#{msg['lucas.application.userScreen.editUserDialog.saveChangesButton.tooltip']}"
-									oncomplete="if (args &amp;&amp; !args.validationFailed){PF('editUserDialog').hide()}" />
-							</p:column>
-							<p:column />
-							<p:column>
-								<p:commandButton
-									value="#{msg['lucas.application.userScreen.editUserDialog.cancelButton.name']}"
-									title="#{msg['lucas.application.userScreen.editUserDialog.cancelButton.tooltip']}"
-									oncomplete="PF('editUserDialog').hide()">
-								</p:commandButton>
-							</p:column>
-						</p:row>
-					</p:panelGrid>
-				</div>
-			</h:form>
-		</p:dialog>
+						</p:selectOneListbox>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputText readonly="true"
+							placeholder="#{msg['lucas.application.userScreen.editUserDialog.userTypeDisplayInputText.name']}#{converterBean.convertEnum(userBean.computeUserType())}"
+							styleClass="userTypeOutput"
+							title="#{msg['lucas.application.userScreen.editUserDialog.userTypeDisplayInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this forenameInputText surnameInputText schoolClassSelectOneMenu ranksDataList"
+							update="@form dataAccorditionPanel:userSearchResultsForm:userSearchResultsTable @(.toolbar)"
+							action="#{userBean.editUser}"
+							value="#{msg['lucas.application.userScreen.editUserDialog.saveChangesButton.name']}"
+							title="#{msg['lucas.application.userScreen.editUserDialog.saveChangesButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('editUserDialog').hide()}" />
+					</p:column>
+					<p:column />
+					<p:column>
+						<p:commandButton process="@this" immediate="true"
+							value="#{msg['lucas.application.userScreen.editUserDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.userScreen.editUserDialog.cancelButton.tooltip']}"
+							oncomplete="PF('editUserDialog').hide()">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
 	</ui:define>
 </ui:composition>

@@ -4,59 +4,58 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.userScreen.createGuestDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="createGuestDialog" />
+	<ui:param name="formId" value="createGuestDialogForm" />
 	<ui:define name="dialogContent">
-		<p:dialog id="createGuestDialog"
-			header="#{msg['lucas.application.userScreen.createGuestDialog.title']}"
-			closable="false" draggable="false" dynamic="true" resizable="false"
-			responsive="true" modal="true" widgetVar="createGuestDialog">
-			<h:form id="createGuestDialogForm">
-				<div class="ui-fluid">
-					<p:panelGrid>
-						<p:row>
-							<p:column>
-								<p:outputLabel
-									value="#{msg['lucas.application.userScreen.createGuestDialog.guestCountInputNumber.name']}"
-									title="#{msg['lucas.application.userScreen.createGuestDialog.guestCountInputNumber.tooltip']}"
-									for="guestCountInputNumber" />
-							</p:column>
-							<p:column colspan="2">
-								<p:message for="guestCountInputNumber" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column colspan="3">
-								<p:inputNumber id="guestCountInputNumber"
-									value="#{userBean.createGuestDialogGuestCount}"
-									title="#{msg['lucas.application.userScreen.createGuestDialog.guestCountInputNumber.tooltip']}"
-									minValue="1" maxValue="250" decimalPlaces="0" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<p:column>
-								<p:commandButton process="@this guestCountInputNumber"
-									id="createGuestButton" update="@form"
-									action="#{userBean.createGuests}"
-									value="#{msg['lucas.application.userScreen.createGuestDialog.createGuestButton.name']}"
-									title="#{msg['lucas.application.userScreen.createGuestDialog.createGuestButton.tooltip']}"
-									oncomplete="if (args &amp;&amp; !args.validationFailed){PF('createGuestDialog').hide()}" />
-							</p:column>
-							<p:column />
-							<p:column>
-								<p:commandButton
-									value="#{msg['lucas.application.userScreen.createGuestDialog.cancelButton.name']}"
-									title="#{msg['lucas.application.userScreen.createGuestDialog.cancelButton.tooltip']}"
-									oncomplete="PF('createGuestDialog').hide()">
-								</p:commandButton>
-								<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
-									<ui:param name="block" value="createGuestDialogForm" />
-									<ui:param name="trigger"
-										value="createGuestDialogForm:createGuestButton" />
-								</ui:include>
-							</p:column>
-						</p:row>
-					</p:panelGrid>
-				</div>
-			</h:form>
-		</p:dialog>
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.userScreen.createGuestDialog.guestCountInputNumber.name']}"
+							title="#{msg['lucas.application.userScreen.createGuestDialog.guestCountInputNumber.tooltip']}"
+							for="guestCountInputNumber" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="guestCountInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputNumber id="guestCountInputNumber"
+							value="#{userBean.createGuestDialogGuestCount}"
+							title="#{msg['lucas.application.userScreen.createGuestDialog.guestCountInputNumber.tooltip']}"
+							minValue="1" maxValue="250" decimalPlaces="0" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton process="@this guestCountInputNumber"
+							id="createGuestButton" update="@form"
+							action="#{userBean.createGuests}"
+							value="#{msg['lucas.application.userScreen.createGuestDialog.createGuestButton.name']}"
+							title="#{msg['lucas.application.userScreen.createGuestDialog.createGuestButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('createGuestDialog').hide()}" />
+					</p:column>
+					<p:column />
+					<p:column>
+						<p:commandButton process="@this"
+							value="#{msg['lucas.application.userScreen.createGuestDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.userScreen.createGuestDialog.cancelButton.tooltip']}"
+							oncomplete="PF('createGuestDialog').hide()" immediate="true">
+						</p:commandButton>
+						<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
+							<ui:param name="block" value="createGuestDialogForm" />
+							<ui:param name="trigger"
+								value="createGuestDialogForm:createGuestButton" />
+						</ui:include>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
 	</ui:define>
 </ui:composition>

@@ -73,7 +73,7 @@
 			<p:commandButton
 				value="#{msg['lucas.application.userScreen.editUserButton.name']}"
 				title="#{msg['lucas.application.userScreen.editUserButton.tooltip']}"
-				update="editUserDialogForm" process="@this"
+				update="editUserDialog" process="@this"
 				action="#{userBean.initEditUserDialog}"
 				oncomplete="PF('editUserDialog').show()" icon="fa fa-edit"
 				disabled="#{userBean.selectedUsers.size() != 1}" />

@@ -82,5 +82,9 @@
 }
 
 .ui-accordion .ui-accordion-header {
-	margin-top: 5px!important;
+	margin-top: 5px !important;
+}
+
+.width50Percent {
+	width: 50%!important;
 }

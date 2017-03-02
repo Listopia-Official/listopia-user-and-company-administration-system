@@ -3,5 +3,12 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
-	<ui:insert name="dialogContent" />
+	<p:dialog id="#{widgetVar}" header="#{msg[dialogTitleKey]}"
+		closable="#{closeable}" draggable="false" dynamic="#{dynamic}"
+		widgetVar="#{widgetVar}" resizable="false" responsive="true"
+		modal="true" styleClass="#{styleClass}">
+		<h:form id="#{formId}">
+			<ui:insert name="dialogContent" />
+		</h:form>
+	</p:dialog>
 </ui:composition>

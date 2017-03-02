@@ -4,170 +4,168 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.userScreen.userCardManagerDialog.title" />
+	<ui:param name="closeable" value="true" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="userCardManagerDialog" />
+	<ui:param name="formId" value="userCardManagerDialogForm" />
+	<ui:param name="styleClass" value="width50Percent" />
 	<ui:define name="dialogContent">
-		<p:dialog id="userCardManagerDialog"
-			header="#{msg['lucas.application.userScreen.userCardManagerDialog.title']}"
-			closable="true" draggable="false" dynamic="true" resizable="false"
-			modal="true" widgetVar="userCardManagerDialog" width="50%">
-			<h:form id="userCardManagerDialogForm">
-				<h:outputText
-					value="#{userBean.userCardManagerDialogUserCards.size()} "
-					style="font-weight:bold" />
-				<h:outputText
-					value="#{msg['lucas.application.userScreen.userCardManagerDialog.header']}"
-					style="font-weight:bold" />
-				<h:outputText value="#{userBean.userCardManagerDialogSelectedUser}"
-					style="font-weight:bold" converter="lucas:userStringConverter" />
-				<p:toolbar id="userCardManagerDialogToolbar" style="margin-top:5px"
-					styleClass="dialogToolbar">
-					<p:toolbarGroup align="left">
-						<p:commandButton
-							value="#{msg['lucas.application.userScreen.userCardManagerDialog.newUserCardButton.name']}"
-							title="#{msg['lucas.application.userScreen.userCardManagerDialog.newUserCardButton.tooltip']}"
-							icon="fa fa-plus"
-							action="#{userBean.userCardManagerDialogNewUserCard}"
-							update="@form" />
-						<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml"/>
-						<p:commandButton
-							value="#{msg['lucas.application.userScreen.userCardManagerDialog.blockUserCardButton.name']}"
-							title="#{msg['lucas.application.userScreen.userCardManagerDialog.blockUserCardButton.tooltip']}"
-							icon="fa fa-lock"
-							action="#{userBean.userCardManagerDialogBlockUserCards}"
-							update="@form"
-							disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
-						<p:commandButton
-							value="#{msg['lucas.application.userScreen.userCardManagerDialog.unblockUserCardButton.name']}"
-							title="#{msg['lucas.application.userScreen.userCardManagerDialog.unblockUserCardButton.tooltip']}"
-							icon="fa fa-unlock"
-							action="#{userBean.userCardManagerDialogUnblockUserCards}"
-							update="@form"
-							disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
-						<p:commandButton id="userCardManagerSetValidDayButton"
-							value="#{msg['lucas.application.userScreen.userCardManagerDialog.setValidDayButton.name']}"
-							title="#{msg['lucas.application.userScreen.userCardManagerDialog.setValidDayButton.tooltip']}"
-							icon="fa fa-calendar"
-							action="#{userBean.initUserCardManagerDialogSetValidDayOverlay}"
-							update="validDayCalendar"
-							disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
-						<p:overlayPanel for="userCardManagerSetValidDayButton"
-							widgetVar="calendarOverlayPanel" showCloseIcon="true"
-							modal="true" appendToBody="true">
-							<div class="ui-fluid">
-								<p:panelGrid>
-									<p:row>
-										<p:column colspan="2">
-											<p:calendar id="validDayCalendar"
-												value="#{userBean.userCardManagerDialogValidDate}"
-												mode="inline">
-												<p:ajax event="dateSelect" process="@this"
-													partialSubmit="true" />
-											</p:calendar>
-										</p:column>
-									</p:row>
-									<p:row>
-										<p:column>
-											<p:commandButton
-												value="#{msg['lucas.application.userScreen.userCardManagerDialog.selectOkValidDayButton.name']}"
-												title="#{msg['lucas.application.userScreen.userCardManagerDialog.selectOkValidDayButton.tooltip']}"
-												process="validDayCalendar @this" update="@form"
-												action="#{userBean.userCardManagerDialogSetValidDay}"
-												oncomplete="PF('calendarOverlayPanel').hide();" />
-										</p:column>
-										<p:column>
-											<p:commandButton
-												value="#{msg['lucas.application.userScreen.userCardManagerDialog.selectCancelValidDayButton.name']}"
-												title="#{msg['lucas.application.userScreen.userCardManagerDialog.selectCancelValidDayButton.tooltip']}"
-												oncomplete="PF('calendarOverlayPanel').hide();" />
-										</p:column>
-									</p:row>
-								</p:panelGrid>
-							</div>
-						</p:overlayPanel>
-						<p:commandButton
-							value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeValidDayButton.name']}"
-							title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeValidDayButton.tooltip']}"
-							action="#{userBean.userCardManagerDialogRemoveValidDay}"
-							icon="fa fa-calendar-o" update="@form"
-							disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
-						<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml"/>
-						<p:commandButton
-							value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardsButton.name']}"
-							title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardsButton.tooltip']}"
-							icon="fa fa-remove"
-							disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}"
-							actionListener="#{userBean.userCardManagerDialogRemoveUserCards}"
-							update="@form">
-							<p:confirm
-								header="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.header']}" />
-						</p:commandButton>
-						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-							<f:facet name="message">
-								<h:outputText
-									value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.message']}" />
-							</f:facet>
-							<p:commandButton
-								value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.yesButton.name']}"
-								type="button"
-								title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.yesButton.tooltip']}"
-								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-							<p:commandButton
-								value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.noButton.name']}"
-								type="button"
-								title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.noButton.tooltip']}"
-								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-						</p:confirmDialog>
-					</p:toolbarGroup>
-					<p:toolbarGroup align="right">
-						<p:commandButton icon="fa fa-refresh"
-							id="userCardManagerRefreshTableButton"
-							update="userCardManagerDialogUserCardTable"
-							disabled="#{userBean.userCardManagerDialogUserCards.size() &lt;= 0}"
-							title="#{msg['lucas.application.userScreen.userCardManagerDialog.refreshTableButton.tooltip']}"
-							action="#{userBean.userCardManagerDialogRefreshUserCards}" />
-						<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
-							<ui:param name="block" value="userCardManagerDialogUserCardTable" />
-							<ui:param name="trigger"
-								value="userCardManagerRefreshTableButton" />
-						</ui:include>
-					</p:toolbarGroup>
-				</p:toolbar>
-				<p:messages for="userCardManagerDialogMessages" showDetail="true"
-					showIcon="true" showSummary="true" closable="true"
-					autoUpdate="true" />
-				<p:dataTable id="userCardManagerDialogUserCardTable"
-					selection="#{userBean.userCardManagerDialogSelectedUserCards}"
-					style="margin-top:5px;max-height:350px" resizableColumns="true"
-					liveResize="true"
-					value="#{userBean.userCardManagerDialogUserCards}" var="userCard"
-					rowKey="#{userCard.id}" draggableColumns="true" rowSelectMode="add"
-					emptyMessage="#{msg['lucas.application.userScreen.userCardManagerDialog.noResults']}">
-					<p:ajax event="toggleSelect" update="@(.dialogToolbar)" />
-					<p:ajax event="rowUnselectCheckbox" update="@(.dialogToolbar)" />
-					<p:ajax event="rowSelectCheckbox" update="@(.dialogToolbar)" />
-					<p:ajax event="rowUnselect" update="@(.dialogToolbar)" />
-					<p:ajax event="rowSelect" update="@(.dialogToolbar)" />
-					<p:column selectionMode="multiple"
-						style="width:16px;text-align:center" exportable="false" />
-					<p:column
-						headerText="#{msg['lucas.application.userScreen.userCardManagerDialog.idHeader']}">
-						<h:outputText value="#{userCard.id}" />
-					</p:column>
-					<p:column
-						headerText="#{msg['lucas.application.userScreen.userCardManagerDialog.blockedHeader']}">
-						<h:outputText value="#{userCard.blocked}" />
-					</p:column>
-					<p:column
-						headerText="#{msg['lucas.application.userScreen.userCardManagerDialog.validDayHeader']}">
-						<h:outputText value="#{userCard.validDay}" />
-					</p:column>
-				</p:dataTable>
-				<p:separator />
-				<p:commandButton style="float:right"
-					value="#{msg['lucas.application.userScreen.userCardManagerDialog.closeButton.name']}"
-					title="#{msg['lucas.application.userScreen.userCardManagerDialog.closeButton.tooltip']}"
-					oncomplete="PF('userCardManagerDialog').hide()">
+		<h:outputText
+			value="#{userBean.userCardManagerDialogUserCards.size()} "
+			style="font-weight:bold" />
+		<h:outputText
+			value="#{msg['lucas.application.userScreen.userCardManagerDialog.header']}"
+			style="font-weight:bold" />
+		<h:outputText value="#{userBean.userCardManagerDialogSelectedUser}"
+			style="font-weight:bold" converter="lucas:userStringConverter" />
+		<p:toolbar id="userCardManagerDialogToolbar" style="margin-top:5px"
+			styleClass="dialogToolbar">
+			<p:toolbarGroup align="left">
+				<p:commandButton
+					value="#{msg['lucas.application.userScreen.userCardManagerDialog.newUserCardButton.name']}"
+					title="#{msg['lucas.application.userScreen.userCardManagerDialog.newUserCardButton.tooltip']}"
+					icon="fa fa-plus"
+					action="#{userBean.userCardManagerDialogNewUserCard}"
+					update="@form" />
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+				<p:commandButton
+					value="#{msg['lucas.application.userScreen.userCardManagerDialog.blockUserCardButton.name']}"
+					title="#{msg['lucas.application.userScreen.userCardManagerDialog.blockUserCardButton.tooltip']}"
+					icon="fa fa-lock"
+					action="#{userBean.userCardManagerDialogBlockUserCards}"
+					update="@form"
+					disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
+				<p:commandButton
+					value="#{msg['lucas.application.userScreen.userCardManagerDialog.unblockUserCardButton.name']}"
+					title="#{msg['lucas.application.userScreen.userCardManagerDialog.unblockUserCardButton.tooltip']}"
+					icon="fa fa-unlock"
+					action="#{userBean.userCardManagerDialogUnblockUserCards}"
+					update="@form"
+					disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
+				<p:commandButton id="userCardManagerSetValidDayButton"
+					value="#{msg['lucas.application.userScreen.userCardManagerDialog.setValidDayButton.name']}"
+					title="#{msg['lucas.application.userScreen.userCardManagerDialog.setValidDayButton.tooltip']}"
+					icon="fa fa-calendar"
+					action="#{userBean.initUserCardManagerDialogSetValidDayOverlay}"
+					update="validDayCalendar"
+					disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
+				<p:overlayPanel for="userCardManagerSetValidDayButton"
+					widgetVar="calendarOverlayPanel" showCloseIcon="true" modal="true"
+					appendToBody="true">
+					<div class="ui-fluid">
+						<p:panelGrid>
+							<p:row>
+								<p:column colspan="2">
+									<p:calendar id="validDayCalendar"
+										value="#{userBean.userCardManagerDialogValidDate}"
+										mode="inline">
+										<p:ajax event="dateSelect" process="@this"
+											partialSubmit="true" />
+									</p:calendar>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<p:commandButton
+										value="#{msg['lucas.application.userScreen.userCardManagerDialog.selectOkValidDayButton.name']}"
+										title="#{msg['lucas.application.userScreen.userCardManagerDialog.selectOkValidDayButton.tooltip']}"
+										process="validDayCalendar @this" update="@form"
+										action="#{userBean.userCardManagerDialogSetValidDay}"
+										oncomplete="PF('calendarOverlayPanel').hide();" />
+								</p:column>
+								<p:column>
+									<p:commandButton
+										value="#{msg['lucas.application.userScreen.userCardManagerDialog.selectCancelValidDayButton.name']}"
+										title="#{msg['lucas.application.userScreen.userCardManagerDialog.selectCancelValidDayButton.tooltip']}"
+										oncomplete="PF('calendarOverlayPanel').hide();" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</div>
+				</p:overlayPanel>
+				<p:commandButton
+					value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeValidDayButton.name']}"
+					title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeValidDayButton.tooltip']}"
+					action="#{userBean.userCardManagerDialogRemoveValidDay}"
+					icon="fa fa-calendar-o" update="@form"
+					disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+				<p:commandButton
+					value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardsButton.name']}"
+					title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardsButton.tooltip']}"
+					icon="fa fa-remove"
+					disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}"
+					actionListener="#{userBean.userCardManagerDialogRemoveUserCards}"
+					update="@form">
+					<p:confirm
+						header="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.header']}" />
 				</p:commandButton>
-			</h:form>
-		</p:dialog>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<f:facet name="message">
+						<h:outputText
+							value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.message']}" />
+					</f:facet>
+					<p:commandButton
+						value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.yesButton.name']}"
+						type="button"
+						title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.yesButton.tooltip']}"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton
+						value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.noButton.name']}"
+						type="button"
+						title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.noButton.tooltip']}"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</p:toolbarGroup>
+			<p:toolbarGroup align="right">
+				<p:commandButton icon="fa fa-refresh"
+					id="userCardManagerRefreshTableButton"
+					update="userCardManagerDialogUserCardTable"
+					disabled="#{userBean.userCardManagerDialogUserCards.size() &lt;= 0}"
+					title="#{msg['lucas.application.userScreen.userCardManagerDialog.refreshTableButton.tooltip']}"
+					action="#{userBean.userCardManagerDialogRefreshUserCards}" />
+				<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
+					<ui:param name="block" value="userCardManagerDialogUserCardTable" />
+					<ui:param name="trigger" value="userCardManagerRefreshTableButton" />
+				</ui:include>
+			</p:toolbarGroup>
+		</p:toolbar>
+		<p:messages for="userCardManagerDialogMessages" showDetail="true"
+			showIcon="true" showSummary="true" closable="true" autoUpdate="true" />
+		<p:dataTable id="userCardManagerDialogUserCardTable"
+			selection="#{userBean.userCardManagerDialogSelectedUserCards}"
+			style="margin-top:5px;max-height:350px" resizableColumns="true"
+			liveResize="true" value="#{userBean.userCardManagerDialogUserCards}"
+			var="userCard" rowKey="#{userCard.id}" draggableColumns="true"
+			rowSelectMode="add"
+			emptyMessage="#{msg['lucas.application.userScreen.userCardManagerDialog.noResults']}">
+			<p:ajax event="toggleSelect" update="@(.dialogToolbar)" />
+			<p:ajax event="rowUnselectCheckbox" update="@(.dialogToolbar)" />
+			<p:ajax event="rowSelectCheckbox" update="@(.dialogToolbar)" />
+			<p:ajax event="rowUnselect" update="@(.dialogToolbar)" />
+			<p:ajax event="rowSelect" update="@(.dialogToolbar)" />
+			<p:column selectionMode="multiple"
+				style="width:16px;text-align:center" exportable="false" />
+			<p:column
+				headerText="#{msg['lucas.application.userScreen.userCardManagerDialog.idHeader']}">
+				<h:outputText value="#{userCard.id}" />
+			</p:column>
+			<p:column
+				headerText="#{msg['lucas.application.userScreen.userCardManagerDialog.blockedHeader']}">
+				<h:outputText value="#{userCard.blocked}" />
+			</p:column>
+			<p:column
+				headerText="#{msg['lucas.application.userScreen.userCardManagerDialog.validDayHeader']}">
+				<h:outputText value="#{userCard.validDay}" />
+			</p:column>
+		</p:dataTable>
+		<p:separator />
+		<p:commandButton style="float:right" process="@this"
+			value="#{msg['lucas.application.userScreen.userCardManagerDialog.closeButton.name']}"
+			title="#{msg['lucas.application.userScreen.userCardManagerDialog.closeButton.tooltip']}"
+			oncomplete="PF('userCardManagerDialog').hide()" immediate="true">
+		</p:commandButton>
 	</ui:define>
 </ui:composition>
