@@ -2,23 +2,18 @@ package florian_haas.lucas.util.converter;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.*;
+import javax.faces.convert.FacesConverter;
 
 import florian_haas.lucas.model.User;
 import florian_haas.lucas.util.WebUtils;
 
 @FacesConverter(value = "lucas:userStringConverter")
-public class UserConverter implements Converter {
+public class UserConverter extends ReadOnlyConverter {
 
 	public static final String PUPIL_KEY = "lucas.application.shortUserConverter.pupil";
 	public static final String TEACHER_KEY = "lucas.application.shortUserConverter.teacher";
 	public static final String GUEST_KEY = "lucas.application.shortUserConverter.guest";
 	public static final String NULL_KEY = "lucas.application.shortUserConverter.none";
-
-	@Override
-	public Object getAsObject(FacesContext context, UIComponent component, String value) {
-		throw new UnsupportedOperationException("getAsObject is not supported by" + this.getClass().getSimpleName());
-	}
 
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
