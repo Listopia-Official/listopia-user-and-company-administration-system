@@ -42,7 +42,7 @@ public class GlobalData extends EntityBase {
 
 	@Basic(optional = false)
 	@NotBlank
-	private String currencySymbol = "Gd";
+	private String currencySymbol = " Gd";
 
 	@Basic(optional = false)
 	@Min(1)
