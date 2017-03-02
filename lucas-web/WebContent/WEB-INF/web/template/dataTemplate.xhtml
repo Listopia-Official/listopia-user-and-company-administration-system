@@ -22,16 +22,68 @@
 						<h:outputText
 							value="#{msg['lucas.application.dataTemplate.searchCriteria.name']}" />
 					</f:facet>
-					<ui:insert name="searchCriteria" />
+					<div class="ui-fluid">
+						<h:form id="#{sitePrefix}SearchCriteriaForm">
+							<p:panelGrid>
+								<ui:insert name="searchCriteria" />
+								<p:row>
+									<p:column>
+										<p:commandButton
+											value="#{msg['lucas.application.'+=sitePrefix+='Screen.searchButton.name']}"
+											title="#{msg['lucas.application.'+=sitePrefix+='Screen.searchButton.tooltip']}"
+											styleClass="blockAllTrigger" icon="fa fa-search"
+											action="#{searchBean[searchFunction]}" process="@form"
+											update="@(.toolbar) dataAccorditionPanel" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</h:form>
+					</div>
 				</p:tab>
 				<p:tab>
 					<f:facet name="title">
 						<h:outputText styleClass="fa fa-database" />
 						<p:spacer width="5px" />
 						<h:outputText
-							value="#{msg['lucas.application.dataTemplate.searchResults.name1']}#{searchResults}#{msg['lucas.application.dataTemplate.searchResults.name2']}" />
+							value="#{msg['lucas.application.dataTemplate.searchResults.name1']}#{searchResults.size()}#{msg['lucas.application.dataTemplate.searchResults.name2']}" />
 					</f:facet>
-					<ui:insert name="searchResults" />
+					<h:form id="#{sitePrefix}SearchResultsForm">
+						<p:dataTable id="#{sitePrefix}SearchResultsTable"
+							styleClass="searchResults" resizableColumns="true"
+							liveResize="true" value="#{searchResults}" var="entity"
+							rowKey="#{entity.id}" selection="#{selectedResults}" rows="10"
+							draggableColumns="true" paginator="true"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {AdditionalComponents}"
+							currentPageReportTemplate="#{msg['lucas.application.dataTemplate.searchResults.currentPageReport1']} {currentPage} #{msg['lucas.application.dataTemplate.searchResults.currentPageReport2']} {totalPages}"
+							rowsPerPageTemplate="10,20,50,75,100,200,500,750,1000"
+							rowSelectMode="add" paginatorPosition="top"
+							emptyMessage="#{msg['lucas.application.dataTemplate.searchResults.noResults']}">
+							<f:facet name="{AdditionalComponents}">
+								<p:commandButton icon="fa fa-refresh"
+									styleClass="blockAllTrigger" update="@(.searchResults)"
+									disabled="#{searchResults.size() &lt;= 0}"
+									title="#{msg['lucas.application.dataTemplate.searchResults.refreshDataButton.tooltip']}"
+									action="#{searchBean[refreshFunction]}" />
+								<p:commandButton id="resultsTableColumnToggler" type="button"
+									style="float:right"
+									value="#{msg['lucas.application.dataTemplate.searchResults.resultsTableColumnToggler.name']}"
+									icon="fa fa-calculator"
+									title="#{msg['lucas.application.dataTemplate.searchResults.resultsTableColumnToggler.tooltip']}" />
+								<p:columnToggler datasource="#{sitePrefix}SearchResultsTable"
+									trigger="resultsTableColumnToggler">
+									<p:ajax event="toggle" listener="#{searchBean.onToggle}" />
+								</p:columnToggler>
+							</f:facet>
+							<p:ajax event="toggleSelect" update="@(.toolbar)" />
+							<p:ajax event="rowUnselectCheckbox" update="@(.toolbar)" />
+							<p:ajax event="rowSelectCheckbox" update="@(.toolbar)" />
+							<p:ajax event="rowUnselect" update="@(.toolbar)" />
+							<p:ajax event="rowSelect" update="@(.toolbar)" />
+							<p:column selectionMode="multiple" toggleable="false"
+								style="width:16px;text-align:center" exportable="false" />
+							<ui:insert name="searchResults" />
+						</p:dataTable>
+					</h:form>
 				</p:tab>
 			</p:accordionPanel>
 			<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
