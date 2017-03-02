@@ -27,9 +27,7 @@
 							icon="fa fa-plus"
 							action="#{userBean.userCardManagerDialogNewUserCard}"
 							update="@form" />
-						<span class="ui-separator"> <span
-							class="ui-icon ui-icon-grip-dotted-vertical" />
-						</span>
+						<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml"/>
 						<p:commandButton
 							value="#{msg['lucas.application.userScreen.userCardManagerDialog.blockUserCardButton.name']}"
 							title="#{msg['lucas.application.userScreen.userCardManagerDialog.blockUserCardButton.tooltip']}"
@@ -91,9 +89,7 @@
 							action="#{userBean.userCardManagerDialogRemoveValidDay}"
 							icon="fa fa-calendar-o" update="@form"
 							disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
-						<span class="ui-separator"> <span
-							class="ui-icon ui-icon-grip-dotted-vertical" />
-						</span>
+						<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml"/>
 						<p:commandButton
 							value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardsButton.name']}"
 							title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardsButton.tooltip']}"

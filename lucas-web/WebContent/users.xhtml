@@ -69,9 +69,7 @@
 					icon="fa fa-file-excel-o"
 					title="#{msg['lucas.application.userScreen.importTeachersButton.tooltip']}" />
 			</p:splitButton>
-			<span class="ui-separator"> <span
-				class="ui-icon ui-icon-grip-dotted-vertical" />
-			</span>
+			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 			<p:commandButton
 				value="#{msg['lucas.application.userScreen.editUserButton.name']}"
 				title="#{msg['lucas.application.userScreen.editUserButton.tooltip']}"
@@ -94,17 +92,13 @@
 				oncomplete="PF('userCardManagerDialog').show()"
 				icon="fa fa-credit-card"
 				disabled="#{userBean.selectedUsers.size() != 1}" />
-			<span class="ui-separator"> <span
-				class="ui-icon ui-icon-grip-dotted-vertical" />
-			</span>
+			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 			<p:commandButton
 				value="#{msg['lucas.application.userScreen.profileButton.name']}"
 				title="#{msg['lucas.application.userScreen.profileButton.tooltip']}"
 				icon="fa fa-info-circle"
 				disabled="#{userBean.selectedUsers.size() != 1}" />
-			<span class="ui-separator"> <span
-				class="ui-icon ui-icon-grip-dotted-vertical" />
-			</span>
+			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 			<p:commandButton icon="fa fa-user-times"
 				value="#{msg['lucas.application.userScreen.removeUserButton.name']}"
 				title="#{msg['lucas.application.userScreen.removeUserButton.tooltip']}"
