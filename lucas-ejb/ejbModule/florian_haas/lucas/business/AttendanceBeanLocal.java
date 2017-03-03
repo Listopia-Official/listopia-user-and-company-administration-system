@@ -5,7 +5,8 @@ import java.util.List;
 import javax.ejb.Local;
 import javax.validation.constraints.NotNull;
 
-import florian_haas.lucas.database.EnumQueryComparator;
+import florian_haas.lucas.database.*;
+import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.ValidEntityId;
 
@@ -26,7 +27,8 @@ public interface AttendanceBeanLocal {
 
 	public List<Attendancedata> findAttendancedata(@NotNull Long id, @NotNull Boolean isUserInState, @NotNull Long timePresentDay,
 			@NotNull Long validTimeMissing, @NotNull Boolean useId, @NotNull Boolean useIsUserInState, @NotNull Boolean useTimePresentDay,
-			@NotNull Boolean useVaidTimeMissing, EnumQueryComparator idComparator, EnumQueryComparator timePresentDayComparator,
-			EnumQueryComparator validTimeMissingComparator);
+			@NotNull Boolean useVaidTimeMissing, @QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator timePresentDayComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator validTimeMissingComparator);
 
 }

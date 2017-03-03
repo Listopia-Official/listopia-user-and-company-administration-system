@@ -6,7 +6,8 @@ import java.util.List;
 import javax.ejb.Local;
 import javax.validation.constraints.NotNull;
 
-import florian_haas.lucas.database.EnumQueryComparator;
+import florian_haas.lucas.database.*;
+import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.*;
 
@@ -37,7 +38,9 @@ public interface AccountBeanLocal {
 	public List<Account> findAccounts(@NotNull Long id, @NotNull Long ownerId, @NotNull EnumAccountOwnerType ownerType,
 			@NotNull BigDecimal bankBalance, @NotNull Boolean blocked, @NotNull Boolean isProtected, @NotNull Boolean useId, Boolean useOwnerId,
 			@NotNull Boolean useOwnerType, @NotNull Boolean useBankBalance, @NotNull Boolean useBlocked, @NotNull Boolean useIsProtected,
-			EnumQueryComparator idComparator, EnumQueryComparator ownerIdComparator, EnumQueryComparator ownerTypeComparator,
-			EnumQueryComparator bankBalanceComparator);
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator ownerIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator ownerTypeComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator bankBalanceComparator);
 
 }

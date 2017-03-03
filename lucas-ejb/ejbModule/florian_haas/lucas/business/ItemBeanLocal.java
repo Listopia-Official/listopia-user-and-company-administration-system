@@ -6,7 +6,8 @@ import java.util.*;
 import javax.ejb.Local;
 import javax.validation.constraints.*;
 
-import florian_haas.lucas.database.EnumQueryComparator;
+import florian_haas.lucas.database.*;
+import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.util.validation.*;
@@ -26,8 +27,12 @@ public interface ItemBeanLocal {
 
 	public List<Item> findItems(@NotNull Long id, @NotNull String name, @NotNull String description, @NotNull Integer itemsAvaible,
 			@NotNull BigDecimal pricePerItem, @NotNull Boolean useId, @NotNull Boolean useName, @NotNull Boolean useDescription,
-			@NotNull Boolean useItemsAvaible, @NotNull Boolean usePricePerItem, EnumQueryComparator idComparator, EnumQueryComparator nameComparator,
-			EnumQueryComparator descriptionComparator, EnumQueryComparator itemsAvaibleComparator, EnumQueryComparator pricePerItemComparator);
+			@NotNull Boolean useItemsAvaible, @NotNull Boolean usePricePerItem,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator nameComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator descriptionComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator itemsAvaibleComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator pricePerItemComparator);
 
 	public Boolean setName(@ValidEntityId(entityClass = Item.class) Long itemId, @NotNull @NotBlankString String name);
 

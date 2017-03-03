@@ -7,7 +7,8 @@ import java.util.List;
 import javax.ejb.Local;
 import javax.validation.constraints.*;
 
-import florian_haas.lucas.database.EnumQueryComparator;
+import florian_haas.lucas.database.*;
+import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.util.validation.*;
@@ -27,10 +28,15 @@ public interface CompanyBeanLocal {
 			@NotNull Integer section, @NotNull EnumCompanyType companyType, @NotNull Long parentCompanyId, @NotNull Integer requiredEmployeesCount,
 			@NotNull Boolean areEmployeesRequired, @NotNull Boolean useId, @NotNull Boolean useName, @NotNull Boolean useDescription,
 			@NotNull Boolean useRoom, @NotNull Boolean useSection, @NotNull Boolean useCompanyType, @NotNull Boolean useParentCompanyId,
-			@NotNull Boolean useRequiredEmployeesCount, @NotNull Boolean useAreEmployeesRequired, EnumQueryComparator idComparator,
-			EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator, EnumQueryComparator roomComparator,
-			EnumQueryComparator sectionComparator, EnumQueryComparator companyTypeComparator, EnumQueryComparator parentCompanyIdComparator,
-			EnumQueryComparator requiredEmployeesCountComparator);
+			@NotNull Boolean useRequiredEmployeesCount, @NotNull Boolean useAreEmployeesRequired,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator nameComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator descriptionComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator roomComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator sectionComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator companyTypeComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator parentCompanyIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator requiredEmployeesCountComparator);
 
 	public Boolean setName(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String name);
 

@@ -6,7 +6,8 @@ import java.util.*;
 import javax.ejb.Local;
 import javax.validation.constraints.NotNull;
 
-import florian_haas.lucas.database.EnumQueryComparator;
+import florian_haas.lucas.database.*;
+import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.util.validation.*;
@@ -31,8 +32,11 @@ public interface UserBeanLocal {
 	public List<User> findUsers(@NotNull Long userId, String forename, String surname, @NotNull List<@TypeNotNull EnumSchoolClass> schoolClasses,
 			@NotNull EnumUserType userType, List<@NotBlankString @TypeNotNull String> ranks, @NotNull Boolean useUserId, @NotNull Boolean useForename,
 			@NotNull Boolean useSurname, @NotNull Boolean useSchoolClass, @NotNull Boolean useUserType, @NotNull Boolean useRanks,
-			EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator, EnumQueryComparator surnameComparator,
-			EnumQueryComparator searchUserTypeComparator, EnumQueryComparator ranksComparator);
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator userIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator forenameComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator surnameComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator searchUserTypeComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.ARRAY) EnumQueryComparator ranksComparator);
 
 	public Boolean setForename(@ValidEntityId(entityClass = User.class) Long userId, @NotBlankString String forename);
 
