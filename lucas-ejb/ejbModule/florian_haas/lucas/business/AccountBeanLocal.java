@@ -37,6 +37,7 @@ public interface AccountBeanLocal {
 	public List<Account> findAccounts(@NotNull Long id, @NotNull Long ownerId, @NotNull EnumAccountOwnerType ownerType,
 			@NotNull BigDecimal bankBalance, @NotNull Boolean blocked, @NotNull Boolean isProtected, @NotNull Boolean useId, Boolean useOwnerId,
 			@NotNull Boolean useOwnerType, @NotNull Boolean useBankBalance, @NotNull Boolean useBlocked, @NotNull Boolean useIsProtected,
-			EnumQueryComparator idComparator, EnumQueryComparator ownerIdComparator, EnumQueryComparator bankBalanceComparator);
+			EnumQueryComparator idComparator, EnumQueryComparator ownerIdComparator, EnumQueryComparator ownerTypeComparator,
+			EnumQueryComparator bankBalanceComparator);
 
 }

@@ -8,6 +8,6 @@ import florian_haas.lucas.model.*;
 public interface AccountDAO extends ReadOnlyDAO<Account> {
 	public List<Account> findAccounts(Long id, Long ownerId, EnumAccountOwnerType ownerType, BigDecimal bankBalance, Boolean blocked,
 			Boolean isProtected, Boolean useId, Boolean useOwnerId, Boolean useOwnerType, Boolean useBankBalance, Boolean useBlocked,
-			Boolean useIsProtected, EnumQueryComparator idComparator, EnumQueryComparator ownerIdComparator,
+			Boolean useIsProtected, EnumQueryComparator idComparator, EnumQueryComparator ownerIdComparator, EnumQueryComparator ownerTypeComparator,
 			EnumQueryComparator bankBalanceComparator);
 }

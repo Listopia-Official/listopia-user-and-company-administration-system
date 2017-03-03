@@ -179,9 +179,9 @@ public class AccountBean implements AccountBeanLocal {
 	@RequiresPermissions(ACCOUNT_FIND_DYNAMIC)
 	public List<Account> findAccounts(Long id, Long ownerId, EnumAccountOwnerType ownerType, BigDecimal bankBalance, Boolean blocked,
 			Boolean isProtected, Boolean useId, Boolean useOwnerId, Boolean useOwnerType, Boolean useBankBalance, Boolean useBlocked,
-			Boolean useProtected, EnumQueryComparator idComparator, EnumQueryComparator ownerIdComparator,
+			Boolean useProtected, EnumQueryComparator idComparator, EnumQueryComparator ownerIdComparator, EnumQueryComparator ownerTypeComparator,
 			EnumQueryComparator bankBalanceComparator) {
 		return accountDao.findAccounts(id, ownerId, ownerType, bankBalance, blocked, isProtected, useId, useOwnerId, useOwnerType, useBankBalance,
-				useBlocked, useProtected, idComparator, ownerIdComparator, bankBalanceComparator);
+				useBlocked, useProtected, idComparator, ownerIdComparator, ownerTypeComparator, bankBalanceComparator);
 	}
 }
