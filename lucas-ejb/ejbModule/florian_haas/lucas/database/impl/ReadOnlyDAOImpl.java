@@ -74,7 +74,7 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 
 	public List<E> readOnlyCriteriaQuery(TriFunction<CriteriaQuery<E>, Root<E>, CriteriaBuilder, Predicate[]> restrictions) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
-		CriteriaQuery<E> query = builder.createQuery(entityClass);
+		CriteriaQuery<E> query = builder.createQuery(entityClass).distinct(true);
 		Root<E> root = query.from(entityClass);
 		query.select(root).where(restrictions.apply(query, root, builder));
 		return manager.createQuery(query).getResultList();
