@@ -3,10 +3,13 @@ package florian_haas.lucas.util;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.List;
 import java.util.function.*;
+import java.util.logging.*;
 
+import javax.enterprise.inject.spi.CDI;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -17,6 +20,7 @@ import org.apache.shiro.ShiroException;
 import org.primefaces.model.*;
 
 import florian_haas.lucas.model.EntityBase;
+import florian_haas.lucas.util.converter.CurrencyConverter;
 
 public class WebUtils {
 
@@ -211,6 +215,7 @@ public class WebUtils {
 					.accept(getTranslatedMessage(failMessageKey, params) + getTranslatedMessage("lucas.application.message.accessDenied"));
 		}
 		catch (Exception e3) {
+			Logger.getAnonymousLogger().log(Level.SEVERE, e3, e3::getMessage);
 			fatalMessageConsumer.accept(getTranslatedMessage(failMessageKey, params) + e3.getLocalizedMessage());
 		}
 		return success;
@@ -285,6 +290,11 @@ public class WebUtils {
 				selectedEntities.set(selectedEntities.indexOf(tmp), refreshed);
 			}
 		}
+	}
+
+	public static String getCurrencyAsString(BigDecimal currency) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		return CDI.current().select(CurrencyConverter.class).get().getAsString(context, UIComponent.getCurrentComponent(context), currency);
 	}
 
 }
