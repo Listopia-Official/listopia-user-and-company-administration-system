@@ -101,15 +101,15 @@ public class AccountBean implements AccountBeanLocal {
 
 		final LocalDateTime dateTime = LocalDateTime.now();
 		// TODO: User in Transactionlog
-		account1.getTransactionLogs()
-				.add(new TransactionLog(account1, dateTime, action, type, account2, transactionAmount, prevBankBalance1, null, comment));
+		account1.addTransactionLog(
+				new TransactionLog(account1, dateTime, action, type, account2, transactionAmount, prevBankBalance1, null, comment));
 
 		if (account2 != null) {
 			final BigDecimal prevBankBalance2 = account2.getBankBalance();
 			account2.setBankBalance(account2.getBankBalance().add(transactionAmount));
 			// TODO: User in Transactionlog
-			account2.getTransactionLogs().add(new TransactionLog(account2, dateTime, EnumAccountAction.CREDIT, EnumAccountActionType.TRANSACTION,
-					account1, transactionAmount, prevBankBalance2, null, comment));
+			account2.addTransactionLog(new TransactionLog(account2, dateTime, EnumAccountAction.CREDIT, EnumAccountActionType.TRANSACTION, account1,
+					transactionAmount, prevBankBalance2, null, comment));
 		}
 		accountDao.getEntityManager().flush();
 		return account1.getId();
