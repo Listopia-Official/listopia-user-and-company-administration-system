@@ -80,41 +80,47 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 		return manager.createQuery(query).getResultList();
 	}
 
-	@SuppressWarnings("unchecked")
-	protected final <T extends Comparable<? super T>> Predicate getSingularRestriction(SingularAttribute<? super E, T> attribute, T value,
+	@SuppressWarnings({
+			"unchecked", "hiding" })
+	protected final <T extends Comparable<? super T>, E extends EntityBase> Predicate getSingularRestriction(Expression<T> attribute, T value,
 			EnumQueryComparator comparator, CriteriaBuilder builder, Path<E> path) {
-		Expression<T> comparableExpression = path.get(attribute);
 
 		if (comparator == null) comparator = EnumQueryComparator.EQUAL;
 
 		switch (comparator) {
 			case EQUAL:
 				if (value instanceof BigDecimal) {
-					return builder.and(builder.not(builder.greaterThan(comparableExpression, value)),
-							builder.not(builder.lessThan(comparableExpression, value)));
+					return builder.and(builder.not(builder.greaterThan(attribute, value)), builder.not(builder.lessThan(attribute, value)));
 				} else {
-					return builder.equal(comparableExpression, value);
+					return builder.equal(attribute, value);
 				}
 			case GREATER_EQUAL:
-				return builder.greaterThanOrEqualTo(comparableExpression, value);
+				return builder.greaterThanOrEqualTo(attribute, value);
 			case GREATER_THAN:
-				return builder.greaterThan(comparableExpression, value);
+				return builder.greaterThan(attribute, value);
 			case LESS_EQUAL:
-				return builder.lessThanOrEqualTo(comparableExpression, value);
+				return builder.lessThanOrEqualTo(attribute, value);
 			case LESS_THAN:
-				return builder.lessThan(comparableExpression, value);
+				return builder.lessThan(attribute, value);
 			case NOT_EQUAL:
-				return builder.notEqual(comparableExpression, value);
+				return builder.notEqual(attribute, value);
 			case LIKE:
-				if (value instanceof String) { return builder.like((Expression<String>) (Expression<?>) comparableExpression, (String) value); }
+				if (value instanceof String) { return builder.like((Expression<String>) (Expression<?>) attribute, (String) value); }
 			case NOT_LIKE:
-				if (value instanceof String) { return builder.notLike((Expression<String>) (Expression<?>) comparableExpression, (String) value); }
+				if (value instanceof String) { return builder.notLike((Expression<String>) (Expression<?>) attribute, (String) value); }
 			default:
 				return null;
 		}
 	}
 
-	protected final <T extends Comparable<? super T>> void getSingularRestriction(SingularAttribute<? super E, T> attribute, T value,
+	@SuppressWarnings("hiding")
+	protected final <T extends Comparable<? super T>, E extends EntityBase> Predicate getSingularRestriction(
+			SingularAttribute<? super E, T> attribute, T value, EnumQueryComparator comparator, CriteriaBuilder builder, Path<E> path) {
+		return getSingularRestriction(path.get(attribute), value, comparator, builder, path);
+	}
+
+	@SuppressWarnings("hiding")
+	protected final <T extends Comparable<? super T>, E extends EntityBase> void getSingularRestriction(Expression<T> attribute, T value,
 			Boolean useValue, EnumQueryComparator comparator, List<Predicate> list, CriteriaBuilder builder, Path<E> path) {
 		if (useValue) {
 			Predicate val = getSingularRestriction(attribute, value, comparator, builder, path);
@@ -124,7 +130,14 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 		}
 	}
 
-	protected final <T extends Comparable<? super T>> Predicate getSingularRestrictionCollection(SingularAttribute<? super E, T> attribute,
+	@SuppressWarnings("hiding")
+	protected final <T extends Comparable<? super T>, E extends EntityBase> void getSingularRestriction(SingularAttribute<? super E, T> attribute,
+			T value, Boolean useValue, EnumQueryComparator comparator, List<Predicate> list, CriteriaBuilder builder, Path<E> path) {
+		getSingularRestriction(path.get(attribute), value, useValue, comparator, list, builder, path);
+	}
+
+	@SuppressWarnings("hiding")
+	protected final <T extends Comparable<? super T>, E extends EntityBase> Predicate getSingularRestrictionCollection(Expression<T> attribute,
 			List<T> values, EnumQueryComparator comparator, CriteriaBuilder builder, Path<E> path) {
 		Predicate[] predicates = new Predicate[values.size()];
 		for (int i = 0; i < values.size(); i++) {
@@ -133,8 +146,16 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 		return builder.or(predicates);
 	}
 
-	protected final <T extends Comparable<? super T>> void getSingularRestrictionCollection(SingularAttribute<? super E, T> attribute, List<T> values,
-			Boolean useValue, EnumQueryComparator comparator, List<Predicate> list, CriteriaBuilder builder, Path<E> path) {
+	@SuppressWarnings("hiding")
+	protected final <T extends Comparable<? super T>, E extends EntityBase> Predicate getSingularRestrictionCollection(
+			SingularAttribute<? super E, T> attribute, List<T> values, EnumQueryComparator comparator, CriteriaBuilder builder, Path<E> path) {
+		return getSingularRestrictionCollection(path.get(attribute), values, comparator, builder, path);
+	}
+
+	@SuppressWarnings("hiding")
+	protected final <T extends Comparable<? super T>, E extends EntityBase> void getSingularRestrictionCollection(
+			SingularAttribute<? super E, T> attribute, List<T> values, Boolean useValue, EnumQueryComparator comparator, List<Predicate> list,
+			CriteriaBuilder builder, Path<E> path) {
 		if (useValue) list.add(getSingularRestrictionCollection(attribute, values, comparator, builder, path));
 
 	}
