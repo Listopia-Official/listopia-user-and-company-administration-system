@@ -70,7 +70,7 @@
 									title="#{msg['lucas.application.dataTemplate.searchResults.refreshDataButton.tooltip']}"
 									action="#{searchBean[refreshFunction]}" />
 								<p:commandButton id="resultsTableColumnToggler" type="button"
-									style="float:right"
+									style="float:right" disabled="#{searchResults.size() &lt;= 0}"
 									value="#{msg['lucas.application.dataTemplate.searchResults.resultsTableColumnToggler.name']}"
 									icon="fa fa-calculator"
 									title="#{msg['lucas.application.dataTemplate.searchResults.resultsTableColumnToggler.tooltip']}" />
