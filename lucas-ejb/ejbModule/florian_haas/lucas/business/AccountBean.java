@@ -43,6 +43,9 @@ public class AccountBean implements AccountBeanLocal {
 	@Resource
 	private Validator validator;
 
+	@EJB
+	private EntityBeanLocal entityBean;
+
 	@Override
 	@RequiresPermissions(ACCOUNT_PAY_IN)
 
@@ -104,16 +107,28 @@ public class AccountBean implements AccountBeanLocal {
 		transactionAmount = transactionAmount.abs();
 
 		final LocalDateTime dateTime = LocalDateTime.now();
-		// TODO: User in Transactionlog
+		User user = null;
+		try {
+			Long userId = Long.valueOf(loginBean.getSubject().getPrincipal().toString());
+			if (userId != null) {
+				if (entityBean.exists(userId, User.class)) {
+					LoginUser tmp = loginBean.findLoginUserById(userId);
+					if (tmp != null) {
+						user = tmp.getUser();
+					}
+				}
+			}
+		}
+		catch (NumberFormatException e) {}
 		account1.addTransactionLog(
-				new TransactionLog(account1, dateTime, action, type, account2, transactionAmount, prevBankBalance1, null, comment));
+				new TransactionLog(account1, dateTime, action, type, account2, transactionAmount, prevBankBalance1, user, comment));
 
 		if (account2 != null) {
 			final BigDecimal prevBankBalance2 = account2.getBankBalance();
 			account2.setBankBalance(account2.getBankBalance().add(transactionAmount));
-			// TODO: User in Transactionlog
+
 			account2.addTransactionLog(new TransactionLog(account2, dateTime, EnumAccountAction.CREDIT, EnumAccountActionType.TRANSACTION, account1,
-					transactionAmount, prevBankBalance2, null, comment));
+					transactionAmount, prevBankBalance2, user, comment));
 		}
 		accountDao.getEntityManager().flush();
 		return account1.getId();
