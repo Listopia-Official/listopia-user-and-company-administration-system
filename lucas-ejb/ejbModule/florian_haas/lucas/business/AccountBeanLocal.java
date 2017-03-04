@@ -43,4 +43,6 @@ public interface AccountBeanLocal {
 			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator ownerTypeComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator bankBalanceComparator);
 
+	public AccountOwner findAccountOwnerById(@ValidEntityId(entityClass = AccountOwner.class) Long id);
+
 }

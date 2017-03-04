@@ -16,7 +16,7 @@ import org.apache.shiro.authz.AuthorizationException;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.UnblockedAccountRequiredValidationGroup;
+import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.*;
 import florian_haas.lucas.util.Utils;
 
@@ -29,6 +29,10 @@ public class AccountBean implements AccountBeanLocal {
 	@Inject
 	@JPADAO
 	private AccountDAO accountDao;
+
+	@Inject
+	@JPADAO
+	private AccountOwnerDAO accountOwnerDao;
 
 	@EJB
 	private GlobalDataBeanLocal globalData;
@@ -183,5 +187,11 @@ public class AccountBean implements AccountBeanLocal {
 			EnumQueryComparator bankBalanceComparator) {
 		return accountDao.findAccounts(id, ownerId, ownerType, bankBalance, blocked, isProtected, useId, useOwnerId, useOwnerType, useBankBalance,
 				useBlocked, useProtected, idComparator, ownerIdComparator, ownerTypeComparator, bankBalanceComparator);
+	}
+
+	@Override
+	@RequiresPermissions(ACCOUNT_FIND_ACCOUNT_OWNER)
+	public AccountOwner findAccountOwnerById(@ValidEntityId(entityClass = AccountOwner.class) Long id) {
+		return accountOwnerDao.findById(id);
 	}
 }
