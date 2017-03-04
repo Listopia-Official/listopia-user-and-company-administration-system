@@ -92,3 +92,11 @@
 .ui-tooltip .ui-state-error {
 	border: 0 none!important;
 }
+
+.credit {
+	background: rgba(12, 204, 101, 0.15) !important;
+}
+
+.debit {
+	background: rgba(239, 83, 80, 0.15) !important;
+}

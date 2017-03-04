@@ -1,0 +1,115 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.accountScreen.transactionLogDialog.title" />
+	<ui:param name="closeable" value="true" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="transactionLogDialog" />
+	<ui:param name="formId" value="transactionLogDialogForm" />
+	<ui:define name="dialogContent">
+		<h:outputText
+			value="#{accountBean.transactionLogsDialogTransactionLogs.size()} "
+			style="font-weight:bold" />
+		<h:outputText
+			value="#{msg['lucas.application.accountScreen.transactionLogDialog.header']}"
+			style="font-weight:bold" />
+		<h:outputText
+			value="#{accountBean.transactionLogDialogSelectedAccount.owner}"
+			style="font-weight:bold"
+			converter="lucas:accountOwnerStringConverter" />
+		<p:dataTable style="margin-top:5px;max-height:500px"
+			id="transactionLogsTable"
+			rowStyleClass="#{transactionLog.action == 'CREDIT' ? 'credit' : 'debit'}"
+			resizableColumns="true" liveResize="true"
+			value="#{accountBean.transactionLogsDialogTransactionLogs}"
+			var="transactionLog" rowKey="#{transactionLog.id}"
+			draggableColumns="true"
+			emptyMessage="#{msg['lucas.application.accountScreen.transactionLogDialog.noResults']}"
+			rows="10" paginator="true"
+			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {AdditionalComponents}"
+			currentPageReportTemplate="#{msg['lucas.application.accountScreen.transactionLogDialog.currentPageReport1']} {currentPage} #{msg['lucas.application.accountScreen.transactionLogDialog.currentPageReport2']} {totalPages}"
+			rowsPerPageTemplate="10,20,50,75,100,200,500,750,1000"
+			paginatorPosition="top">
+			<f:facet name="{AdditionalComponents}">
+				<p:commandButton id="columnToggler"
+					disabled="#{accountBean.transactionLogsDialogTransactionLogs.size() &lt;= 0}"
+					value="#{msg['lucas.application.accountScreen.transactionLogDialog.columnToggler.name']}"
+					icon="fa fa-calculator"
+					title="#{msg['lucas.application.accountScreen.transactionLogDialog.columnToggler.name']}" />
+				<p:columnToggler datasource="transactionLogsTable"
+					trigger="columnToggler">
+					<p:ajax event="toggle" update="@(column)"
+						listener="#{accountBean.transactionLogDialogOnToggle}" />
+				</p:columnToggler>
+			</f:facet>
+			<p:column
+				visible="#{accountBean.transactionLogsDialogDatatableColumns[0]}"
+				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.idHeader']}">
+				<h:outputText value="#{transactionLog.id}" />
+			</p:column>
+			<p:column
+				visible="#{accountBean.transactionLogsDialogDatatableColumns[1]}"
+				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.dateTimeHeader']}">
+				<h:outputText value="#{transactionLog.dateTime}" />
+			</p:column>
+			<p:column
+				visible="#{accountBean.transactionLogsDialogDatatableColumns[2]}"
+				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.actionHeader']}">
+				<h:outputText
+					value="#{converterBean.convertEnum(transactionLog.action)}" />
+			</p:column>
+			<p:column
+				visible="#{accountBean.transactionLogsDialogDatatableColumns[3]}"
+				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.actionTypeHeader']}">
+				<h:outputText
+					value="#{converterBean.convertEnum(transactionLog.actionType)}" />
+			</p:column>
+			<p:column
+				visible="#{accountBean.transactionLogsDialogDatatableColumns[4]}"
+				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.relatedAccount']}">
+				<h:outputText value="#{transactionLog.relatedAccount.owner}"
+					converter="lucas:accountOwnerStringConverter" />
+			</p:column>
+			<p:column
+				visible="#{accountBean.transactionLogsDialogDatatableColumns[5]}"
+				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.previousBankBalance']}">
+				<h:outputText value="#{transactionLog.previousBankBalance}"
+					converter="#{currencyConverter}" />
+			</p:column>
+			<p:column
+				visible="#{accountBean.transactionLogsDialogDatatableColumns[6]}"
+				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.amount']}">
+				<h:outputText value="#{transactionLog.amount}"
+					converter="#{currencyConverter}" />
+			</p:column>
+			<p:column
+				visible="#{accountBean.transactionLogsDialogDatatableColumns[7]}"
+				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.currentBankBalance']}">
+				<h:outputText value="#{transactionLog.currentBankBalance}"
+					converter="#{currencyConverter}" />
+			</p:column>
+			<p:column
+				visible="#{accountBean.transactionLogsDialogDatatableColumns[8]}"
+				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.comment']}">
+				<h:outputText value="#{transactionLog.comment}"
+					converter="lucas:NullStringConverter" />
+			</p:column>
+			<p:column
+				visible="#{accountBean.transactionLogsDialogDatatableColumns[9]}"
+				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.bankUser']}">
+				<h:outputText value="#{transactionLog.bankUser}"
+					converter="lucas:loginUserStringConverter" />
+			</p:column>
+		</p:dataTable>
+		<p:separator />
+		<p:commandButton style="float:right" process="@this"
+			value="#{msg['lucas.application.accountScreen.transactionLogDialog.closeButton.name']}"
+			title="#{msg['lucas.application.accountScreen.transactionLogDialog.closeButton.tooltip']}"
+			oncomplete="PF('transactionLogDialog').hide()" immediate="true">
+		</p:commandButton>
+	</ui:define>
+</ui:composition>

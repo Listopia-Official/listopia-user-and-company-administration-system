@@ -1,0 +1,74 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.accountScreen.payOutDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="payOutDialog" />
+	<ui:param name="formId" value="payOutDialogForm" />
+	<ui:define name="dialogContent">
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.accountScreen.payOutDialog.amountInputNumber.name']}"
+							title="#{msg['lucas.application.accountScreen.payOutDialog.amountInputNumber.tooltip']}"
+							for="amountInputNumber" />
+					</p:column>
+					<p:column>
+						<p:inputNumber id="amountInputNumber"
+							value="#{accountBean.payOutDialogTransactionAmount}"
+							title="#{msg['lucas.application.accountScreen.payOutDialog.amountInputNumber.tooltip']}"
+							minValue="0" symbol="#{accountBean.currencySymbol}"
+							maxValue="#{accountBean.transactionLimit}" symbolPosition="post"
+							emptyValue="zero" decimalPlaces="2" />
+					</p:column>
+					<p:column>
+						<p:message for="amountInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.accountScreen.payOutDialog.commentInputText.name']}"
+							title="#{msg['lucas.application.accountScreen.payOutDialog.commentInputText.tooltip']}"
+							for="commentInputText" />
+					</p:column>
+					<p:column>
+						<p:inputText id="commentInputText"
+							value="#{accountBean.payOutDialogComment}"
+							converter="lucas:nullStringConverterNoText" maxlength="64"
+							title="#{msg['lucas.application.accountScreen.payOutDialog.commentInputText.tooltip']}" />
+					</p:column>
+					<p:column>
+						<p:message for="commentInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this amountInputNumber commentInputText"
+							update="@form dataAccorditionPanel:accountSearchResultsForm:accountSearchResultsTable"
+							action="#{accountBean.payOut}"
+							value="#{msg['lucas.application.accountScreen.payOutDialog.payOutButton.name']}"
+							title="#{msg['lucas.application.accountScreen.payOutDialog.payOutButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('payOutDialog').hide()}" />
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this"
+							value="#{msg['lucas.application.accountScreen.payOutDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.accountScreen.payOutDialog.cancelButton.tooltip']}"
+							oncomplete="PF('payOutDialog').hide()" immediate="true">
+						</p:commandButton>
+					</p:column>
+					<p:column />
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

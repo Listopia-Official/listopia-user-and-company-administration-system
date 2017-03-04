@@ -1,0 +1,103 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.accountScreen.transactionDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="transactionDialog" />
+	<ui:param name="formId" value="transactionDialogForm" />
+	<ui:define name="dialogContent">
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.accountScreen.transactionDialog.amountInputNumber.name']}"
+							title="#{msg['lucas.application.accountScreen.transactionDialog.amountInputNumber.tooltip']}"
+							for="amountInputNumber" />
+					</p:column>
+					<p:column>
+						<p:inputNumber id="amountInputNumber"
+							value="#{accountBean.transactionDialogTransactionAmount}"
+							title="#{msg['lucas.application.accountScreen.transactionDialog.amountInputNumber.tooltip']}"
+							minValue="0" symbol="#{accountBean.currencySymbol}"
+							maxValue="#{accountBean.transactionLimit}" symbolPosition="post"
+							emptyValue="empty" decimalPlaces="2" />
+					</p:column>
+					<p:column>
+						<p:message for="amountInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.accountScreen.transactionDialog.toInputNumber.name']}"
+							title="#{msg['lucas.application.accountScreen.transactionDialog.toInputNumber.tooltip']}"
+							for="amountInputNumber" />
+					</p:column>
+					<p:column>
+						<p:inputNumber id="toInputNumber"
+							value="#{accountBean.transactionDialogToId}"
+							title="#{msg['lucas.application.accountScreen.transactionDialog.toInputNumber.tooltip']}"
+							minValue="0" emptyValue="zero" decimalPlaces="0">
+							<p:ajax event="keyup" delay="250" process="@this"
+								update="transactionDialogForm:toIdOutputInputText toInputNumberMessage @this" />
+						</p:inputNumber>
+					</p:column>
+					<p:column>
+						<p:message for="toInputNumber" id="toInputNumberMessage" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column />
+					<p:column>
+						<p:inputText title="#{accountBean.accountOwnerFromCurrentId}"
+							placeholder="#{accountBean.accountOwnerFromCurrentId}"
+							id="toIdOutputInputText" readonly="true" />
+					</p:column>
+					<p:column />
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.accountScreen.transactionDialog.commentInputText.name']}"
+							title="#{msg['lucas.application.accountScreen.transactionDialog.commentInputText.tooltip']}"
+							for="commentInputText" />
+					</p:column>
+					<p:column>
+						<p:inputText id="commentInputText"
+							value="#{accountBean.transactionDialogComment}"
+							converter="lucas:nullStringConverterNoText" maxlength="64"
+							title="#{msg['lucas.application.accountScreen.transactionDialog.commentInputText.tooltip']}" />
+					</p:column>
+					<p:column>
+						<p:message for="commentInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this amountInputNumber toInputNumber commentInputText"
+							update="@form dataAccorditionPanel:accountSearchResultsForm:accountSearchResultsTable"
+							action="#{accountBean.transaction}"
+							value="#{msg['lucas.application.accountScreen.transactionDialog.transactionButton.name']}"
+							title="#{msg['lucas.application.accountScreen.transactionDialog.transactionButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('transactionDialog').hide()}" />
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this"
+							value="#{msg['lucas.application.accountScreen.transactionDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.accountScreen.transactionDialog.cancelButton.tooltip']}"
+							oncomplete="PF('transactionDialog').hide()" immediate="true">
+						</p:commandButton>
+					</p:column>
+					<p:column />
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

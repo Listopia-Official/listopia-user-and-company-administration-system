@@ -1,0 +1,299 @@
+<ui:composition template="/WEB-INF/web/template/dataTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="pageTitle"
+		value="#{msg['lucas.application.accountScreen.title']}" />
+	<ui:param name="sitePrefix" value="account" />
+	<ui:param name="searchBean" value="#{accountBean}" />
+	<ui:param name="searchResults"
+		value="#{accountBean.searchAccountResults}" />
+	<ui:param name="selectedResults"
+		value="#{accountBean.selectedAccounts}" />
+	<ui:param name="searchFunction" value="searchAccounts" />
+	<ui:param name="refreshFunction" value="refreshAccounts" />
+	<ui:define name="dialogs">
+		<ui:include src="/WEB-INF/web/accounts/payInDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/accounts/payOutDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/accounts/transactionDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/accounts/transactionLogDialog.xhtml" />
+	</ui:define>
+	<ui:define name="otherContent">
+		<p:importEnum type="florian_haas.lucas.model.EnumAccountOwnerType" />
+	</ui:define>
+	<ui:define name="buttonArea">
+		<p:toolbarGroup align="left">
+			<p:commandButton
+				value="#{msg['lucas.application.accountScreen.payInButton.name']}"
+				action="#{accountBean.resetPayInDialog}"
+				title="#{msg['lucas.application.accountScreen.payInButton.tooltip']}"
+				icon="fa fa-arrow-up" process="@this" update="payInDialogForm"
+				disabled="#{accountBean.selectedAccounts.size() &lt;=0}"
+				oncomplete="PF('payInDialog').show()" />
+			<p:commandButton
+				value="#{msg['lucas.application.accountScreen.payOutButton.name']}"
+				action="#{accountBean.resetPayOutDialog}"
+				title="#{msg['lucas.application.accountScreen.payOutButton.tooltip']}"
+				icon="fa fa-arrow-down" process="@this" update="payOutDialogForm"
+				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}"
+				oncomplete="PF('payOutDialog').show()" />
+			<p:commandButton
+				value="#{msg['lucas.application.accountScreen.transactionButton.name']}"
+				action="#{accountBean.resetTransactionDialog}"
+				title="#{msg['lucas.application.accountScreen.transactionButton.tooltip']}"
+				icon="fa fa-retweet" process="@this" update="transactionDialogForm"
+				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}"
+				oncomplete="PF('transactionDialog').show()" />
+			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			<p:commandButton
+				value="#{msg['lucas.application.accountScreen.blockButton.name']}"
+				title="#{msg['lucas.application.accountScreen.blockButton.tooltip']}"
+				icon="fa fa-lock" process="@this" update="@(.searchResults)"
+				action="#{accountBean.block}"
+				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}" />
+			<p:commandButton
+				value="#{msg['lucas.application.accountScreen.unblockButton.name']}"
+				title="#{msg['lucas.application.accountScreen.unblockButton.tooltip']}"
+				icon="fa fa-unlock" process="@this" update="@(.searchResults)"
+				action="#{accountBean.unblock}"
+				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}" />
+			<p:commandButton
+				value="#{msg['lucas.application.accountScreen.protectButton.name']}"
+				title="#{msg['lucas.application.accountScreen.protectButton.tooltip']}"
+				icon="fa fa-link" process="@this" update="@(.searchResults)"
+				action="#{accountBean.protect}"
+				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}" />
+			<p:commandButton
+				value="#{msg['lucas.application.accountScreen.unprotectButton.name']}"
+				title="#{msg['lucas.application.accountScreen.unprotectButton.tooltip']}"
+				icon="fa fa-unlink" process="@this" update="@(.searchResults)"
+				action="#{accountBean.unprotect}"
+				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}" />
+			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			<p:commandButton
+				value="#{msg['lucas.application.accountScreen.showLogsButton.name']}"
+				action="#{accountBean.initTransactionLogDialog}" process="@this"
+				update="transactionLogDialogForm"
+				title="#{msg['lucas.application.accountScreen.showLogsButton.tooltip']}"
+				icon="fa fa-list-ul" oncomplete="PF('transactionLogDialog').show()"
+				disabled="#{accountBean.selectedAccounts.size() != 1}" />
+		</p:toolbarGroup>
+	</ui:define>
+	<ui:define name="searchCriteria">
+		<p:row>
+			<p:column>
+				<p:selectBooleanCheckbox id="searchAccountIdSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{accountBean.useSearchAccountId}"
+					title="#{msg['lucas.application.accountScreen.searchAccountIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="accountSearchCriteriaForm:searchAccountIdInputNumber accountSearchCriteriaForm:searchAccountIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchAccountIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.accountScreen.searchAccountIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.accountScreen.searchAccountIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchAccountOwnerIdSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{accountBean.useSearchAccountOwnerId}"
+					title="#{msg['lucas.application.accountScreen.searchAccountOwnerIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="accountSearchCriteriaForm:searchAccountOwnerIdInputNumber accountSearchCriteriaForm:searchAccountOwnerIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchAccountOwnerIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.accountScreen.searchAccountOwnerIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.accountScreen.searchAccountOwnerIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchAccountOwnerTypeSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{accountBean.useSearchAccountOwnerType}"
+					title="#{msg['lucas.application.accountScreen.searchAccountOwnerTypeSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="accountSearchCriteriaForm:searchAccountOwnerTypeSelectOneMenu accountSearchCriteriaForm:searchAccountOwnerTypeComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchAccountOwnerTypeSelectBooleanCheckbox"
+					value="#{msg['lucas.application.accountScreen.searchAccountOwnerTypeSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.accountScreen.searchAccountOwnerTypeSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchAccountBankBalanceSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{accountBean.useSearchAccountBankBalance}"
+					title="#{msg['lucas.application.accountScreen.searchAccountBankBalanceSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="accountSearchCriteriaForm:searchAccountBankBalanceInputNumber accountSearchCriteriaForm:searchAccountBankBalanceComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchAccountBankBalanceSelectBooleanCheckbox"
+					value="#{msg['lucas.application.accountScreen.searchAccountBankBalanceSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.accountScreen.searchAccountBankBalanceSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchAccountBlockedSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{accountBean.useSearchAccountBlocked}"
+					title="#{msg['lucas.application.accountScreen.searchAccountBlockedSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="accountSearchCriteriaForm:searchAccountBlockedBooleanButton"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchAccountBlockedSelectBooleanCheckbox"
+					value="#{msg['lucas.application.accountScreen.searchAccountBlockedSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.accountScreen.searchAccountBlockedSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchAccountProtectedSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{accountBean.useSearchAccountIsProtected}"
+					title="#{msg['lucas.application.accountScreen.searchAccountProtectedSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="accountSearchCriteriaForm:searchAccountProtectedBooleanButton"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchAccountProtectedSelectBooleanCheckbox"
+					value="#{msg['lucas.application.accountScreen.searchAccountProtectedSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.accountScreen.searchAccountProtectedSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:selectOneMenu id="searchAccountIdComparator"
+					disabled="#{not accountBean.useSearchAccountId}"
+					value="#{accountBean.searchAccountIdComparator}"
+					title="#{msg['lucas.application.accountScreen.searchAccountIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchAccountOwnerIdComparator"
+					disabled="#{not accountBean.useSearchAccountOwnerId}"
+					value="#{accountBean.searchAccountOwnerIdComparator}"
+					title="#{msg['lucas.application.accountScreen.searchAccountOwnerIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchAccountOwnerTypeComparator"
+					disabled="#{not accountBean.useSearchAccountOwnerType}"
+					value="#{accountBean.searchAccountOwnerTypeComparator}"
+					title="#{msg['lucas.application.accountScreen.searchAccountOwnerTypeComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchAccountBankBalanceComparator"
+					disabled="#{not accountBean.useSearchAccountBankBalance}"
+					value="#{accountBean.searchAccountBankBalanceComparator}"
+					title="#{msg['lucas.application.accountScreen.searchAccountBankBalanceComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column />
+			<p:column />
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:inputNumber value="#{accountBean.searchAccountId}" minValue="0"
+					decimalPlaces="0" id="searchAccountIdInputNumber"
+					disabled="#{not accountBean.useSearchAccountId}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{accountBean.searchAccountOwnerId}"
+					minValue="0" decimalPlaces="0" id="searchAccountOwnerIdInputNumber"
+					disabled="#{not accountBean.useSearchAccountOwnerId}" />
+			</p:column>
+			<p:column>
+				<p:selectOneMenu value="#{accountBean.searchAccountOwnerType}"
+					id="searchAccountOwnerTypeSelectOneMenu"
+					disabled="#{not accountBean.useSearchAccountOwnerType}">
+					<f:selectItems value="#{EnumAccountOwnerType.ALL_VALUES}"
+						var="ownerType" itemValue="#{ownerType}"
+						itemLabel="#{converterBean.convertEnum(ownerType)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{accountBean.searchAccountBankBalance}"
+					minValue="0" decimalPlaces="2" emptyValue="zero"
+					symbol="#{accountBean.currencySymbol}" symbolPosition="post"
+					id="searchAccountBankBalanceInputNumber"
+					disabled="#{not accountBean.useSearchAccountBankBalance}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanButton
+					offLabel="#{msg['lucas.application.booleanConverter.false']}"
+					onLabel="#{msg['lucas.application.booleanConverter.true']}"
+					id="searchAccountBlockedBooleanButton"
+					value="#{accountBean.searchAccountBlocked}"
+					disabled="#{not accountBean.useSearchAccountBlocked}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanButton
+					offLabel="#{msg['lucas.application.booleanConverter.false']}"
+					onLabel="#{msg['lucas.application.booleanConverter.true']}"
+					id="searchAccountProtectedBooleanButton"
+					value="#{accountBean.searchAccountIsProtected}"
+					disabled="#{not accountBean.useSearchAccountIsProtected}" />
+			</p:column>
+		</p:row>
+	</ui:define>
+	<ui:define name="searchResults">
+		<p:column
+			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.idColumn.name']}"
+			sortBy="#{entity.id}"
+			visible="#{accountBean.resultsDatatableColumns[0]}">
+			<h:outputText value="#{entity.id}" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.ownerColumn.name']}"
+			sortable="false" visible="#{accountBean.resultsDatatableColumns[1]}">
+			<h:outputText value="#{entity.owner}"
+				converter="lucas:accountOwnerStringConverter" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.ownerTypeColumn.name']}"
+			sortBy="#{entity.owner.ownerType}"
+			visible="#{accountBean.resultsDatatableColumns[2]}">
+			<h:outputText value="#{entity.owner.ownerType}" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.bankBalanceColumn.name']}"
+			sortBy="#{entity.bankBalance}"
+			visible="#{accountBean.resultsDatatableColumns[3]}">
+			<h:outputText value="#{entity.bankBalance}"
+				converter="#{currencyConverter}" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.blockedColumn.name']}"
+			sortBy="#{entity.blocked}"
+			visible="#{accountBean.resultsDatatableColumns[4]}">
+			<h:outputText value="#{entity.blocked}"
+				converter="lucas:BooleanStringConverter" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.protectedColumn.name']}"
+			sortBy="#{entity.isProtected}"
+			visible="#{accountBean.resultsDatatableColumns[5]}">
+			<h:outputText value="#{entity.isProtected}"
+				converter="lucas:BooleanStringConverter" />
+		</p:column>
+	</ui:define>
+</ui:composition>
