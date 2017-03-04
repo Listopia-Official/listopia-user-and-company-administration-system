@@ -86,5 +86,9 @@
 }
 
 .width50Percent {
-	width: 50%!important;
+	width: 50% !important;
+}
+
+.ui-tooltip .ui-state-error {
+	border: 0 none!important;
 }
