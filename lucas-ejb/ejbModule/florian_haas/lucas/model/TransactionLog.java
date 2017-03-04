@@ -66,7 +66,7 @@ public class TransactionLog extends EntityBase {
 		this.action = action;
 		this.actionType = actionType;
 		this.relatedAccount = relatedAccount;
-		this.amount = action == EnumAccountAction.DEBIT ? amount.negate() : amount;
+		this.amount = amount;
 		this.previousBankBalance = prevBankBalance;
 		this.bankUser = bankUser;
 		this.comment = comment;
@@ -101,7 +101,7 @@ public class TransactionLog extends EntityBase {
 	}
 
 	public BigDecimal getCurrentBankBalance() {
-		return this.previousBankBalance.add(this.amount);
+		return this.previousBankBalance.add(this.action == EnumAccountAction.CREDIT ? this.amount : this.amount.negate());
 	}
 
 	public User getBankUser() {

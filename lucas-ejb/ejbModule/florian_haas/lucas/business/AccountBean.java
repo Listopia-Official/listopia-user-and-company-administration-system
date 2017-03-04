@@ -49,7 +49,7 @@ public class AccountBean implements AccountBeanLocal {
 	@Override
 	@RequiresPermissions(ACCOUNT_PAY_OUT)
 	public Long payOut(Long id, BigDecimal amount, String comment) {
-		return transaction(amount, id, null, comment);
+		return transaction(amount.negate(), id, null, comment);
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class AccountBean implements AccountBeanLocal {
 			throw new AuthorizationException(
 					loginBean.getSubject().getPrincipal() + " is not permitted to start a transaction to a protected account");
 
-		if (Utils.isGreatherThan(amount, globalData.getTransactionLimit())
+		if (Utils.isGreatherThan(amount.abs(), globalData.getTransactionLimit())
 				&& !loginBean.getSubject().isPermitted(ACCOUNT_IGNORE_TRANSACTION_LIMIT.getPermissionString()))
 			throw new AuthorizationException(loginBean.getSubject().getPrincipal() + " is not permitted to ignore transaction limit");
 
