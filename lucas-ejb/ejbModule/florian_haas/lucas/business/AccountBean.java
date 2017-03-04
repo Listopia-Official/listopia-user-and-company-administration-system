@@ -107,15 +107,12 @@ public class AccountBean implements AccountBeanLocal {
 		transactionAmount = transactionAmount.abs();
 
 		final LocalDateTime dateTime = LocalDateTime.now();
-		User user = null;
+		LoginUser user = null;
 		try {
 			Long userId = Long.valueOf(loginBean.getSubject().getPrincipal().toString());
 			if (userId != null) {
 				if (entityBean.exists(userId, User.class)) {
-					LoginUser tmp = loginBean.findLoginUserById(userId);
-					if (tmp != null) {
-						user = tmp.getUser();
-					}
+					user = loginBean.findLoginUserById(userId);
 				}
 			}
 		}

@@ -50,7 +50,7 @@ public class TransactionLog extends EntityBase {
 
 	@OneToOne(optional = true)
 	@JoinColumn(nullable = true)
-	private User bankUser;
+	private LoginUser bankUser;
 
 	@Basic(optional = true)
 	@Column(nullable = true)
@@ -60,7 +60,7 @@ public class TransactionLog extends EntityBase {
 	TransactionLog() {}
 
 	public TransactionLog(Account account, LocalDateTime dateTime, EnumAccountAction action, EnumAccountActionType actionType, Account relatedAccount,
-			BigDecimal amount, BigDecimal prevBankBalance, User bankUser, String comment) {
+			BigDecimal amount, BigDecimal prevBankBalance, LoginUser bankUser, String comment) {
 		this.account = account;
 		this.dateTime = dateTime;
 		this.action = action;
@@ -104,7 +104,7 @@ public class TransactionLog extends EntityBase {
 		return this.previousBankBalance.add(this.action == EnumAccountAction.CREDIT ? this.amount : this.amount.negate());
 	}
 
-	public User getBankUser() {
+	public LoginUser getBankUser() {
 		return this.bankUser;
 	}
 
