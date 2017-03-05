@@ -15,7 +15,6 @@ import org.apache.shiro.subject.Subject;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.security.*;
 
 @Stateless
@@ -166,10 +165,17 @@ public class LoginBean implements LoginBeanLocal {
 	}
 
 	@Override
-	public String getDBUsername(@ValidEntityId(entityClass = LoginUser.class) Long userId) {
+	public String getDBUsername(Long userId) {
 		LoginUser user = loginUserDao.findById(userId);
 		User user2 = user.getUser();
 		return user2 != null && user2.getForename() != null && user2.getSurname() != null ? user2.getForename() + " " + user2.getSurname() : null;
+	}
+
+	@Override
+	public List<LoginUserRole> findLoginUserRoles(Long id, String name, Set<String> permissions, Boolean useId, Boolean useName,
+			Boolean usePermissions, EnumQueryComparator idComparator, EnumQueryComparator nameComparator, EnumQueryComparator permissionsComparator) {
+		return loginUserRoleDao.findLoginUserRoles(id, name, permissions, useId, useName, usePermissions, idComparator, nameComparator,
+				permissionsComparator);
 	}
 
 }

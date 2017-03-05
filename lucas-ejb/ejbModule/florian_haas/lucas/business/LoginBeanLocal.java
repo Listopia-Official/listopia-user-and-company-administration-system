@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 import org.apache.shiro.subject.Subject;
 import org.hibernate.validator.constraints.NotBlank;
 
+import florian_haas.lucas.database.*;
+import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.util.validation.*;
@@ -49,6 +51,12 @@ public interface LoginBeanLocal {
 	public LoginUserRole findLoginUserRoleById(@ValidEntityId(entityClass = LoginUserRole.class) Long roleId);
 
 	public List<LoginUserRole> findAllLoginUserRoles();
+
+	public List<LoginUserRole> findLoginUserRoles(@NotNull Long id, @NotNull String name,
+			@NotNull Set<@TypeNotNull @NotBlankString String> permissions, @NotNull Boolean useId, @NotNull Boolean useName,
+			@NotNull Boolean usePermissions, @QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator nameComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.ARRAY) EnumQueryComparator permissionsComparator);
 
 	public List<LoginUser> findAllLoginUsers();
 

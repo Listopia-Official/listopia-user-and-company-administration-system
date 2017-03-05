@@ -20,9 +20,8 @@
 				</p:submenu>
 				<p:submenu
 					label="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.name']}">
-					<p:menuitem
-						value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.usersMenuItem.name']}"
-						outcome="/users.xhtml" />
+					<p:menuitem outcome="/users.xhtml"
+						value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.usersMenuItem.name']}" />
 					<p:menuitem disabled="true"
 						value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.companiesMenuItem.name']}" />
 					<p:menuitem disabled="true"
@@ -39,9 +38,8 @@
 				</p:submenu>
 				<p:submenu
 					label="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.name']}">
-					<p:menuitem
-						value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.accountsMenuItem.name']}"
-						outcome="/accounts.xhtml" />
+					<p:menuitem outcome="/accounts.xhtml"
+						value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.accountsMenuItem.name']}" />
 					<p:menuitem disabled="true"
 						value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.taxdataItem.name']}" />
 				</p:submenu>
@@ -53,7 +51,9 @@
 				<p:submenu
 					label="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.name']}">
 					<p:menuitem disabled="true"
-						value="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.logindataMenuItem.name']}" />
+						value="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.loginUsersMenuItem.name']}" />
+					<p:menuitem outcome="/loginRoles.xhtml"
+						value="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.loginRolesMenuItem.name']}" />
 					<p:menuitem disabled="true"
 						value="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.globaldataItem.name']}" />
 				</p:submenu>
