@@ -182,13 +182,14 @@
 			<p:column>
 				<p:selectBooleanCheckbox id="searchUserRanksSelectBooleanCheckbox"
 					styleClass="checkbox" value="#{userBean.useSearchUserRanks}"
-					title="Title">
+					title="#{msg['lucas.application.userScreen.searchUserRanksSelectBooleanCheckbox.tooltip']}">
 					<p:ajax event="change"
 						update="userSearchCriteriaForm:searchUserRanksComparator userSearchCriteriaForm:searchUserRanksChips"
 						process="@this" />
 				</p:selectBooleanCheckbox>
 				<p:outputLabel for="searchUserRanksSelectBooleanCheckbox"
-					value="Ranks:" title="title" />
+					value="#{msg['lucas.application.userScreen.searchUserRanksSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.userScreen.searchUserRanksSelectBooleanCheckbox.tooltip']}" />
 			</p:column>
 		</p:row>
 		<p:row>
@@ -254,7 +255,8 @@
 			</p:column>
 			<p:column>
 				<p:selectOneMenu id="searchUserRanksComparator"
-					disabled="#{not userBean.useSearchUserRanks}" title="Title"
+					disabled="#{not userBean.useSearchUserRanks}"
+					title="#{msg['lucas.application.userScreen.searchUserRanksComparator.tooltip']}"
 					value="#{userBean.searchUserRanksComparator}">
 					<f:selectItems value="#{EnumQueryComparator.ARRAY_COMPARATORS}"
 						var="comparator" itemValue="#{comparator}"
