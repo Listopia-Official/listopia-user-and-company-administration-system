@@ -6,6 +6,9 @@ import java.util.ArrayList;
 
 public enum EnumPermission {
 
+	ALL(null, "*"),
+
+	ACCOUNT_ALL(ACCOUNT, "*"),
 	ACCOUNT_PAY_IN(ACCOUNT, "payIn"),
 	ACCOUNT_PAY_OUT(ACCOUNT, "payOut"),
 	ACCOUNT_TRANSACTION(ACCOUNT, "transaction"),
@@ -21,6 +24,7 @@ public enum EnumPermission {
 	ACCOUNT_IGNORE_TRANSACTION_LIMIT(ACCOUNT, "ignoreTransactionLimit"),
 	ACCOUNT_FIND_ACCOUNT_OWNER(ACCOUNT, "findAccountOwner"),
 
+	ATTENDANCE_ALL(ATTENDANCE, "*"),
 	ATTENDANCE_SCAN(ATTENDANCE, "scan"),
 	ATTENDANCE_EVALUATE_ALL(ATTENDANCE, "evaluateAll"),
 	ATTENDANCE_FIND_ALL(ATTENDANCE, "findAll"),
@@ -28,6 +32,7 @@ public enum EnumPermission {
 	ATTENDANCE_FIND_BY_USER_CARD_ID(ATTENDANCE, "findByUserCardId"),
 	ATTENDANCE_FIND_DYNAMIC(ATTENDANCE, "findDynamic"),
 
+	COMPANY_ALL(COMPANY, "*"),
 	COMPANY_CREATE(COMPANY, "create"),
 	COMPANY_FIND_ALL(COMPANY, "findAll"),
 	COMPANY_FIND_BY_ID(COMPANY, "findById"),
@@ -48,6 +53,7 @@ public enum EnumPermission {
 	COMPANY_BLOCK_COMPANY_CARD(COMPANY, "blockCompanyCard"),
 	COMPANY_UNBLOCK_COMPANY_CARD(COMPANY, "unblockCompanyCard"),
 
+	EMPLOYMENT_ALL(EMPLOYMENT, "*"),
 	EMPLOYMENT_CREATE_DEFAULT(EMPLOYMENT, "createDefault"),
 	EMPLOYMENT_CREATE_ADVANCED(EMPLOYMENT, "createAdvanced"),
 	EMPLOYMENT_REMOVE(EMPLOYMENT, "remove"),
@@ -61,8 +67,10 @@ public enum EnumPermission {
 	EMPLOYMENT_REMOVE_ATTENDANCEDATA(EMPLOYMENT, "remvoeAttendancedata"),
 	EMPLOYMENT_PAY_SALARY(EMPLOYMENT, "paySalary"),
 
+	ENTITY_ALL(ENTITY, "*"),
 	ENTITY_EXISTS(ENTITY, "exists"),
 
+	GLOBAL_DATA_ALL(GLOBAL_DATA, "*"),
 	GLOBAL_DATA_GET_SALARIES(GLOBAL_DATA, "getSalaries"),
 	GLOBAL_DATA_GET_MIN_TIME_PRESENT(GLOBAL_DATA, "getMinTimePresent"),
 	GLOBAL_DATA_GET_MINIMUM_WAGE(GLOBAL_DATA, "getMinimumWage"),
@@ -83,6 +91,7 @@ public enum EnumPermission {
 	GLOBAL_DATA_GET_MAX_USER_IMAGE_HEIGHT(GLOBAL_DATA, "getMaxUserImageHeight"),
 	GLOBAL_DATA_SET_MAX_USER_IMAGE_HEIGHT(GLOBAL_DATA, "setMaxUserImageHeight"),
 
+	ITEM_ALL(ITEM, "*"),
 	ITEM_SELL(ITEM, "sell"),
 	ITEM_FIND_ALL(ITEM, "findAll"),
 	ITEM_FIND_BY_ID(ITEM, "findById"),
@@ -94,6 +103,7 @@ public enum EnumPermission {
 	ITEM_SUB_ITEMS_AVAIBLE(ITEM, "subItemsAvaible"),
 	ITEM_CREATE(ITEM, "create"),
 
+	USER_ALL(USER, "*"),
 	USER_CREATE_PUPIL(USER, "createPupil"),
 	USER_CREATE_TEACHER(USER, "createTeacher"),
 	USER_CREATE_GUEST(USER, "createGuest"),
@@ -115,6 +125,7 @@ public enum EnumPermission {
 	USER_GET_IMAGE_FROM_ID(USER, "getImageFromId"),
 	USER_GET_USER_CARDS(USER, "getUserCards"),
 
+	LOGIN_ALL(LOGIN, "*"),
 	LOGIN_CREATE_RAW_LOGIN_USER(LOGIN, "createRawLoginUser"),
 	LOGIN_CREATE_REGISTERED_LOGIN_USER(LOGIN, "createRegisteredLoginUser"),
 	LOGIN_CHANGE_PASSWORD(LOGIN, "changePassword"),
@@ -123,7 +134,7 @@ public enum EnumPermission {
 	private String permissionString;
 
 	private EnumPermission(EnumPermissionModule module, String permissionString) {
-		this.permissionString = module.getModuleName() + ":" + permissionString;
+		this.permissionString = (module != null ? module.getModuleName() + ":" : "") + permissionString;
 	}
 
 	public String getPermissionString() {
