@@ -1,5 +1,6 @@
 package florian_haas.lucas.util;
 
+import java.io.*;
 import java.lang.reflect.ParameterizedType;
 import java.math.BigDecimal;
 import java.time.*;
@@ -100,5 +101,17 @@ public class Utils {
 
 	public static LocalDateTime asLocalDateTime(Date date) {
 		return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+	}
+
+	public static final String getStackTraceAsString(Throwable t) {
+		String ret = null;
+		try (StringWriter writer = new StringWriter(); PrintWriter writer2 = new PrintWriter(writer)) {
+			t.printStackTrace(writer2);
+			ret = writer.toString();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ret;
 	}
 }
