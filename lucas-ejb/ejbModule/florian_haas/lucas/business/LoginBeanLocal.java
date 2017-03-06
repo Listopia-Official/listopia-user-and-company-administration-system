@@ -52,9 +52,9 @@ public interface LoginBeanLocal {
 
 	public List<LoginUserRole> findAllLoginUserRoles();
 
-	public List<LoginUserRole> findLoginUserRoles(@NotNull Long id, @NotNull String name,
-			@NotNull Set<@TypeNotNull @NotBlankString String> permissions, @NotNull Boolean useId, @NotNull Boolean useName,
-			@NotNull Boolean usePermissions, @QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
+	public List<LoginUserRole> findLoginUserRoles(@NotNull Long id, @NotNull String name, Set<@TypeNotNull @NotBlankString String> permissions,
+			@NotNull Boolean useId, @NotNull Boolean useName, @NotNull Boolean usePermissions,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator nameComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.ARRAY) EnumQueryComparator permissionsComparator);
 
