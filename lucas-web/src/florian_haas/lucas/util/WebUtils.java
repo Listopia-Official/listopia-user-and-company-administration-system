@@ -211,12 +211,12 @@ public class WebUtils {
 			}
 		}
 		catch (ShiroException e2) {
-			errorMessageConsumer
-					.accept(getTranslatedMessage(failMessageKey, params) + getTranslatedMessage("lucas.application.message.accessDenied"));
+			errorMessageConsumer.accept(getTranslatedMessage(failMessageKey, params) + getTranslatedMessage("lucas.application.message.accessDenied")
+					+ e2.getLocalizedMessage());
 		}
 		catch (Exception e3) {
 			Logger.getAnonymousLogger().log(Level.SEVERE, e3, e3::getMessage);
-			fatalMessageConsumer.accept(getTranslatedMessage(failMessageKey, params) + e3.getLocalizedMessage());
+			fatalMessageConsumer.accept(getTranslatedMessage(failMessageKey, params) + Utils.getStackTraceAsString(e3));
 		}
 		return success;
 
