@@ -15,6 +15,7 @@ import org.apache.shiro.subject.Subject;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
+import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.security.*;
 
 @Stateless
@@ -176,6 +177,11 @@ public class LoginBean implements LoginBeanLocal {
 			Boolean usePermissions, EnumQueryComparator idComparator, EnumQueryComparator nameComparator, EnumQueryComparator permissionsComparator) {
 		return loginUserRoleDao.findLoginUserRoles(id, name, permissions, useId, useName, usePermissions, idComparator, nameComparator,
 				permissionsComparator);
+	}
+
+	@Override
+	public Set<String> getPermissions(@ValidEntityId(entityClass = LoginUserRole.class) Long roleId) {
+		return loginUserRoleDao.findById(roleId).getPermissions();
 	}
 
 }
