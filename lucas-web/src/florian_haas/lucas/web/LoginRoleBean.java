@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.*;
 
-import florian_haas.lucas.business.LoginBeanLocal;
+import florian_haas.lucas.business.LoginUserRoleBeanLocal;
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.LoginUserRole;
@@ -27,7 +27,7 @@ public class LoginRoleBean implements Serializable {
 	private static final long serialVersionUID = 5788543415266420741L;
 
 	@EJB
-	private LoginBeanLocal loginBean;
+	private LoginUserRoleBeanLocal loginUserRoleBean;
 
 	@NotNull
 	@Min(0)
@@ -88,7 +88,7 @@ public class LoginRoleBean implements Serializable {
 
 	public void searchLoginRoles() {
 		WebUtils.executeTask((params) -> {
-			List<LoginUserRole> results = loginBean.findLoginUserRoles(searchLoginUserRoleId, searchLoginUserRoleName,
+			List<LoginUserRole> results = loginUserRoleBean.findLoginUserRoles(searchLoginUserRoleId, searchLoginUserRoleName,
 					searchLoginUserRolePermissions != null ? new HashSet<>(searchLoginUserRolePermissions) : null, useSearchLoginUserRoleId,
 					useSearchLoginUserRoleName, useSearchLoginUserRolePermissions, searchLoginUserRoleIdComparator, searchLoginUserRoleNameComparator,
 					searchLoginUserRolePermissionsComparator);
@@ -103,7 +103,7 @@ public class LoginRoleBean implements Serializable {
 
 	public void refreshLoginRoles() {
 		WebUtils.executeTask((params) -> {
-			WebUtils.refreshEntities(LoginUserRole.class, searchLoginRoleResults, selectedLoginRoles, loginBean::findLoginUserRoleById);
+			WebUtils.refreshEntities(LoginUserRole.class, searchLoginRoleResults, selectedLoginRoles, loginUserRoleBean::findLoginUserRoleById);
 			params.add(searchLoginRoleResults.size());
 			return true;
 		}, "lucas.application.loginRoleScreen.refreshLoginUsers.message.success", null,
@@ -220,7 +220,7 @@ public class LoginRoleBean implements Serializable {
 		WebUtils.executeTask(params -> {
 			params.add(
 					WebUtils.getAsString(
-							loginBean.findLoginUserRoleById(loginBean.newLoginUserRole(createLoginUserRoleDialogName,
+							loginUserRoleBean.findLoginUserRoleById(loginUserRoleBean.newLoginUserRole(createLoginUserRoleDialogName,
 									new HashSet<>(createLoginUserRoleDialogPermissionsListModel.getTarget()))),
 							"lucas:loginUserRoleStringConverter"));
 			return true;
@@ -252,7 +252,7 @@ public class LoginRoleBean implements Serializable {
 			LoginUserRole tmp = selectedLoginRoles.get(0);
 			permissionsDialogSelectedRoleString = WebUtils.getAsString(tmp, "lucas:loginUserRoleStringConverter");
 			permissionsDialogPermissions.clear();
-			permissionsDialogPermissions.addAll(loginBean.getPermissions(tmp.getId()));
+			permissionsDialogPermissions.addAll(loginUserRoleBean.getPermissions(tmp.getId()));
 		}
 	}
 
@@ -266,7 +266,7 @@ public class LoginRoleBean implements Serializable {
 			LoginUserRole role = it.next();
 			WebUtils.executeTask(params -> {
 				params.add(WebUtils.getAsString(role, "lucas:loginUserRoleStringConverter"));
-				Boolean ret = loginBean.removeLoginUserRole(role.getId());
+				Boolean ret = loginUserRoleBean.removeLoginUserRole(role.getId());
 				if (ret) {
 					searchLoginRoleResults.remove(role);
 					it.remove();
@@ -309,7 +309,7 @@ public class LoginRoleBean implements Serializable {
 			editLoginUserRole = selectedLoginRoles.get(0);
 			this.editLoginUserRoleDialogName = editLoginUserRole.getName();
 			List<String> actualPermissions = new ArrayList<>();
-			actualPermissions.addAll(loginBean.getPermissions(editLoginUserRole.getId()));
+			actualPermissions.addAll(loginUserRoleBean.getPermissions(editLoginUserRole.getId()));
 			List<String> permissions = new ArrayList<>();
 			for (EnumPermission value : EnumPermission.values()) {
 				if (!actualPermissions.contains(value.getPermissionString())) {
@@ -323,19 +323,19 @@ public class LoginRoleBean implements Serializable {
 	public void editLoginRole() {
 		WebUtils.executeTask(params -> {
 			Long id = editLoginUserRole.getId();
-			List<String> permissions = new ArrayList<>(loginBean.getPermissions(id));
-			loginBean.setRoleName(id, editLoginUserRoleDialogName);
+			List<String> permissions = new ArrayList<>(loginUserRoleBean.getPermissions(id));
+			loginUserRoleBean.setRoleName(id, editLoginUserRoleDialogName);
 			editLoginUserRoleDialogPermissionsListModel.getTarget().forEach(permission -> {
 				if (!permissions.contains(permission)) {
-					loginBean.addPermission(id, permission);
+					loginUserRoleBean.addPermission(id, permission);
 				}
 			});
 			permissions.forEach(permission -> {
 				if (!editLoginUserRoleDialogPermissionsListModel.getTarget().contains(permission)) {
-					loginBean.removePermission(id, permission);
+					loginUserRoleBean.removePermission(id, permission);
 				}
 			});
-			LoginUserRole newRole = loginBean.findLoginUserRoleById(id);
+			LoginUserRole newRole = loginUserRoleBean.findLoginUserRoleById(id);
 			params.add(WebUtils.getAsString(editLoginUserRole, "lucas:loginUserRoleStringConverter"));
 			Collections.replaceAll(searchLoginRoleResults, editLoginUserRole, newRole);
 			Collections.replaceAll(selectedLoginRoles, editLoginUserRole, newRole);
