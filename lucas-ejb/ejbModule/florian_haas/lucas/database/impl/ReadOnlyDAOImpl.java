@@ -72,12 +72,30 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 		return readOnlyJPQLQuery(jpql, entityClass, params);
 	}
 
-	public List<E> readOnlyCriteriaQuery(TriFunction<CriteriaQuery<E>, Root<E>, CriteriaBuilder, Predicate[]> restrictions) {
+	protected <T> T readOnlyCriteriaQuerySingleResult(TriFunction<CriteriaQuery<T>, Root<T>, CriteriaBuilder, Predicate[]> restrictions,
+			Class<T> clazz) {
+		T ret = null;
+		List<T> results = readOnlyCriteriaQuery(restrictions, clazz);
+		if (results != null && !results.isEmpty()) {
+			ret = results.get(0);
+		}
+		return ret;
+	}
+
+	protected <T> List<T> readOnlyCriteriaQuery(TriFunction<CriteriaQuery<T>, Root<T>, CriteriaBuilder, Predicate[]> restrictions, Class<T> clazz) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
-		CriteriaQuery<E> query = builder.createQuery(entityClass).distinct(true);
-		Root<E> root = query.from(entityClass);
+		CriteriaQuery<T> query = builder.createQuery(clazz).distinct(true);
+		Root<T> root = query.from(clazz);
 		query.select(root).where(restrictions.apply(query, root, builder));
 		return manager.createQuery(query).getResultList();
+	}
+
+	public E readOnlyCriteriaQuerySingleResult(TriFunction<CriteriaQuery<E>, Root<E>, CriteriaBuilder, Predicate[]> restrictions) {
+		return readOnlyCriteriaQuerySingleResult(restrictions, entityClass);
+	}
+
+	public List<E> readOnlyCriteriaQuery(TriFunction<CriteriaQuery<E>, Root<E>, CriteriaBuilder, Predicate[]> restrictions) {
+		return readOnlyCriteriaQuery(restrictions, entityClass);
 	}
 
 	@SuppressWarnings({
