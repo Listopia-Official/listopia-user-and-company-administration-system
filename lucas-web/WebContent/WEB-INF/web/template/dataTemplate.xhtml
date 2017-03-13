@@ -10,6 +10,18 @@
 			type="florian_haas.lucas.database.EnumQueryComparator" />
 	</ui:define>
 	<ui:define name="content">
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton
+				value="#{msg['lucas.application.dataTemplate.confirm.yesButton.name']}"
+				type="button"
+				title="#{msg['lucas.application.dataTemplate.confirm.yesButton.tooltip']}"
+				styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton
+				value="#{msg['lucas.application.dataTemplate.confirm.noButton.name']}"
+				type="button"
+				title="#{msg['lucas.application.dataTemplate.confirm.noButton.tooltip']}"
+				styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
 		<div class="dataArea">
 			<h:form>
 				<p:toolbar

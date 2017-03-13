@@ -100,24 +100,9 @@
 					actionListener="#{userBean.userCardManagerDialogRemoveUserCards}"
 					update="@form">
 					<p:confirm
-						header="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.header']}" />
+						header="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.header']}"
+						message="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.message']}" />
 				</p:commandButton>
-				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-					<f:facet name="message">
-						<h:outputText
-							value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.message']}" />
-					</f:facet>
-					<p:commandButton
-						value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.yesButton.name']}"
-						type="button"
-						title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.yesButton.tooltip']}"
-						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-					<p:commandButton
-						value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.noButton.name']}"
-						type="button"
-						title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.noButton.tooltip']}"
-						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-				</p:confirmDialog>
 			</p:toolbarGroup>
 			<p:toolbarGroup align="right">
 				<p:commandButton icon="fa fa-refresh"
