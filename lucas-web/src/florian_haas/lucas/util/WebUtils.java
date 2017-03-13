@@ -294,7 +294,11 @@ public class WebUtils {
 
 	public static String getCurrencyAsString(BigDecimal currency) {
 		FacesContext context = FacesContext.getCurrentInstance();
-		return CDI.current().select(CurrencyConverter.class).get().getAsString(context, UIComponent.getCurrentComponent(context), currency);
+		return getCDIManagerBean(CurrencyConverter.class).getAsString(context, UIComponent.getCurrentComponent(context), currency);
+	}
+
+	public static <T> T getCDIManagerBean(Class<T> clazz) {
+		return CDI.current().select(clazz).get();
 	}
 
 }
