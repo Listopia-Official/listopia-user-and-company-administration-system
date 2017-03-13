@@ -122,7 +122,7 @@ public class AccountBean implements Serializable {
 
 	public void refreshAccounts() {
 		WebUtils.executeTask((params) -> {
-			WebUtils.refreshEntities(searchAccountResults, selectedAccounts, accountBean::findById);
+			WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, accountBean::findById);
 			params.add(searchAccountResults.size());
 			return true;
 		}, "lucas.application.accountScreen.refreshAccounts.success", null, "lucas.application.accountScreen.refreshAccounts.fail");
@@ -316,7 +316,7 @@ public class AccountBean implements Serializable {
 			}, "lucas.application.accountScreen.payIn.message.success", null, "lucas.application.accountScreen.payIn.message.fail",
 					WebUtils.getAsString(account.getOwner(), "lucas:accountOwnerStringConverter"));
 		}
-		WebUtils.refreshEntities(searchAccountResults, selectedAccounts, accountBean::findById);
+		WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, accountBean::findById);
 	}
 
 	/*
@@ -364,7 +364,7 @@ public class AccountBean implements Serializable {
 			}, "lucas.application.accountScreen.payOut.message.success", null, "lucas.application.accountScreen.payOut.message.fail",
 					WebUtils.getAsString(account.getOwner(), "lucas:accountOwnerStringConverter"));
 		}
-		WebUtils.refreshEntities(searchAccountResults, selectedAccounts, accountBean::findById);
+		WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, accountBean::findById);
 	}
 
 	/*
@@ -433,7 +433,7 @@ public class AccountBean implements Serializable {
 					WebUtils.getAsString(account.getOwner(), "lucas:accountOwnerStringConverter"),
 					WebUtils.getAsString(owner, "lucas:accountOwnerStringConverter"));
 		}
-		WebUtils.refreshEntities(searchAccountResults, selectedAccounts, accountBean::findById);
+		WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, accountBean::findById);
 	}
 
 	/*
@@ -448,7 +448,7 @@ public class AccountBean implements Serializable {
 					"lucas.application.accountScreen.block.message.fail",
 					WebUtils.getAsString(account.getOwner(), "lucas:accountOwnerStringConverter"));
 		}
-		WebUtils.refreshEntities(searchAccountResults, selectedAccounts, accountBean::findById);
+		WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, accountBean::findById);
 	}
 
 	public void unblock() {
@@ -459,7 +459,7 @@ public class AccountBean implements Serializable {
 					"lucas.application.accountScreen.unblock.message.fail",
 					WebUtils.getAsString(account.getOwner(), "lucas:accountOwnerStringConverter"));
 		}
-		WebUtils.refreshEntities(searchAccountResults, selectedAccounts, accountBean::findById);
+		WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, accountBean::findById);
 	}
 
 	public void protect() {
@@ -470,7 +470,7 @@ public class AccountBean implements Serializable {
 					"lucas.application.accountScreen.protect.message.fail",
 					WebUtils.getAsString(account.getOwner(), "lucas:accountOwnerStringConverter"));
 		}
-		WebUtils.refreshEntities(searchAccountResults, selectedAccounts, accountBean::findById);
+		WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, accountBean::findById);
 	}
 
 	public void unprotect() {
@@ -481,7 +481,7 @@ public class AccountBean implements Serializable {
 					"lucas.application.accountScreen.unprotect.message.fail",
 					WebUtils.getAsString(account.getOwner(), "lucas:accountOwnerStringConverter"));
 		}
-		WebUtils.refreshEntities(searchAccountResults, selectedAccounts, accountBean::findById);
+		WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, accountBean::findById);
 	}
 
 	/*

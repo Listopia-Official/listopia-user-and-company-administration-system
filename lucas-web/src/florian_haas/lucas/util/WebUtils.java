@@ -281,13 +281,23 @@ public class WebUtils {
 		return context.getApplication().createConverter(converterId).getAsString(context, UIComponent.getCurrentComponent(context), object);
 	}
 
-	public static <E extends EntityBase> void refreshEntities(List<E> entityList, List<E> selectedEntities, Function<Long, E> entityDao) {
-		for (int i = 0; i < entityList.size(); i++) {
-			E tmp = entityList.get(i);
-			E refreshed = entityDao.apply(tmp.getId());
-			entityList.set(i, refreshed);
-			if (selectedEntities.contains(tmp)) {
-				selectedEntities.set(selectedEntities.indexOf(tmp), refreshed);
+	public static <E extends EntityBase> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,
+			Function<Long, E> entityDao) {
+		ListIterator<E> it = entityList.listIterator();
+		while (it.hasNext()) {
+			E tmp = it.next();
+			Long id = tmp.getId();
+			if (getCDIManagerBean(EntityBean.class).exists(id, entityClass)) {
+				E refreshed = entityDao.apply(id);
+				it.set(refreshed);
+				if (selectedEntities.contains(tmp)) {
+					selectedEntities.set(selectedEntities.indexOf(tmp), refreshed);
+				}
+			} else {
+				it.remove();
+				if (selectedEntities.contains(tmp)) {
+					selectedEntities.remove(tmp);
+				}
 			}
 		}
 	}
