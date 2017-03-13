@@ -15,7 +15,6 @@ import org.apache.shiro.subject.Subject;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.security.*;
 
 @Stateless
@@ -122,7 +121,7 @@ public class LoginBean implements LoginBeanLocal {
 	}
 
 	@Override
-	public Boolean removeLoginUserRole(Long userId, Long roleId) {
+	public Boolean removeLoginUserRoleFromUser(Long userId, Long roleId) {
 		LoginUser user = loginUserDao.findById(userId);
 		LoginUserRole role = loginUserRoleDao.findById(roleId);
 		return user.removeRole(role);
@@ -180,8 +179,18 @@ public class LoginBean implements LoginBeanLocal {
 	}
 
 	@Override
-	public Set<String> getPermissions(@ValidEntityId(entityClass = LoginUserRole.class) Long roleId) {
+	public Set<String> getPermissions(Long roleId) {
 		return loginUserRoleDao.findById(roleId).getPermissions();
+	}
+
+	@Override
+	public Boolean removeLoginUserRole(Long roleId) {
+		if (!loginUserRoleDao.isUsed(roleId)) {
+			LoginUserRole role = loginUserRoleDao.findById(roleId);
+			loginUserRoleDao.delete(role);
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
 	}
 
 }

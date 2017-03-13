@@ -2,7 +2,7 @@ package florian_haas.lucas.database.impl;
 
 import java.util.*;
 
-import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.*;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
@@ -32,5 +32,15 @@ public class LoginUserRoleDAOImpl extends DAOImpl<LoginUserRole> implements Logi
 
 			return predicates.toArray(new Predicate[predicates.size()]);
 		});
+	}
+
+	@Override
+	public Boolean isUsed(Long id) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Long> query = builder.createQuery(Long.class);
+		Root<LoginUser> user = query.from(LoginUser.class);
+		Path<Long> loginUserRoleId = user.join(LoginUser_.roles).get(LoginUserRole_.id);
+		query.select(builder.count(loginUserRoleId)).where(builder.equal(loginUserRoleId, id));
+		return manager.createQuery(query).getSingleResult() > 0;
 	}
 }
