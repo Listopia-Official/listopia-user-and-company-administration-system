@@ -31,7 +31,7 @@ public interface LoginBeanLocal {
 
 	public LoginUser findLoginUserById(@ValidEntityId(entityClass = LoginUser.class) Long id);
 
-	public Boolean addLoginUserRole(@ValidEntityId(entityClass = LoginUser.class) Long userId,
+	public Boolean addLoginUserRoleToUser(@ValidEntityId(entityClass = LoginUser.class) Long userId,
 			@ValidEntityId(entityClass = LoginUserRole.class) Long roleId);
 
 	public Boolean removeLoginUserRoleFromUser(@ValidEntityId(entityClass = LoginUser.class) Long userId,

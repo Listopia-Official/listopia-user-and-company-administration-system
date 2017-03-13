@@ -102,7 +102,7 @@ public class LoginBean implements LoginBeanLocal {
 	}
 
 	@Override
-	public Boolean addLoginUserRole(Long userId, Long roleId) {
+	public Boolean addLoginUserRoleToUser(Long userId, Long roleId) {
 		LoginUser user = loginUserDao.findById(userId);
 		LoginUserRole role = loginUserRoleDao.findById(roleId);
 		return user.addRole(role);
