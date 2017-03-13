@@ -1,0 +1,75 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.loginRoleScreen.editLoginUserRoleDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="editLoginUserRoleDialog" />
+	<ui:param name="formId" value="editLoginUserRoleDialogForm" />
+	<ui:define name="dialogContent">
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleDialog.nameInputText.name']}"
+							title="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleDialog.nameInputText.tooltip']}"
+							for="roleNameInputText" />
+					</p:column>
+					<p:column colspan="3">
+						<p:inputText id="roleNameInputText"
+							value="#{loginRoleBean.editLoginUserRoleDialogName}"
+							title="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleDialog.nameInputText.tooltip']}" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="roleNameInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleDialog.permissionsPickList.name']}"
+							title="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleDialog.permissionsPickList.tooltip']}"
+							for="permissionsPickList" />
+					</p:column>
+					<p:column colspan="3">
+						<p:pickList id="permissionsPickList" showSourceFilter="true" filterMatchMode="contains"
+							showTargetFilter="true"
+							value="#{loginRoleBean.editLoginUserRoleDialogPermissionsListModel}"
+							var="permission" itemLabel="#{permission}"
+							itemValue="#{permission}"
+							addLabel="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleDialog.permissionsPickList.addLabel']}"
+							addAllLabel="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleDialog.permissionsPickList.addAllLabel']}"
+							removeLabel="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleDialog.permissionsPickList.removeLabel']}"
+							removeAllLabel="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleDialog.permissionsPickList.removeAllLabel']}" />
+					</p:column>
+					<p:column colspan="2" />
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this roleNameInputText permissionsPickList"
+							update="@form dataAccorditionPanel:loginRoleSearchResultsForm:loginRoleSearchResultsTable"
+							action="#{loginRoleBean.editLoginRole}"
+							value="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleDialog.saveRoleButton.name']}"
+							title="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleDialog.saveRoleButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('editLoginUserRoleDialog').hide()}" />
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this"
+							value="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleDialog.cancelButton.tooltip']}"
+							oncomplete="PF('editLoginUserRoleDialog').hide()"
+							immediate="true">
+						</p:commandButton>
+					</p:column>
+					<p:column colspan="4" />
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

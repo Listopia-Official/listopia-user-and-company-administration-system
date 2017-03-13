@@ -1,0 +1,174 @@
+<ui:composition template="/WEB-INF/web/template/dataTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="pageTitle"
+		value="#{msg['lucas.application.loginRoleScreen.title']}" />
+	<ui:param name="sitePrefix" value="loginRole" />
+	<ui:param name="searchBean" value="#{loginRoleBean}" />
+	<ui:param name="searchResults"
+		value="#{loginRoleBean.searchLoginRoleResults}" />
+	<ui:param name="selectedResults"
+		value="#{loginRoleBean.selectedLoginRoles}" />
+	<ui:param name="searchFunction" value="searchLoginRoles" />
+	<ui:param name="refreshFunction" value="refreshLoginRoles" />
+	<ui:define name="dialogs">
+		<ui:include
+			src="/WEB-INF/web/loginUserRole/createLoginUserRoleDialog.xhtml" />
+		<ui:include
+			src="/WEB-INF/web/loginUserRole/viewPermissionsDialog.xhtml" />
+		<ui:include
+			src="/WEB-INF/web/loginUserRole/editLoginUserRoleDialog.xhtml" />
+	</ui:define>
+	<ui:define name="buttonArea">
+		<p:toolbarGroup align="left">
+			<p:commandButton
+				value="#{msg['lucas.application.loginRoleScreen.createLoginUserRoleButton.name']}"
+				title="#{msg['lucas.application.loginRoleScreen.createLoginUserRoleButton.tooltip']}"
+				icon="fa fa-plus"
+				oncomplete="PF('createLoginUserRoleDialog').show()"
+				action="#{loginRoleBean.initCreateLoginUserRoleDialog}"
+				process="@this" update="createLoginUserRoleDialogForm" />
+			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			<p:commandButton
+				value="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleButton.name']}"
+				title="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleButton.tooltip']}"
+				icon="fa fa-edit" oncomplete="PF('editLoginUserRoleDialog').show()"
+				action="#{loginRoleBean.initEditLoginUserRoleDialog}"
+				process="@this" update="editLoginUserRoleDialogForm"
+				disabled="#{loginRoleBean.selectedLoginRoles.size() != 1}" />
+			<p:commandButton
+				value="#{msg['lucas.application.loginRoleScreen.showLoginUserRolePermissionsButton.name']}"
+				title="#{msg['lucas.application.loginRoleScreen.showLoginUserRolePermissionsButton.tooltip']}"
+				icon="fa fa-search" oncomplete="PF('viewPermissionsDialog').show()"
+				action="#{loginRoleBean.initPermissionsDialog}" process="@this"
+				update="viewPermissionsDialogForm"
+				disabled="#{loginRoleBean.selectedLoginRoles.size() != 1}" />
+			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			<p:commandButton
+				value="#{msg['lucas.application.loginRoleScreen.removeLoginUserRoleButton.name']}"
+				title="#{msg['lucas.application.loginRoleScreen.removeLoginUserRoleButton.tooltip']}"
+				icon="fa fa-remove" process="@this"
+				update="dataAccorditionPanel:loginRoleSearchResultsForm:loginRoleSearchResultsTable"
+				action="#{loginRoleBean.removeLoginUserRole}"
+				disabled="#{loginRoleBean.selectedLoginRoles.size() &lt;= 0}">
+				<p:confirm
+					header="#{msg['lucas.application.loginRoleScreen.removeLoginUserRoleConfirmDialog.header']}"
+					message="#{msg['lucas.application.loginRoleScreen.removeLoginUserRoleConfirmDialog.message']}" />
+			</p:commandButton>
+		</p:toolbarGroup>
+	</ui:define>
+	<ui:define name="searchCriteria">
+		<p:row>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchLoginUserRoleIdSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{loginRoleBean.useSearchLoginUserRoleId}"
+					title="#{msg['lucas.application.loginRoleScreen.searchLoginUserRoleIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="loginRoleSearchCriteriaForm:searchLoginUserRoleIdInputNumber loginRoleSearchCriteriaForm:searchLoginUserRoleIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchLoginUserRoleIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.loginRoleScreen.searchLoginUserRoleIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.loginRoleScreen.searchLoginUserRoleIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchLoginUserRoleNameSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{loginRoleBean.useSearchLoginUserRoleName}"
+					title="#{msg['lucas.application.loginRoleScreen.searchLoginUserRoleNameSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="loginRoleSearchCriteriaForm:searchLoginUserRoleNameInputText loginRoleSearchCriteriaForm:searchLoginUserRoleNameComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchLoginUserRoleNameSelectBooleanCheckbox"
+					value="#{msg['lucas.application.loginRoleScreen.searchLoginUserRoleNameSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.loginRoleScreen.searchLoginUserRoleNameSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchLoginUserRolePermissionsSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{loginRoleBean.useSearchLoginUserRolePermissions}"
+					title="#{msg['lucas.application.loginRoleScreen.searchLoginUserRolePermissionsSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="loginRoleSearchCriteriaForm:searchLoginUserRolePermissionsChips loginRoleSearchCriteriaForm:searchLoginUserRolePermissionsComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchLoginUserRolePermissionsSelectBooleanCheckbox"
+					value="#{msg['lucas.application.loginRoleScreen.searchLoginUserRolePermissionsSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.loginRoleScreen.searchLoginUserRolePermissionsSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:selectOneMenu id="searchLoginUserRoleIdComparator"
+					disabled="#{not loginRoleBean.useSearchLoginUserRoleId}"
+					value="#{loginRoleBean.searchLoginUserRoleIdComparator}"
+					title="#{msg['lucas.application.loginRoleScreen.searchLoginUserRoleIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchLoginUserRoleNameComparator"
+					disabled="#{not loginRoleBean.useSearchLoginUserRoleName}"
+					value="#{loginRoleBean.searchLoginUserRoleNameComparator}"
+					title="#{msg['lucas.application.loginRoleScreen.searchLoginUserRoleNameComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchLoginUserRolePermissionsComparator"
+					disabled="#{not loginRoleBean.useSearchLoginUserRolePermissions}"
+					value="#{loginRoleBean.searchLoginUserRolePermissionsComparator}"
+					title="#{msg['lucas.application.loginRoleScreen.searchLoginUserRolePermissionsComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.ARRAY_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:inputNumber value="#{loginRoleBean.searchLoginUserRoleId}"
+					minValue="0" decimalPlaces="0"
+					id="searchLoginUserRoleIdInputNumber"
+					disabled="#{not loginRoleBean.useSearchLoginUserRoleId}" />
+			</p:column>
+			<p:column>
+				<p:inputText value="#{loginRoleBean.searchLoginUserRoleName}"
+					id="searchLoginUserRoleNameInputText"
+					disabled="#{not loginRoleBean.useSearchLoginUserRoleName}" />
+			</p:column>
+			<p:column>
+				<p:chips id="searchLoginUserRolePermissionsChips"
+					value="#{loginRoleBean.searchLoginUserRolePermissions}"
+					disabled="#{not loginRoleBean.useSearchLoginUserRolePermissions}" />
+			</p:column>
+		</p:row>
+	</ui:define>
+	<ui:define name="searchResults">
+		<p:column
+			headerText="#{msg['lucas.application.loginRoleScreen.loginRoleSearchResultsTable.idColumn.name']}"
+			sortBy="#{entity.id}"
+			visible="#{loginRoleBean.resultsDatatableColumns[0]}">
+			<h:outputText value="#{entity.id}" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.loginRoleScreen.loginRoleSearchResultsTable.nameColumn.name']}"
+			sortBy="#{entity.name}"
+			visible="#{loginRoleBean.resultsDatatableColumns[1]}">
+			<h:outputText value="#{entity.name}" />
+		</p:column>
+	</ui:define>
+</ui:composition>
