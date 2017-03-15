@@ -114,4 +114,10 @@ public class Utils {
 		}
 		return ret;
 	}
+
+	public static <K, V> Map<K, V> asMap(K key, V value) {
+		Map<K, V> map = new HashMap<>();
+		map.put(key, value);
+		return map;
+	}
 }
