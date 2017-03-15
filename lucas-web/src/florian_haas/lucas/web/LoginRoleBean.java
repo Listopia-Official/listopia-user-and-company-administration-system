@@ -97,8 +97,8 @@ public class LoginRoleBean implements Serializable {
 			searchLoginRoleResults.addAll(results);
 			params.add(results.size());
 			return true;
-		}, "lucas.application.loginRoleScreen.searchLoginUser.message.success", null,
-				"lucas.application.loginRoleScreen.searchLoginUser.message.fail");
+		}, "lucas.application.loginRoleScreen.searchLoginUserRoles.message.success", null,
+				"lucas.application.loginRoleScreen.searchLoginUserRoles.message.fail");
 	}
 
 	public void refreshLoginRoles() {
@@ -106,8 +106,8 @@ public class LoginRoleBean implements Serializable {
 			WebUtils.refreshEntities(LoginUserRole.class, searchLoginRoleResults, selectedLoginRoles, loginUserRoleBean::findById, false);
 			params.add(searchLoginRoleResults.size());
 			return true;
-		}, "lucas.application.loginRoleScreen.refreshLoginUsers.message.success", null,
-				"lucas.application.loginRoleScreen.refreshLoginUsers.message.fail");
+		}, "lucas.application.loginRoleScreen.refreshLoginUserRoles.message.success", null,
+				"lucas.application.loginRoleScreen.refreshLoginUserRoles.message.fail");
 	}
 
 	public Long getSearchLoginUserRoleId() {
