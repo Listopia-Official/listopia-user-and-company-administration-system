@@ -655,8 +655,7 @@ public class UserBean implements Serializable {
 				});
 				User tmp2 = userBean.findById(id);
 				params.add(WebUtils.getAsString(tmp, "lucas:userStringConverter"));
-				Collections.replaceAll(searchUserResults, editUserDialogSelectedUser, tmp2);
-				Collections.replaceAll(selectedUsers, editUserDialogSelectedUser, tmp2);
+				WebUtils.refreshEntities(User.class, searchUserResults, selectedUsers, tmp2, userBean::findById, true);
 				return true;
 			}, "lucas.application.userScreen.editUser.message.success", null, "lucas.application.userScreen.editUser.message.fail");
 		}
@@ -829,8 +828,8 @@ public class UserBean implements Serializable {
 						WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
 					}, WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter"))) {
 				UserCard newCard = userBean.findUserCardById(id);
-				Collections.replaceAll(userCardManagerDialogSelectedUserCards, card, newCard);
-				Collections.replaceAll(userCardManagerDialogUserCards, card, newCard);
+				WebUtils.refreshEntities(UserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
+						userBean::findUserCardById, true);
 			}
 		}
 	}
@@ -852,8 +851,8 @@ public class UserBean implements Serializable {
 						WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
 					}, WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter"))) {
 				UserCard newCard = userBean.findUserCardById(id);
-				Collections.replaceAll(userCardManagerDialogSelectedUserCards, card, newCard);
-				Collections.replaceAll(userCardManagerDialogUserCards, card, newCard);
+				WebUtils.refreshEntities(UserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
+						userBean::findUserCardById, true);
 			}
 		}
 	}
@@ -884,8 +883,8 @@ public class UserBean implements Serializable {
 						WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
 					})) {
 				UserCard newCard = userBean.findUserCardById(id);
-				Collections.replaceAll(userCardManagerDialogSelectedUserCards, card, newCard);
-				Collections.replaceAll(userCardManagerDialogUserCards, card, newCard);
+				WebUtils.refreshEntities(UserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
+						userBean::findUserCardById, true);
 			}
 		}
 	}
@@ -907,8 +906,8 @@ public class UserBean implements Serializable {
 						WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
 					})) {
 				UserCard newCard = userBean.findUserCardById(id);
-				Collections.replaceAll(userCardManagerDialogSelectedUserCards, card, newCard);
-				Collections.replaceAll(userCardManagerDialogUserCards, card, newCard);
+				WebUtils.refreshEntities(UserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
+						userBean::findUserCardById, true);
 			}
 		}
 	}

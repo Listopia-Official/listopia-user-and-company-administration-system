@@ -283,13 +283,23 @@ public class WebUtils {
 
 	public static <E extends EntityBase> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,
 			Function<Long, E> entityDao, Boolean onlySelected) {
+		refreshEntities(entityClass, entityList, selectedEntities, (Map<Long, E>) null, entityDao, onlySelected);
+	}
+
+	public static <E extends EntityBase> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities, E replacement,
+			Function<Long, E> entityDao, Boolean onlySelected) {
+		refreshEntities(entityClass, entityList, selectedEntities, Utils.asMap(replacement.getId(), replacement), entityDao, onlySelected);
+	}
+
+	public static <E extends EntityBase> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,
+			Map<Long, E> replacements, Function<Long, E> entityDao, Boolean onlySelected) {
 		ListIterator<E> it = entityList.listIterator();
 		while (it.hasNext()) {
 			E tmp = it.next();
 			Long id = tmp.getId();
 			if (getCDIManagerBean(EntityBean.class).exists(id, entityClass)) {
 				if (onlySelected ? selectedEntities.contains(tmp) : true) {
-					E refreshed = entityDao.apply(id);
+					E refreshed = replacements != null && replacements.get(id) != null ? replacements.get(id) : entityDao.apply(id);
 					it.set(refreshed);
 					if (selectedEntities.contains(tmp)) {
 						selectedEntities.set(selectedEntities.indexOf(tmp), refreshed);
