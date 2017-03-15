@@ -171,11 +171,16 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 	}
 
 	@SuppressWarnings("hiding")
+	protected final <T extends Comparable<? super T>, E extends EntityBase> void getSingularRestrictionCollection(Expression<T> attribute,
+			List<T> values, Boolean useValue, EnumQueryComparator comparator, List<Predicate> list, CriteriaBuilder builder, Path<E> path) {
+		if (useValue) list.add(getSingularRestrictionCollection(attribute, values, comparator, builder, path));
+	}
+
+	@SuppressWarnings("hiding")
 	protected final <T extends Comparable<? super T>, E extends EntityBase> void getSingularRestrictionCollection(
 			SingularAttribute<? super E, T> attribute, List<T> values, Boolean useValue, EnumQueryComparator comparator, List<Predicate> list,
 			CriteriaBuilder builder, Path<E> path) {
-		if (useValue) list.add(getSingularRestrictionCollection(attribute, values, comparator, builder, path));
-
+		getSingularRestrictionCollection(path.get(attribute), values, useValue, comparator, list, builder, path);
 	}
 
 	@SuppressWarnings("hiding")
