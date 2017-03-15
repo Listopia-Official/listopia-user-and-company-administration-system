@@ -7,9 +7,11 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.shiro.subject.Subject;
 
+import florian_haas.lucas.database.*;
+import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.*;
-import florian_haas.lucas.util.validation.NotBlankString;
+import florian_haas.lucas.util.validation.*;
 
 @Local
 public interface LoginBeanLocal {
@@ -29,6 +31,13 @@ public interface LoginBeanLocal {
 	public Subject getSubject();
 
 	public LoginUser findLoginUserById(@ValidEntityId(entityClass = LoginUser.class) Long id);
+
+	public List<LoginUser> findLoginUsers(@NotNull Long id, @NotNull String username, @NotNull Long userId,
+			List<@TypeNotNull @TypeMin(0) Long> roleIds, @NotNull Boolean useId, @NotNull Boolean useUsername, @NotNull Boolean useUserId,
+			@NotNull Boolean useRoleIds, @QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator usernameComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator userIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator roleIdsComparator);
 
 	public Boolean addLoginUserRoleToUser(@ValidEntityId(entityClass = LoginUser.class) Long userId,
 			@ValidEntityId(entityClass = LoginUserRole.class) Long roleId);
