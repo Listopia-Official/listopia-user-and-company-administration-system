@@ -55,12 +55,12 @@ public class LoginUserRoleBean implements LoginUserRoleBeanLocal {
 	}
 
 	@Override
-	public LoginUserRole findLoginUserRoleById(Long roleId) {
+	public LoginUserRole findById(Long roleId) {
 		return loginUserRoleDao.findById(roleId);
 	}
 
 	@Override
-	public List<LoginUserRole> findAllLoginUserRoles() {
+	public List<LoginUserRole> findAll() {
 		return loginUserRoleDao.findAll();
 	}
 

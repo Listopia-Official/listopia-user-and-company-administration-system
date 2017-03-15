@@ -103,8 +103,7 @@ public class LoginRoleBean implements Serializable {
 
 	public void refreshLoginRoles() {
 		WebUtils.executeTask((params) -> {
-			WebUtils.refreshEntities(LoginUserRole.class, searchLoginRoleResults, selectedLoginRoles, loginUserRoleBean::findLoginUserRoleById,
-					false);
+			WebUtils.refreshEntities(LoginUserRole.class, searchLoginRoleResults, selectedLoginRoles, loginUserRoleBean::findById, false);
 			params.add(searchLoginRoleResults.size());
 			return true;
 		}, "lucas.application.loginRoleScreen.refreshLoginUsers.message.success", null,
@@ -221,7 +220,7 @@ public class LoginRoleBean implements Serializable {
 		WebUtils.executeTask(params -> {
 			params.add(
 					WebUtils.getAsString(
-							loginUserRoleBean.findLoginUserRoleById(loginUserRoleBean.newLoginUserRole(createLoginUserRoleDialogName,
+							loginUserRoleBean.findById(loginUserRoleBean.newLoginUserRole(createLoginUserRoleDialogName,
 									new HashSet<>(createLoginUserRoleDialogPermissionsListModel.getTarget()))),
 							"lucas:loginUserRoleStringConverter"));
 			return true;
@@ -336,10 +335,9 @@ public class LoginRoleBean implements Serializable {
 					loginUserRoleBean.removePermission(id, permission);
 				}
 			});
-			LoginUserRole newRole = loginUserRoleBean.findLoginUserRoleById(id);
+			LoginUserRole newRole = loginUserRoleBean.findById(id);
 			params.add(WebUtils.getAsString(editLoginUserRole, "lucas:loginUserRoleStringConverter"));
-			WebUtils.refreshEntities(LoginUserRole.class, searchLoginRoleResults, selectedLoginRoles, newRole,
-					loginUserRoleBean::findLoginUserRoleById, true);
+			WebUtils.refreshEntities(LoginUserRole.class, searchLoginRoleResults, selectedLoginRoles, newRole, loginUserRoleBean::findById, true);
 			return true;
 		}, "lucas.application.loginRoleScreen.editLoginUserRole.success", null, "lucas.application.loginRoleScreen.editLoginUserRole.fail");
 	}

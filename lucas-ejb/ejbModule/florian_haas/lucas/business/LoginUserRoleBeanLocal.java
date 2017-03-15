@@ -28,9 +28,9 @@ public interface LoginUserRoleBeanLocal {
 
 	public Set<String> getPermissions(@ValidEntityId(entityClass = LoginUserRole.class) Long roleId);
 
-	public LoginUserRole findLoginUserRoleById(@ValidEntityId(entityClass = LoginUserRole.class) Long roleId);
+	public LoginUserRole findById(@ValidEntityId(entityClass = LoginUserRole.class) Long roleId);
 
-	public List<LoginUserRole> findAllLoginUserRoles();
+	public List<LoginUserRole> findAll();
 
 	public List<LoginUserRole> findLoginUserRoles(@NotNull Long id, @NotNull String name, Set<@TypeNotNull @NotBlankString String> permissions,
 			@NotNull Boolean useId, @NotNull Boolean useName, @NotNull Boolean usePermissions,
