@@ -32,9 +32,9 @@ public interface LoginBeanLocal {
 
 	public LoginUser findLoginUserById(@ValidEntityId(entityClass = LoginUser.class) Long id);
 
-	public List<LoginUser> findLoginUsers(@NotNull Long id, @NotNull String username, @NotNull Long userId,
-			List<@TypeNotNull @TypeMin(0) Long> roleIds, @NotNull Boolean useId, @NotNull Boolean useUsername, @NotNull Boolean useUserId,
-			@NotNull Boolean useRoleIds, @QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
+	public List<LoginUser> findLoginUsers(@NotNull Long id, @NotNull String username, Long userId, List<@TypeNotNull @TypeMin(0) Long> roleIds,
+			@NotNull Boolean useId, @NotNull Boolean useUsername, @NotNull Boolean useUserId, @NotNull Boolean useRoleIds,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator usernameComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator userIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator roleIdsComparator);
