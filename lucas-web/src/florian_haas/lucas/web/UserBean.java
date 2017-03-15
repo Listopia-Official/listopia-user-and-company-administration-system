@@ -504,7 +504,7 @@ public class UserBean implements Serializable {
 
 	public void refreshUsers() {
 		WebUtils.executeTask((params) -> {
-			WebUtils.refreshEntities(User.class, searchUserResults, selectedUsers, userBean::findById);
+			WebUtils.refreshEntities(User.class, searchUserResults, selectedUsers, userBean::findById, false);
 			params.add(searchUserResults.size());
 			return true;
 		}, "lucas.application.userScreen.refreshUsers.success", null, "lucas.application.userScreen.refreshUsers.fail");
@@ -945,7 +945,7 @@ public class UserBean implements Serializable {
 	public void userCardManagerDialogRefreshUserCards() {
 		WebUtils.executeTask((params) -> {
 			WebUtils.refreshEntities(UserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards,
-					userBean::findUserCardById);
+					userBean::findUserCardById, true);
 			params.add(userCardManagerDialogUserCards.size());
 			return true;
 		}, "lucas.application.userScreen.refreshUserCards.success", null, "lucas.application.userScreen.refreshUserCards.fail", message -> {

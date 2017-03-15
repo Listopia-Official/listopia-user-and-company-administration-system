@@ -103,7 +103,8 @@ public class LoginRoleBean implements Serializable {
 
 	public void refreshLoginRoles() {
 		WebUtils.executeTask((params) -> {
-			WebUtils.refreshEntities(LoginUserRole.class, searchLoginRoleResults, selectedLoginRoles, loginUserRoleBean::findLoginUserRoleById);
+			WebUtils.refreshEntities(LoginUserRole.class, searchLoginRoleResults, selectedLoginRoles, loginUserRoleBean::findLoginUserRoleById,
+					false);
 			params.add(searchLoginRoleResults.size());
 			return true;
 		}, "lucas.application.loginRoleScreen.refreshLoginUsers.message.success", null,
