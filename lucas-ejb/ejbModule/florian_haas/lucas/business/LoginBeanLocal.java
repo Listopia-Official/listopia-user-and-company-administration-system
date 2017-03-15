@@ -22,8 +22,7 @@ public interface LoginBeanLocal {
 
 	public void logout();
 
-	public Boolean changePassword(@ValidEntityId(entityClass = LoginUser.class) Long loginUserId, @ValidUnhashedPassword char[] oldPassword,
-			@ValidUnhashedPassword char[] newPassword);
+	public Boolean changePassword(@ValidUnhashedPassword char[] oldPassword, @ValidUnhashedPassword char[] newPassword);
 
 	public Boolean newPassword(@ValidEntityId(entityClass = LoginUser.class) Long loginUserId, @ValidUnhashedPassword char[] newPassword);
 

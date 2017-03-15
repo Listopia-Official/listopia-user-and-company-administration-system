@@ -73,8 +73,13 @@ public class LoginBean implements LoginBeanLocal {
 
 	@Override
 	@RequiresPermissions(LOGIN_CHANGE_PASSWORD)
-	public Boolean changePassword(Long loginUserId, char[] oldPassword, char[] newPassword) {
-		return changePasswordHelper(loginUserId, oldPassword, newPassword);
+	public Boolean changePassword(char[] oldPassword, char[] newPassword) {
+		Boolean ret = Boolean.FALSE;
+		try {
+			ret = changePasswordHelper(Long.valueOf(SecurityUtils.getSubject().getPrincipal().toString()), oldPassword, newPassword);
+		}
+		catch (NumberFormatException e) {}
+		return ret;
 	}
 
 	@Override
