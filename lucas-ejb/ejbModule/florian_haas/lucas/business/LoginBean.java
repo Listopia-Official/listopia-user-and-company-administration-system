@@ -52,20 +52,23 @@ public class LoginBean implements LoginBeanLocal {
 
 	@Override
 	@RequiresPermissions(LOGIN_CREATE_RAW_LOGIN_USER)
-	public Long newLoginUser(String username, char[] password) {
-		return newLoginUserHelper(username, password, null);
+	public Long newLoginUser(String username, char[] password, List<Long> userRoleIds) {
+		return newLoginUserHelper(username, password, null, userRoleIds);
 	}
 
 	@Override
 	@RequiresPermissions(LOGIN_CREATE_REGISTERED_LOGIN_USER)
-	public Long newLoginUser(Long user, char[] password) {
-		return newLoginUserHelper(Long.toString(user), password, userBean.findById(user));
+	public Long newLoginUser(Long user, char[] password, List<Long> userRoleIds) {
+		return newLoginUserHelper(Long.toString(user), password, userBean.findById(user), userRoleIds);
 	}
 
-	private Long newLoginUserHelper(String username, char[] password, User usr) {
+	private Long newLoginUserHelper(String username, char[] password, User usr, List<Long> userRoleIds) {
 		PasswordService passwordService = new DefaultPasswordService();
 		String encryptedPassword = passwordService.encryptPassword(password);
 		LoginUser user = new LoginUser(username, encryptedPassword, usr);
+		userRoleIds.forEach(id -> {
+			user.addRole(loginUserRoleDao.findById(id));
+		});
 		Arrays.fill(password, 'c');
 		loginUserDao.persist(user);
 		return user.getId();
