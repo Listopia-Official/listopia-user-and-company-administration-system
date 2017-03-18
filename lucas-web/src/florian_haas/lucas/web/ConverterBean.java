@@ -28,4 +28,8 @@ public class ConverterBean implements Serializable {
 		}
 		return ret;
 	}
+
+	public String getAsString(Object object, String converterId) {
+		return WebUtils.getAsString(object, converterId);
+	}
 }
