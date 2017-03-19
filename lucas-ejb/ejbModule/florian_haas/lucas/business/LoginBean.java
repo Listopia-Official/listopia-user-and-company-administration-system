@@ -103,7 +103,9 @@ public class LoginBean implements LoginBeanLocal {
 		String newEncryptedPassword = passwordService.encryptPassword(newPassword);
 		Arrays.fill(newPassword, 'c');
 		if (oldPassword == null || (oldPassword != null && passwordService.passwordsMatch(oldPassword, user.getHashedPassword()))) {
-			Arrays.fill(oldPassword, 'c');
+			if (oldPassword != null) {
+				Arrays.fill(oldPassword, 'c');
+			}
 			user.setHashedPassword(newEncryptedPassword);
 			return Boolean.TRUE;
 		}
