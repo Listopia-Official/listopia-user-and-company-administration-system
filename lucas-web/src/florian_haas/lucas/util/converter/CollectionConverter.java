@@ -7,7 +7,7 @@ import javax.faces.context.FacesContext;
 
 import florian_haas.lucas.util.WebUtils;
 
-public abstract class CollectionConverter extends ReadOnlyConverter {
+public abstract class CollectionConverter<T> extends ReadOnlyConverter {
 
 	private final String NO_VALUE_KEY;
 
@@ -16,17 +16,22 @@ public abstract class CollectionConverter extends ReadOnlyConverter {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
-		Collection<?> collection = (Collection<?>) value;
+		Collection<T> collection = (Collection<T>) value;
 		StringBuilder builder = new StringBuilder();
 		if (collection.isEmpty()) {
 			builder.append(WebUtils.getTranslatedMessage(NO_VALUE_KEY));
 		} else {
-			collection.forEach(rank -> {
-				builder.append(rank + "<br />");
+			collection.forEach(entry -> {
+				builder.append(entryToString(entry) + "<br />");
 			});
 		}
 		return builder.toString().trim();
+	}
+
+	protected String entryToString(T entry) {
+		return entry.toString();
 	}
 
 }
