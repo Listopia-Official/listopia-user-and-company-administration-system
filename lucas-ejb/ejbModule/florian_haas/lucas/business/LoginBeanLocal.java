@@ -44,6 +44,8 @@ public interface LoginBeanLocal {
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator userIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator roleIdsComparator);
 
+	public Boolean changeUsername(@ValidEntityId(entityClass = LoginUser.class) Long id, String username);
+
 	public Boolean addLoginUserRoleToUser(@ValidEntityId(entityClass = LoginUser.class) Long userId,
 			@ValidEntityId(entityClass = LoginUserRole.class) Long roleId);
 

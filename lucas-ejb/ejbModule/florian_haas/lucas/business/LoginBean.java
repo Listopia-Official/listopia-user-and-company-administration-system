@@ -4,8 +4,10 @@ import static florian_haas.lucas.security.EnumPermission.*;
 
 import java.util.*;
 
+import javax.annotation.Resource;
 import javax.ejb.*;
 import javax.inject.Inject;
+import javax.validation.*;
 import javax.validation.executable.*;
 
 import org.apache.shiro.SecurityUtils;
@@ -15,6 +17,7 @@ import org.apache.shiro.subject.Subject;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
+import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.*;
 
 @Stateless
@@ -33,6 +36,9 @@ public class LoginBean implements LoginBeanLocal {
 
 	@EJB
 	private UserBeanLocal userBean;
+
+	@Resource
+	private Validator validator;
 
 	@Override
 	public void login(String username, char[] password) {
@@ -139,6 +145,19 @@ public class LoginBean implements LoginBeanLocal {
 	@Override
 	public LoginUser findLoginUserByUsername(String username) {
 		return loginUserDao.findByUsername(username);
+	}
+
+	@Override
+	public Boolean changeUsername(@ValidEntityId(entityClass = LoginUser.class) Long id, String username) {
+		LoginUser user = loginUserDao.findById(id);
+		Set<ConstraintViolation<LoginUser>> violations = validator.validate(user, DefaultLoginUserRequired.class);
+		if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
+		if (user.getUsername().equals(username)) {
+			return Boolean.FALSE;
+		} else {
+			user.setUsername(username);
+			return Boolean.TRUE;
+		}
 	}
 
 }

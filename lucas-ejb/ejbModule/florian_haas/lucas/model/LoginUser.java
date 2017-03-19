@@ -3,8 +3,9 @@ package florian_haas.lucas.model;
 import java.util.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
+import florian_haas.lucas.model.validation.DefaultLoginUserRequired;
 import florian_haas.lucas.util.validation.*;
 
 @Entity
@@ -25,6 +26,7 @@ public class LoginUser extends EntityBase {
 
 	@JoinColumn(unique = true)
 	@OneToOne
+	@Null(groups = DefaultLoginUserRequired.class)
 	private User user;
 
 	@OneToMany(cascade = {
