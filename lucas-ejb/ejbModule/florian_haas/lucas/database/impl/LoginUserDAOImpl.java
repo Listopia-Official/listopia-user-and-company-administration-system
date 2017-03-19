@@ -23,7 +23,7 @@ public class LoginUserDAOImpl extends DAOImpl<LoginUser> implements LoginUserDAO
 					root);
 			getSingularRestrictionCollection(root.join(LoginUser_.roles, JoinType.LEFT).get(LoginUserRole_.id), roleIds, useRoleIds,
 					roleIdsComparator, predicates, builder, root);
-			return predicates.toArray(new Predicate[predicates.size()]);
+			return predicates;
 		});
 	}
 
@@ -32,7 +32,7 @@ public class LoginUserDAOImpl extends DAOImpl<LoginUser> implements LoginUserDAO
 		return this.readOnlyCriteriaQuerySingleResult((query, root, builder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 			getSingularRestriction(LoginUser_.username, username, Boolean.TRUE, EnumQueryComparator.EQUAL, predicates, builder, root);
-			return predicates.toArray(new Predicate[predicates.size()]);
+			return predicates;
 		});
 	}
 }

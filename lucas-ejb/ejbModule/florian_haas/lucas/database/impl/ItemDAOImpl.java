@@ -25,7 +25,7 @@ public class ItemDAOImpl extends DAOImpl<Item> implements ItemDAO {
 			getSingularRestriction(Item_.itemsAvaible, itemsAvaible, useItemsAvaible, itemsAvaibleComparator, predicates, builder, root);
 			getSingularRestriction(Item_.pricePerItem, pricePerItem, usePricePerItem, pricePerItemComparator, predicates, builder, root);
 
-			return predicates.toArray(new Predicate[predicates.size()]);
+			return predicates;
 		});
 	}
 

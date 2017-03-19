@@ -33,7 +33,7 @@ public class AccountDAOImpl extends ReadOnlyDAOImpl<Account> implements AccountD
 			getSingularRestriction(Account_.blocked, blocked, useBlocked, null, predicates, builder, root);
 			getSingularRestriction(Account_.isProtected, isProtected, useProtected, null, predicates, builder, root);
 
-			return predicates.toArray(new Predicate[predicates.size()]);
+			return predicates;
 		});
 	}
 }

@@ -15,7 +15,7 @@ public class LoginUserRoleDAOImpl extends DAOImpl<LoginUserRole> implements Logi
 		List<LoginUserRole> results = readOnlyCriteriaQuery((query, root, builder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 			getSingularRestriction(LoginUserRole_.name, name, Boolean.TRUE, null, predicates, builder, root);
-			return predicates.toArray(new Predicate[predicates.size()]);
+			return predicates;
 		});
 		return results.size() > 0 ? results.get(0) : null;
 	}
@@ -30,7 +30,7 @@ public class LoginUserRoleDAOImpl extends DAOImpl<LoginUserRole> implements Logi
 			getSingularRestriction(LoginUserRole_.name, name, useName, nameComparator, predicates, builder, root);
 			getPluralRestrictionCollection(LoginUserRole_.permissions, permissions, usePermissions, permissionsComparator, predicates, builder, root);
 
-			return predicates.toArray(new Predicate[predicates.size()]);
+			return predicates;
 		});
 	}
 

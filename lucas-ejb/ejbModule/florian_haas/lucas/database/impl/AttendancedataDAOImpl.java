@@ -24,7 +24,7 @@ public class AttendancedataDAOImpl extends ReadOnlyDAOImpl<Attendancedata> imple
 			getSingularRestriction(Attendancedata_.validTimeMissing, validTimeMissing, useVaidTimeMissing, validTimeMissingComparator, predicates,
 					builder, root);
 
-			return predicates.toArray(new Predicate[predicates.size()]);
+			return predicates;
 		});
 	}
 }

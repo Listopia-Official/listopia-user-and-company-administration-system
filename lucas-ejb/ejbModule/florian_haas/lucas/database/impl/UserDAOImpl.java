@@ -46,7 +46,7 @@ public class UserDAOImpl extends DAOImpl<User> implements UserDAO {
 			}
 			getPluralRestrictionCollection(User_.ranks, ranks, useRanks, ranksComparator, predicates, builder, root);
 
-			return predicates.toArray(new Predicate[predicates.size()]);
+			return predicates;
 		});
 	}
 
