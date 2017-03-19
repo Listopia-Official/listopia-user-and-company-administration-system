@@ -44,7 +44,7 @@ public interface LoginBeanLocal {
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator userIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator roleIdsComparator);
 
-	public Boolean changeUsername(@ValidEntityId(entityClass = LoginUser.class) Long id, String username);
+	public Boolean changeUsername(@ValidEntityId(entityClass = LoginUser.class) Long id, @NotBlank String username);
 
 	public Boolean addLoginUserRoleToUser(@ValidEntityId(entityClass = LoginUser.class) Long userId,
 			@ValidEntityId(entityClass = LoginUserRole.class) Long roleId);
@@ -53,5 +53,7 @@ public interface LoginBeanLocal {
 			@ValidEntityId(entityClass = LoginUserRole.class) Long roleId);
 
 	public List<LoginUser> findAllLoginUsers();
+
+	public List<LoginUserRole> getLoginUserRoles(@ValidEntityId(entityClass = LoginUser.class) Long userId);
 
 }

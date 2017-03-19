@@ -148,7 +148,7 @@ public class LoginBean implements LoginBeanLocal {
 	}
 
 	@Override
-	public Boolean changeUsername(@ValidEntityId(entityClass = LoginUser.class) Long id, String username) {
+	public Boolean changeUsername(Long id, String username) {
 		LoginUser user = loginUserDao.findById(id);
 		Set<ConstraintViolation<LoginUser>> violations = validator.validate(user, DefaultLoginUserRequired.class);
 		if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
@@ -158,6 +158,12 @@ public class LoginBean implements LoginBeanLocal {
 			user.setUsername(username);
 			return Boolean.TRUE;
 		}
+	}
+
+	@Override
+	public List<LoginUserRole> getLoginUserRoles(@ValidEntityId(entityClass = LoginUser.class) Long userId) {
+		LoginUser user = loginUserDao.findById(userId);
+		return new ArrayList<>(user.getRoles());
 	}
 
 }
