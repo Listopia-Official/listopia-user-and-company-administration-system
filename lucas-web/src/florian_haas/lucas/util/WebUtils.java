@@ -13,6 +13,7 @@ import javax.enterprise.inject.spi.CDI;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.imageio.ImageIO;
 import javax.validation.*;
 
@@ -276,9 +277,13 @@ public class WebUtils {
 		return tmp;
 	}
 
-	public static String getAsString(Object object, String converterId) {
+	public static String getAsString(Object object, Converter converter) {
 		FacesContext context = FacesContext.getCurrentInstance();
-		return context.getApplication().createConverter(converterId).getAsString(context, UIComponent.getCurrentComponent(context), object);
+		return converter.getAsString(context, UIComponent.getCurrentComponent(context), object);
+	}
+
+	public static String getAsString(Object object, String converterId) {
+		return getAsString(object, FacesContext.getCurrentInstance().getApplication().createConverter(converterId));
 	}
 
 	public static <E extends EntityBase> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,
