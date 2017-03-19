@@ -6,6 +6,7 @@ import javax.ejb.Local;
 import javax.validation.constraints.NotNull;
 
 import org.apache.shiro.subject.Subject;
+import org.hibernate.validator.constraints.NotBlank;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.database.validation.QueryComparator;
@@ -33,6 +34,8 @@ public interface LoginBeanLocal {
 	public Subject getSubject();
 
 	public LoginUser findLoginUserById(@ValidEntityId(entityClass = LoginUser.class) Long id);
+
+	public LoginUser findLoginUserByUsername(@NotBlank String username);
 
 	public List<LoginUser> findLoginUsers(@NotNull Long id, @NotNull String username, Long userId, List<@TypeNotNull @TypeMin(0) Long> roleIds,
 			@NotNull Boolean useId, @NotNull Boolean useUsername, @NotNull Boolean useUserId, @NotNull Boolean useRoleIds,

@@ -107,16 +107,8 @@ public class AccountBean implements AccountBeanLocal {
 		transactionAmount = transactionAmount.abs();
 
 		final LocalDateTime dateTime = LocalDateTime.now();
-		LoginUser user = null;
-		try {
-			Long userId = Long.valueOf(loginBean.getSubject().getPrincipal().toString());
-			if (userId != null) {
-				if (entityBean.exists(userId, User.class)) {
-					user = loginBean.findLoginUserById(userId);
-				}
-			}
-		}
-		catch (NumberFormatException e) {}
+		LoginUser user = loginBean.findLoginUserByUsername(loginBean.getSubject().getPrincipal().toString());
+
 		account1.addTransactionLog(
 				new TransactionLog(account1, dateTime, action, type, account2, transactionAmount, prevBankBalance1, user, comment));
 

@@ -14,7 +14,7 @@ public class LoginUserDAOImpl extends DAOImpl<LoginUser> implements LoginUserDAO
 	public List<LoginUser> findLoginUsers(Long id, String username, Long userId, List<Long> roleIds, Boolean useId, Boolean useUsername,
 			Boolean useUserId, Boolean useRoleIds, EnumQueryComparator idComparator, EnumQueryComparator usernameComparator,
 			EnumQueryComparator userIdComparator, EnumQueryComparator roleIdsComparator) {
-		List<LoginUser> ret = this.readOnlyCriteriaQuery((query, root, builder) -> {
+		return this.readOnlyCriteriaQuery((query, root, builder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 
 			getSingularRestriction(LoginUser_.id, id, useId, idComparator, predicates, builder, root);
@@ -25,6 +25,14 @@ public class LoginUserDAOImpl extends DAOImpl<LoginUser> implements LoginUserDAO
 					roleIdsComparator, predicates, builder, root);
 			return predicates.toArray(new Predicate[predicates.size()]);
 		});
-		return ret;
+	}
+
+	@Override
+	public LoginUser findByUsername(String username) {
+		return this.readOnlyCriteriaQuerySingleResult((query, root, builder) -> {
+			List<Predicate> predicates = new ArrayList<>();
+			getSingularRestriction(LoginUser_.username, username, Boolean.TRUE, EnumQueryComparator.EQUAL, predicates, builder, root);
+			return predicates.toArray(new Predicate[predicates.size()]);
+		});
 	}
 }

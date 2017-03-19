@@ -143,4 +143,9 @@ public class LoginBean implements LoginBeanLocal {
 				userIdComparator, roleIdsComparator);
 	}
 
+	@Override
+	public LoginUser findLoginUserByUsername(String username) {
+		return loginUserDao.findByUsername(username);
+	}
+
 }
