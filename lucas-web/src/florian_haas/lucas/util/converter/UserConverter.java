@@ -19,19 +19,21 @@ public class UserConverter extends ReadOnlyConverter {
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		User user = value != null ? (User) value : null;
 		String key = NULL_KEY;
-		switch (user.getUserType()) {
-			case PUPIL:
-				key = PUPIL_KEY;
-				break;
-			case TEACHER:
-				key = TEACHER_KEY;
-				break;
-			case GUEST:
-				key = GUEST_KEY;
-				break;
-			default:
-				key = NULL_KEY;
-				break;
+		if (user != null) {
+			switch (user.getUserType()) {
+				case PUPIL:
+					key = PUPIL_KEY;
+					break;
+				case TEACHER:
+					key = TEACHER_KEY;
+					break;
+				case GUEST:
+					key = GUEST_KEY;
+					break;
+				default:
+					key = NULL_KEY;
+					break;
+			}
 		}
 		return key != NULL_KEY ? WebUtils.getTranslatedMessage(key, user.getForename(), user.getSurname(), user.getSchoolClass(), user.getId())
 				: WebUtils.getTranslatedMessage(key);
