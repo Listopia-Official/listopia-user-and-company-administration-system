@@ -23,6 +23,7 @@ public class LoginUser extends EntityBase {
 	@NotNull
 	private String hashedPassword;
 
+	@JoinColumn(unique = true)
 	@OneToOne
 	private User user;
 
