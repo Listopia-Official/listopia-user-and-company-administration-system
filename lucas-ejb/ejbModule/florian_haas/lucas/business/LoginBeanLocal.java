@@ -52,5 +52,4 @@ public interface LoginBeanLocal {
 
 	public List<LoginUser> findAllLoginUsers();
 
-	public String getDBUsername(@ValidEntityId(entityClass = LoginUser.class) Long userId);
 }

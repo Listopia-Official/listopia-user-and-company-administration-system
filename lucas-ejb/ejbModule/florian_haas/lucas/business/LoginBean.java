@@ -129,13 +129,6 @@ public class LoginBean implements LoginBeanLocal {
 	}
 
 	@Override
-	public String getDBUsername(Long userId) {
-		LoginUser user = loginUserDao.findById(userId);
-		User user2 = user.getUser();
-		return user2 != null && user2.getForename() != null && user2.getSurname() != null ? user2.getForename() + " " + user2.getSurname() : null;
-	}
-
-	@Override
 	public List<LoginUser> findLoginUsers(Long id, String username, Long userId, List<Long> roleIds, Boolean useId, Boolean useUsername,
 			Boolean useUserId, Boolean useRoleIds, EnumQueryComparator idComparator, EnumQueryComparator usernameComparator,
 			EnumQueryComparator userIdComparator, EnumQueryComparator roleIdsComparator) {

@@ -17,10 +17,10 @@
 							<h:outputText value="#{pageTitle}" />
 						</p:column>
 						<p:column styleClass="userBarCell right">
-							<p:graphicImage value="#{loginBean.image}" width="42px"
+							<p:graphicImage value="#{loginBean.image}" width="42px" cache="false"
 								height="42px" style="vertical-align:middle;display:inline;" />
 							<p:spacer width="5px" />
-							<p:menuButton value="#{loginBean.loggedInUsername}"
+							<p:menuButton value="#{loginBean.advancedUsername}"
 								iconPos="right">
 								<p:menuitem icon="fa fa-gear"
 									disabled="#{not loginBean.isUserInDatabase}"

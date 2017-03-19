@@ -8,11 +8,10 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.util.CollectionUtils;
 import org.primefaces.model.StreamedContent;
 
 import florian_haas.lucas.business.*;
+import florian_haas.lucas.model.User;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.WebUtils;
 
@@ -32,52 +31,47 @@ public class LoginBean {
 	@EJB
 	private GlobalDataBeanLocal globalDataBean;
 
-	public Boolean getIsUserInDatabase() {
-		return !getIsAnonymous() && getDBUsername() != null;
+	public Boolean getIsAnonymous() {
+		return SecurityUtils.getSubject().getPrincipals().isEmpty();
 	}
 
-	public Object getPrincipal() {
+	private Object getPrincipal() {
 		return getIsAnonymous() ? null : SecurityUtils.getSubject().getPrincipal();
 	}
 
-	public Long getUserId() {
-		String username = getUsername();
+	public String getSimpleUsername() {
+		return getIsAnonymous() ? "Anonymous" : getPrincipal().toString();
+	}
+
+	private Long getUserId(String principal) {
+		String simpleUsername = principal;
 		Long id = null;
-		if (username != null) {
+		if (simpleUsername != null) {
 			try {
-				id = Long.valueOf(username);
+				id = Long.valueOf(simpleUsername);
 			}
 			catch (Exception e) {}
 		}
 		return id;
 	}
 
-	public String getUsername() {
-		Object principal = getPrincipal();
-		return principal != null ? principal.toString() : null;
-	}
-
-	public String getDBUsername() {
-		Long id = getUserId();
-		return id != null ? loginBean.getDBUsername(id) : null;
-	}
-
-	public Boolean getIsAnonymous() {
-		return SecurityUtils.getSubject().getPrincipals().isEmpty();
-	}
-
-	public String getLoggedInUsername() {
-		Subject subject = SecurityUtils.getSubject();
-		if (getIsUserInDatabase()) {
-
+	public String getAdvancedUsername() {
+		String ret = getSimpleUsername();
+		Long id = getUserId(ret);
+		if (id != null && entityBean.exists(id, User.class)) {
+			ret = WebUtils.getAsString(userBean.findById(id), "lucas:userStringConverter");
 		}
-		if (!CollectionUtils.isEmpty(subject.getPrincipals())) return subject.getPrincipal().toString();
-		return "Anonymous";
+		return ret;
+	}
+
+	public Boolean getIsUserInDatabase() {
+		Long id = getUserId(getSimpleUsername());
+		return !getIsAnonymous() && id != null && loginBean.findLoginUserByUsername(id.toString()) != null;
 	}
 
 	public StreamedContent getImage() {
 		StreamedContent ret = null;
-		Long id = getUserId();
+		Long id = getUserId(getSimpleUsername());
 		if (id != null && SecurityUtils.getSubject().isPermitted(EnumPermission.USER_GET_IMAGE_FROM_ID.getPermissionString())) {
 			try {
 				ret = WebUtils.getJPEGImage(userBean.getImage(id));
@@ -86,11 +80,8 @@ public class LoginBean {
 				e.printStackTrace();
 			}
 		}
-		if (ret == null) {
-			ret = WebUtils.getSVGImage(
-					FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/WEB-INF/resources/images/user_male.svg"));
-		}
-		return ret;
+		return ret == null ? WebUtils.getSVGImage(
+				FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/WEB-INF/resources/images/user_male.svg")) : ret;
 	}
 
 	public void logout() {
