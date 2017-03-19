@@ -1,0 +1,136 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.loginUserScreen.createBoundLoginUserDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="createBoundLoginUserDialog" />
+	<ui:param name="formId" value="createBoundLoginUserDialogForm" />
+	<ui:define name="dialogContent">
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.boundUserIdInputNumber.name']}"
+							title="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.boundUserIdInputNumber.tooltip']}"
+							for="boundUserIdInputNumber" />
+					</p:column>
+					<p:column colspan="3">
+						<p:inputNumber id="boundUserIdInputNumber"
+							value="#{loginUserBean.createBoundLoginUserBoundUser}"
+							title="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.boundUserIdInputNumber.tooltip']}"
+							minValue="0" emptyValue="zero" decimalPlaces="0">
+							<p:ajax event="keyup" delay="250" process="@this"
+								update="createBoundLoginUserDialogForm:boundUserIdOutputInputText boundUserIdInputNumberMessage @this" />
+						</p:inputNumber>
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="boundUserIdInputNumber"
+							id="boundUserIdInputNumberMessage" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column />
+					<p:column colspan="3">
+						<p:inputText
+							title="#{loginUserBean.createBoundLoginUserBoundUserFromId}"
+							placeholder="#{loginUserBean.createBoundLoginUserBoundUserFromId}"
+							id="boundUserIdOutputInputText" readonly="true" />
+					</p:column>
+					<p:column colspan="2" />
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.passwordInputText.name']}"
+							title="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.passwordInputText.tooltip']}"
+							for="loginUserPasswordInputPassword" />
+					</p:column>
+					<p:column colspan="3">
+						<p:password id="loginUserPasswordInputPassword" feedback="true"
+							inline="true"
+							weakLabel="#{msg['lucas.application.loginUserScreen.createDefaultLoginUserDialog.passwordInputText.weakLabel']}"
+							goodLabel="#{msg['lucas.application.loginUserScreen.createDefaultLoginUserDialog.passwordInputText.goodLabel']}"
+							strongLabel="#{msg['lucas.application.loginUserScreen.createDefaultLoginUserDialog.passwordInputText.strongLabel']}"
+							promptLabel="#{msg['lucas.application.loginUserScreen.createDefaultLoginUserDialog.passwordInputText.promptLabel']}"
+							validatorMessage="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.passwordInputText.matchLabel']}"
+							match="createBoundLoginUserDialogForm:loginUserConfirmPasswordInputPassword"
+							converter="lucas:StringChar[]Converter" maxlength="16"
+							value="#{loginUserBean.createBoundLoginUserPassword}"
+							title="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.passwordInputText.tooltip']}" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="loginUserPasswordInputPassword" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.confirmPasswordInputText.name']}"
+							title="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.confirmPasswordInputText.tooltip']}"
+							for="loginUserConfirmPasswordInputPassword" />
+					</p:column>
+					<p:column colspan="3">
+						<p:password id="loginUserConfirmPasswordInputPassword"
+							converter="lucas:StringChar[]Converter" maxlength="16"
+							value="#{loginUserBean.createBoundLoginUserPassword}"
+							title="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.confirmPasswordInputText.tooltip']}" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="loginUserConfirmPasswordInputPassword" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.rolesPickList.name']}"
+							title="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.rolesPickList.tooltip']}"
+							for="rolesPickList" />
+					</p:column>
+					<p:column colspan="3">
+						<p:pickList id="rolesPickList" showSourceFilter="true"
+							showTargetFilter="true" filterMatchMode="contains"
+							value="#{loginUserBean.createBoundLoginUserRolesListModel}"
+							var="role" itemLabel="#{role}" itemValue="#{role}"
+							converter="lucas:shortLoginUserRoleConverter"
+							addLabel="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.rolesPickList.addLabel']}"
+							addAllLabel="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.rolesPickList.addAllLabel']}"
+							removeLabel="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.rolesPickList.removeLabel']}"
+							removeAllLabel="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.rolesPickList.removeAllLabel']}">
+							<p:column>
+								<h:outputText value="#{role}"
+									converter="lucas:shortLoginUserRoleConverter" />
+							</p:column>
+						</p:pickList>
+					</p:column>
+					<p:column colspan="2" />
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this boundUserIdInputNumber loginUserPasswordInputPassword loginUserConfirmPasswordInputPassword rolesPickList"
+							update="@form dataAccorditionPanel:loginUserSearchResultsForm:loginUserSearchResultsTable"
+							action="#{loginUserBean.createBoundLoginUser}"
+							value="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.createUserButton.name']}"
+							title="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.createUserButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('createBoundLoginUserDialog').hide()}" />
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this"
+							value="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.cancelButton.tooltip']}"
+							oncomplete="PF('createBoundLoginUserDialog').hide()"
+							immediate="true">
+						</p:commandButton>
+					</p:column>
+					<p:column colspan="4" />
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

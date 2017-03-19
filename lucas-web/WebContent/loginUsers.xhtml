@@ -1,0 +1,191 @@
+<ui:composition template="/WEB-INF/web/template/dataTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="pageTitle"
+		value="#{msg['lucas.application.loginUserScreen.title']}" />
+	<ui:param name="sitePrefix" value="loginUser" />
+	<ui:param name="searchBean" value="#{loginUserBean}" />
+	<ui:param name="searchResults"
+		value="#{loginUserBean.searchLoginUserResults}" />
+	<ui:param name="selectedResults"
+		value="#{loginUserBean.selectedLoginUsers}" />
+	<ui:param name="searchFunction" value="searchLoginUsers" />
+	<ui:param name="refreshFunction" value="refreshLoginUsers" />
+	<ui:define name="dialogs">
+		<ui:include
+			src="/WEB-INF/web/loginUser/createDefaultLoginUserDialog.xhtml" />
+		<ui:include
+			src="/WEB-INF/web/loginUser/createBoundLoginUserDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/loginUser/editLoginUserDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/loginUser/changePasswordDialog.xhtml" />
+	</ui:define>
+	<ui:define name="buttonArea">
+		<p:toolbarGroup>
+			<p:splitButton icon="fa fa-user-plus"
+				value="#{msg['lucas.application.loginUserScreen.createLoginUserButton.name']}"
+				title="#{msg['lucas.application.loginUserScreen.createLoginUserButton.tooltip']}"
+				update="createDefaultLoginUserDialogForm" process="@this"
+				oncomplete="PF('createDefaultLoginUserDialog').show()"
+				actionListener="#{loginUserBean.initCreateDefaultLoginUserDialog}">
+				<p:menuitem icon="fa fa-user"
+					value="#{msg['lucas.application.loginUserScreen.createDefaultLoginUserButton.name']}"
+					title="#{msg['lucas.application.loginUserScreen.createDefaultLoginUserButton.tooltip']}"
+					update="createDefaultLoginUserDialogForm" process="@this"
+					oncomplete="PF('createDefaultLoginUserDialog').show()"
+					actionListener="#{loginUserBean.initCreateDefaultLoginUserDialog}">
+				</p:menuitem>
+				<p:menuitem icon="fa fa-user-md"
+					value="#{msg['lucas.application.loginUserScreen.createBoundLoginUserButton.name']}"
+					title="#{msg['lucas.application.loginUserScreen.createBoundLoginUserButton.tooltip']}"
+					update="createBoundLoginUserDialogForm" process="@this"
+					oncomplete="PF('createBoundLoginUserDialog').show()"
+					actionListener="#{loginUserBean.initCreateBoundLoginUserDialog}">
+				</p:menuitem>
+			</p:splitButton>
+			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			<p:commandButton
+				value="#{msg['lucas.application.loginUserScreen.editLoginUserButton.name']}"
+				title="#{msg['lucas.application.loginUserScreen.editLoginUserButton.tooltip']}"
+				icon="fa fa-edit" process="@this" update="editLoginUserDialogForm"
+				disabled="#{loginUserBean.selectedLoginUsers.size() != 1}"
+				oncomplete="PF('editLoginUserDialog').show()"
+				actionListener="#{loginUserBean.initEditLoginUserDialog}" />
+			<p:commandButton
+				value="#{msg['lucas.application.loginUserScreen.setPasswordButton.name']}"
+				title="#{msg['lucas.application.loginUserScreen.setPasswordButton.tooltip']}"
+				icon="fa fa-key" process="@this" update="changePasswordDialogForm"
+				disabled="#{loginUserBean.selectedLoginUsers.size() != 1}"
+				oncomplete="PF('changePasswordDialog').show()"
+				actionListener="#{loginUserBean.initChangePasswordDialog}">
+				<p:confirm
+					header="#{msg['lucas.application.loginUserScreen.changePasswordConfirmDialog.header']}"
+					message="#{msg['lucas.application.loginUserScreen.changePasswordConfirmDialog.message']}" />
+			</p:commandButton>
+		</p:toolbarGroup>
+	</ui:define>
+	<ui:define name="searchCriteria">
+		<p:row>
+			<p:column>
+				<p:selectBooleanCheckbox id="searchLoginUserIdSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{loginUserBean.useSearchLoginUserId}"
+					title="#{msg['lucas.application.userScreen.searchLoginUserIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="loginUserSearchCriteriaForm:searchLoginUserIdInputNumber loginUserSearchCriteriaForm:searchLoginUserIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchLoginUserIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.loginUserScreen.searchLoginUserIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.loginUserScreen.searchLoginUserIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchLoginUserUsernameSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{loginUserBean.useSearchLoginUserUsername}"
+					title="#{msg['lucas.application.userScreen.searchLoginUserUsernameSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="loginUserSearchCriteriaForm:searchLoginUserUsernameInputText loginUserSearchCriteriaForm:searchLoginUserUsernameComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchLoginUserIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.loginUserScreen.searchLoginUserUsernameSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.loginUserScreen.searchLoginUserUsernameSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchLoginUserUserIdSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{loginUserBean.useSearchLoginUserUserId}"
+					title="#{msg['lucas.application.userScreen.searchLoginUserUserIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="loginUserSearchCriteriaForm:searchLoginUserUserIdInputNumber loginUserSearchCriteriaForm:searchLoginUserUserIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchLoginUserUserIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.loginUserScreen.searchLoginUserUserIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.loginUserScreen.searchLoginUserUserIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:selectOneMenu id="searchLoginUserIdComparator"
+					disabled="#{not loginUserBean.useSearchLoginUserId}"
+					value="#{loginUserBean.searchLoginUserIdComparator}"
+					title="#{msg['lucas.application.loginUserScreen.searchLoginUserIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchLoginUserUsernameComparator"
+					disabled="#{not loginUserBean.useSearchLoginUserUsername}"
+					value="#{loginUserBean.searchLoginUserUsernameComparator}"
+					title="#{msg['lucas.application.loginUserScreen.searchLoginUserUsernameComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchLoginUserUserIdComparator"
+					disabled="#{not loginUserBean.useSearchLoginUserUserId}"
+					value="#{loginUserBean.searchLoginUserUserIdComparator}"
+					title="#{msg['lucas.application.loginUserScreen.searchLoginUserUserIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:inputNumber value="#{loginUserBean.searchLoginUserId}"
+					minValue="0" decimalPlaces="0" id="searchLoginUserIdInputNumber"
+					disabled="#{not loginUserBean.useSearchLoginUserId}" />
+			</p:column>
+			<p:column>
+				<p:inputText value="#{loginUserBean.searchLoginUserUsername}"
+					id="searchLoginUserUsernameInputText"
+					disabled="#{not loginUserBean.useSearchLoginUserUsername}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{loginUserBean.searchLoginUserUserId}"
+					minValue="0" decimalPlaces="0"
+					id="searchLoginUserUserIdInputNumber"
+					disabled="#{not loginUserBean.useSearchLoginUserUserId}" />
+			</p:column>
+		</p:row>
+	</ui:define>
+	<ui:define name="searchResults">
+		<p:column
+			headerText="#{msg['lucas.application.loginUserScreen.loginUserSearchResultsTable.id.name']}"
+			sortBy="#{entity.id}"
+			visible="#{loginUserBean.resultsDatatableColumns[0]}">
+			<h:outputText value="#{entity.id}" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.loginUserScreen.loginUserSearchResultsTable.username.name']}"
+			sortBy="#{entity.username}"
+			visible="#{loginUserBean.resultsDatatableColumns[1]}">
+			<h:outputText value="#{entity.username}" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.loginUserScreen.loginUserSearchResultsTable.user.name']}"
+			sortBy="#{entity.user}"
+			visible="#{loginUserBean.resultsDatatableColumns[2]}">
+			<h:outputText value="#{entity.user}"
+				converter="lucas:userStringConverter" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.loginUserScreen.loginUserSearchResultsTable.roles.name']}"
+			sortable="false"
+			visible="#{loginUserBean.resultsDatatableColumns[3]}">
+			<h:outputText value="#{entity.roles}"
+				converter="lucas:rolesConverter" escape="false" />
+		</p:column>
+	</ui:define>
+</ui:composition>
