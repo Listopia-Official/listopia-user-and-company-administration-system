@@ -120,7 +120,7 @@ public enum EnumPermission {
 	USER_BLOCK_USER_CARD(USER, "blockUSerCard"),
 	USER_UNBLOCK_USER_CARD(USER, "unblockUserCard"),
 	USER_SET_VALID_DATE(USER, "setValidDate"),
-	USER_FIND_USER_CARD_BY_ID(USER, "findUSerCardById"),
+	USER_FIND_USER_CARD_BY_ID(USER, "findUserCardById"),
 	USER_SET_IMAGE(USER, "setImage"),
 	USER_GET_IMAGE_FROM_ID(USER, "getImageFromId"),
 	USER_GET_USER_CARDS(USER, "getUserCards"),
