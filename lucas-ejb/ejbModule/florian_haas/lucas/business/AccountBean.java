@@ -48,7 +48,6 @@ public class AccountBean implements AccountBeanLocal {
 
 	@Override
 	@RequiresPermissions(ACCOUNT_PAY_IN)
-
 	public Long payIn(Long id, BigDecimal amount, String comment) {
 		return transaction(amount, id, null, comment);
 	}
