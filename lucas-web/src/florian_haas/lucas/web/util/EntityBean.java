@@ -1,4 +1,4 @@
-package florian_haas.lucas.util;
+package florian_haas.lucas.web.util;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;

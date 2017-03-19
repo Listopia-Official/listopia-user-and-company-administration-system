@@ -1,4 +1,4 @@
-package florian_haas.lucas.util.converter;
+package florian_haas.lucas.web.util.converter;
 
 import java.lang.reflect.Field;
 
@@ -6,7 +6,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.ConverterException;
 
-import florian_haas.lucas.util.*;
+import florian_haas.lucas.util.Utils;
+import florian_haas.lucas.web.util.*;
 
 public abstract class EnumConverter<E extends Enum<E>> extends javax.faces.convert.EnumConverter {
 

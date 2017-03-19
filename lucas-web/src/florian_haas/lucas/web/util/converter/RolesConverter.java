@@ -1,9 +1,9 @@
-package florian_haas.lucas.util.converter;
+package florian_haas.lucas.web.util.converter;
 
 import javax.faces.convert.FacesConverter;
 
 import florian_haas.lucas.model.LoginUserRole;
-import florian_haas.lucas.util.WebUtils;
+import florian_haas.lucas.web.util.WebUtils;
 
 @FacesConverter(value = "lucas:rolesConverter")
 public class RolesConverter extends CollectionConverter<LoginUserRole> {

@@ -19,7 +19,7 @@ import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.EnumPermission;
-import florian_haas.lucas.util.WebUtils;
+import florian_haas.lucas.web.util.WebUtils;
 
 @Named("accountBean")
 @ViewScoped

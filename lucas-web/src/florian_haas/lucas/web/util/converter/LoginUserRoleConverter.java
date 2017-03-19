@@ -1,11 +1,11 @@
-package florian_haas.lucas.util.converter;
+package florian_haas.lucas.web.util.converter;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.FacesConverter;
 
 import florian_haas.lucas.model.LoginUserRole;
-import florian_haas.lucas.util.WebUtils;
+import florian_haas.lucas.web.util.WebUtils;
 
 @FacesConverter(value = "lucas:loginUserRoleStringConverter")
 public class LoginUserRoleConverter extends ReadOnlyConverter {

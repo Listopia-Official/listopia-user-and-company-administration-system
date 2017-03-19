@@ -18,8 +18,9 @@ import florian_haas.lucas.business.*;
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.util.*;
+import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.util.validation.*;
+import florian_haas.lucas.web.util.*;
 
 @Named("userBean")
 @ViewScoped

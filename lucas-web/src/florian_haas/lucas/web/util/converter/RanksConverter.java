@@ -1,4 +1,4 @@
-package florian_haas.lucas.util.converter;
+package florian_haas.lucas.web.util.converter;
 
 import javax.faces.convert.FacesConverter;
 

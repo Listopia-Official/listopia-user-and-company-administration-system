@@ -1,11 +1,11 @@
-package florian_haas.lucas.util.converter;
+package florian_haas.lucas.web.util.converter;
 
 import java.util.Collection;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
-import florian_haas.lucas.util.WebUtils;
+import florian_haas.lucas.web.util.WebUtils;
 
 public abstract class CollectionConverter<T> extends ReadOnlyConverter {
 

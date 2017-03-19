@@ -13,7 +13,7 @@ import org.primefaces.model.StreamedContent;
 import florian_haas.lucas.business.*;
 import florian_haas.lucas.model.User;
 import florian_haas.lucas.security.EnumPermission;
-import florian_haas.lucas.util.WebUtils;
+import florian_haas.lucas.web.util.WebUtils;
 
 @Named
 @RequestScoped

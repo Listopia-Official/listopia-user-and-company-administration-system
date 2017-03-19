@@ -1,11 +1,11 @@
-package florian_haas.lucas.util.converter;
+package florian_haas.lucas.web.util.converter;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.FacesConverter;
 
 import florian_haas.lucas.model.Company;
-import florian_haas.lucas.util.WebUtils;
+import florian_haas.lucas.web.util.WebUtils;
 
 @FacesConverter(value = "lucas:companyStringConverter")
 public class CompanyConverter extends ReadOnlyConverter {

@@ -9,7 +9,7 @@
 			<display-name>Output Text Renderer</display-name>
 			<component-family>javax.faces.Output</component-family>
 			<renderer-type>javax.faces.Text</renderer-type>
-			<renderer-class>florian_haas.lucas.util.renderer.OutputTextRenderer</renderer-class>
+			<renderer-class>florian_haas.lucas.web.util.renderer.OutputTextRenderer</renderer-class>
 		</renderer>
 	</render-kit>
 </faces-config>

@@ -1,4 +1,4 @@
-package florian_haas.lucas.util.converter;
+package florian_haas.lucas.web.util.converter;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -9,7 +9,7 @@ import javax.inject.Named;
 
 import florian_haas.lucas.business.LoginUserRoleBeanLocal;
 import florian_haas.lucas.model.LoginUserRole;
-import florian_haas.lucas.util.*;
+import florian_haas.lucas.web.util.*;
 
 @FacesConverter(value = "lucas:shortLoginUserRoleConverter")
 public class ShortLoginUserRoleConverter implements Converter {

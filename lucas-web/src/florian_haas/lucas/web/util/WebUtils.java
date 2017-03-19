@@ -1,4 +1,4 @@
-package florian_haas.lucas.util;
+package florian_haas.lucas.web.util;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -21,7 +21,8 @@ import org.apache.shiro.ShiroException;
 import org.primefaces.model.*;
 
 import florian_haas.lucas.model.EntityBase;
-import florian_haas.lucas.util.converter.CurrencyConverter;
+import florian_haas.lucas.util.Utils;
+import florian_haas.lucas.web.util.converter.CurrencyConverter;
 
 public class WebUtils {
 

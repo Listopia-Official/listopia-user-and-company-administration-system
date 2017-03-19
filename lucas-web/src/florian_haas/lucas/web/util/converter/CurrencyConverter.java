@@ -1,4 +1,4 @@
-package florian_haas.lucas.util.converter;
+package florian_haas.lucas.web.util.converter;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -13,7 +13,7 @@ import javax.inject.Named;
 import org.primefaces.component.inputnumber.InputNumber;
 
 import florian_haas.lucas.business.GlobalDataBeanLocal;
-import florian_haas.lucas.util.WebUtils;
+import florian_haas.lucas.web.util.WebUtils;
 
 @Named(value = "currencyConverter")
 @RequestScoped
