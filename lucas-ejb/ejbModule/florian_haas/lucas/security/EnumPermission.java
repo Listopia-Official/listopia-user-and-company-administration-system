@@ -121,7 +121,7 @@ public enum EnumPermission {
 	USER_REMOVE_RANK(USER, "removeRank"),
 	USER_ADD_USER_CARD(USER, "addUserCard"),
 	USER_REMOVE_USER_CARD(USER, "removeUserCard"),
-	USER_BLOCK_USER_CARD(USER, "blockUSerCard"),
+	USER_BLOCK_USER_CARD(USER, "blockUserCard"),
 	USER_UNBLOCK_USER_CARD(USER, "unblockUserCard"),
 	USER_SET_VALID_DATE_USER_CARD(USER, "setValidDate"),
 	USER_FIND_USER_CARD_BY_ID(USER, "findUserCardById"),
