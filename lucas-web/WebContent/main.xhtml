@@ -6,6 +6,9 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 	<ui:param name="pageTitle"
 		value="#{msg['lucas.application.mainScreen.title']}" />
+	<ui:define name="otherContent">
+		<p:importEnum type="florian_haas.lucas.security.EnumPermission" />
+	</ui:define>
 	<ui:define name="content">
 		<h:form>
 			<p:messages globalOnly="true" showDetail="true" showSummary="true"
@@ -21,6 +24,7 @@
 				<p:submenu
 					label="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.name']}">
 					<p:menuitem outcome="/users.xhtml"
+						rendered="#{loginBean.hasPermission(EnumPermission.USER_ACCESS_VIEW)}"
 						value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.usersMenuItem.name']}" />
 					<p:menuitem disabled="true"
 						value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.companiesMenuItem.name']}" />
@@ -39,6 +43,7 @@
 				<p:submenu
 					label="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.name']}">
 					<p:menuitem outcome="/accounts.xhtml"
+						rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_ACCESS_VIEW)}"
 						value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.accountsMenuItem.name']}" />
 					<p:menuitem disabled="true"
 						value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.taxdataItem.name']}" />
@@ -51,8 +56,10 @@
 				<p:submenu
 					label="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.name']}">
 					<p:menuitem outcome="/loginUsers.xhtml"
+						rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_USER_ACCESS_VIEW)}"
 						value="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.loginUsersMenuItem.name']}" />
 					<p:menuitem outcome="/loginRoles.xhtml"
+						rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_ROLE_ACCESS_VIEW)}"
 						value="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.loginRolesMenuItem.name']}" />
 					<p:menuitem disabled="true"
 						value="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.globaldataItem.name']}" />

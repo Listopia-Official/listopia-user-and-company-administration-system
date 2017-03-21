@@ -12,6 +12,7 @@
 	<ui:param name="refreshFunction" value="refreshUsers" />
 	<ui:param name="searchResults" value="#{userBean.searchUserResults}" />
 	<ui:param name="selectedResults" value="#{userBean.selectedUsers}" />
+	<ui:param name="findDynamicPermission" value="USER_FIND_DYNAMIC" />
 	<ui:define name="dialogs">
 		<ui:include src="/WEB-INF/web/users/createPupilDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/users/createTeacherDialog.xhtml" />
@@ -26,48 +27,59 @@
 	</ui:define>
 	<ui:define name="buttonArea">
 		<p:toolbarGroup>
-			<p:splitButton icon="fa fa-user-plus"
-				value="#{msg['lucas.application.userScreen.createUserButton.name']}"
-				title="#{msg['lucas.application.userScreen.createUserButton.tooltip']}"
-				update="createPupilDialogForm" process="@this"
-				oncomplete="PF('createPupilDialog').show()"
-				actionListener="#{userBean.resetCreatePupilDialog}">
-				<p:resetInput target="createPupilDialogForm" clearModel="true" />
-				<p:menuitem icon="fa fa-user"
-					value="#{msg['lucas.application.userScreen.newPupilButton.name']}"
+			<ui:fragment
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.USER_CREATE_PUPIL,EnumPermission.USER_CREATE_TEACHER,EnumPermission.USER_CREATE_GUEST])}">
+				<p:splitButton icon="fa fa-user-plus"
+					value="#{msg['lucas.application.userScreen.createUserButton.name']}"
+					title="#{msg['lucas.application.userScreen.createUserButton.tooltip']}"
 					update="createPupilDialogForm" process="@this"
+					oncomplete="PF('createPupilDialog').show()"
 					actionListener="#{userBean.resetCreatePupilDialog}"
-					title="#{msg['lucas.application.userScreen.newPupilButton.tooltip']}"
-					oncomplete="PF('createPupilDialog').show()">
+					onstart="return #{loginBean.hasPermission(EnumPermission.USER_CREATE_PUPIL)}">
 					<p:resetInput target="createPupilDialogForm" clearModel="true" />
-				</p:menuitem>
-				<p:menuitem icon="fa fa-user-md"
-					value="#{msg['lucas.application.userScreen.newTeacherButton.name']}"
-					update="createTeacherDialogForm" process="@this"
-					actionListener="#{userBean.resetCreateTeacherDialog}"
-					title="#{msg['lucas.application.userScreen.newTeacherButton.tooltip']}"
-					oncomplete="PF('createTeacherDialog').show()">
-					<p:resetInput target="createTeacherDialogForm" clearModel="true" />
-				</p:menuitem>
-				<p:menuitem icon="fa fa-group"
-					value="#{msg['lucas.application.userScreen.newGuestButton.name']}"
-					update="createGuestDialogForm" process="@this"
-					title="#{msg['lucas.application.userScreen.newGuestButton.tooltip']}"
-					oncomplete="PF('createGuestDialog').show()">
-					<p:resetInput target="createGuestDialogForm" clearModel="true" />
-				</p:menuitem>
-				<p:separator />
-				<p:menuitem
-					value="#{msg['lucas.application.userScreen.importPupilsButton.name']}"
-					icon="fa fa-file-excel-o"
-					title="#{msg['lucas.application.userScreen.importPupilsButton.tooltip']}" />
-				<p:menuitem
-					value="#{msg['lucas.application.userScreen.importTeachersButton.name']}"
-					icon="fa fa-file-excel-o"
-					title="#{msg['lucas.application.userScreen.importTeachersButton.tooltip']}" />
-			</p:splitButton>
-			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+					<p:menuitem icon="fa fa-user"
+						rendered="#{loginBean.hasPermission(EnumPermission.USER_CREATE_PUPIL)}"
+						value="#{msg['lucas.application.userScreen.newPupilButton.name']}"
+						update="createPupilDialogForm" process="@this"
+						actionListener="#{userBean.resetCreatePupilDialog}"
+						title="#{msg['lucas.application.userScreen.newPupilButton.tooltip']}"
+						oncomplete="PF('createPupilDialog').show()">
+						<p:resetInput target="createPupilDialogForm" clearModel="true" />
+					</p:menuitem>
+					<p:menuitem icon="fa fa-user-md"
+						rendered="#{loginBean.hasPermission(EnumPermission.USER_CREATE_TEACHER)}"
+						value="#{msg['lucas.application.userScreen.newTeacherButton.name']}"
+						update="createTeacherDialogForm" process="@this"
+						actionListener="#{userBean.resetCreateTeacherDialog}"
+						title="#{msg['lucas.application.userScreen.newTeacherButton.tooltip']}"
+						oncomplete="PF('createTeacherDialog').show()">
+						<p:resetInput target="createTeacherDialogForm" clearModel="true" />
+					</p:menuitem>
+					<p:menuitem icon="fa fa-group"
+						rendered="#{loginBean.hasPermission(EnumPermission.USER_CREATE_GUEST)}"
+						value="#{msg['lucas.application.userScreen.newGuestButton.name']}"
+						update="createGuestDialogForm" process="@this"
+						title="#{msg['lucas.application.userScreen.newGuestButton.tooltip']}"
+						oncomplete="PF('createGuestDialog').show()">
+						<p:resetInput target="createGuestDialogForm" clearModel="true" />
+					</p:menuitem>
+					<p:separator
+						rendered="#{(loginBean.hasPermission(EnumPermission.USER_CREATE_PUPIL) &amp;&amp; loginBean.hasPermission(EnumPermission.USER_IMPORT_PUPILS))||(loginBean.hasPermission(EnumPermission.USER_CREATE_TEACHER) &amp;&amp; loginBean.hasPermission(EnumPermission.USER_IMPORT_TEACHERS))}" />
+					<p:menuitem disabled="true"
+						rendered="#{loginBean.hasPermissionsAnd([EnumPermission.USER_IMPORT_PUPILS,EnumPermission.USER_CREATE_PUPIL])}"
+						value="#{msg['lucas.application.userScreen.importPupilsButton.name']}"
+						icon="fa fa-file-excel-o"
+						title="#{msg['lucas.application.userScreen.importPupilsButton.tooltip']}" />
+					<p:menuitem disabled="true"
+						rendered="#{loginBean.hasPermissionsAnd([EnumPermission.USER_IMPORT_TEACHERS,EnumPermission.USER_CREATE_TEACHER])}"
+						value="#{msg['lucas.application.userScreen.importTeachersButton.name']}"
+						icon="fa fa-file-excel-o"
+						title="#{msg['lucas.application.userScreen.importTeachersButton.tooltip']}" />
+				</p:splitButton>
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			</ui:fragment>
 			<p:commandButton
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.USER_SET_FORENAME,EnumPermission.USER_SET_SURNAME,EnumPermission.USER_SET_SCHOOL_CLASS,EnumPermission.USER_ADD_RANK,EnumPermission.USER_REMOVE_RANK])}"
 				value="#{msg['lucas.application.userScreen.editUserButton.name']}"
 				title="#{msg['lucas.application.userScreen.editUserButton.tooltip']}"
 				update="editUserDialog" process="@this"
@@ -75,6 +87,7 @@
 				oncomplete="PF('editUserDialog').show()" icon="fa fa-edit"
 				disabled="#{userBean.selectedUsers.size() != 1}" />
 			<p:commandButton
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.USER_SET_IMAGE,EnumPermission.USER_GET_IMAGE_FROM_ID])}"
 				value="#{msg['lucas.application.userScreen.imageManagerButton.name']}"
 				title="#{msg['lucas.application.userScreen.imageManagerButton.tooltip']}"
 				update="imageManagerDialogForm" process="@this"
@@ -82,6 +95,7 @@
 				oncomplete="PF('imageManagerDialog').show()" icon="fa fa-image"
 				disabled="#{userBean.selectedUsers.size() != 1}" />
 			<p:commandButton
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.USER_ADD_USER_CARD,EnumPermission.USER_REMOVE_USER_CARD,EnumPermission.USER_BLOCK_USER_CARD,EnumPermission.USER_UNBLOCK_USER_CARD,EnumPermission.USER_SET_VALID_DATE_USER_CARD]) &amp;&amp; loginBean.hasPermissionsAnd([EnumPermission.USER_FIND_USER_CARD_BY_ID,EnumPermission.USER_GET_USER_CARDS])}"
 				value="#{msg['lucas.application.userScreen.userCardManagerButton.name']}"
 				title="#{msg['lucas.application.userScreen.userCardManagerButton.tooltip']}"
 				update="userCardManagerDialogForm" process="@this"
@@ -94,12 +108,12 @@
 				value="#{msg['lucas.application.userScreen.profileButton.name']}"
 				title="#{msg['lucas.application.userScreen.profileButton.tooltip']}"
 				icon="fa fa-info-circle"
-				disabled="#{userBean.selectedUsers.size() != 1}" />
+				disabled="#{userBean.selectedUsers.size() != 1 || true}" />
 			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 			<p:commandButton icon="fa fa-user-times"
 				value="#{msg['lucas.application.userScreen.removeUserButton.name']}"
 				title="#{msg['lucas.application.userScreen.removeUserButton.tooltip']}"
-				disabled="#{userBean.selectedUsers.size() &lt;= 0}" />
+				disabled="#{userBean.selectedUsers.size() &lt;= 0 || true}" />
 		</p:toolbarGroup>
 	</ui:define>
 	<ui:define name="searchCriteria">

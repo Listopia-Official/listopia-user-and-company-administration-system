@@ -10,6 +10,7 @@ public enum EnumPermissionModule {
 	GLOBAL_DATA("globalData"),
 	ITEM("item"),
 	LOGIN("login"),
+	LOGIN_ROLE("loginRole"),
 	USER("user");
 
 	private String moduleName;

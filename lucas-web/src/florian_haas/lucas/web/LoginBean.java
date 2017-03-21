@@ -1,6 +1,7 @@
 package florian_haas.lucas.web;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -98,4 +99,21 @@ public class LoginBean {
 		return globalDataBean.getMaxIdleTime();
 	}
 
+	public Boolean hasPermission(EnumPermission permission) {
+		return SecurityUtils.getSubject().isPermitted(permission.getPermissionString());
+	}
+
+	public Boolean hasPermissionsOr(List<EnumPermission> permissions) {
+		for (EnumPermission permission : permissions) {
+			if (SecurityUtils.getSubject().isPermitted(permission.getPermissionString())) return true;
+		}
+		return false;
+	}
+
+	public Boolean hasPermissionsAnd(List<EnumPermission> permissions) {
+		for (EnumPermission permission : permissions) {
+			if (!SecurityUtils.getSubject().isPermitted(permission.getPermissionString())) return false;
+		}
+		return true;
+	}
 }

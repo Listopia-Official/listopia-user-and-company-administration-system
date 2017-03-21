@@ -24,6 +24,7 @@
 			styleClass="dialogToolbar">
 			<p:toolbarGroup align="left">
 				<p:commandButton
+					rendered="#{loginBean.hasPermission(EnumPermission.USER_ADD_USER_CARD)}"
 					value="#{msg['lucas.application.userScreen.userCardManagerDialog.newUserCardButton.name']}"
 					title="#{msg['lucas.application.userScreen.userCardManagerDialog.newUserCardButton.tooltip']}"
 					icon="fa fa-plus"
@@ -31,6 +32,7 @@
 					update="@form" />
 				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 				<p:commandButton
+					rendered="#{loginBean.hasPermission(EnumPermission.USER_BLOCK_USER_CARD)}"
 					value="#{msg['lucas.application.userScreen.userCardManagerDialog.blockUserCardButton.name']}"
 					title="#{msg['lucas.application.userScreen.userCardManagerDialog.blockUserCardButton.tooltip']}"
 					icon="fa fa-lock"
@@ -38,61 +40,65 @@
 					update="@form"
 					disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
 				<p:commandButton
+					rendered="#{loginBean.hasPermission(EnumPermission.USER_UNBLOCK_USER_CARD)}"
 					value="#{msg['lucas.application.userScreen.userCardManagerDialog.unblockUserCardButton.name']}"
 					title="#{msg['lucas.application.userScreen.userCardManagerDialog.unblockUserCardButton.tooltip']}"
 					icon="fa fa-unlock"
 					action="#{userBean.userCardManagerDialogUnblockUserCards}"
 					update="@form"
 					disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
-				<p:commandButton id="userCardManagerSetValidDayButton"
-					value="#{msg['lucas.application.userScreen.userCardManagerDialog.setValidDayButton.name']}"
-					title="#{msg['lucas.application.userScreen.userCardManagerDialog.setValidDayButton.tooltip']}"
-					icon="fa fa-calendar"
-					action="#{userBean.initUserCardManagerDialogSetValidDayOverlay}"
-					update="validDayCalendar"
-					disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
-				<p:overlayPanel for="userCardManagerSetValidDayButton"
-					widgetVar="calendarOverlayPanel" showCloseIcon="true" modal="true"
-					appendToBody="true">
-					<div class="ui-fluid">
-						<p:panelGrid>
-							<p:row>
-								<p:column colspan="2">
-									<p:calendar id="validDayCalendar"
-										value="#{userBean.userCardManagerDialogValidDate}"
-										mode="inline">
-										<p:ajax event="dateSelect" process="@this"
-											partialSubmit="true" />
-									</p:calendar>
-								</p:column>
-							</p:row>
-							<p:row>
-								<p:column>
-									<p:commandButton
-										value="#{msg['lucas.application.userScreen.userCardManagerDialog.selectOkValidDayButton.name']}"
-										title="#{msg['lucas.application.userScreen.userCardManagerDialog.selectOkValidDayButton.tooltip']}"
-										process="validDayCalendar @this" update="@form"
-										action="#{userBean.userCardManagerDialogSetValidDay}"
-										oncomplete="PF('calendarOverlayPanel').hide();" />
-								</p:column>
-								<p:column>
-									<p:commandButton
-										value="#{msg['lucas.application.userScreen.userCardManagerDialog.selectCancelValidDayButton.name']}"
-										title="#{msg['lucas.application.userScreen.userCardManagerDialog.selectCancelValidDayButton.tooltip']}"
-										oncomplete="PF('calendarOverlayPanel').hide();" />
-								</p:column>
-							</p:row>
-						</p:panelGrid>
-					</div>
-				</p:overlayPanel>
-				<p:commandButton
-					value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeValidDayButton.name']}"
-					title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeValidDayButton.tooltip']}"
-					action="#{userBean.userCardManagerDialogRemoveValidDay}"
-					icon="fa fa-calendar-o" update="@form"
-					disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
-				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
-				<p:commandButton
+				<ui:fragment
+					rendered="#{loginBean.hasPermission(EnumPermission.USER_SET_VALID_DATE_USER_CARD)}">
+					<p:commandButton id="userCardManagerSetValidDayButton"
+						value="#{msg['lucas.application.userScreen.userCardManagerDialog.setValidDayButton.name']}"
+						title="#{msg['lucas.application.userScreen.userCardManagerDialog.setValidDayButton.tooltip']}"
+						icon="fa fa-calendar"
+						action="#{userBean.initUserCardManagerDialogSetValidDayOverlay}"
+						update="validDayCalendar"
+						disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
+					<p:overlayPanel for="userCardManagerSetValidDayButton"
+						widgetVar="calendarOverlayPanel" showCloseIcon="true" modal="true"
+						appendToBody="true">
+						<div class="ui-fluid">
+							<p:panelGrid>
+								<p:row>
+									<p:column colspan="2">
+										<p:calendar id="validDayCalendar"
+											value="#{userBean.userCardManagerDialogValidDate}"
+											mode="inline">
+											<p:ajax event="dateSelect" process="@this"
+												partialSubmit="true" />
+										</p:calendar>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:commandButton
+											value="#{msg['lucas.application.userScreen.userCardManagerDialog.selectOkValidDayButton.name']}"
+											title="#{msg['lucas.application.userScreen.userCardManagerDialog.selectOkValidDayButton.tooltip']}"
+											process="validDayCalendar @this" update="@form"
+											action="#{userBean.userCardManagerDialogSetValidDay}"
+											oncomplete="PF('calendarOverlayPanel').hide();" />
+									</p:column>
+									<p:column>
+										<p:commandButton
+											value="#{msg['lucas.application.userScreen.userCardManagerDialog.selectCancelValidDayButton.name']}"
+											title="#{msg['lucas.application.userScreen.userCardManagerDialog.selectCancelValidDayButton.tooltip']}"
+											oncomplete="PF('calendarOverlayPanel').hide();" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</div>
+					</p:overlayPanel>
+					<p:commandButton
+						value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeValidDayButton.name']}"
+						title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeValidDayButton.tooltip']}"
+						action="#{userBean.userCardManagerDialogRemoveValidDay}"
+						icon="fa fa-calendar-o" update="@form"
+						disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
+					<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+				</ui:fragment>
+				<p:commandButton rendered="#{loginBean.hasPermission(EnumPermission.USER_REMOVE_USER_CARD)}"
 					value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardsButton.name']}"
 					title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardsButton.tooltip']}"
 					icon="fa fa-remove"

@@ -14,6 +14,7 @@
 		value="#{accountBean.selectedAccounts}" />
 	<ui:param name="searchFunction" value="searchAccounts" />
 	<ui:param name="refreshFunction" value="refreshAccounts" />
+	<ui:param name="findDynamicPermission" value="ACCOUNT_FIND_DYNAMIC" />
 	<ui:define name="dialogs">
 		<ui:include src="/WEB-INF/web/accounts/payInDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/accounts/payOutDialog.xhtml" />
@@ -26,6 +27,7 @@
 	<ui:define name="buttonArea">
 		<p:toolbarGroup align="left">
 			<p:commandButton
+				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_PAY_IN)}"
 				value="#{msg['lucas.application.accountScreen.payInButton.name']}"
 				action="#{accountBean.resetPayInDialog}"
 				title="#{msg['lucas.application.accountScreen.payInButton.tooltip']}"
@@ -33,6 +35,7 @@
 				disabled="#{accountBean.selectedAccounts.size() &lt;=0}"
 				oncomplete="PF('payInDialog').show()" />
 			<p:commandButton
+				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_PAY_OUT)}"
 				value="#{msg['lucas.application.accountScreen.payOutButton.name']}"
 				action="#{accountBean.resetPayOutDialog}"
 				title="#{msg['lucas.application.accountScreen.payOutButton.tooltip']}"
@@ -40,39 +43,51 @@
 				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}"
 				oncomplete="PF('payOutDialog').show()" />
 			<p:commandButton
+				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_TRANSACTION)}"
 				value="#{msg['lucas.application.accountScreen.transactionButton.name']}"
 				action="#{accountBean.resetTransactionDialog}"
 				title="#{msg['lucas.application.accountScreen.transactionButton.tooltip']}"
 				icon="fa fa-retweet" process="@this" update="transactionDialogForm"
 				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}"
 				oncomplete="PF('transactionDialog').show()" />
-			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			<ui:fragment
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.ACCOUNT_BLOCK,EnumPermission.ACCOUNT_UNBLOCK,EnumPermission.ACCOUNT_PROTECT,EnumPermission.ACCOUNT_UNPROTECT])}">
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			</ui:fragment>
 			<p:commandButton
+				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_BLOCK)}"
 				value="#{msg['lucas.application.accountScreen.blockButton.name']}"
 				title="#{msg['lucas.application.accountScreen.blockButton.tooltip']}"
 				icon="fa fa-lock" process="@this" update="@(.searchResults)"
 				action="#{accountBean.block}"
 				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}" />
 			<p:commandButton
+				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_UNBLOCK)}"
 				value="#{msg['lucas.application.accountScreen.unblockButton.name']}"
 				title="#{msg['lucas.application.accountScreen.unblockButton.tooltip']}"
 				icon="fa fa-unlock" process="@this" update="@(.searchResults)"
 				action="#{accountBean.unblock}"
 				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}" />
 			<p:commandButton
+				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_PROTECT)}"
 				value="#{msg['lucas.application.accountScreen.protectButton.name']}"
 				title="#{msg['lucas.application.accountScreen.protectButton.tooltip']}"
 				icon="fa fa-link" process="@this" update="@(.searchResults)"
 				action="#{accountBean.protect}"
 				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}" />
 			<p:commandButton
+				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_UNPROTECT)}"
 				value="#{msg['lucas.application.accountScreen.unprotectButton.name']}"
 				title="#{msg['lucas.application.accountScreen.unprotectButton.tooltip']}"
 				icon="fa fa-unlink" process="@this" update="@(.searchResults)"
 				action="#{accountBean.unprotect}"
 				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}" />
-			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			<ui:fragment
+				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_VIEW_TRANSACTION_LOGS)}">
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			</ui:fragment>
 			<p:commandButton
+				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_VIEW_TRANSACTION_LOGS)}"
 				value="#{msg['lucas.application.accountScreen.showLogsButton.name']}"
 				action="#{accountBean.initTransactionLogDialog}" process="@this"
 				update="transactionLogDialogForm"

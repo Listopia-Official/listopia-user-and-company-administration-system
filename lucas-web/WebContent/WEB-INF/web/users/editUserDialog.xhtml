@@ -13,7 +13,8 @@
 	<ui:define name="dialogContent">
 		<div class="ui-fluid">
 			<p:panelGrid>
-				<p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.USER_SET_FORENAME)}">
 					<p:column>
 						<p:outputLabel
 							value="#{msg['lucas.application.userScreen.editUserDialog.forenameInputText.name']}"
@@ -24,7 +25,8 @@
 						<p:message for="forenameInputText" />
 					</p:column>
 				</p:row>
-				<p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.USER_SET_FORENAME)}">
 					<p:column colspan="3">
 						<p:inputText id="forenameInputText"
 							converter="lucas:nullStringConverterNoText"
@@ -35,7 +37,8 @@
 						</p:inputText>
 					</p:column>
 				</p:row>
-				<p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.USER_SET_SURNAME)}">
 					<p:column>
 						<p:outputLabel
 							value="#{msg['lucas.application.userScreen.editUserDialog.surnameInputText.name']}"
@@ -46,7 +49,8 @@
 						<p:message for="surnameInputText" />
 					</p:column>
 				</p:row>
-				<p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.USER_SET_SURNAME)}">
 					<p:column colspan="3">
 						<p:inputText id="surnameInputText"
 							converter="lucas:nullStringConverterNoText"
@@ -57,14 +61,16 @@
 						</p:inputText>
 					</p:column>
 				</p:row>
-				<p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.USER_SET_SCHOOL_CLASS)}">
 					<p:column colspan="3">
 						<p:outputLabel
 							value="#{msg['lucas.application.userScreen.editUserDialog.schoolClassSelectOne.name']}"
 							title="#{msg['lucas.application.userScreen.editUserDialog.schoolClassSelectOne.tooltip']}" />
 					</p:column>
 				</p:row>
-				<p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.USER_SET_SCHOOL_CLASS)}">
 					<p:column colspan="3">
 						<p:selectOneMenu id="schoolClassSelectOneMenu" styleClass="theta"
 							value="#{userBean.editUserDialogSchoolClass}"
@@ -79,7 +85,8 @@
 						</p:selectOneMenu>
 					</p:column>
 				</p:row>
-				<p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.USER_ADD_RANK)}">
 					<p:column>
 						<p:outputLabel id="rankOutputLabel" for="rankInputText"
 							value="#{msg['lucas.application.userScreen.editUserDialog.rankInputText.name']}"
@@ -90,7 +97,8 @@
 							for="editUserDialogForm:rankInputText" />
 					</p:column>
 				</p:row>
-				<p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.USER_ADD_RANK)}">
 					<p:column colspan="3">
 						<p:inputText id="rankInputText"
 							value="#{userBean.editUserDialogTmpRank}"
@@ -100,6 +108,7 @@
 				<p:row>
 					<p:column>
 						<p:commandButton
+							rendered="#{loginBean.hasPermission(EnumPermission.USER_ADD_RANK)}"
 							value="#{msg['lucas.application.userScreen.editUserDialog.addRankButton.name']}"
 							title="#{msg['lucas.application.userScreen.editUserDialog.addRankButton.tooltip']}"
 							process="rankInputText @this"
@@ -111,6 +120,7 @@
 					</p:column>
 					<p:column>
 						<p:commandButton
+							rendered="#{loginBean.hasPermission(EnumPermission.USER_ADD_RANK)}"
 							value="#{msg['lucas.application.userScreen.editUserDialog.editRankButton.name']}"
 							title="#{msg['lucas.application.userScreen.editUserDialog.editRankButton.tooltip']}"
 							action="#{userBean.editEditUserDialogSelectedRank}"
@@ -119,6 +129,7 @@
 					</p:column>
 					<p:column>
 						<p:commandButton
+							rendered="#{loginBean.hasPermission(EnumPermission.USER_REMOVE_RANK)}"
 							value="#{msg['lucas.application.userScreen.editUserDialog.removeRankButton.name']}"
 							title="#{msg['lucas.application.userScreen.editUserDialog.removeRankButton.tooltip']}"
 							process="editUserDialogForm:ranksDataList @this"
@@ -128,7 +139,8 @@
 						</p:commandButton>
 					</p:column>
 				</p:row>
-				<p:row>
+				<p:row
+					rendered="#{loginBean.hasPermissionsOr([EnumPermission.USER_REMOVE_RANK,EnumPermission.USER_ADD_RANK])}">
 					<p:column colspan="3">
 						<p:selectOneListbox id="ranksDataList" var="rank"
 							value="#{userBean.editUserDialogSelectedRank}"

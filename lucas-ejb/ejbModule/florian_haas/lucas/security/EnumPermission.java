@@ -23,6 +23,8 @@ public enum EnumPermission {
 	ACCOUNT_TRANSACTION_TO_PROTECTED(ACCOUNT, "transactionToProtected"),
 	ACCOUNT_IGNORE_TRANSACTION_LIMIT(ACCOUNT, "ignoreTransactionLimit"),
 	ACCOUNT_FIND_ACCOUNT_OWNER(ACCOUNT, "findAccountOwner"),
+	ACCOUNT_ACCESS_VIEW(ACCOUNT, "accessView"),
+	ACCOUNT_VIEW_TRANSACTION_LOGS(ACCOUNT, "viewTransactionLogs"),
 
 	ATTENDANCE_ALL(ATTENDANCE, "*"),
 	ATTENDANCE_SCAN(ATTENDANCE, "scan"),
@@ -107,6 +109,8 @@ public enum EnumPermission {
 	USER_CREATE_PUPIL(USER, "createPupil"),
 	USER_CREATE_TEACHER(USER, "createTeacher"),
 	USER_CREATE_GUEST(USER, "createGuest"),
+	USER_IMPORT_PUPILS(USER, "importPupils"),
+	USER_IMPORT_TEACHERS(USER, "importTeachers"),
 	USER_FIND_ALL(USER, "findAll"),
 	USER_FIND_BY_ID(USER, "findById"),
 	USER_FIND_DYNAMIC(USER, "findDynamic"),
@@ -119,17 +123,22 @@ public enum EnumPermission {
 	USER_REMOVE_USER_CARD(USER, "removeUserCard"),
 	USER_BLOCK_USER_CARD(USER, "blockUSerCard"),
 	USER_UNBLOCK_USER_CARD(USER, "unblockUserCard"),
-	USER_SET_VALID_DATE(USER, "setValidDate"),
+	USER_SET_VALID_DATE_USER_CARD(USER, "setValidDate"),
 	USER_FIND_USER_CARD_BY_ID(USER, "findUserCardById"),
 	USER_SET_IMAGE(USER, "setImage"),
 	USER_GET_IMAGE_FROM_ID(USER, "getImageFromId"),
 	USER_GET_USER_CARDS(USER, "getUserCards"),
+	USER_ACCESS_VIEW(USER, "accessView"),
 
 	LOGIN_ALL(LOGIN, "*"),
 	LOGIN_CREATE_RAW_LOGIN_USER(LOGIN, "createRawLoginUser"),
 	LOGIN_CREATE_REGISTERED_LOGIN_USER(LOGIN, "createRegisteredLoginUser"),
 	LOGIN_CHANGE_PASSWORD(LOGIN, "changePassword"),
-	LOGIN_NEW_PASSWORD(LOGIN, "newPassword");
+	LOGIN_NEW_PASSWORD(LOGIN, "newPassword"),
+	LOGIN_ROLE_ACCESS_VIEW(LOGIN_ROLE, "accessView"),
+	LOGIN_ROLE_FIND_DYNAMIC(LOGIN_ROLE, "findDynamic"),
+	LOGIN_USER_FIND_DYNAMIC(LOGIN, "findDynamic"),
+	LOGIN_USER_ACCESS_VIEW(LOGIN, "accessView");
 
 	private String permissionString;
 
