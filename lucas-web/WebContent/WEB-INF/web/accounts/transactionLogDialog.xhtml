@@ -54,7 +54,8 @@
 			<p:column sortBy="#{transactionLog.dateTime}"
 				visible="#{accountBean.transactionLogsDialogDatatableColumns[1]}"
 				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.dateTimeHeader']}">
-				<h:outputText value="#{transactionLog.dateTime}" />
+				<h:outputText value="#{transactionLog.dateTime}"
+					converter="lucas:localDateTimeStringConverter" />
 			</p:column>
 			<p:column sortBy="#{transactionLog.action}"
 				visible="#{accountBean.transactionLogsDialogDatatableColumns[2]}"

@@ -149,7 +149,7 @@
 			</p:column>
 			<p:column
 				headerText="#{msg['lucas.application.userScreen.userCardManagerDialog.validDayHeader']}">
-				<h:outputText value="#{userCard.validDay}" />
+				<h:outputText value="#{userCard.validDay}" converter="lucas:localDateStringConverter"/>
 			</p:column>
 		</p:dataTable>
 		<p:separator />

@@ -882,8 +882,8 @@ public class UserBean implements Serializable {
 			Long id = card.getId();
 			if (WebUtils.executeTask(params -> {
 				params.add(card.getId());
-				params.add(userCardManagerDialogValidDate);
-				params.add(card.getValidDay());
+				params.add(WebUtils.getAsString(Utils.asLocalDate(userCardManagerDialogValidDate), "lucas:localDateStringConverter"));
+				params.add(WebUtils.getAsString(card.getValidDay(), "lucas:localDateStringConverter"));
 				return userBean.setValidDate(id, Utils.asLocalDate(userCardManagerDialogValidDate));
 			}, "lucas.application.userScreen.setValidDay.success", "lucas.application.userScreen.setValidDay.warn",
 					"lucas.application.userScreen.setValidDay.fail", message -> {
