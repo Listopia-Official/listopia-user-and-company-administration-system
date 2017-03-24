@@ -37,7 +37,7 @@
 										</p:themeSwitcher>
 									</p:column>
 									<p:column>
-										<p:commandButton
+										<p:commandButton resetValues="true"
 											rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_CHANGE_PASSWORD)}"
 											value="#{msg['lucas.application.preferencesScreen.changePasswordButton.name']}"
 											title="#{msg['lucas.application.preferencesScreen.changePasswordButton.tooltip']}"

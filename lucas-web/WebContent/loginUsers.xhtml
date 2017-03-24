@@ -25,20 +25,20 @@
 	</ui:define>
 	<ui:define name="buttonArea">
 		<p:toolbarGroup>
-			<p:splitButton icon="fa fa-user-plus"
+			<p:splitButton icon="fa fa-user-plus" resetValues="true"
 				value="#{msg['lucas.application.loginUserScreen.createLoginUserButton.name']}"
 				title="#{msg['lucas.application.loginUserScreen.createLoginUserButton.tooltip']}"
 				update="createDefaultLoginUserDialogForm" process="@this"
 				oncomplete="PF('createDefaultLoginUserDialog').show()"
 				actionListener="#{loginUserBean.initCreateDefaultLoginUserDialog}">
-				<p:menuitem icon="fa fa-user"
+				<p:menuitem icon="fa fa-user" resetValues="true"
 					value="#{msg['lucas.application.loginUserScreen.createDefaultLoginUserButton.name']}"
 					title="#{msg['lucas.application.loginUserScreen.createDefaultLoginUserButton.tooltip']}"
 					update="createDefaultLoginUserDialogForm" process="@this"
 					oncomplete="PF('createDefaultLoginUserDialog').show()"
 					actionListener="#{loginUserBean.initCreateDefaultLoginUserDialog}">
 				</p:menuitem>
-				<p:menuitem icon="fa fa-user-md"
+				<p:menuitem icon="fa fa-user-md" resetValues="true"
 					value="#{msg['lucas.application.loginUserScreen.createBoundLoginUserButton.name']}"
 					title="#{msg['lucas.application.loginUserScreen.createBoundLoginUserButton.tooltip']}"
 					update="createBoundLoginUserDialogForm" process="@this"
@@ -47,14 +47,14 @@
 				</p:menuitem>
 			</p:splitButton>
 			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
-			<p:commandButton
+			<p:commandButton resetValues="true"
 				value="#{msg['lucas.application.loginUserScreen.editLoginUserButton.name']}"
 				title="#{msg['lucas.application.loginUserScreen.editLoginUserButton.tooltip']}"
 				icon="fa fa-edit" process="@this" update="editLoginUserDialogForm"
 				disabled="#{loginUserBean.selectedLoginUsers.size() != 1}"
 				oncomplete="PF('editLoginUserDialog').show()"
 				actionListener="#{loginUserBean.initEditLoginUserDialog}" />
-			<p:commandButton
+			<p:commandButton resetValues="true"
 				value="#{msg['lucas.application.loginUserScreen.setPasswordButton.name']}"
 				title="#{msg['lucas.application.loginUserScreen.setPasswordButton.tooltip']}"
 				icon="fa fa-key" process="@this" update="changePasswordDialogForm"

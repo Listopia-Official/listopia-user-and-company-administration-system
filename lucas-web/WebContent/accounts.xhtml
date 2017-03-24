@@ -26,7 +26,7 @@
 	</ui:define>
 	<ui:define name="buttonArea">
 		<p:toolbarGroup align="left">
-			<p:commandButton
+			<p:commandButton resetValues="true"
 				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_PAY_IN)}"
 				value="#{msg['lucas.application.accountScreen.payInButton.name']}"
 				action="#{accountBean.resetPayInDialog}"
@@ -34,7 +34,7 @@
 				icon="fa fa-arrow-up" process="@this" update="payInDialogForm"
 				disabled="#{accountBean.selectedAccounts.size() &lt;=0}"
 				oncomplete="PF('payInDialog').show()" />
-			<p:commandButton
+			<p:commandButton resetValues="true"
 				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_PAY_OUT)}"
 				value="#{msg['lucas.application.accountScreen.payOutButton.name']}"
 				action="#{accountBean.resetPayOutDialog}"
@@ -42,7 +42,7 @@
 				icon="fa fa-arrow-down" process="@this" update="payOutDialogForm"
 				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}"
 				oncomplete="PF('payOutDialog').show()" />
-			<p:commandButton
+			<p:commandButton resetValues="true"
 				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_TRANSACTION)}"
 				value="#{msg['lucas.application.accountScreen.transactionButton.name']}"
 				action="#{accountBean.resetTransactionDialog}"

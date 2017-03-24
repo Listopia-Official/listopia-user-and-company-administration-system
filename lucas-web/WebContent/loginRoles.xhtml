@@ -25,7 +25,7 @@
 	</ui:define>
 	<ui:define name="buttonArea">
 		<p:toolbarGroup align="left">
-			<p:commandButton
+			<p:commandButton resetValues="true"
 				value="#{msg['lucas.application.loginRoleScreen.createLoginUserRoleButton.name']}"
 				title="#{msg['lucas.application.loginRoleScreen.createLoginUserRoleButton.tooltip']}"
 				icon="fa fa-plus"
@@ -33,7 +33,7 @@
 				action="#{loginRoleBean.initCreateLoginUserRoleDialog}"
 				process="@this" update="createLoginUserRoleDialogForm" />
 			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
-			<p:commandButton
+			<p:commandButton resetValues="true"
 				value="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleButton.name']}"
 				title="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleButton.tooltip']}"
 				icon="fa fa-edit" oncomplete="PF('editLoginUserRoleDialog').show()"
