@@ -46,6 +46,8 @@ public interface LoginBeanLocal {
 
 	public Boolean changeUsername(@ValidEntityId(entityClass = LoginUser.class) Long id, @NotBlank String username);
 
+	public Boolean setUITheme(@ValidEntityId(entityClass = LoginUser.class) Long id, @ValidUITheme @NotNull String uiTheme);
+
 	public Boolean addLoginUserRoleToUser(@ValidEntityId(entityClass = LoginUser.class) Long userId,
 			@ValidEntityId(entityClass = LoginUserRole.class) Long roleId);
 

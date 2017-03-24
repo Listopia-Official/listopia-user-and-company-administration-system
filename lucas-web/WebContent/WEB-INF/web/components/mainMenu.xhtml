@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<p:importEnum type="florian_haas.lucas.security.EnumPermission" />
+	<p:menu toggleable="true">
+		<p:submenu
+			label="#{msg['lucas.application.mainScreen.navigationMenu.communicationSubmenu.name']}">
+			<p:menuitem disabled="true"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.communicationSubmenu.chatMenuItem.name']}" />
+			<p:menuitem disabled="true"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.communicationSubmenu.notificationsMenuItem.name']}" />
+		</p:submenu>
+		<p:submenu
+			label="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.name']}">
+			<p:menuitem outcome="/users.xhtml"
+				rendered="#{loginBean.hasPermission(EnumPermission.USER_ACCESS_VIEW)}"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.usersMenuItem.name']}" />
+			<p:menuitem disabled="true"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.companiesMenuItem.name']}" />
+			<p:menuitem disabled="true"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.employmentsMenuItem.name']}" />
+		</p:submenu>
+		<p:submenu
+			label="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.name']}">
+			<p:menuitem disabled="true"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.scanMenuItem.name']}" />
+			<p:menuitem disabled="true"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.visaMenuItem.name']}" />
+			<p:menuitem disabled="true"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.attendancedataMenuItem.name']}" />
+		</p:submenu>
+		<p:submenu
+			label="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.name']}">
+			<p:menuitem outcome="/accounts.xhtml"
+				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_ACCESS_VIEW)}"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.accountsMenuItem.name']}" />
+			<p:menuitem disabled="true"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.taxdataItem.name']}" />
+		</p:submenu>
+		<p:submenu
+			label="#{msg['lucas.application.mainScreen.navigationMenu.warehouseSubmenu.name']}">
+			<p:menuitem disabled="true"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.warehouseSubmenu.itemsMenuItem.name']}" />
+		</p:submenu>
+		<p:submenu
+			label="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.name']}">
+			<p:menuitem outcome="/loginUsers.xhtml"
+				rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_USER_ACCESS_VIEW)}"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.loginUsersMenuItem.name']}" />
+			<p:menuitem outcome="/loginRoles.xhtml"
+				rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_ROLE_ACCESS_VIEW)}"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.loginRolesMenuItem.name']}" />
+			<p:menuitem disabled="true"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.globaldataItem.name']}" />
+		</p:submenu>
+	</p:menu>
+</ui:composition>

@@ -1,7 +1,7 @@
 package florian_haas.lucas.business;
 
 import java.math.BigDecimal;
-import java.util.Map;
+import java.util.*;
 
 import javax.ejb.Local;
 import javax.validation.constraints.*;
@@ -32,6 +32,10 @@ public interface GlobalDataBeanLocal {
 
 	public Integer getMaxUserImageHeight();
 
+	public String getDefaultUITheme();
+
+	public List<String> getUIThemes();
+
 	public Boolean setSalary(@NotNull EnumSalaryClass salaryClass, @MinimumWage BigDecimal salary);
 
 	public Boolean setMinTimePresent(@NotNull @Min(1) Long minTimePresent);
@@ -51,5 +55,11 @@ public interface GlobalDataBeanLocal {
 	public Boolean setMaxUserImageWidth(@NotNull @Min(50) Integer maxUserImageWidth);
 
 	public Boolean setMaxUserImageHeight(@NotNull @Min(50) Integer maxUserImageHeight);
+
+	public Boolean setDefaultUITheme(@ValidUITheme @NotNull String uiTheme);
+
+	public Boolean addUITheme(@NotBlank String uiTheme);
+
+	public Boolean removeUITheme(@ValidUITheme @NotNull String uiTheme);
 
 }

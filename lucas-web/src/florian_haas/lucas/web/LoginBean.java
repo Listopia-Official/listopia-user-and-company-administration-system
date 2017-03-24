@@ -1,18 +1,21 @@
 package florian_haas.lucas.web;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.validation.constraints.NotNull;
 
 import org.apache.shiro.SecurityUtils;
 import org.primefaces.model.StreamedContent;
 
 import florian_haas.lucas.business.*;
-import florian_haas.lucas.model.User;
+import florian_haas.lucas.model.*;
+import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.web.util.WebUtils;
 
@@ -33,7 +36,8 @@ public class LoginBean {
 	private GlobalDataBeanLocal globalDataBean;
 
 	public Boolean getIsAnonymous() {
-		return SecurityUtils.getSubject().getPrincipals().isEmpty();
+		return SecurityUtils.getSubject() == null || SecurityUtils.getSubject().getPrincipals() == null
+				|| SecurityUtils.getSubject().getPrincipals().isEmpty();
 	}
 
 	private Object getPrincipal() {
@@ -66,8 +70,8 @@ public class LoginBean {
 	}
 
 	public Boolean getIsUserInDatabase() {
-		Long id = getUserId(getSimpleUsername());
-		return !getIsAnonymous() && id != null && loginBean.findLoginUserByUsername(id.toString()) != null;
+		String username = getSimpleUsername();
+		return !getIsAnonymous() && username != null && loginBean.findLoginUserByUsername(username) != null;
 	}
 
 	public StreamedContent getImage() {
@@ -115,5 +119,82 @@ public class LoginBean {
 			if (!SecurityUtils.getSubject().isPermitted(permission.getPermissionString())) return false;
 		}
 		return true;
+	}
+
+	public String getUiTheme() {
+		String username = getSimpleUsername();
+		String theme = null;
+		if (username != null && !username.trim().isEmpty()) {
+			LoginUser user = loginBean.findLoginUserByUsername(username);
+			theme = user != null ? user.getUiTheme() : null;
+		}
+		return theme != null ? theme : globalDataBean.getDefaultUITheme();
+	}
+
+	@NotNull
+	@ValidUITheme
+	private String preferencesScreenSelectedUITheme = null;
+
+	public void preferencesScreenSetUITheme() {
+		String username = getSimpleUsername();
+		if (username != null && !username.trim().isEmpty()) {
+			LoginUser user = loginBean.findLoginUserByUsername(username);
+			if (user != null) {
+				loginBean.setUITheme(user.getId(), preferencesScreenSelectedUITheme);
+			}
+		}
+	}
+
+	public List<String> getUIThemes() {
+		return globalDataBean.getUIThemes();
+	}
+
+	public String getPreferencesScreenSelectedUITheme() {
+		return preferencesScreenSelectedUITheme;
+	}
+
+	public void setPreferencesScreenSelectedUITheme(String preferencesScreenSelectedUITheme) {
+		this.preferencesScreenSelectedUITheme = preferencesScreenSelectedUITheme;
+	}
+
+	@ValidUnhashedPassword
+	private char[] changePasswordDialogOldPassword = null;
+
+	@ValidUnhashedPassword
+	private char[] changePasswordDialogPassword = null;
+
+	@PostConstruct
+	public void onPostConstruct() {
+		preferencesScreenSelectedUITheme = getUiTheme();
+	}
+
+	public char[] getChangePasswordDialogOldPassword() {
+		return changePasswordDialogOldPassword;
+	}
+
+	public void setChangePasswordDialogOldPassword(char[] changePasswordDialogOldPassword) {
+		this.changePasswordDialogOldPassword = changePasswordDialogOldPassword;
+	}
+
+	public char[] getChangePasswordDialogPassword() {
+		return changePasswordDialogPassword;
+	}
+
+	public void setChangePasswordDialogPassword(char[] changePasswordDialogPassword) {
+		this.changePasswordDialogPassword = changePasswordDialogPassword;
+	}
+
+	public void initChangePasswordDialog() {
+		changePasswordDialogOldPassword = null;
+		changePasswordDialogPassword = null;
+	}
+
+	public void changePassword() {
+		WebUtils.executeTask(params -> {
+			return loginBean.changePassword(changePasswordDialogOldPassword, changePasswordDialogPassword);
+		}, "lucas.application.preferencesScreen.changePassword.success", "lucas.application.preferencesScreen.changePassword.warn",
+				"lucas.application.preferencesScreen.changePassword.fail", getAdvancedUsername());
+		Arrays.fill(changePasswordDialogPassword, 'c');
+		Arrays.fill(changePasswordDialogOldPassword, 'c');
 	}
 }

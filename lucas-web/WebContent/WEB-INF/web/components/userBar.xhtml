@@ -17,13 +17,15 @@
 							<h:outputText value="#{pageTitle}" />
 						</p:column>
 						<p:column styleClass="userBarCell right">
-							<p:graphicImage value="#{loginBean.image}" width="42px" cache="false"
-								height="42px" style="vertical-align:middle;display:inline;" />
+							<p:graphicImage value="#{loginBean.image}" width="42px"
+								cache="false" height="42px"
+								style="vertical-align:middle;display:inline;" />
 							<p:spacer width="5px" />
 							<p:menuButton value="#{loginBean.advancedUsername}"
 								iconPos="right">
 								<p:menuitem icon="fa fa-gear"
 									disabled="#{not loginBean.isUserInDatabase}"
+									outcome="/preferences.xhtml"
 									value="#{msg['lucas.application.userBar.preferencesButton.name']}"
 									title="#{msg['lucas.application.userBar.preferencesButton.tooltip']}" />
 								<p:menuitem icon="fa fa-sign-out"
@@ -40,8 +42,10 @@
 			<p:ajax event="idle" listener="#{loginBean.logout}" />
 		</p:idleMonitor>
 	</h:form>
-	<p:growl for="stickyGrowlMessage" showDetail="true" showSummary="true" globalOnly="true" autoUpdate="true" sticky="true"/>
-	<p:growl for="growlMessage" showDetail="true" showSummary="true" globalOnly="true" autoUpdate="true" life="10000"/>
-	<p:messages for="defaultMessage" globalOnly="true" showDetail="true" showIcon="true"
-		showSummary="true" closable="true" autoUpdate="true"/>
+	<p:growl for="stickyGrowlMessage" showDetail="true" showSummary="true"
+		globalOnly="true" autoUpdate="true" sticky="true" />
+	<p:growl for="growlMessage" showDetail="true" showSummary="true"
+		globalOnly="true" autoUpdate="true" life="10000" />
+	<p:messages for="defaultMessage" globalOnly="true" showDetail="true"
+		showIcon="true" showSummary="true" closable="true" autoUpdate="true" />
 </ui:composition>

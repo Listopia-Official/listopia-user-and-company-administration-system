@@ -184,4 +184,37 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 		return newInstance().getMaxUserImageHeight();
 	}
 
+	@Override
+	public String getDefaultUITheme() {
+		return newInstance().getDefaultUITheme();
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_GET_UI_THEMES)
+	public List<String> getUIThemes() {
+		return newInstance().getUiThemes();
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_SET_DEFAULT_UI_THEME)
+	public Boolean setDefaultUITheme(String uiTheme) {
+		GlobalData newInstance = newInstance();
+		if (!newInstance.getDefaultUITheme().equals(uiTheme)) {
+			newInstance.setDefaultUITheme(uiTheme);
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_ADD_UI_THEME)
+	public Boolean addUITheme(String uiTheme) {
+		return newInstance().addUITheme(uiTheme);
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_REMOVE_UI_THEME)
+	public Boolean removeUITheme(String uiTheme) {
+		return newInstance().removeUITheme(uiTheme);
+	}
 }

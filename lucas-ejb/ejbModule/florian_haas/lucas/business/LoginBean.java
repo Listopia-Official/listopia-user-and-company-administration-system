@@ -83,12 +83,8 @@ public class LoginBean implements LoginBeanLocal {
 	@Override
 	@RequiresPermissions(LOGIN_CHANGE_PASSWORD)
 	public Boolean changePassword(char[] oldPassword, char[] newPassword) {
-		Boolean ret = Boolean.FALSE;
-		try {
-			ret = changePasswordHelper(Long.valueOf(SecurityUtils.getSubject().getPrincipal().toString()), oldPassword, newPassword);
-		}
-		catch (NumberFormatException e) {}
-		return ret;
+		return changePasswordHelper(loginUserDao.findByUsername(SecurityUtils.getSubject().getPrincipal().toString()).getId(), oldPassword,
+				newPassword);
 	}
 
 	@Override
@@ -166,6 +162,16 @@ public class LoginBean implements LoginBeanLocal {
 	public List<LoginUserRole> getLoginUserRoles(@ValidEntityId(entityClass = LoginUser.class) Long userId) {
 		LoginUser user = loginUserDao.findById(userId);
 		return new ArrayList<>(user.getRoles());
+	}
+
+	@Override
+	public Boolean setUITheme(Long id, String uiTheme) {
+		LoginUser user = loginUserDao.findById(id);
+		if (user.getUiTheme() == null || !user.getUiTheme().equals(uiTheme)) {
+			user.setUiTheme(uiTheme);
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
 	}
 
 }

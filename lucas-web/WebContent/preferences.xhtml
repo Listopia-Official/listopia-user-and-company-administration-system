@@ -1,0 +1,61 @@
+<ui:composition template="/WEB-INF/web/template/appTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="pageTitle"
+		value="#{msg['lucas.application.preferencesScreen.title']}" />
+	<ui:define name="dialogs">
+		<ui:include src="/WEB-INF/web/preferences/changePasswordDialog.xhtml" />
+	</ui:define>
+	<ui:define name="content">
+		<p:panelGrid>
+			<p:row>
+				<p:column>
+					<ui:include src="/WEB-INF/web/components/mainMenu.xhtml" />
+				</p:column>
+				<p:column style="vertical-align:top">
+					<ui:fragment rendered="#{loginBean.isUserInDatabase}">
+						<h:form>
+							<p:panelGrid>
+								<p:row>
+									<p:column>
+										<h:outputLabel for="userPreferencesThemeSwitcher"
+											value="#{msg['lucas.application.preferencesScreen.themeSwitcher.name']}"
+											title="#{msg['lucas.application.preferencesScreen.themeSwitcher.tooltip']}" />
+									</p:column>
+									<p:column />
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:themeSwitcher id="userPreferencesThemeSwitcher"
+											title="#{msg['lucas.application.preferencesScreen.themeSwitcher.tooltip']}"
+											value="#{loginBean.preferencesScreenSelectedUITheme}">
+											<p:ajax listener="#{loginBean.preferencesScreenSetUITheme}" />
+											<f:selectItems value="#{loginBean.UIThemes}" />
+										</p:themeSwitcher>
+									</p:column>
+									<p:column>
+										<p:commandButton
+											rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_CHANGE_PASSWORD)}"
+											value="#{msg['lucas.application.preferencesScreen.changePasswordButton.name']}"
+											title="#{msg['lucas.application.preferencesScreen.changePasswordButton.tooltip']}"
+											update="changePasswordDialogForm" process="@this"
+											action="#{loginBean.initChangePasswordDialog}"
+											oncomplete="PF('changePasswordDialog').show()"
+											icon="fa fa-key" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</h:form>
+					</ui:fragment>
+					<ui:fragment rendered="#{not loginBean.isUserInDatabase}">
+						<h:outputText style="font-weight:bold"
+							value="#{msg['lucas.application.preferencesScreen.notInDatabase']}" />
+					</ui:fragment>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</ui:define>
+</ui:composition>

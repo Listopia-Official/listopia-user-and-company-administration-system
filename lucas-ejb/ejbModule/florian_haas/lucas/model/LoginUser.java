@@ -29,6 +29,8 @@ public class LoginUser extends EntityBase {
 	@Null(groups = DefaultLoginUserRequired.class)
 	private User user;
 
+	private String uiTheme = null;
+
 	@OneToMany(cascade = {
 			CascadeType.PERSIST, CascadeType.REFRESH })
 	@NotNull
@@ -76,5 +78,13 @@ public class LoginUser extends EntityBase {
 
 	public Boolean removeRole(LoginUserRole role) {
 		return roles.remove(role);
+	}
+
+	public String getUiTheme() {
+		return uiTheme;
+	}
+
+	public void setUiTheme(String uiTheme) {
+		this.uiTheme = uiTheme;
 	}
 }

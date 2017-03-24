@@ -49,29 +49,6 @@
 	border: 0 none !important;
 }
 
-.ui-messages-info {
-	background-color: #9ccc65 !important;
-	color: #fff !important;
-	border-color: #9ccc65 !important;
-}
-
-.ui-messages-warn {
-	background-color: #ffa726 !important;
-	color: #fff !important;
-	border-color: #ffa726 !important;
-}
-
-.ui-messages-error {
-	background-color: #ef5350 !important;
-	color: #fff !important;
-	border-color: #ef5350 !important;
-}
-
-.ui-messages-fatal {
-	background-color: #ef5350 !important;
-	color: #fff !important;
-	border-color: #ef5350 !important;
-}
 
 .checkbox {
 	margin-right: 4px;

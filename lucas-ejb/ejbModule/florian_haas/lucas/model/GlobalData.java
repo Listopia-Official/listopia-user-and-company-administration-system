@@ -9,6 +9,7 @@ import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.NotBlank;
 
 import florian_haas.lucas.model.validation.*;
+import florian_haas.lucas.util.validation.*;
 
 @Entity
 public class GlobalData extends EntityBase {
@@ -58,6 +59,18 @@ public class GlobalData extends EntityBase {
 	@NotNull
 	@Min(50)
 	private Integer maxUserImageHeight = 300;
+
+	@Basic(optional = false)
+	@NotBlank
+	private String defaultUITheme = "omega";
+
+	@ElementCollection
+	@NotNull
+	private List<@NotBlankString @TypeNotNull String> uiThemes = Arrays.asList("afterdark", "afternoon", "afterwork", "aristo", "black-tie",
+			"blitzer", "bluesky", "bootstrap", "casablanca", "cupertino", "cruze", "dark-hive", "delta", "dot-luv", "eggplant", "excite-bike",
+			"flick", "glass-x", "home", "hot-sneaks", "humanity", "le-frog", "midnight", "mint-choc", "overcast", "omega", "pepper-grinder",
+			"redmond", "rocket", "sam", "smoothness", "south-street", "start", "sunny", "swanky-purse", "trontastic", "ui-darkness", "ui-lightness",
+			"vader");
 
 	public Map<EnumSalaryClass, BigDecimal> getSalaries() {
 		return Collections.unmodifiableMap(salaries);
@@ -129,6 +142,26 @@ public class GlobalData extends EntityBase {
 
 	public void setMaxUserImageHeight(Integer maxUserImageHeight) {
 		this.maxUserImageHeight = maxUserImageHeight;
+	}
+
+	public String getDefaultUITheme() {
+		return defaultUITheme;
+	}
+
+	public void setDefaultUITheme(String defaultUITheme) {
+		this.defaultUITheme = defaultUITheme;
+	}
+
+	public List<String> getUiThemes() {
+		return this.uiThemes;
+	}
+
+	public Boolean addUITheme(String uiTheme) {
+		return uiThemes.add(uiTheme);
+	}
+
+	public Boolean removeUITheme(String uiTheme) {
+		return uiThemes.remove(uiTheme);
 	}
 
 }
