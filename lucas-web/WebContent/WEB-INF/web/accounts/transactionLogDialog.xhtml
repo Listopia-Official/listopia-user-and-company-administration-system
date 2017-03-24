@@ -102,7 +102,7 @@
 				visible="#{accountBean.transactionLogsDialogDatatableColumns[9]}"
 				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.bankUser']}">
 				<h:outputText value="#{transactionLog.bankUser}"
-					converter="lucas:loginUserStringConverter" />
+					converter="lucas:shortLoginUserStringConverter" />
 			</p:column>
 		</p:dataTable>
 		<p:separator />
