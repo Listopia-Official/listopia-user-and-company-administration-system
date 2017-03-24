@@ -46,59 +46,59 @@
 						listener="#{accountBean.transactionLogDialogOnToggle}" />
 				</p:columnToggler>
 			</f:facet>
-			<p:column
+			<p:column sortBy="#{transactionLog.id}"
 				visible="#{accountBean.transactionLogsDialogDatatableColumns[0]}"
 				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.idHeader']}">
 				<h:outputText value="#{transactionLog.id}" />
 			</p:column>
-			<p:column
+			<p:column sortBy="#{transactionLog.dateTime}"
 				visible="#{accountBean.transactionLogsDialogDatatableColumns[1]}"
 				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.dateTimeHeader']}">
 				<h:outputText value="#{transactionLog.dateTime}" />
 			</p:column>
-			<p:column
+			<p:column sortBy="#{transactionLog.action}"
 				visible="#{accountBean.transactionLogsDialogDatatableColumns[2]}"
 				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.actionHeader']}">
 				<h:outputText
 					value="#{converterBean.convertEnum(transactionLog.action)}" />
 			</p:column>
-			<p:column
+			<p:column sortBy="#{transactionLog.actionType}"
 				visible="#{accountBean.transactionLogsDialogDatatableColumns[3]}"
 				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.actionTypeHeader']}">
 				<h:outputText
 					value="#{converterBean.convertEnum(transactionLog.actionType)}" />
 			</p:column>
-			<p:column
+			<p:column sortBy="#{transactionLog.relatedAccount.owner}"
 				visible="#{accountBean.transactionLogsDialogDatatableColumns[4]}"
 				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.relatedAccount']}">
 				<h:outputText value="#{transactionLog.relatedAccount.owner}"
 					converter="lucas:accountOwnerStringConverter" />
 			</p:column>
-			<p:column
+			<p:column sortBy="#{transactionLog.previousBankBalance}"
 				visible="#{accountBean.transactionLogsDialogDatatableColumns[5]}"
 				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.previousBankBalance']}">
 				<h:outputText value="#{transactionLog.previousBankBalance}"
 					converter="#{currencyConverter}" />
 			</p:column>
-			<p:column
+			<p:column sortBy="#{transactionLog.amount}"
 				visible="#{accountBean.transactionLogsDialogDatatableColumns[6]}"
 				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.amount']}">
 				<h:outputText value="#{transactionLog.amount}"
 					converter="#{currencyConverter}" />
 			</p:column>
-			<p:column
+			<p:column sortBy="#{transactionLog.currentBankBalance}"
 				visible="#{accountBean.transactionLogsDialogDatatableColumns[7]}"
 				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.currentBankBalance']}">
 				<h:outputText value="#{transactionLog.currentBankBalance}"
 					converter="#{currencyConverter}" />
 			</p:column>
-			<p:column
+			<p:column sortBy="#{transactionLog.comment}"
 				visible="#{accountBean.transactionLogsDialogDatatableColumns[8]}"
 				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.comment']}">
 				<h:outputText value="#{transactionLog.comment}"
 					converter="lucas:NullStringConverter" />
 			</p:column>
-			<p:column
+			<p:column sortable="false"
 				visible="#{accountBean.transactionLogsDialogDatatableColumns[9]}"
 				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.bankUser']}">
 				<h:outputText value="#{transactionLog.bankUser}"
