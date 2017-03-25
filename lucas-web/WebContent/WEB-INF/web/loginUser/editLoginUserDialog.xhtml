@@ -13,7 +13,8 @@
 	<ui:define name="dialogContent">
 		<div class="ui-fluid">
 			<p:panelGrid>
-				<p:row rendered="#{loginUserBean.editLoginUserIsDefaultLoginUser}">
+				<p:row
+					rendered="#{loginUserBean.editLoginUserIsDefaultLoginUser &amp;&amp; loginBean.hasPermission(EnumPermission.LOGIN_USER_CHANGE_USERNAME)}">
 					<p:column>
 						<p:outputLabel
 							value="#{msg['lucas.application.loginUserScreen.editLoginUserDialog.usernameInputText.name']}"
@@ -29,7 +30,8 @@
 						<p:message for="loginUserNameInputText" />
 					</p:column>
 				</p:row>
-				<p:row>
+				<p:row
+					rendered="#{loginBean.hasPermissionsAnd([EnumPermission.LOGIN_USER_GET_ROLES,EnumPermission.LOGIN_USER_ADD_ROLE,EnumPermission.LOGIN_USER_REMOVE_ROLE])}">
 					<p:column>
 						<p:outputLabel
 							value="#{msg['lucas.application.loginUserScreen.editLoginUserDialog.rolesPickList.name']}"

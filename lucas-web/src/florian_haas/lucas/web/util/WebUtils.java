@@ -17,10 +17,11 @@ import javax.faces.convert.Converter;
 import javax.imageio.ImageIO;
 import javax.validation.*;
 
-import org.apache.shiro.ShiroException;
+import org.apache.shiro.*;
 import org.primefaces.model.*;
 
 import florian_haas.lucas.model.EntityBase;
+import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.web.util.converter.CurrencyConverter;
 
@@ -327,6 +328,13 @@ public class WebUtils {
 
 	public static <T> T getCDIManagerBean(Class<T> clazz) {
 		return CDI.current().select(clazz).get();
+	}
+
+	public static Boolean isPermitted(EnumPermission... permissions) {
+		for (EnumPermission permission : permissions) {
+			if (!SecurityUtils.getSubject().isPermitted(permission.getPermissionString())) return false;
+		}
+		return true;
 	}
 
 }

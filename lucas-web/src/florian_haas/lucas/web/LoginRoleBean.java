@@ -309,7 +309,9 @@ public class LoginRoleBean implements Serializable {
 			editLoginUserRole = selectedLoginRoles.get(0);
 			this.editLoginUserRoleDialogName = editLoginUserRole.getName();
 			List<String> actualPermissions = new ArrayList<>();
-			actualPermissions.addAll(loginUserRoleBean.getPermissions(editLoginUserRole.getId()));
+			if (WebUtils.isPermitted(EnumPermission.LOGIN_ROLE_GET_PERMISSIONS)) {
+				actualPermissions.addAll(loginUserRoleBean.getPermissions(editLoginUserRole.getId()));
+			}
 			List<String> permissions = new ArrayList<>();
 			for (EnumPermission value : EnumPermission.values()) {
 				if (!actualPermissions.contains(value.getPermissionString())) {
@@ -323,18 +325,23 @@ public class LoginRoleBean implements Serializable {
 	public void editLoginRole() {
 		WebUtils.executeTask(params -> {
 			Long id = editLoginUserRole.getId();
-			List<String> permissions = new ArrayList<>(loginUserRoleBean.getPermissions(id));
-			loginUserRoleBean.setRoleName(id, editLoginUserRoleDialogName);
-			editLoginUserRoleDialogPermissionsListModel.getTarget().forEach(permission -> {
-				if (!permissions.contains(permission)) {
-					loginUserRoleBean.addPermission(id, permission);
-				}
-			});
-			permissions.forEach(permission -> {
-				if (!editLoginUserRoleDialogPermissionsListModel.getTarget().contains(permission)) {
-					loginUserRoleBean.removePermission(id, permission);
-				}
-			});
+			if (WebUtils.isPermitted(EnumPermission.LOGIN_ROLE_SET_NAME)) {
+				loginUserRoleBean.setRoleName(id, editLoginUserRoleDialogName);
+			}
+			if (WebUtils.isPermitted(EnumPermission.LOGIN_ROLE_ADD_PERMISSION, EnumPermission.LOGIN_ROLE_REMOVE_PERMISSION,
+					EnumPermission.LOGIN_ROLE_GET_PERMISSIONS)) {
+				List<String> permissions = new ArrayList<>(loginUserRoleBean.getPermissions(id));
+				editLoginUserRoleDialogPermissionsListModel.getTarget().forEach(permission -> {
+					if (!permissions.contains(permission)) {
+						loginUserRoleBean.addPermission(id, permission);
+					}
+				});
+				permissions.forEach(permission -> {
+					if (!editLoginUserRoleDialogPermissionsListModel.getTarget().contains(permission)) {
+						loginUserRoleBean.removePermission(id, permission);
+					}
+				});
+			}
 			LoginUserRole newRole = loginUserRoleBean.findById(id);
 			params.add(WebUtils.getAsString(editLoginUserRole, "lucas:loginUserRoleStringConverter"));
 			WebUtils.refreshEntities(LoginUserRole.class, searchLoginRoleResults, selectedLoginRoles, newRole, loginUserRoleBean::findById, true);

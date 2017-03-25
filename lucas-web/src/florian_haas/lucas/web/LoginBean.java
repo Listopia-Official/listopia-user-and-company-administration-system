@@ -104,19 +104,19 @@ public class LoginBean {
 	}
 
 	public Boolean hasPermission(EnumPermission permission) {
-		return SecurityUtils.getSubject().isPermitted(permission.getPermissionString());
+		return WebUtils.isPermitted(permission);
 	}
 
 	public Boolean hasPermissionsOr(List<EnumPermission> permissions) {
 		for (EnumPermission permission : permissions) {
-			if (SecurityUtils.getSubject().isPermitted(permission.getPermissionString())) return true;
+			if (hasPermission(permission)) return true;
 		}
 		return false;
 	}
 
 	public Boolean hasPermissionsAnd(List<EnumPermission> permissions) {
 		for (EnumPermission permission : permissions) {
-			if (!SecurityUtils.getSubject().isPermitted(permission.getPermissionString())) return false;
+			if (!hasPermission(permission)) return false;
 		}
 		return true;
 	}
@@ -124,7 +124,7 @@ public class LoginBean {
 	public String getUiTheme() {
 		String username = getSimpleUsername();
 		String theme = null;
-		if (username != null && !username.trim().isEmpty()) {
+		if (username != null && !username.trim().isEmpty() && WebUtils.isPermitted(EnumPermission.LOGIN_USER_FIND_BY_USERNAME)) {
 			LoginUser user = loginBean.findLoginUserByUsername(username);
 			theme = user != null ? user.getUiTheme() : null;
 		}

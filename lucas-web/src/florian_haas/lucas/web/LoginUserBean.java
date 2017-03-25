@@ -17,6 +17,7 @@ import florian_haas.lucas.database.*;
 import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.*;
+import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.validation.*;
 import florian_haas.lucas.web.util.WebUtils;
 
@@ -384,35 +385,43 @@ public class LoginUserBean implements Serializable {
 		if (!selectedLoginUsers.isEmpty()) {
 			editLoginUserSelectedUser = selectedLoginUsers.get(0);
 			editLoginUserUsername = editLoginUserSelectedUser.getUsername();
-			List<LoginUserRole> rolesOfUser = new ArrayList<>(editLoginUserSelectedUser.getRoles());
-			List<LoginUserRole> roles = new ArrayList<>();
-			List<LoginUserRole> allRoles = loginUserRoleBean.findAll();
-			allRoles.forEach(role -> {
-				if (!rolesOfUser.contains(role)) {
-					roles.add(role);
-				}
-			});
-			editLoginUserRolesListModel = new DualListModel<>(roles, rolesOfUser);
+			if (WebUtils.isPermitted(EnumPermission.LOGIN_USER_GET_ROLES, EnumPermission.LOGIN_USER_ADD_ROLE,
+					EnumPermission.LOGIN_USER_REMOVE_ROLE)) {
+				List<LoginUserRole> rolesOfUser = new ArrayList<>(editLoginUserSelectedUser.getRoles());
+				List<LoginUserRole> roles = new ArrayList<>();
+				List<LoginUserRole> allRoles = loginUserRoleBean.findAll();
+				allRoles.forEach(role -> {
+					if (!rolesOfUser.contains(role)) {
+						roles.add(role);
+					}
+				});
+				editLoginUserRolesListModel = new DualListModel<>(roles, rolesOfUser);
+			} else {
+				editLoginUserRolesListModel = new DualListModel<>();
+			}
 		}
 	}
 
 	public void editLoginUser() {
 		WebUtils.executeTask(params -> {
 			Long id = editLoginUserSelectedUser.getId();
-			List<LoginUserRole> roles = new ArrayList<>(loginBean.getLoginUserRoles(id));
-			if (getEditLoginUserIsDefaultLoginUser()) {
+			if (getEditLoginUserIsDefaultLoginUser() && WebUtils.isPermitted(EnumPermission.LOGIN_USER_CHANGE_USERNAME)) {
 				loginBean.changeUsername(id, editLoginUserUsername);
 			}
-			editLoginUserRolesListModel.getTarget().forEach(role -> {
-				if (!roles.contains(role)) {
-					loginBean.addLoginUserRoleToUser(id, role.getId());
-				}
-			});
-			roles.forEach(role -> {
-				if (!editLoginUserRolesListModel.getTarget().contains(role)) {
-					loginBean.removeLoginUserRoleFromUser(id, role.getId());
-				}
-			});
+			if (WebUtils.isPermitted(EnumPermission.LOGIN_USER_GET_ROLES, EnumPermission.LOGIN_USER_ADD_ROLE,
+					EnumPermission.LOGIN_USER_REMOVE_ROLE)) {
+				List<LoginUserRole> roles = new ArrayList<>(loginBean.getLoginUserRoles(id));
+				editLoginUserRolesListModel.getTarget().forEach(role -> {
+					if (!roles.contains(role)) {
+						loginBean.addLoginUserRoleToUser(id, role.getId());
+					}
+				});
+				roles.forEach(role -> {
+					if (!editLoginUserRolesListModel.getTarget().contains(role)) {
+						loginBean.removeLoginUserRoleFromUser(id, role.getId());
+					}
+				});
+			}
 			LoginUser newUser = loginBean.findLoginUserById(id);
 			params.add(WebUtils.getAsString(newUser, "lucas:loginUserStringConverter"));
 			WebUtils.refreshEntities(LoginUser.class, searchLoginUserResults, selectedLoginUsers, newUser, loginBean::findLoginUserById, true);

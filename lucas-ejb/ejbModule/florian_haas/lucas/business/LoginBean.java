@@ -57,13 +57,13 @@ public class LoginBean implements LoginBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions(LOGIN_CREATE_RAW_LOGIN_USER)
+	@RequiresPermissions(LOGIN_USER_CREATE_RAW)
 	public Long newLoginUser(String username, char[] password, List<Long> userRoleIds) {
 		return newLoginUserHelper(username, password, null, userRoleIds);
 	}
 
 	@Override
-	@RequiresPermissions(LOGIN_CREATE_REGISTERED_LOGIN_USER)
+	@RequiresPermissions(LOGIN_USER_CREATE_REGISTERED)
 	public Long newLoginUser(Long user, char[] password, List<Long> userRoleIds) {
 		return newLoginUserHelper(Long.toString(user), password, userBean.findById(user), userRoleIds);
 	}
@@ -88,7 +88,18 @@ public class LoginBean implements LoginBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions(LOGIN_NEW_PASSWORD)
+	@RequiresPermissions(LOGIN_SET_UI_THEME)
+	public Boolean setUITheme(Long id, String uiTheme) {
+		LoginUser user = loginUserDao.findById(id);
+		if (user.getUiTheme() == null || !user.getUiTheme().equals(uiTheme)) {
+			user.setUiTheme(uiTheme);
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
+	@Override
+	@RequiresPermissions(LOGIN_USER_NEW_PASSWORD)
 	public Boolean newPassword(Long loginUserId, char[] newPassword) {
 		return changePasswordHelper(loginUserId, null, newPassword);
 	}
@@ -109,30 +120,32 @@ public class LoginBean implements LoginBeanLocal {
 	}
 
 	@Override
+	@RequiresPermissions(LOGIN_USER_FIND_BY_ID)
 	public LoginUser findLoginUserById(Long id) {
 		return loginUserDao.findById(id);
 	}
 
 	@Override
-	public Boolean addLoginUserRoleToUser(Long userId, Long roleId) {
-		LoginUser user = loginUserDao.findById(userId);
-		LoginUserRole role = loginUserRoleDao.findById(roleId);
-		return user.addRole(role);
+	@RequiresPermissions(LOGIN_USER_FIND_BY_USERNAME)
+	public LoginUser findLoginUserByUsername(String username) {
+		return loginUserDao.findByUsername(username);
 	}
 
 	@Override
-	public Boolean removeLoginUserRoleFromUser(Long userId, Long roleId) {
-		LoginUser user = loginUserDao.findById(userId);
-		LoginUserRole role = loginUserRoleDao.findById(roleId);
-		return user.removeRole(role);
-	}
-
-	@Override
+	@RequiresPermissions(LOGIN_USER_FIND_ALL)
 	public List<LoginUser> findAllLoginUsers() {
 		return loginUserDao.findAll();
 	}
 
 	@Override
+	@RequiresPermissions(LOGIN_USER_GET_ROLES)
+	public List<LoginUserRole> getLoginUserRoles(@ValidEntityId(entityClass = LoginUser.class) Long userId) {
+		LoginUser user = loginUserDao.findById(userId);
+		return new ArrayList<>(user.getRoles());
+	}
+
+	@Override
+	@RequiresPermissions(LOGIN_USER_FIND_DYNAMIC)
 	public List<LoginUser> findLoginUsers(Long id, String username, Long userId, List<Long> roleIds, Boolean useId, Boolean useUsername,
 			Boolean useUserId, Boolean useRoleIds, EnumQueryComparator idComparator, EnumQueryComparator usernameComparator,
 			EnumQueryComparator userIdComparator, EnumQueryComparator roleIdsComparator) {
@@ -141,11 +154,23 @@ public class LoginBean implements LoginBeanLocal {
 	}
 
 	@Override
-	public LoginUser findLoginUserByUsername(String username) {
-		return loginUserDao.findByUsername(username);
+	@RequiresPermissions(LOGIN_USER_ADD_ROLE)
+	public Boolean addLoginUserRoleToUser(Long userId, Long roleId) {
+		LoginUser user = loginUserDao.findById(userId);
+		LoginUserRole role = loginUserRoleDao.findById(roleId);
+		return user.addRole(role);
 	}
 
 	@Override
+	@RequiresPermissions(LOGIN_USER_REMOVE_ROLE)
+	public Boolean removeLoginUserRoleFromUser(Long userId, Long roleId) {
+		LoginUser user = loginUserDao.findById(userId);
+		LoginUserRole role = loginUserRoleDao.findById(roleId);
+		return user.removeRole(role);
+	}
+
+	@Override
+	@RequiresPermissions(LOGIN_USER_CHANGE_USERNAME)
 	public Boolean changeUsername(Long id, String username) {
 		LoginUser user = loginUserDao.findById(id);
 		Set<ConstraintViolation<LoginUser>> violations = validator.validate(user, DefaultLoginUserRequired.class);
@@ -156,22 +181,6 @@ public class LoginBean implements LoginBeanLocal {
 			user.setUsername(username);
 			return Boolean.TRUE;
 		}
-	}
-
-	@Override
-	public List<LoginUserRole> getLoginUserRoles(@ValidEntityId(entityClass = LoginUser.class) Long userId) {
-		LoginUser user = loginUserDao.findById(userId);
-		return new ArrayList<>(user.getRoles());
-	}
-
-	@Override
-	public Boolean setUITheme(Long id, String uiTheme) {
-		LoginUser user = loginUserDao.findById(id);
-		if (user.getUiTheme() == null || !user.getUiTheme().equals(uiTheme)) {
-			user.setUiTheme(uiTheme);
-			return Boolean.TRUE;
-		}
-		return Boolean.FALSE;
 	}
 
 }

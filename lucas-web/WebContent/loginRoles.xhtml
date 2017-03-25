@@ -14,7 +14,7 @@
 		value="#{loginRoleBean.selectedLoginRoles}" />
 	<ui:param name="searchFunction" value="searchLoginRoles" />
 	<ui:param name="refreshFunction" value="refreshLoginRoles" />
-	<ui:param name="findDynamicPermission" value="LOGIN_ROLE_FIND_DYNAMIC"/>
+	<ui:param name="findDynamicPermission" value="LOGIN_ROLE_FIND_DYNAMIC" />
 	<ui:define name="dialogs">
 		<ui:include
 			src="/WEB-INF/web/loginUserRole/createLoginUserRoleDialog.xhtml" />
@@ -25,15 +25,19 @@
 	</ui:define>
 	<ui:define name="buttonArea">
 		<p:toolbarGroup align="left">
+			<ui:fragment
+				rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_ROLE_CREATE)}">
+				<p:commandButton resetValues="true"
+					value="#{msg['lucas.application.loginRoleScreen.createLoginUserRoleButton.name']}"
+					title="#{msg['lucas.application.loginRoleScreen.createLoginUserRoleButton.tooltip']}"
+					icon="fa fa-plus"
+					oncomplete="PF('createLoginUserRoleDialog').show()"
+					action="#{loginRoleBean.initCreateLoginUserRoleDialog}"
+					process="@this" update="createLoginUserRoleDialogForm" />
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			</ui:fragment>
 			<p:commandButton resetValues="true"
-				value="#{msg['lucas.application.loginRoleScreen.createLoginUserRoleButton.name']}"
-				title="#{msg['lucas.application.loginRoleScreen.createLoginUserRoleButton.tooltip']}"
-				icon="fa fa-plus"
-				oncomplete="PF('createLoginUserRoleDialog').show()"
-				action="#{loginRoleBean.initCreateLoginUserRoleDialog}"
-				process="@this" update="createLoginUserRoleDialogForm" />
-			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
-			<p:commandButton resetValues="true"
+				rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_ROLE_SET_NAME) || loginBean.hasPermissionsAnd([EnumPermission.LOGIN_ROLE_ADD_PERMISSION,EnumPermission.LOGIN_ROLE_REMOVE_PERMISSION,EnumPermission.LOGIN_ROLE_GET_PERMISSIONS])}"
 				value="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleButton.name']}"
 				title="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleButton.tooltip']}"
 				icon="fa fa-edit" oncomplete="PF('editLoginUserRoleDialog').show()"
@@ -41,24 +45,29 @@
 				process="@this" update="editLoginUserRoleDialogForm"
 				disabled="#{loginRoleBean.selectedLoginRoles.size() != 1}" />
 			<p:commandButton
+				rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_ROLE_GET_PERMISSIONS)}"
 				value="#{msg['lucas.application.loginRoleScreen.showLoginUserRolePermissionsButton.name']}"
 				title="#{msg['lucas.application.loginRoleScreen.showLoginUserRolePermissionsButton.tooltip']}"
 				icon="fa fa-search" oncomplete="PF('viewPermissionsDialog').show()"
 				action="#{loginRoleBean.initPermissionsDialog}" process="@this"
 				update="viewPermissionsDialogForm"
 				disabled="#{loginRoleBean.selectedLoginRoles.size() != 1}" />
-			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
-			<p:commandButton
-				value="#{msg['lucas.application.loginRoleScreen.removeLoginUserRoleButton.name']}"
-				title="#{msg['lucas.application.loginRoleScreen.removeLoginUserRoleButton.tooltip']}"
-				icon="fa fa-remove" process="@this"
-				update="dataAccorditionPanel:loginRoleSearchResultsForm:loginRoleSearchResultsTable"
-				action="#{loginRoleBean.removeLoginUserRole}"
-				disabled="#{loginRoleBean.selectedLoginRoles.size() &lt;= 0}">
-				<p:confirm
-					header="#{msg['lucas.application.loginRoleScreen.removeLoginUserRoleConfirmDialog.header']}"
-					message="#{msg['lucas.application.loginRoleScreen.removeLoginUserRoleConfirmDialog.message']}" />
-			</p:commandButton>
+			<ui:fragment
+				rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_ROLE_REMOVE)}">
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+				<p:commandButton
+					rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_ROLE_REMOVE)}"
+					value="#{msg['lucas.application.loginRoleScreen.removeLoginUserRoleButton.name']}"
+					title="#{msg['lucas.application.loginRoleScreen.removeLoginUserRoleButton.tooltip']}"
+					icon="fa fa-remove" process="@this"
+					update="dataAccorditionPanel:loginRoleSearchResultsForm:loginRoleSearchResultsTable"
+					action="#{loginRoleBean.removeLoginUserRole}"
+					disabled="#{loginRoleBean.selectedLoginRoles.size() &lt;= 0}">
+					<p:confirm
+						header="#{msg['lucas.application.loginRoleScreen.removeLoginUserRoleConfirmDialog.header']}"
+						message="#{msg['lucas.application.loginRoleScreen.removeLoginUserRoleConfirmDialog.message']}" />
+				</p:commandButton>
+			</ui:fragment>
 		</p:toolbarGroup>
 	</ui:define>
 	<ui:define name="searchCriteria">

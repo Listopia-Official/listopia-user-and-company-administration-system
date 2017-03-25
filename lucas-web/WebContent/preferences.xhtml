@@ -20,7 +20,8 @@
 						<h:form>
 							<p:panelGrid>
 								<p:row>
-									<p:column>
+									<p:column
+										rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_SET_UI_THEME)}">
 										<h:outputLabel for="userPreferencesThemeSwitcher"
 											value="#{msg['lucas.application.preferencesScreen.themeSwitcher.name']}"
 											title="#{msg['lucas.application.preferencesScreen.themeSwitcher.tooltip']}" />
@@ -28,7 +29,8 @@
 									<p:column />
 								</p:row>
 								<p:row>
-									<p:column>
+									<p:column
+										rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_SET_UI_THEME)}">
 										<p:themeSwitcher id="userPreferencesThemeSwitcher"
 											title="#{msg['lucas.application.preferencesScreen.themeSwitcher.tooltip']}"
 											value="#{loginBean.preferencesScreenSelectedUITheme}">

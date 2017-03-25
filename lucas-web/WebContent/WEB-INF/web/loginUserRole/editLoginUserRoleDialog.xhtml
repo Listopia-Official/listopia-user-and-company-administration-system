@@ -13,7 +13,8 @@
 	<ui:define name="dialogContent">
 		<div class="ui-fluid">
 			<p:panelGrid>
-				<p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_ROLE_SET_NAME)}">
 					<p:column>
 						<p:outputLabel
 							value="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleDialog.nameInputText.name']}"
@@ -29,7 +30,8 @@
 						<p:message for="roleNameInputText" />
 					</p:column>
 				</p:row>
-				<p:row>
+				<p:row
+					rendered="#{loginBean.hasPermissionsAnd([EnumPermission.LOGIN_ROLE_ADD_PERMISSION,EnumPermission.LOGIN_ROLE_REMOVE_PERMISSION,EnumPermission.LOGIN_ROLE_GET_PERMISSIONS])}">
 					<p:column>
 						<p:outputLabel
 							value="#{msg['lucas.application.loginRoleScreen.editLoginUserRoleDialog.permissionsPickList.name']}"
@@ -37,8 +39,8 @@
 							for="permissionsPickList" />
 					</p:column>
 					<p:column colspan="3">
-						<p:pickList id="permissionsPickList" showSourceFilter="true" filterMatchMode="contains"
-							showTargetFilter="true"
+						<p:pickList id="permissionsPickList" showSourceFilter="true"
+							filterMatchMode="contains" showTargetFilter="true"
 							value="#{loginRoleBean.editLoginUserRoleDialogPermissionsListModel}"
 							var="permission" itemLabel="#{permission}"
 							itemValue="#{permission}"
