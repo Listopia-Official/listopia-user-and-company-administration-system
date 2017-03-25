@@ -19,7 +19,8 @@ public class ShortLoginUserConverter extends ReadOnlyConverter {
 		LoginUser user = value != null ? (LoginUser) value : null;
 		return user == null ? WebUtils.getTranslatedMessage(NULL_KEY)
 				: user.getUser() != null
-						? WebUtils.getTranslatedMessage(USER_KEY, user.getId(), WebUtils.getAsString(user.getUser(), "lucas:userStringConverter"))
+						? WebUtils.getTranslatedMessage(USER_KEY, user.getId(),
+								WebUtils.getAsString(user.getUser(), "lucas:shortUserStringConverter"))
 						: WebUtils.getTranslatedMessage(NORMAL_KEY, user.getId(), user.getUsername());
 	}
 

@@ -14,7 +14,7 @@ import org.apache.shiro.SecurityUtils;
 import org.primefaces.model.StreamedContent;
 
 import florian_haas.lucas.business.*;
-import florian_haas.lucas.model.*;
+import florian_haas.lucas.model.LoginUser;
 import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.web.util.WebUtils;
@@ -62,9 +62,11 @@ public class LoginBean {
 
 	public String getAdvancedUsername() {
 		String ret = getSimpleUsername();
-		Long id = getUserId(ret);
-		if (id != null && entityBean.exists(id, User.class)) {
-			ret = WebUtils.getAsString(userBean.findById(id), "lucas:userStringConverter");
+		if (ret != null) {
+			LoginUser user = loginBean.findLoginUserByUsername(ret);
+			if (user != null) {
+				ret = WebUtils.getAsString(user, "lucas:shortLoginUserStringConverter");
+			}
 		}
 		return ret;
 	}

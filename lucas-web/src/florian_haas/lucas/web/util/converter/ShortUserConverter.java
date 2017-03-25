@@ -7,13 +7,13 @@ import javax.faces.convert.FacesConverter;
 import florian_haas.lucas.model.User;
 import florian_haas.lucas.web.util.WebUtils;
 
-@FacesConverter(value = "lucas:userStringConverter")
-public class UserConverter extends ReadOnlyConverter {
+@FacesConverter(value = "lucas:shortUserStringConverter")
+public class ShortUserConverter extends ReadOnlyConverter {
 
-	public static final String PUPIL_KEY = "lucas.application.userConverter.pupil";
-	public static final String TEACHER_KEY = "lucas.application.userConverter.teacher";
-	public static final String GUEST_KEY = "lucas.application.userConverter.guest";
-	public static final String NULL_KEY = "lucas.application.userConverter.none";
+	public static final String PUPIL_KEY = "lucas.application.shortUserConverter.pupil";
+	public static final String TEACHER_KEY = "lucas.application.shortUserConverter.teacher";
+	public static final String GUEST_KEY = "lucas.application.shortUserConverter.guest";
+	public static final String NULL_KEY = "lucas.application.shortUserConverter.none";
 
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
@@ -35,7 +35,7 @@ public class UserConverter extends ReadOnlyConverter {
 					break;
 			}
 		}
-		return key != NULL_KEY ? WebUtils.getTranslatedMessage(key, user.getForename(), user.getSurname(), user.getSchoolClass(), user.getId())
+		return key != NULL_KEY ? WebUtils.getTranslatedMessage(key, user.getForename(), user.getSurname(), user.getId())
 				: WebUtils.getTranslatedMessage(key);
 	}
 
