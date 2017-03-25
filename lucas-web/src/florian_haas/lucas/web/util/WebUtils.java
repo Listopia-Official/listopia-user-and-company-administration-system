@@ -6,7 +6,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.List;
-import java.util.function.*;
+import java.util.function.Function;
 import java.util.logging.*;
 
 import javax.enterprise.inject.spi.CDI;
@@ -185,41 +185,65 @@ public class WebUtils {
 				String.class);
 	}
 
-	public static boolean executeTask(FailableTask task, String successMessageKey, String warnMessageKey, String failMessageKey,
-			Object... argParams) {
-		return executeTask(task, successMessageKey, warnMessageKey, failMessageKey, WebUtils::addDefaultInformationMessage,
-				WebUtils::addDefaultWarningMessage, WebUtils::addDefaultErrorMessage, WebUtils::addDefaultFatalMessage, argParams);
+	public static final String SUCCESS_MESSAGE_SUFFIX = ".success";
+	public static final String WARN_MESSAGE_SUFFIX = ".warn";
+	public static final String FAIL_MESSAGE_SUFFIX = ".fail";
+
+	public static boolean executeTask(FailableTask task, String messagePrefix, List<Object> argParams) {
+		return executeTask(task, true, true, messagePrefix, DEFAULT_MESSAGE_COMPONENT_ID, argParams);
 	}
 
-	public static boolean executeTask(FailableTask task, String successMessageKey, String warnMessageKey, String failMessageKey,
-			Consumer<String> informationMessageConsumer, Consumer<String> warnMessageConsumer, Consumer<String> errorMessageConsumer,
-			Consumer<String> fatalMessageConsumer, Object... argParams) {
+	public static boolean executeTask(FailableTask task, String messagePrefix) {
+		return executeTask(task, true, true, messagePrefix, DEFAULT_MESSAGE_COMPONENT_ID, new ArrayList<>());
+	}
+
+	public static boolean executeTask(FailableTask task, String messagePrefix, String messageComponentId, List<Object> argParams) {
+		return executeTask(task, true, true, messagePrefix, messageComponentId, argParams);
+	}
+
+	public static boolean executeTask(FailableTask task, String messagePrefix, String messageComponentId) {
+		return executeTask(task, true, true, messagePrefix, messageComponentId, new ArrayList<>());
+	}
+
+	public static boolean executeTask(FailableTask task, boolean useSuccessMessage, boolean useWarnMessage, String messagePrefix,
+			List<Object> argParams) {
+		return executeTask(task, useSuccessMessage, useWarnMessage, messagePrefix, DEFAULT_MESSAGE_COMPONENT_ID, argParams);
+	}
+
+	public static boolean executeTask(FailableTask task, boolean useSuccessMessage, boolean useWarnMessage, String messagePrefix) {
+		return executeTask(task, useSuccessMessage, useWarnMessage, messagePrefix, DEFAULT_MESSAGE_COMPONENT_ID, new ArrayList<>());
+	}
+
+	public static boolean executeTask(FailableTask task, boolean useSuccessMessage, boolean useWarnMessage, String messagePrefix,
+			String messageComponentId, List<Object> argParams) {
+		String successMessageKey = messagePrefix.concat(SUCCESS_MESSAGE_SUFFIX);
+		String warnMessageKey = messagePrefix.concat(WARN_MESSAGE_SUFFIX);
+		String failMessageKey = messagePrefix.concat(FAIL_MESSAGE_SUFFIX);
+
 		boolean success = false;
-		List<Object> paramsList = new ArrayList<>();
-		paramsList.addAll(Arrays.asList(argParams));
-		Object[] params = paramsList.toArray();
+		Object[] params = argParams.toArray();
 		try {
-			success = task.executeTask(paramsList);
-			params = paramsList.toArray();
-			if (success && successMessageKey != null) {
-				informationMessageConsumer.accept(WebUtils.getTranslatedMessage(successMessageKey, params));
-			} else if (warnMessageKey != null) {
-				warnMessageConsumer.accept(WebUtils.getTranslatedMessage(warnMessageKey, params));
+			success = task.executeTask(argParams);
+			params = argParams.toArray();
+			if (success && useSuccessMessage) {
+				WebUtils.addTranslatedInformationMessage(successMessageKey, messageComponentId, params);
+			} else if (useWarnMessage) {
+				WebUtils.addTranslatedWarningMessage(warnMessageKey, messageComponentId, params);
 			}
 		}
 		catch (ConstraintViolationException e) {
 			for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
-				errorMessageConsumer
-						.accept(getTranslatedMessage(failMessageKey, params) + violation.getPropertyPath() + " " + violation.getMessage());
+				WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + violation.getPropertyPath() + " " + violation.getMessage(),
+						messageComponentId);
 			}
 		}
 		catch (ShiroException e2) {
-			errorMessageConsumer.accept(getTranslatedMessage(failMessageKey, params) + getTranslatedMessage("lucas.application.message.accessDenied")
-					+ e2.getLocalizedMessage());
+			WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + getTranslatedMessage("lucas.application.message.accessDenied")
+					+ e2.getLocalizedMessage(), messageComponentId);
 		}
 		catch (Exception e3) {
 			Logger.getAnonymousLogger().log(Level.SEVERE, e3, e3::getMessage);
-			fatalMessageConsumer.accept(getTranslatedMessage(failMessageKey, params) + Utils.getStackTraceAsString(e3));
+			WebUtils.addFatalMessage(getTranslatedMessage(failMessageKey, params) + Utils.getStackTraceAsString(e3), messageComponentId);
 		}
 		return success;
 

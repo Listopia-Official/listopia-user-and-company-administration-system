@@ -17,6 +17,7 @@ import florian_haas.lucas.business.*;
 import florian_haas.lucas.model.LoginUser;
 import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.EnumPermission;
+import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.web.util.WebUtils;
 
 @Named
@@ -194,8 +195,7 @@ public class LoginBean {
 	public void changePassword() {
 		WebUtils.executeTask(params -> {
 			return loginBean.changePassword(changePasswordDialogOldPassword, changePasswordDialogPassword);
-		}, "lucas.application.preferencesScreen.changePassword.success", "lucas.application.preferencesScreen.changePassword.warn",
-				"lucas.application.preferencesScreen.changePassword.fail", getAdvancedUsername());
+		}, "lucas.application.preferencesScreen.changePassword", Utils.asList(getAdvancedUsername()));
 		Arrays.fill(changePasswordDialogPassword, 'c');
 		Arrays.fill(changePasswordDialogOldPassword, 'c');
 	}

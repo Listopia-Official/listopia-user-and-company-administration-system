@@ -97,8 +97,7 @@ public class LoginRoleBean implements Serializable {
 			searchLoginRoleResults.addAll(results);
 			params.add(results.size());
 			return true;
-		}, "lucas.application.loginRoleScreen.searchLoginUserRoles.message.success", null,
-				"lucas.application.loginRoleScreen.searchLoginUserRoles.message.fail");
+		}, "lucas.application.loginRoleScreen.searchLoginUserRoles.message");
 	}
 
 	public void refreshLoginRoles() {
@@ -106,8 +105,7 @@ public class LoginRoleBean implements Serializable {
 			WebUtils.refreshEntities(LoginUserRole.class, searchLoginRoleResults, selectedLoginRoles, loginUserRoleBean::findById, false);
 			params.add(searchLoginRoleResults.size());
 			return true;
-		}, "lucas.application.loginRoleScreen.refreshLoginUserRoles.message.success", null,
-				"lucas.application.loginRoleScreen.refreshLoginUserRoles.message.fail");
+		}, "lucas.application.loginRoleScreen.refreshLoginUserRoles.message");
 	}
 
 	public Long getSearchLoginUserRoleId() {
@@ -224,7 +222,7 @@ public class LoginRoleBean implements Serializable {
 									new HashSet<>(createLoginUserRoleDialogPermissionsListModel.getTarget()))),
 							"lucas:loginUserRoleStringConverter"));
 			return true;
-		}, "lucas.application.loginRoleScreen.createLoginUserRole.success", null, "lucas.application.loginRoleScreen.createLoginUserRole.fail");
+		}, "lucas.application.loginRoleScreen.createLoginUserRole");
 	}
 
 	/*
@@ -272,8 +270,7 @@ public class LoginRoleBean implements Serializable {
 					it.remove();
 				}
 				return ret;
-			}, "lucas.application.loginRoleScreen.removeLoginUserRole.success", "lucas.application.loginRoleScreen.removeLoginUserRole.warn",
-					"lucas.application.loginRoleScreen.removeLoginUserRole.fail");
+			}, "lucas.application.loginRoleScreen.removeLoginUserRole");
 		}
 	}
 
@@ -346,7 +343,7 @@ public class LoginRoleBean implements Serializable {
 			params.add(WebUtils.getAsString(editLoginUserRole, "lucas:loginUserRoleStringConverter"));
 			WebUtils.refreshEntities(LoginUserRole.class, searchLoginRoleResults, selectedLoginRoles, newRole, loginUserRoleBean::findById, true);
 			return true;
-		}, "lucas.application.loginRoleScreen.editLoginUserRole.success", null, "lucas.application.loginRoleScreen.editLoginUserRole.fail");
+		}, "lucas.application.loginRoleScreen.editLoginUserRole");
 	}
 
 	/*

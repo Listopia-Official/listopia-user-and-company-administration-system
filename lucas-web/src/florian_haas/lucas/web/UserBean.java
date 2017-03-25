@@ -114,7 +114,7 @@ public class UserBean implements Serializable {
 					userBean.createPupil(createPupilDialogForename, createPupilDialogSurname, createPupilDialogSchoolClass, createPupilDialogRanks)),
 					"lucas:userStringConverter"));
 			return true;
-		}, "lucas.application.userScreen.createPupil.message.success", null, "lucas.application.userScreen.createPupil.message.error");
+		}, "lucas.application.userScreen.createPupil.message");
 	}
 
 	public void resetCreatePupilDialog() {
@@ -201,7 +201,7 @@ public class UserBean implements Serializable {
 					userBean.findById(userBean.createTeacher(createTeacherDialogForename, createTeacherDialogSurname, createTeacherDialogRanks)),
 					"lucas:userStringConverter"));
 			return true;
-		}, "lucas.application.userScreen.createTeacher.message.success", null, "lucas.application.userScreen.createTeacher.message.error");
+		}, "lucas.application.userScreen.createTeacher.message");
 	}
 
 	public void resetCreateTeacherDialog() {
@@ -243,7 +243,7 @@ public class UserBean implements Serializable {
 			if (WebUtils.executeTask((params) -> {
 				userBean.createGuest();
 				return true;
-			}, null, null, "lucas.application.userScreen.createGuest.message.error")) {
+			}, false, false, "lucas.application.userScreen.createGuest.message")) {
 				createdGuests++;
 			}
 		}
@@ -502,7 +502,7 @@ public class UserBean implements Serializable {
 			searchUserResults.addAll(results);
 			params.add(results.size());
 			return true;
-		}, "lucas.application.userScreen.searchUser.message.success", null, "lucas.application.userScreen.searchUser.message.error");
+		}, "lucas.application.userScreen.searchUser.message");
 	}
 
 	public void refreshUsers() {
@@ -510,7 +510,7 @@ public class UserBean implements Serializable {
 			WebUtils.refreshEntities(User.class, searchUserResults, selectedUsers, userBean::findById, false);
 			params.add(searchUserResults.size());
 			return true;
-		}, "lucas.application.userScreen.refreshUsers.success", null, "lucas.application.userScreen.refreshUsers.fail");
+		}, "lucas.application.userScreen.refreshUsers");
 	}
 
 	public List<User> getSearchUserResults() {
@@ -670,7 +670,7 @@ public class UserBean implements Serializable {
 				params.add(WebUtils.getAsString(tmp, "lucas:userStringConverter"));
 				WebUtils.refreshEntities(User.class, searchUserResults, selectedUsers, tmp2, userBean::findById, true);
 				return true;
-			}, "lucas.application.userScreen.editUser.message.success", null, "lucas.application.userScreen.editUser.message.fail");
+			}, "lucas.application.userScreen.editUser.message");
 		}
 	}
 
@@ -733,24 +733,14 @@ public class UserBean implements Serializable {
 				return true;
 			}
 			return false;
-		}, "lucas.application.userScreen.uploadUserImage.message.success", "lucas.application.userScreen.uploadUserImage.message.warn",
-				"lucas.application.userScreen.uploadUserImage.message.fail", (key) -> {
-					WebUtils.addInformationMessage(key, IMAGE_DIALOG_MESSAGES_ID);
-				}, (key) -> {
-					WebUtils.addWarningMessage(key, IMAGE_DIALOG_MESSAGES_ID);
-				}, (key) -> {
-					WebUtils.addErrorMessage(key, IMAGE_DIALOG_MESSAGES_ID);
-				}, (key) -> {
-					WebUtils.addFatalMessage(key, IMAGE_DIALOG_MESSAGES_ID);
-				}, file.getFileName());
+		}, "lucas.application.userScreen.uploadUserImage.message", IMAGE_DIALOG_MESSAGES_ID, Utils.asList(file.getFileName()));
 	}
 
 	public void onSave() {
 		WebUtils.executeTask(params -> {
 			return userBean.setImage(imageManagerDialogSelectedUser.getId(), imageManagerDialogUploadedImage);
-		}, "lucas.application.userScreen.changeUserImage.message.success", "lucas.application.userScreen.changeUserImage.message.warn",
-				"lucas.application.userScreen.changeUserImage.message.fail",
-				WebUtils.getAsString(imageManagerDialogSelectedUser, "lucas:userStringConverter"));
+		}, "lucas.application.userScreen.changeUserImage.message",
+				Utils.asList(WebUtils.getAsString(imageManagerDialogSelectedUser, "lucas:userStringConverter")));
 	}
 
 	/*
@@ -812,15 +802,8 @@ public class UserBean implements Serializable {
 				userCardManagerDialogUserCards.add(userBean.findUserCardById(id));
 				params.add(id);
 				return true;
-			}, "lucas.application.userScreen.createUserCard.success", null, "lucas.application.userScreen.createUserCard.fail", message -> {
-				WebUtils.addInformationMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-			}, message -> {
-				WebUtils.addWarningMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-			}, message -> {
-				WebUtils.addErrorMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-			}, message -> {
-				WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-			}, WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter"));
+			}, "lucas.application.userScreen.createUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
+					Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter")));
 		}
 	}
 
@@ -830,16 +813,8 @@ public class UserBean implements Serializable {
 			if (WebUtils.executeTask(params -> {
 				params.add(id);
 				return userBean.blockUserCard(id);
-			}, "lucas.application.userScreen.blockUserCard.success", "lucas.application.userScreen.blockUserCard.warn",
-					"lucas.application.userScreen.blockUserCard.fail", message -> {
-						WebUtils.addInformationMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-					}, message -> {
-						WebUtils.addWarningMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-					}, message -> {
-						WebUtils.addErrorMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-					}, message -> {
-						WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-					}, WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter"))) {
+			}, "lucas.application.userScreen.blockUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
+					Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter")))) {
 				UserCard newCard = userBean.findUserCardById(id);
 				WebUtils.refreshEntities(UserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
 						userBean::findUserCardById, true);
@@ -853,16 +828,8 @@ public class UserBean implements Serializable {
 			if (WebUtils.executeTask(params -> {
 				params.add(id);
 				return userBean.unblockUserCard(id);
-			}, "lucas.application.userScreen.unblockUserCard.success", "lucas.application.userScreen.unblockUserCard.warn",
-					"lucas.application.userScreen.unblockUserCard.fail", message -> {
-						WebUtils.addInformationMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-					}, message -> {
-						WebUtils.addWarningMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-					}, message -> {
-						WebUtils.addErrorMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-					}, message -> {
-						WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-					}, WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter"))) {
+			}, "lucas.application.userScreen.unblockUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
+					Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter")))) {
 				UserCard newCard = userBean.findUserCardById(id);
 				WebUtils.refreshEntities(UserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
 						userBean::findUserCardById, true);
@@ -885,16 +852,7 @@ public class UserBean implements Serializable {
 				params.add(WebUtils.getAsString(Utils.asLocalDate(userCardManagerDialogValidDate), "lucas:localDateStringConverter"));
 				params.add(WebUtils.getAsString(card.getValidDay(), "lucas:localDateStringConverter"));
 				return userBean.setValidDate(id, Utils.asLocalDate(userCardManagerDialogValidDate));
-			}, "lucas.application.userScreen.setValidDay.success", "lucas.application.userScreen.setValidDay.warn",
-					"lucas.application.userScreen.setValidDay.fail", message -> {
-						WebUtils.addInformationMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-					}, message -> {
-						WebUtils.addWarningMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-					}, message -> {
-						WebUtils.addErrorMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-					}, message -> {
-						WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-					})) {
+			}, "lucas.application.userScreen.setValidDay", USER_CARD_MANAGER_DIALOG_MESSAGES_ID)) {
 				UserCard newCard = userBean.findUserCardById(id);
 				WebUtils.refreshEntities(UserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
 						userBean::findUserCardById, true);
@@ -908,16 +866,7 @@ public class UserBean implements Serializable {
 			if (WebUtils.executeTask(params -> {
 				params.add(card.getId());
 				return userBean.setValidDate(id, null);
-			}, "lucas.application.userScreen.removeValidDay.success", "lucas.application.userScreen.removeValidDay.warn",
-					"lucas.application.userScreen.removeValidDay.fail", message -> {
-						WebUtils.addInformationMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-					}, message -> {
-						WebUtils.addWarningMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-					}, message -> {
-						WebUtils.addErrorMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-					}, message -> {
-						WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-					})) {
+			}, "lucas.application.userScreen.removeValidDay", USER_CARD_MANAGER_DIALOG_MESSAGES_ID)) {
 				UserCard newCard = userBean.findUserCardById(id);
 				WebUtils.refreshEntities(UserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
 						userBean::findUserCardById, true);
@@ -939,16 +888,8 @@ public class UserBean implements Serializable {
 					}
 					params.add(id);
 					return removed;
-				}, "lucas.application.userScreen.deleteUserCard.success", "lucas.application.userScreen.deleteUserCard.warn",
-						"lucas.application.userScreen.deleteUserCard.fail", message -> {
-							WebUtils.addInformationMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-						}, message -> {
-							WebUtils.addWarningMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-						}, message -> {
-							WebUtils.addErrorMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-						}, message -> {
-							WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-						}, WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter"));
+				}, "lucas.application.userScreen.deleteUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
+						Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter")));
 
 			}
 		}
@@ -960,15 +901,7 @@ public class UserBean implements Serializable {
 					userBean::findUserCardById, true);
 			params.add(userCardManagerDialogUserCards.size());
 			return true;
-		}, "lucas.application.userScreen.refreshUserCards.success", null, "lucas.application.userScreen.refreshUserCards.fail", message -> {
-			WebUtils.addInformationMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-		}, message -> {
-			WebUtils.addWarningMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-		}, message -> {
-			WebUtils.addErrorMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-		}, message -> {
-			WebUtils.addFatalMessage(message, USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
-		});
+		}, "lucas.application.userScreen.refreshUserCards", USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
 	}
 
 	/*

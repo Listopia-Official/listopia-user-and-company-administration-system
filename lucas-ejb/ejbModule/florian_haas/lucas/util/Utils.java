@@ -120,4 +120,13 @@ public class Utils {
 		map.put(key, value);
 		return map;
 	}
+
+	@SafeVarargs
+	public static <T> List<T> asList(T... values) {
+		ArrayList<T> list = new ArrayList<>();
+		for (T value : values) {
+			list.add(value);
+		}
+		return list;
+	}
 }

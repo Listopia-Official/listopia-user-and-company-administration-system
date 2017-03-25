@@ -18,6 +18,7 @@ import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.EnumPermission;
+import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.util.validation.*;
 import florian_haas.lucas.web.util.WebUtils;
 
@@ -115,8 +116,7 @@ public class LoginUserBean implements Serializable {
 			searchLoginUserResults.addAll(results);
 			params.add(results.size());
 			return true;
-		}, "lucas.application.loginUserScreen.searchLoginUser.message.success", null,
-				"lucas.application.loginUserScreen.searchLoginUser.message.fail");
+		}, "lucas.application.loginUserScreen.searchLoginUser.message");
 	}
 
 	public void refreshLoginUsers() {
@@ -124,8 +124,7 @@ public class LoginUserBean implements Serializable {
 			WebUtils.refreshEntities(LoginUser.class, searchLoginUserResults, selectedLoginUsers, loginBean::findLoginUserById, false);
 			params.add(searchLoginUserResults.size());
 			return true;
-		}, "lucas.application.loginUserScreen.refreshLoginUsers.message.success", null,
-				"lucas.application.loginUserScreen.refreshLoginUsers.message.fail");
+		}, "lucas.application.loginUserScreen.refreshLoginUsers.message");
 	}
 
 	public Long getSearchLoginUserId() {
@@ -275,7 +274,7 @@ public class LoginUserBean implements Serializable {
 					"lucas:loginUserStringConverter"));
 			Arrays.fill(createDefaultLoginUserPassword, 'c');
 			return true;
-		}, "lucas.application.loginUserScreen.createDefaultLoginUser.success", null, "lucas.application.loginUserScreen.createDefaultLoginUser.fail");
+		}, "lucas.application.loginUserScreen.createDefaultLoginUser");
 	}
 
 	/*
@@ -339,7 +338,7 @@ public class LoginUserBean implements Serializable {
 					"lucas:loginUserStringConverter"));
 			Arrays.fill(createBoundLoginUserPassword, 'c');
 			return true;
-		}, "lucas.application.loginUserScreen.createBoundLoginUser.success", null, "lucas.application.loginUserScreen.createBoundLoginUser.fail");
+		}, "lucas.application.loginUserScreen.createBoundLoginUser");
 	}
 
 	/*
@@ -426,7 +425,7 @@ public class LoginUserBean implements Serializable {
 			params.add(WebUtils.getAsString(newUser, "lucas:loginUserStringConverter"));
 			WebUtils.refreshEntities(LoginUser.class, searchLoginUserResults, selectedLoginUsers, newUser, loginBean::findLoginUserById, true);
 			return true;
-		}, "lucas.application.loginUserScreen.editLoginUser.success", null, "lucas.application.loginUserScreen.editLoginUser.fail");
+		}, "lucas.application.loginUserScreen.editLoginUser");
 	}
 
 	/*
@@ -465,8 +464,8 @@ public class LoginUserBean implements Serializable {
 			loginBean.newPassword(changePasswordDialogSelectedUser.getId(), changePasswordDialogPassword);
 			Arrays.fill(changePasswordDialogPassword, 'c');
 			return true;
-		}, "lucas.application.loginUserScreen.changePassword.success", null, "lucas.application.loginUserScreen.changePassword.fail",
-				WebUtils.getAsString(changePasswordDialogSelectedUser, "lucas:loginUserStringConverter"));
+		}, "lucas.application.loginUserScreen.changePassword",
+				Utils.asList(WebUtils.getAsString(changePasswordDialogSelectedUser, "lucas:loginUserStringConverter")));
 	}
 
 	/*
