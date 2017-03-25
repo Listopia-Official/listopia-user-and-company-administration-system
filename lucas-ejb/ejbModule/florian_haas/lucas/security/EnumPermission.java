@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public enum EnumPermission {
 
 	ALL(null, "*"),
+	ACCESS_XHTMLS(null, "accessXHTMLs"),
 
 	ACCOUNT_ALL(ACCOUNT, "*"),
 	ACCOUNT_PAY_IN(ACCOUNT, "payIn"),
