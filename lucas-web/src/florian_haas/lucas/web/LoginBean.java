@@ -139,13 +139,17 @@ public class LoginBean {
 	private String preferencesScreenSelectedUITheme = null;
 
 	public void preferencesScreenSetUITheme() {
-		String username = getSimpleUsername();
-		if (username != null && !username.trim().isEmpty()) {
-			LoginUser user = loginBean.findLoginUserByUsername(username);
-			if (user != null) {
-				loginBean.setUITheme(user.getId(), preferencesScreenSelectedUITheme);
+		WebUtils.executeTask(params -> {
+			String username = getSimpleUsername();
+			if (username != null && !username.trim().isEmpty()) {
+				LoginUser user = loginBean.findLoginUserByUsername(username);
+				params.add(username);
+				params.add(preferencesScreenSelectedUITheme);
+				if (user != null) return loginBean.setUITheme(user.getId(), preferencesScreenSelectedUITheme);
 			}
-		}
+			return true;
+		}, "lucas.application.preferencesScreen.changeTheme");
+
 	}
 
 	public List<String> getUIThemes() {
