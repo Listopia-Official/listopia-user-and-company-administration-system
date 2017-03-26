@@ -144,7 +144,7 @@ public class LoginBean {
 			if (username != null && !username.trim().isEmpty()) {
 				LoginUser user = loginBean.findLoginUserByUsername(username);
 				params.add(username);
-				params.add(preferencesScreenSelectedUITheme);
+				params.add(WebUtils.getAsString(preferencesScreenSelectedUITheme, "lucas:themeConverter"));
 				if (user != null) return loginBean.setUITheme(user.getId(), preferencesScreenSelectedUITheme);
 			}
 			return true;

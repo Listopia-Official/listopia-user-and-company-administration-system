@@ -35,7 +35,9 @@
 											title="#{msg['lucas.application.preferencesScreen.themeSwitcher.tooltip']}"
 											value="#{loginBean.preferencesScreenSelectedUITheme}">
 											<p:ajax listener="#{loginBean.preferencesScreenSetUITheme}" />
-											<f:selectItems value="#{loginBean.UIThemes}" />
+											<f:selectItems value="#{loginBean.UIThemes}" var="theme"
+												itemValue="#{theme}"
+												itemLabel="#{converterBean.getAsString(theme,'lucas:themeConverter')}" />
 										</p:themeSwitcher>
 									</p:column>
 									<p:column>
