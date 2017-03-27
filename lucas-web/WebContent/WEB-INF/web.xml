@@ -28,6 +28,18 @@
 		<param-name>primefaces.FONT_AWESOME</param-name>
 		<param-value>true</param-value>
 	</context-param>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/web/errorPages/notFound.jsf</location>
+	</error-page>
+	<error-page>
+		<error-code>401</error-code>
+		<location>/WEB-INF/web/errorPages/accessDenied.jsf</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/web/errorPages/internalError.jsf</location>
+	</error-page>
 	<listener>
 		<listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
 	</listener>

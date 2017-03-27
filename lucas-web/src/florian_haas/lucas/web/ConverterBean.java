@@ -7,6 +7,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
+import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.web.util.WebUtils;
 
 @Named
@@ -31,5 +32,9 @@ public class ConverterBean implements Serializable {
 
 	public String getAsString(Object object, String converterId) {
 		return WebUtils.getAsString(object, converterId);
+	}
+
+	public String getStackTrace(Exception e) {
+		return Utils.getStackTraceAsString(e);
 	}
 }

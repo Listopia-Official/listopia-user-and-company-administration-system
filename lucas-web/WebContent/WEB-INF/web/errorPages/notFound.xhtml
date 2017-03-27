@@ -1,0 +1,12 @@
+<ui:composition template="/WEB-INF/web/template/errorPageTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html">
+	<ui:param name="header"
+		value="#{msg['lucas.application.errorPage.notFound.header']}" />
+	<ui:define name="errorMessage">
+		<h:outputText
+			value="#{msg['lucas.application.errorPage.notFound.message']}" />
+	</ui:define>
+</ui:composition>

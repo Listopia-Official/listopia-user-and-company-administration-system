@@ -1,0 +1,27 @@
+<ui:composition template="/WEB-INF/web/template/errorPageTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html">
+	<ui:define name="errorMessage">
+	<h:outputText value="#{exceptionMessagePre}" style="font-weight:bold"/>
+		<h:outputText
+			value="#{requestScope[ 'javax.servlet.error.exception'].getLocalizedMessage()}"
+			 />
+	</ui:define>
+	<ui:define name="additionalContent">
+		<p:row>
+			<p:column>
+				<p:panel toggleable="true"
+					toggleTitle="#{msg['lucas.application.exceptionPageTemplate.stackTraceInputTextArea.toggleTip']}"
+					collapsed="true"
+					header="#{msg['lucas.application.exceptionPageTemplate.stackTraceInputTextArea.header']}"
+					toggleOrientation="vertical">
+					<p:inputTextarea
+						value="#{converterBean.getStackTrace(requestScope['javax.servlet.error.exception'])}"
+						readonly="true" />
+				</p:panel>
+			</p:column>
+		</p:row>
+	</ui:define>
+</ui:composition>
