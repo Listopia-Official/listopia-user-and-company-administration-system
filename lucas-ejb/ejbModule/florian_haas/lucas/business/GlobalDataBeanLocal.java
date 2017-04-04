@@ -22,6 +22,8 @@ public interface GlobalDataBeanLocal {
 
 	public BigDecimal getMinimumWage();
 
+	public Company getWarehouse();
+
 	public BigDecimal getTransactionLimit();
 
 	public String getCurrencySymbol();
@@ -41,8 +43,6 @@ public interface GlobalDataBeanLocal {
 	public Boolean setMinTimePresent(@NotNull @Min(1) Long minTimePresent);
 
 	public Boolean setMinimumWage(@NotNull @DecimalMin(value = "0", inclusive = false) BigDecimal minimumWage);
-
-	public Company getWarehouse();
 
 	public Boolean setWarehouse(@ValidEntityId(entityClass = Company.class) Long companyId);
 
