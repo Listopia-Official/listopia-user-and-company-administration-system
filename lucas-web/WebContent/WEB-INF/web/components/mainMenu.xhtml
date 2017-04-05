@@ -45,6 +45,7 @@
 				value="#{msg['lucas.application.mainScreen.navigationMenu.warehouseSubmenu.itemsMenuItem.name']}" />
 		</p:submenu>
 		<p:submenu
+			rendered="#{loginBean.hasPermissionsOr([EnumPermission.LOGIN_USER_ACCESS_VIEW,EnumPermission.LOGIN_ROLE_ACCESS_VIEW,EnumPermission.GLOBAL_DATA_ACCESS_VIEW])}"
 			label="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.name']}">
 			<p:menuitem outcome="/loginUsers.xhtml"
 				rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_USER_ACCESS_VIEW)}"
@@ -52,7 +53,8 @@
 			<p:menuitem outcome="/loginRoles.xhtml"
 				rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_ROLE_ACCESS_VIEW)}"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.loginRolesMenuItem.name']}" />
-			<p:menuitem disabled="true"
+			<p:menuitem outcome="/globalData.xhtml"
+				rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_ACCESS_VIEW)}"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.administrationSubmenu.globaldataItem.name']}" />
 		</p:submenu>
 	</p:menu>

@@ -1,0 +1,172 @@
+<ui:composition template="/WEB-INF/web/template/appTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="pageTitle"
+		value="#{msg['lucas.application.globalDataScreen.title']}" />
+	<ui:define name="dialogs">
+		<ui:include src="/WEB-INF/web/globalData/editThemesDialog.xhtml" />
+	</ui:define>
+	<ui:define name="content">
+		<div class="ui-fluid">
+			<h:form>
+				<p:panelGrid>
+					<p:row>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_MAX_IDLE_TIME)}">
+							<p:outputLabel for="maxIdleTimeInputNumber"
+								value="#{msg['lucas.application.globalDataScreen.maxIdleTimeInputNumber.name']}"
+								title="#{msg['lucas.application.globalDataScreen.maxIdleTimeInputNumber.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_CURRENCY_SYMBOL)}">
+							<p:outputLabel for="currencySymbolInputText"
+								value="#{msg['lucas.application.globalDataScreen.currencySymbolInputText.name']}"
+								title="#{msg['lucas.application.globalDataScreen.currencySymbolInputText.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_TRANSACTION_LIMIT)}">
+							<p:outputLabel for="transactionLimitInputNumber"
+								value="#{msg['lucas.application.globalDataScreen.transactionLimitInputNumber.name']}"
+								title="#{msg['lucas.application.globalDataScreen.transactionLimitInputNumber.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_MAX_USER_IMAGE_WIDTH)}">
+							<p:outputLabel for="maxUserImageWidthInputNumber"
+								value="#{msg['lucas.application.globalDataScreen.maxUserImageWidthInputNumber.name']}"
+								title="#{msg['lucas.application.globalDataScreen.maxUserImageWidthInputNumber.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_MAX_USER_IMAGE_HEIGHT)}">
+							<p:outputLabel for="maxUserImageHeightInputNumber"
+								value="#{msg['lucas.application.globalDataScreen.maxUserImageHeightInputNumber.name']}"
+								title="#{msg['lucas.application.globalDataScreen.maxUserImageHeightInputNumber.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_MINIMUM_WAGE)}">
+							<p:outputLabel for="minimumWageInputNumber"
+								value="#{msg['lucas.application.globalDataScreen.minimumWageInputNumber.name']}"
+								title="#{msg['lucas.application.globalDataScreen.minimumWageInputNumber.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_MIN_TIME_PRESENT)}">
+							<p:outputLabel for="minTimePresentInputNumber"
+								value="#{msg['lucas.application.globalDataScreen.minTimePresentInputNumber.name']}"
+								title="#{msg['lucas.application.globalDataScreen.minTimePresentInputNumber.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_UI_THEMES)}">
+							<h:outputText
+								value="#{msg['lucas.application.globalDataScreen.editThemesLabel.name']}"
+								title="#{msg['lucas.application.globalDataScreen.editThemesLabel.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermissionsAnd([EnumPermission.GLOBAL_DATA_GET_UI_THEMES,EnumPermission.GLOBAL_DATA_GET_DEFAULT_UI_THEME])}">
+							<h:outputLabel for="defaultUIThemeSelectOneMenu"
+								value="#{msg['lucas.application.globalDataScreen.defaultUIThemeSelectOneMenu.name']}"
+								title="#{msg['lucas.application.globalDataScreen.defaultUIThemeSelectOneMenu.tooltip']}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_MAX_IDLE_TIME)}">
+							<p:inputNumber id="maxIdleTimeInputNumber" symbolPosition="post"
+								readonly="#{not loginBean.hasPermission(EnumPermission.GLOBAL_DATA_SET_MAX_IDLE_TIME)}"
+								symbol=" #{msg['lucas.application.symbol.milliseconds']}"
+								title="#{msg['lucas.application.globalDataScreen.maxIdleTimeInputNumber.tooltip']}"
+								value="#{globalDataBean.maxIdleTime}" minValue="1"
+								decimalPlaces="0" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_CURRENCY_SYMBOL)}">
+							<p:inputText id="currencySymbolInputText"
+								readonly="#{not loginBean.hasPermission(EnumPermission.GLOBAL_DATA_SET_CURRENCY_SYMBOL)}"
+								value="#{globalDataBean.currencySymbol}"
+								title="#{msg['lucas.application.globalDataScreen.currencySymbolInputText.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_TRANSACTION_LIMIT)}">
+							<p:inputNumber id="transactionLimitInputNumber"
+								symbolPosition="post"
+								readonly="#{not loginBean.hasPermission(EnumPermission.GLOBAL_DATA_SET_TRANSACTION_LIMIT)}"
+								symbol=" #{accountBean.currencySymbol}"
+								title="#{msg['lucas.application.globalDataScreen.transactionLimitInputNumber.tooltip']}"
+								value="#{globalDataBean.transactionLimit}" minValue="0.01"
+								decimalPlaces="2" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_MAX_USER_IMAGE_WIDTH)}">
+							<p:inputNumber id="maxUserImageWidthInputNumber"
+								symbolPosition="post"
+								readonly="#{not loginBean.hasPermission(EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_WIDTH)}"
+								symbol=" #{msg['lucas.application.symbol.pixels']}"
+								title="#{msg['lucas.application.globalDataScreen.maxUserImageWidthInputNumber.tooltip']}"
+								value="#{globalDataBean.maxUserImageWidth}" minValue="50"
+								decimalPlaces="0" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_MAX_USER_IMAGE_HEIGHT)}">
+							<p:inputNumber id="maxUserImageHeightInputNumber"
+								symbolPosition="post"
+								readonly="#{not loginBean.hasPermission(EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_HEIGHT)}"
+								symbol=" #{msg['lucas.application.symbol.pixels']}"
+								title="#{msg['lucas.application.globalDataScreen.maxUserImageHeightInputNumber.tooltip']}"
+								value="#{globalDataBean.maxUserImageHeight}" minValue="50"
+								decimalPlaces="0" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_MINIMUM_WAGE)}">
+							<p:inputNumber id="minimumWageInputNumber" symbolPosition="post"
+								readonly="#{not loginBean.hasPermission(EnumPermission.GLOBAL_DATA_SET_MINIMUM_WAGE)}"
+								symbol=" #{accountBean.currencySymbol}"
+								title="#{msg['lucas.application.globalDataScreen.minimumWageInputNumber.tooltip']}"
+								value="#{globalDataBean.minimumWage}" minValue="0.01"
+								decimalPlaces="2" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_MIN_TIME_PRESENT)}">
+							<p:inputNumber id="minTimePresentInputNumber"
+								symbolPosition="post"
+								readonly="#{not loginBean.hasPermission(EnumPermission.GLOBAL_DATA_SET_MIN_TIME_PRESENT)}"
+								symbol=" #{msg['lucas.application.symbol.milliseconds']}"
+								title="#{msg['lucas.application.globalDataScreen.minTimePresentInputNumber.tooltip']}"
+								value="#{globalDataBean.minTimePresent}" minValue="1"
+								decimalPlaces="0" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_UI_THEMES)}">
+							<p:commandButton
+								title="#{msg['lucas.application.globalDataScreen.editThemesButton.tooltip']}"
+								value="#{msg['lucas.application.globalDataScreen.editThemesButton.name']}"
+								icon="fa fa-edit" update="editThemesDialogForm" process="@this"
+								action="#{globalDataBean.initEditThemesDialog}"
+								oncomplete="PF('editThemesDialog').show()" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermissionsAnd([EnumPermission.GLOBAL_DATA_GET_UI_THEMES,EnumPermission.GLOBAL_DATA_GET_DEFAULT_UI_THEME])}">
+							<p:selectOneMenu id="defaultUIThemeSelectOneMenu"
+								value="#{globalDataBean.defaultUiTheme}"
+								title="#{msg['lucas.application.globalDataScreen.defaultUIThemeSelectOneMenu.tooltip']}"
+								disabled="#{not loginBean.hasPermission(EnumPermission.GLOBAL_DATA_SET_DEFAULT_UI_THEME)}">
+								<f:selectItems value="#{globalDataBean.defaultUiThemeThemesList}" var="theme"
+									itemValue="#{theme}"
+									itemLabel="#{converterBean.getAsString(theme,'lucas:themeConverter')}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column
+							rendered="#{loginBean.hasPermissionsOr([EnumPermission.GLOBAL_DATA_SET_MAX_IDLE_TIME,EnumPermission.GLOBAL_DATA_SET_CURRENCY_SYMBOL,EnumPermission.GLOBAL_DATA_SET_TRANSACTION_LIMIT,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_WIDTH,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_HEIGHT,EnumPermission.GLOBAL_DATA_SET_MINIMUM_WAGE,EnumPermission.GLOBAL_DATA_ADD_UI_THEME,EnumPermission.GLOBAL_DATA_REMOVE_UI_THEME,EnumPermission.GLOBAL_DATA_SET_DEFAULT_UI_THEME])}">
+							<p:commandButton
+								value="#{msg['lucas.application.globalDataScreen.saveButton.name']}"
+								title="#{msg['lucas.application.globalDataScreen.saveButton.tooltip']}"
+								action="#{globalDataBean.save}" update="@form" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

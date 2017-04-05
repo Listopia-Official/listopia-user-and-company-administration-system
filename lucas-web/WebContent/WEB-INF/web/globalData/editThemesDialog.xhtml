@@ -1,0 +1,87 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.globalDataScreen.editThemesDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="editThemesDialog" />
+	<ui:param name="formId" value="editThemesDialogForm" />
+	<ui:define name="dialogContent">
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_ADD_UI_THEME)}">
+					<p:column colspan="3">
+						<p:inputText id="themeInputText"
+							value="#{globalDataBean.editThemesDialogTmpUITheme}"
+							title="#{msg['lucas.application.globalDataScreen.editThemesDialog.themeInputText.tooltip']}" />
+					</p:column>
+					<p:column>
+						<p:message id="themeInputTextMessage" for="themeInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column
+						rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_ADD_UI_THEME)}">
+						<p:commandButton
+							value="#{msg['lucas.application.globalDataScreen.editThemesDialog.addThemeButton.name']}"
+							title="#{msg['lucas.application.globalDataScreen.editThemesDialog.addThemeButton.tooltip']}"
+							process="themeInputText @this"
+							update="@this themeInputText themesSelectOneListbox themeInputTextMessage"
+							action="#{globalDataBean.editThemesDialogResetTmpUITheme}">
+							<p:collector value="#{globalDataBean.editThemesDialogTmpUITheme}"
+								addTo="#{globalDataBean.uiThemes}" unique="true" />
+						</p:commandButton>
+					</p:column>
+					<p:column
+						rendered="#{loginBean.hasPermissionsAnd([EnumPermission.GLOBAL_DATA_ADD_UI_THEME,EnumPermission.GLOBAL_DATA_REMOVE_UI_THEME])}">
+						<p:commandButton
+							value="#{msg['lucas.application.globalDataScreen.editThemesDialog.editThemeButton.name']}"
+							title="#{msg['lucas.application.globalDataScreen.editThemesDialog.editThemeButton.tooltip']}"
+							action="#{globalDataBean.editThemesDialogEditUITheme}"
+							process="@this themesSelectOneListbox"
+							update="themesSelectOneListbox themeInputText @this" />
+					</p:column>
+					<p:column
+						rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_REMOVE_UI_THEME)}">
+						<p:commandButton
+							value="#{msg['lucas.application.globalDataScreen.editThemesDialog.removeThemeButton.name']}"
+							title="#{msg['lucas.application.globalDataScreen.editThemesDialog.removeThemeButton.tooltip']}"
+							process="@this themesSelectOneListbox"
+							update="themesSelectOneListbox @this">
+							<p:collector removeFrom="#{globalDataBean.uiThemes}"
+								value="#{globalDataBean.editThemesDialogSelectedUITheme}" />
+						</p:commandButton>
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_UI_THEMES)}">
+					<p:column colspan="3">
+						<p:selectOneListbox id="themesSelectOneListbox" var="theme"
+							value="#{globalDataBean.editThemesDialogSelectedUITheme}">
+							<f:selectItems value="#{globalDataBean.uiThemes}" />
+							<p:column>
+								<h:outputText value="#{theme}" />
+							</p:column>
+						</p:selectOneListbox>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column />
+					<p:column />
+					<p:column>
+						<p:commandButton process="@this"
+							value="#{msg['lucas.application.globalDataScreen.editThemesDialog.closeButton.name']}"
+							title="#{msg['lucas.application.globalDataScreen.editThemesDialog.closeButton.tooltip']}"
+							oncomplete="PF('editThemesDialog').hide()" immediate="true">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>
