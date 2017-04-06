@@ -120,7 +120,7 @@
 					</p:column>
 					<p:column>
 						<p:commandButton
-							rendered="#{loginBean.hasPermission(EnumPermission.USER_ADD_RANK)}"
+							rendered="#{loginBean.hasPermissionsAnd([EnumPermission.USER_ADD_RANK,EnumPermission.USER_REMOVE_RANK])}"
 							value="#{msg['lucas.application.userScreen.editUserDialog.editRankButton.name']}"
 							title="#{msg['lucas.application.userScreen.editUserDialog.editRankButton.tooltip']}"
 							action="#{userBean.editEditUserDialogSelectedRank}"
