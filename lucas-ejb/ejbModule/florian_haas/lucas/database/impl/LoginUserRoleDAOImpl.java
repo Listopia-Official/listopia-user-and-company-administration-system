@@ -26,7 +26,7 @@ public class LoginUserRoleDAOImpl extends DAOImpl<LoginUserRole> implements Logi
 		return readOnlyCriteriaQuery((query, root, builder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 
-			getSingularRestriction(LoginUserRole_.id, id, useName, idComparator, predicates, builder, root);
+			getSingularRestriction(LoginUserRole_.id, id, useId, idComparator, predicates, builder, root);
 			getSingularRestriction(LoginUserRole_.name, name, useName, nameComparator, predicates, builder, root);
 			getPluralRestrictionCollection(LoginUserRole_.permissions, permissions, usePermissions, permissionsComparator, predicates, builder, root);
 
