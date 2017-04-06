@@ -710,6 +710,10 @@ public class UserBean implements Serializable {
 		return globalDataBean.getMaxUserImageHeight();
 	}
 
+	public Long getMaxUserImageUploadSizeBytes() {
+		return globalDataBean.getMaxUserImageUploadSizeBytes();
+	}
+
 	public void initImageManagerDialog() {
 		if (!this.selectedUsers.isEmpty()) {
 			imageManagerDialogSelectedUser = this.selectedUsers.get(0);

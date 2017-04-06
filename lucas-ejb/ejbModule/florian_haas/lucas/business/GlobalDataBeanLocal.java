@@ -38,6 +38,8 @@ public interface GlobalDataBeanLocal {
 
 	public List<String> getUIThemes();
 
+	public Long getMaxUserImageUploadSizeBytes();
+
 	public Boolean setSalary(@NotNull EnumSalaryClass salaryClass, @MinimumWage BigDecimal salary);
 
 	public Boolean setMinTimePresent(@NotNull @Min(1) Long minTimePresent);
@@ -61,5 +63,7 @@ public interface GlobalDataBeanLocal {
 	public Boolean addUITheme(@NotBlank String uiTheme);
 
 	public Boolean removeUITheme(@ValidUITheme @NotNull String uiTheme);
+
+	public Boolean setMaxUserImageUploadSizeBytes(@NotNull @Min(1) Long maxUserImageUploadSizeBytes);
 
 }

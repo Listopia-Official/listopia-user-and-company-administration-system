@@ -72,6 +72,10 @@ public class GlobalData extends EntityBase {
 			"redmond", "rocket", "sam", "smoothness", "south-street", "start", "sunny", "swanky-purse", "trontastic", "ui-darkness", "ui-lightness",
 			"vader");
 
+	@Min(1)
+	@NotNull
+	private Long maxUserImageUploadSizeByte = 1000000l;
+
 	public Map<EnumSalaryClass, BigDecimal> getSalaries() {
 		return Collections.unmodifiableMap(salaries);
 	}
@@ -162,6 +166,14 @@ public class GlobalData extends EntityBase {
 
 	public Boolean removeUITheme(String uiTheme) {
 		return uiThemes.remove(uiTheme);
+	}
+
+	public Long getMaxUserImageUploadSizeByte() {
+		return maxUserImageUploadSizeByte;
+	}
+
+	public void setMaxUserImageUploadSizeByte(Long maxUserImageUploadSizeByte) {
+		this.maxUserImageUploadSizeByte = maxUserImageUploadSizeByte;
 	}
 
 }

@@ -217,4 +217,21 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	public Boolean removeUITheme(String uiTheme) {
 		return newInstance().removeUITheme(uiTheme);
 	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_GET_MAX_USER_IMAGE_UPLOAD_SIZE_BYTES)
+	public Long getMaxUserImageUploadSizeBytes() {
+		return newInstance().getMaxUserImageUploadSizeByte();
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_SET_MAX_USER_IMAGE_UPLOAD_SIZE_BYTES)
+	public Boolean setMaxUserImageUploadSizeBytes(Long maxUserImageUploadSizeBytes) {
+		GlobalData newInstance = newInstance();
+		if (!newInstance.getMaxUserImageUploadSizeByte().equals(maxUserImageUploadSizeBytes)) {
+			newInstance.setMaxUserImageUploadSizeByte(maxUserImageUploadSizeBytes);
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
 }

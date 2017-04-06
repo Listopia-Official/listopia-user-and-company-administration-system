@@ -68,6 +68,12 @@
 								value="#{msg['lucas.application.globalDataScreen.defaultUIThemeSelectOneMenu.name']}"
 								title="#{msg['lucas.application.globalDataScreen.defaultUIThemeSelectOneMenu.tooltip']}" />
 						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_MAX_USER_IMAGE_UPLOAD_SIZE_BYTES)}">
+							<h:outputLabel for="maxUserImageUploadSizeBytesInputNumber"
+								value="#{msg['lucas.application.globalDataScreen.maxUserImageUploadSizeBytesInputNumber.name']}"
+								title="#{msg['lucas.application.globalDataScreen.maxUserImageUploadSizeBytesInputNumber.tooltip']}" />
+						</p:column>
 					</p:row>
 					<p:row>
 						<p:column
@@ -150,10 +156,21 @@
 								value="#{globalDataBean.defaultUiTheme}"
 								title="#{msg['lucas.application.globalDataScreen.defaultUIThemeSelectOneMenu.tooltip']}"
 								disabled="#{not loginBean.hasPermission(EnumPermission.GLOBAL_DATA_SET_DEFAULT_UI_THEME)}">
-								<f:selectItems value="#{globalDataBean.defaultUiThemeThemesList}" var="theme"
+								<f:selectItems
+									value="#{globalDataBean.defaultUiThemeThemesList}" var="theme"
 									itemValue="#{theme}"
 									itemLabel="#{converterBean.getAsString(theme,'lucas:themeConverter')}" />
 							</p:selectOneMenu>
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_MAX_USER_IMAGE_UPLOAD_SIZE_BYTES)}">
+							<p:inputNumber id="maxUserImageUploadSizeBytesInputNumber"
+								symbolPosition="post"
+								readonly="#{not loginBean.hasPermission(EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_UPLOAD_SIZE_BYTES)}"
+								symbol=" #{msg['lucas.application.symbol.bytes']}"
+								title="#{msg['lucas.application.globalDataScreen.maxUserImageUploadSizeBytesInputNumber.tooltip']}"
+								value="#{globalDataBean.maxUserImageUploadSizeBytes}"
+								minValue="1" decimalPlaces="0" />
 						</p:column>
 					</p:row>
 					<p:row>

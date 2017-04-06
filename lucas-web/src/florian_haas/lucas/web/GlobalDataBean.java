@@ -63,6 +63,10 @@ public class GlobalDataBean implements Serializable {
 
 	private List<String> defaultUiThemeThemesList = new ArrayList<>();
 
+	@Min(1)
+	@NotNull
+	private Long maxUserImageUploadSizeBytes = 1000000l;
+
 	public Long getMaxIdleTime() {
 		return maxIdleTime;
 	}
@@ -139,6 +143,14 @@ public class GlobalDataBean implements Serializable {
 		return this.defaultUiThemeThemesList;
 	}
 
+	public Long getMaxUserImageUploadSizeBytes() {
+		return maxUserImageUploadSizeBytes;
+	}
+
+	public void setMaxUserImageUploadSizeBytes(Long maxUserImageUploadSizeBytes) {
+		this.maxUserImageUploadSizeBytes = maxUserImageUploadSizeBytes;
+	}
+
 	@PostConstruct
 	public void refresh() {
 		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_MAX_IDLE_TIME)) {
@@ -169,6 +181,9 @@ public class GlobalDataBean implements Serializable {
 		}
 		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_DEFAULT_UI_THEME)) {
 			defaultUiTheme = globalDataBean.getDefaultUITheme();
+		}
+		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_MAX_USER_IMAGE_UPLOAD_SIZE_BYTES)) {
+			maxUserImageUploadSizeBytes = globalDataBean.getMaxUserImageUploadSizeBytes();
 		}
 	}
 
@@ -204,6 +219,8 @@ public class GlobalDataBean implements Serializable {
 		}
 		changeValue(defaultUiTheme, globalDataBean::setDefaultUITheme, EnumPermission.GLOBAL_DATA_SET_DEFAULT_UI_THEME,
 				"lucas.application.globalDataScreen.setDefaultUITheme");
+		changeValue(maxUserImageUploadSizeBytes, globalDataBean::setMaxUserImageUploadSizeBytes,
+				EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_UPLOAD_SIZE_BYTES, "lucas.application.globalDataScreen.setMaxUserImageUploadSizeBytes");
 	}
 
 	private <T> void changeValue(T value, Predicate<T> setter, EnumPermission permission, String messagePrefix) {
