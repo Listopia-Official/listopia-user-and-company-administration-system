@@ -224,4 +224,9 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 		if (useValue) list.addAll(getPluralRestrictionCollection(attribute, value, comparator, builder, root));
 	}
 
+	@Override
+	public void flush() {
+		manager.flush();
+	}
+
 }

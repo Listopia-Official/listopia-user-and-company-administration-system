@@ -28,4 +28,5 @@ public interface ReadOnlyDAO<E extends EntityBase> {
 
 	public List<E> readOnlyCriteriaQuery(TriFunction<CriteriaQuery<E>, Root<E>, CriteriaBuilder, Collection<Predicate>> restrictions);
 
+	public void flush();
 }

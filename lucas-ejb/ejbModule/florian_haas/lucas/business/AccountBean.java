@@ -118,7 +118,7 @@ public class AccountBean implements AccountBeanLocal {
 			account2.addTransactionLog(new TransactionLog(account2, dateTime, EnumAccountAction.CREDIT, EnumAccountActionType.TRANSACTION, account1,
 					transactionAmount, prevBankBalance2, user, comment));
 		}
-		accountDao.getEntityManager().flush();
+		accountDao.flush();
 		return account1.getId();
 	}
 
