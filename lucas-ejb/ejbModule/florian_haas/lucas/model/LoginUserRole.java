@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import florian_haas.lucas.model.validation.UniqueLoginUserRoleName;
 import florian_haas.lucas.util.validation.TypeNotNull;
 
 @Entity
@@ -17,7 +16,6 @@ public class LoginUserRole extends EntityBase {
 	private static final long serialVersionUID = -539981772258580862L;
 
 	@Column(name = "name", nullable = false, unique = true)
-	@UniqueLoginUserRoleName
 	@NotBlank
 	private String name;
 

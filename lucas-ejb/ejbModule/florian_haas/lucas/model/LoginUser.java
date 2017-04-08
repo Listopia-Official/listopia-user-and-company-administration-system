@@ -7,8 +7,8 @@ import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import florian_haas.lucas.model.validation.*;
-import florian_haas.lucas.util.validation.*;
+import florian_haas.lucas.model.validation.DefaultLoginUserRequired;
+import florian_haas.lucas.util.validation.TypeNotNull;
 
 @Entity
 @Table(name = "loginuser")
@@ -18,12 +18,10 @@ public class LoginUser extends EntityBase {
 
 	@Column(name = "username", nullable = false, unique = true)
 	@NotBlank
-	@UniqueLoginUserUsername
 	private String username;
 
 	@Column(name = "password", nullable = false)
-	@NotBlankString
-	@NotNull
+	@NotBlank
 	private String hashedPassword;
 
 	@JoinColumn(unique = true)

@@ -10,4 +10,6 @@ public interface ItemDAO extends DAO<Item> {
 			Boolean useName, Boolean useDescription, Boolean useItemsAvaible, Boolean usePricePerItem, EnumQueryComparator idComparator,
 			EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator, EnumQueryComparator itemsAvaibleComparator,
 			EnumQueryComparator pricePerItemComparator);
+
+	public Boolean isNameUnique(String name);
 }

@@ -90,6 +90,7 @@ public class ItemBean implements ItemBeanLocal {
 	public Boolean setName(Long itemId, String name) {
 		Item item = itemDao.findById(itemId);
 		if (item.getName().equals(name)) return Boolean.FALSE;
+		checkIsItemNameUnique(name);
 		item.setName(name);
 		return Boolean.TRUE;
 	}
@@ -131,9 +132,14 @@ public class ItemBean implements ItemBeanLocal {
 	@Override
 	@RequiresPermissions(ITEM_CREATE)
 	public Long newItem(String name, String description, BigDecimal price, Integer itemsAvaible) {
+		checkIsItemNameUnique(name);
 		Item item = new Item(name, description, price, itemsAvaible);
 		itemDao.persist(item);
 		return item.getId();
+	}
+
+	private void checkIsItemNameUnique(String name) {
+		if (!itemDao.isNameUnique(name)) throw new LucasException("The item name is used by another item");
 	}
 
 }

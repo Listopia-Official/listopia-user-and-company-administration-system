@@ -1,6 +1,6 @@
 package florian_haas.lucas.business;
 
-import static florian_haas.lucas.security.EnumPermission.*;
+import static florian_haas.lucas.security.EnumPermission.ENTITY_EXISTS;
 
 import javax.ejb.*;
 import javax.persistence.*;
@@ -24,14 +24,4 @@ public class EntityBean implements EntityBeanLocal {
 		return manager.createQuery("SELECT COUNT(e.id) FROM " + entityClass.getSimpleName() + " e WHERE e.id=" + id, Long.class)
 				.getSingleResult() > 0;
 	}
-
-	@Override
-	@RequiresPermissions(ENTITY_IS_UNIQUE)
-	public <T> Boolean isUnique(String columnName, T value, Class<? extends EntityBase> entityClass) {
-		TypedQuery<Long> query = manager.createQuery(
-				"SELECT COUNT(e." + columnName + ") FROM " + entityClass.getSimpleName() + " e WHERE e." + columnName + "=?1", Long.class);
-		query.setParameter(1, value);
-		return query.getSingleResult() == 0;
-	}
-
 }

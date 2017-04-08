@@ -16,4 +16,6 @@ public interface CompanyDAO extends DAO<Company> {
 
 	public Boolean existsLocation(String room, Integer section);
 
+	public Boolean isNameUnique(String name);
+
 }

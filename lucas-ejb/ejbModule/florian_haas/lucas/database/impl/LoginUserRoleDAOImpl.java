@@ -43,4 +43,9 @@ public class LoginUserRoleDAOImpl extends DAOImpl<LoginUserRole> implements Logi
 		query.select(builder.count(loginUserRoleId)).where(builder.equal(loginUserRoleId, id));
 		return manager.createQuery(query).getSingleResult() > 0;
 	}
+
+	@Override
+	public Boolean isNameUnique(String name) {
+		return isUnique(name, LoginUserRole_.name);
+	}
 }

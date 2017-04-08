@@ -45,6 +45,8 @@ public class CompanyBean implements CompanyBeanLocal {
 	@RequiresPermissions(COMPANY_CREATE)
 	public Long createCompany(String name, String description, String room, Integer section, EnumCompanyType companyType, List<Employment> managers,
 			Integer requiredEmployeesCount) {
+		checkIsNameUnique(name);
+		checkIsLocationUnique(room, section);
 		Company company = new Company(name, description, room, section, companyType, managers, requiredEmployeesCount);
 		if (companyType == EnumCompanyType.STATE) {
 			company.getAccount().setIsProtected(Boolean.TRUE);
@@ -85,6 +87,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	public Boolean setName(Long companyId, String name) {
 		Company comp = findById(companyId);
 		if (comp.getName().equals(name)) return Boolean.FALSE;
+		checkIsNameUnique(name);
 		comp.setName(name);
 		return Boolean.TRUE;
 	}
@@ -103,6 +106,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	public Boolean setRoom(Long companyId, String room) {
 		Company comp = companyDao.findById(companyId);
 		if (comp.getRoom().equals(room)) return Boolean.FALSE;
+		checkIsLocationUnique(room, comp.getSection());
 		comp.setRoom(room);
 		return Boolean.TRUE;
 	}
@@ -112,6 +116,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	public Boolean setSection(Long companyId, Integer section) {
 		Company comp = companyDao.findById(companyId);
 		if (comp.getSection().equals(section)) return Boolean.FALSE;
+		checkIsLocationUnique(comp.getRoom(), section);
 		comp.setSection(section);
 		return Boolean.TRUE;
 	}
@@ -225,5 +230,13 @@ public class CompanyBean implements CompanyBeanLocal {
 	@RequiresPermissions(COMPANY_EXISTS_LOCATION)
 	public Boolean existsLocation(String room, Integer section) {
 		return companyDao.existsLocation(room, section);
+	}
+
+	private void checkIsNameUnique(String name) {
+		if (!companyDao.isNameUnique(name)) throw new LucasException("The name is used by another company");
+	}
+
+	private void checkIsLocationUnique(String room, Integer section) {
+		if (!companyDao.existsLocation(room, section)) throw new LucasException("Another company is assigned to the location");
 	}
 }

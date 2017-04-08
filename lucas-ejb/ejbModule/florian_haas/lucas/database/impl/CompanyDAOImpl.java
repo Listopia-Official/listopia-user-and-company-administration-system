@@ -46,4 +46,9 @@ public class CompanyDAOImpl extends DAOImpl<Company> implements CompanyDAO {
 		}).isEmpty();
 	}
 
+	@Override
+	public Boolean isNameUnique(String name) {
+		return isUnique(name, Company_.name);
+	}
+
 }

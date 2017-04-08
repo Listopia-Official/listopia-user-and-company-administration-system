@@ -25,6 +25,7 @@ public class LoginUserRoleBean implements LoginUserRoleBeanLocal {
 	@Override
 	@RequiresPermissions(LOGIN_ROLE_CREATE)
 	public Long newLoginUserRole(String name, Set<String> permissions) {
+		checkIsNameUnique(name);
 		LoginUserRole role = new LoginUserRole(name);
 		if (permissions != null) {
 			permissions.forEach(permission -> {
@@ -35,11 +36,16 @@ public class LoginUserRoleBean implements LoginUserRoleBeanLocal {
 		return role.getId();
 	}
 
+	private void checkIsNameUnique(String name) {
+		if (!loginUserRoleDao.isNameUnique(name)) throw new LucasException("The name of the login user role is already used");
+	}
+
 	@Override
 	@RequiresPermissions(LOGIN_ROLE_SET_NAME)
 	public Boolean setRoleName(Long roleId, String name) {
 		LoginUserRole role = loginUserRoleDao.findById(roleId);
 		if (!role.getName().equals(name)) {
+			checkIsNameUnique(name);
 			role.setName(name);
 			return Boolean.TRUE;
 		}

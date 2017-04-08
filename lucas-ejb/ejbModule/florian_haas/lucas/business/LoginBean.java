@@ -69,6 +69,10 @@ public class LoginBean implements LoginBeanLocal {
 	}
 
 	private Long newLoginUserHelper(String username, char[] password, User usr, List<Long> userRoleIds) {
+		if (usr != null) {
+			checkUserIsUnique(usr);
+		}
+		checkUsernameIsUnique(username);
 		PasswordService passwordService = new DefaultPasswordService();
 		String encryptedPassword = passwordService.encryptPassword(password);
 		LoginUser user = new LoginUser(username, encryptedPassword, usr);
@@ -82,9 +86,8 @@ public class LoginBean implements LoginBeanLocal {
 
 	@Override
 	@RequiresPermissions(LOGIN_CHANGE_PASSWORD)
-	public Boolean changePassword(char[] oldPassword, char[] newPassword) {
-		return changePasswordHelper(loginUserDao.findByUsername(SecurityUtils.getSubject().getPrincipal().toString()).getId(), oldPassword,
-				newPassword);
+	public void changePassword(char[] oldPassword, char[] newPassword) {
+		changePasswordHelper(loginUserDao.findByUsername(SecurityUtils.getSubject().getPrincipal().toString()).getId(), oldPassword, newPassword);
 	}
 
 	@Override
@@ -100,11 +103,11 @@ public class LoginBean implements LoginBeanLocal {
 
 	@Override
 	@RequiresPermissions(LOGIN_USER_NEW_PASSWORD)
-	public Boolean newPassword(Long loginUserId, char[] newPassword) {
-		return changePasswordHelper(loginUserId, null, newPassword);
+	public void newPassword(Long loginUserId, char[] newPassword) {
+		changePasswordHelper(loginUserId, null, newPassword);
 	}
 
-	private Boolean changePasswordHelper(Long loginUserId, char[] oldPassword, char[] newPassword) {
+	private void changePasswordHelper(Long loginUserId, char[] oldPassword, char[] newPassword) {
 		PasswordService passwordService = new DefaultPasswordService();
 		LoginUser user = loginUserDao.findById(loginUserId);
 		String newEncryptedPassword = passwordService.encryptPassword(newPassword);
@@ -114,9 +117,21 @@ public class LoginBean implements LoginBeanLocal {
 				Arrays.fill(oldPassword, 'c');
 			}
 			user.setHashedPassword(newEncryptedPassword);
-			return Boolean.TRUE;
-		}
-		return Boolean.FALSE;
+		} else if ((oldPassword != null && !passwordService.passwordsMatch(oldPassword, user.getHashedPassword())))
+			throw new LucasException("The specified old password doesn't match the old password");
+	}
+
+	private void checkUsernameIsUnique(String username) {
+		if (!loginUserDao.isUsernameUnique(username))
+			throw new LucasException("The username is used by another login user", USERNAME_NOT_UNIQUE_EXCEPTION_MARKER);
+	}
+
+	public static final String USERNAME_NOT_UNIQUE_EXCEPTION_MARKER = "notUniqueUsername";
+	public static final String USER_NOT_UNIQUE_EXCEPTION_MARKER = "notUniqueUser";
+
+	private void checkUserIsUnique(User user) {
+		if (user != null && !loginUserDao.isReferencedUserUnique(user.getId()))
+			throw new LucasException("The user is bound to another login user", USER_NOT_UNIQUE_EXCEPTION_MARKER);
 	}
 
 	@Override
@@ -178,6 +193,7 @@ public class LoginBean implements LoginBeanLocal {
 		if (user.getUsername().equals(username)) {
 			return Boolean.FALSE;
 		} else {
+			checkUsernameIsUnique(username);
 			user.setUsername(username);
 			return Boolean.TRUE;
 		}

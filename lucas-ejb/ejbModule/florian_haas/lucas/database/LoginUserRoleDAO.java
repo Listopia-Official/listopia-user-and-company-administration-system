@@ -6,6 +6,8 @@ import florian_haas.lucas.model.LoginUserRole;
 
 public interface LoginUserRoleDAO extends DAO<LoginUserRole> {
 
+	public Boolean isNameUnique(String name);
+
 	public LoginUserRole findByName(String name);
 
 	public Boolean isUsed(Long id);

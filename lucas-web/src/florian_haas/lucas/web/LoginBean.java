@@ -198,8 +198,11 @@ public class LoginBean {
 
 	public void changePassword() {
 		WebUtils.executeTask(params -> {
-			return loginBean.changePassword(changePasswordDialogOldPassword, changePasswordDialogPassword);
-		}, "lucas.application.preferencesScreen.changePassword", Utils.asList(getAdvancedUsername()));
+			loginBean.changePassword(changePasswordDialogOldPassword, changePasswordDialogPassword);
+			return true;
+		}, "lucas.application.preferencesScreen.changePassword", (exception, params) -> {
+			return WebUtils.getTranslatedMessage("lucas.application.preferencesScreen.changePassword.wrongOldPassword");
+		}, Utils.asList(getAdvancedUsername()));
 		Arrays.fill(changePasswordDialogPassword, 'c');
 		Arrays.fill(changePasswordDialogOldPassword, 'c');
 	}

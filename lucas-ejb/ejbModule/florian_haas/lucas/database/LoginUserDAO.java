@@ -11,4 +11,8 @@ public interface LoginUserDAO extends DAO<LoginUser> {
 			EnumQueryComparator userIdComparator, EnumQueryComparator roleIdsComparator);
 
 	public LoginUser findByUsername(String username);
+
+	public Boolean isUsernameUnique(String username);
+
+	public Boolean isReferencedUserUnique(Long referencedUserId);
 }

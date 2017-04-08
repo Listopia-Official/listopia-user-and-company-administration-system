@@ -9,7 +9,7 @@ import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import florian_haas.lucas.model.validation.*;
+import florian_haas.lucas.model.validation.ValidItemPrice;
 import florian_haas.lucas.util.validation.*;
 
 @Entity
@@ -20,7 +20,6 @@ public class Item extends EntityBase {
 	@Basic(optional = false)
 	@Column(nullable = false, unique = true)
 	@NotBlank
-	@UniqueItemName
 	private String name;
 
 	@Basic(optional = true)

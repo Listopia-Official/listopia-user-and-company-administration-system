@@ -35,4 +35,16 @@ public class LoginUserDAOImpl extends DAOImpl<LoginUser> implements LoginUserDAO
 			return predicates;
 		});
 	}
+
+	@Override
+	public Boolean isUsernameUnique(String username) {
+		return isUnique(username, LoginUser_.username);
+	}
+
+	@Override
+	public Boolean isReferencedUserUnique(Long userId) {
+		return isUnique(userId, root -> {
+			return root.join(LoginUser_.user).get(User_.id);
+		});
+	}
 }

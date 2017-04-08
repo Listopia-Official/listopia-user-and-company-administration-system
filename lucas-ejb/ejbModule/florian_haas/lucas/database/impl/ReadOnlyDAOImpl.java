@@ -2,6 +2,7 @@ package florian_haas.lucas.database.impl;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.Function;
 
 import javax.inject.Named;
 import javax.persistence.*;
@@ -52,6 +53,23 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 	@Override
 	public Boolean exists(Long id) {
 		return manager.createQuery("SELECT COUNT(e.id) FROM " + entityClass.getSimpleName() + " e WHERE e.id=:id", Long.class).getSingleResult() > 0;
+	}
+
+	@Override
+	public <T> Boolean isUnique(T value, Function<Root<E>, Path<T>> attribute) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Long> query = builder.createQuery(Long.class);
+		Root<E> root = query.from(entityClass);
+		Path<T> expression = attribute.apply(root);
+		query.select(builder.count(expression)).where(builder.equal(expression, value));
+		return manager.createQuery(query).getSingleResult() == 0;
+	}
+
+	@Override
+	public <T> Boolean isUnique(T value, SingularAttribute<? super E, T> attribute) {
+		return isUnique(value, root -> {
+			return root.get(attribute);
+		});
 	}
 
 	@Override

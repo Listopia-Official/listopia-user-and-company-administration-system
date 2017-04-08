@@ -17,6 +17,7 @@ import florian_haas.lucas.database.*;
 import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.LoginUserRole;
 import florian_haas.lucas.security.EnumPermission;
+import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.util.validation.*;
 import florian_haas.lucas.web.util.WebUtils;
 
@@ -222,7 +223,10 @@ public class LoginRoleBean implements Serializable {
 									new HashSet<>(createLoginUserRoleDialogPermissionsListModel.getTarget()))),
 							"lucas:loginUserRoleStringConverter"));
 			return true;
-		}, "lucas.application.loginRoleScreen.createLoginUserRole");
+		}, "lucas.application.loginRoleScreen.createLoginUserRole", (exception, params) -> {
+			return WebUtils.getTranslatedMessage("lucas.application.loginRoleScreen.createLoginUserRole.notUnique",
+					params.toArray(new Object[params.size()]));
+		}, Utils.asList(createLoginUserRoleDialogName));
 	}
 
 	/*
@@ -342,8 +346,10 @@ public class LoginRoleBean implements Serializable {
 			LoginUserRole newRole = loginUserRoleBean.findById(id);
 			WebUtils.refreshEntities(LoginUserRole.class, searchLoginRoleResults, selectedLoginRoles, newRole, loginUserRoleBean::findById, true);
 			return true;
-		}, "lucas.application.loginRoleScreen.editLoginUserRole",
-				Arrays.asList(WebUtils.getAsString(editLoginUserRole, "lucas:loginUserRoleStringConverter")));
+		}, "lucas.application.loginRoleScreen.editLoginUserRole", (exception, params) -> {
+			return WebUtils.getTranslatedMessage("lucas.application.loginRoleScreen.editLoginUserRole.notUnique",
+					params.toArray(new Object[params.size()]));
+		}, Utils.asList(WebUtils.getAsString(editLoginUserRole, "lucas:loginUserRoleStringConverter"), editLoginUserRoleDialogName));
 	}
 
 	/*

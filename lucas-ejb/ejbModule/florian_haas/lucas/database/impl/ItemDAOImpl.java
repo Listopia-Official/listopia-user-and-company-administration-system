@@ -29,4 +29,9 @@ public class ItemDAOImpl extends DAOImpl<Item> implements ItemDAO {
 		});
 	}
 
+	@Override
+	public Boolean isNameUnique(String name) {
+		return isUnique(name, Item_.name);
+	}
+
 }

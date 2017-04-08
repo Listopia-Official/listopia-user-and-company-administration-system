@@ -274,7 +274,10 @@ public class LoginUserBean implements Serializable {
 					"lucas:loginUserStringConverter"));
 			Arrays.fill(createDefaultLoginUserPassword, 'c');
 			return true;
-		}, "lucas.application.loginUserScreen.createDefaultLoginUser");
+		}, "lucas.application.loginUserScreen.createDefaultLoginUser", (exception, params) -> {
+			return WebUtils.getTranslatedMessage("lucas.application.loginUserScreen.createDefaultLoginUser.notUniqueUsername",
+					params.toArray(new Object[params.size()]));
+		}, Utils.asList(createDefaultLoginUserUsername));
 	}
 
 	/*
@@ -338,7 +341,13 @@ public class LoginUserBean implements Serializable {
 					"lucas:loginUserStringConverter"));
 			Arrays.fill(createBoundLoginUserPassword, 'c');
 			return true;
-		}, "lucas.application.loginUserScreen.createBoundLoginUser");
+		}, "lucas.application.loginUserScreen.createBoundLoginUser", (exception, params) -> {
+			return WebUtils.getTranslatedMessage(
+					(exception.getMark().equals(florian_haas.lucas.business.LoginBean.USER_NOT_UNIQUE_EXCEPTION_MARKER)
+							? "lucas.application.loginUserScreen.createBoundLoginUser.notUniqueUser"
+							: "lucas.application.loginUserScreen.createBoundLoginUser.notUniqueUsername"),
+					params.toArray(new Object[params.size()]));
+		}, Utils.asList(WebUtils.getAsString(userBean.findById(createBoundLoginUserBoundUser), "lucas:userStringConverter")));
 	}
 
 	/*
@@ -425,7 +434,10 @@ public class LoginUserBean implements Serializable {
 			params.add(WebUtils.getAsString(newUser, "lucas:loginUserStringConverter"));
 			WebUtils.refreshEntities(LoginUser.class, searchLoginUserResults, selectedLoginUsers, newUser, loginBean::findLoginUserById, true);
 			return true;
-		}, "lucas.application.loginUserScreen.editLoginUser");
+		}, "lucas.application.loginUserScreen.editLoginUser", (exception, params) -> {
+			return WebUtils.getTranslatedMessage("lucas.application.loginUserScreen.createBoundLoginUser.notUniqueUsername",
+					params.toArray(new Object[params.size()]));
+		}, Utils.asList(editLoginUserUsername));
 	}
 
 	/*

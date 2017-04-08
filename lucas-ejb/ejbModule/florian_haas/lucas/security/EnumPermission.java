@@ -73,7 +73,6 @@ public enum EnumPermission {
 
 	ENTITY_ALL(ENTITY, "*"),
 	ENTITY_EXISTS(ENTITY, "exists"),
-	ENTITY_IS_UNIQUE(ENTITY, "isUnique"),
 
 	GLOBAL_DATA_ALL(GLOBAL_DATA, "*"),
 	GLOBAL_DATA_GET_SALARIES(GLOBAL_DATA, "getSalaries"),

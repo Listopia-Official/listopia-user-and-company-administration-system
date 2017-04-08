@@ -8,14 +8,13 @@ import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import florian_haas.lucas.model.validation.*;
+import florian_haas.lucas.model.validation.UniqueValue;
 import florian_haas.lucas.util.validation.TypeNotNull;
 
 @Entity
 @DiscriminatorValue(value = "company")
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {
 		"room", "section" }))
-@UniqueCompanyRoomSectionCombination
 public class Company extends AccountOwner {
 
 	private static final long serialVersionUID = -8593998936489707393L;

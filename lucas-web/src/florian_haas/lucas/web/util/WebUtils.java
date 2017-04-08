@@ -6,7 +6,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.*;
 import java.util.logging.*;
 
 import javax.ejb.EJBException;
@@ -22,6 +22,7 @@ import javax.validation.*;
 import org.apache.shiro.*;
 import org.primefaces.model.*;
 
+import florian_haas.lucas.business.LucasException;
 import florian_haas.lucas.model.EntityBase;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
@@ -192,32 +193,53 @@ public class WebUtils {
 	public static final String FAIL_MESSAGE_SUFFIX = ".fail";
 
 	public static boolean executeTask(FailableTask task, String messagePrefix, List<Object> argParams) {
-		return executeTask(task, true, true, messagePrefix, DEFAULT_MESSAGE_COMPONENT_ID, argParams);
+		return executeTask(task, true, true, messagePrefix, DEFAULT_MESSAGE_COMPONENT_ID, null, argParams);
+	}
+
+	public static boolean executeTask(FailableTask task, String messagePrefix,
+			BiFunction<LucasException, List<Object>, String> exceptionMessageGetter, List<Object> argParams) {
+		return executeTask(task, true, true, messagePrefix, DEFAULT_MESSAGE_COMPONENT_ID, exceptionMessageGetter, argParams);
 	}
 
 	public static boolean executeTask(FailableTask task, String messagePrefix) {
-		return executeTask(task, true, true, messagePrefix, DEFAULT_MESSAGE_COMPONENT_ID, new ArrayList<>());
+		return executeTask(task, true, true, messagePrefix, DEFAULT_MESSAGE_COMPONENT_ID, null, new ArrayList<>());
+	}
+
+	public static boolean executeTask(FailableTask task, String messagePrefix,
+			BiFunction<LucasException, List<Object>, String> exceptionMessageGetter) {
+		return executeTask(task, true, true, messagePrefix, DEFAULT_MESSAGE_COMPONENT_ID, exceptionMessageGetter, new ArrayList<>());
 	}
 
 	public static boolean executeTask(FailableTask task, String messagePrefix, String messageComponentId, List<Object> argParams) {
-		return executeTask(task, true, true, messagePrefix, messageComponentId, argParams);
+		return executeTask(task, true, true, messagePrefix, messageComponentId, null, argParams);
 	}
 
 	public static boolean executeTask(FailableTask task, String messagePrefix, String messageComponentId) {
-		return executeTask(task, true, true, messagePrefix, messageComponentId, new ArrayList<>());
+		return executeTask(task, true, true, messagePrefix, messageComponentId, null, new ArrayList<>());
 	}
 
 	public static boolean executeTask(FailableTask task, boolean useSuccessMessage, boolean useWarnMessage, String messagePrefix,
 			List<Object> argParams) {
-		return executeTask(task, useSuccessMessage, useWarnMessage, messagePrefix, DEFAULT_MESSAGE_COMPONENT_ID, argParams);
-	}
-
-	public static boolean executeTask(FailableTask task, boolean useSuccessMessage, boolean useWarnMessage, String messagePrefix) {
-		return executeTask(task, useSuccessMessage, useWarnMessage, messagePrefix, DEFAULT_MESSAGE_COMPONENT_ID, new ArrayList<>());
+		return executeTask(task, useSuccessMessage, useWarnMessage, messagePrefix, DEFAULT_MESSAGE_COMPONENT_ID, null, argParams);
 	}
 
 	public static boolean executeTask(FailableTask task, boolean useSuccessMessage, boolean useWarnMessage, String messagePrefix,
-			String messageComponentId, List<Object> argParams) {
+			BiFunction<LucasException, List<Object>, String> exceptionMessageGetter, List<Object> argParams) {
+		return executeTask(task, useSuccessMessage, useWarnMessage, messagePrefix, DEFAULT_MESSAGE_COMPONENT_ID, exceptionMessageGetter, argParams);
+	}
+
+	public static boolean executeTask(FailableTask task, boolean useSuccessMessage, boolean useWarnMessage, String messagePrefix) {
+		return executeTask(task, useSuccessMessage, useWarnMessage, messagePrefix, DEFAULT_MESSAGE_COMPONENT_ID, null, new ArrayList<>());
+	}
+
+	public static boolean executeTask(FailableTask task, boolean useSuccessMessage, boolean useWarnMessage, String messagePrefix,
+			BiFunction<LucasException, List<Object>, String> exceptionMessageGetter) {
+		return executeTask(task, useSuccessMessage, useWarnMessage, messagePrefix, DEFAULT_MESSAGE_COMPONENT_ID, exceptionMessageGetter,
+				new ArrayList<>());
+	}
+
+	public static boolean executeTask(FailableTask task, boolean useSuccessMessage, boolean useWarnMessage, String messagePrefix,
+			String messageComponentId, BiFunction<LucasException, List<Object>, String> exceptionMessageGetter, List<Object> argParams) {
 		String successMessageKey = messagePrefix.concat(SUCCESS_MESSAGE_SUFFIX);
 		String warnMessageKey = messagePrefix.concat(WARN_MESSAGE_SUFFIX);
 		String failMessageKey = messagePrefix.concat(FAIL_MESSAGE_SUFFIX);
@@ -239,6 +261,10 @@ public class WebUtils {
 		catch (ShiroException e2) {
 			WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + getTranslatedMessage("lucas.application.message.accessDenied")
 					+ e2.getLocalizedMessage(), messageComponentId);
+		}
+		catch (LucasException e45) {
+			WebUtils.addErrorMessage(exceptionMessageGetter != null ? exceptionMessageGetter.apply(e45, argParams)
+					: getTranslatedMessage(failMessageKey, params) + e45.getLocalizedMessage(), messageComponentId);
 		}
 		catch (EJBException e25) {
 			Throwable cause = e25.getCause();
