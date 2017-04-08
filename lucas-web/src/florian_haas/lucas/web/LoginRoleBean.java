@@ -340,10 +340,10 @@ public class LoginRoleBean implements Serializable {
 				});
 			}
 			LoginUserRole newRole = loginUserRoleBean.findById(id);
-			params.add(WebUtils.getAsString(editLoginUserRole, "lucas:loginUserRoleStringConverter"));
 			WebUtils.refreshEntities(LoginUserRole.class, searchLoginRoleResults, selectedLoginRoles, newRole, loginUserRoleBean::findById, true);
 			return true;
-		}, "lucas.application.loginRoleScreen.editLoginUserRole");
+		}, "lucas.application.loginRoleScreen.editLoginUserRole",
+				Arrays.asList(WebUtils.getAsString(editLoginUserRole, "lucas:loginUserRoleStringConverter")));
 	}
 
 	/*

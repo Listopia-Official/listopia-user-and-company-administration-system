@@ -220,4 +220,10 @@ public class CompanyBean implements CompanyBeanLocal {
 		companyCard.setBlocked(Boolean.FALSE);
 		return Boolean.TRUE;
 	}
+
+	@Override
+	@RequiresPermissions(COMPANY_EXISTS_LOCATION)
+	public Boolean existsLocation(String room, Integer section) {
+		return companyDao.existsLocation(room, section);
+	}
 }

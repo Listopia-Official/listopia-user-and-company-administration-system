@@ -23,6 +23,10 @@
 			<exception-class>javax.validation.ConstraintViolationException</exception-class>
 			<rollback>true</rollback>
 		</application-exception>
+		<application-exception>
+			<exception-class>javax.persistence.PersistenceException</exception-class>
+			<rollback>true</rollback>
+		</application-exception>
 	</assembly-descriptor>
 	<ejb-client-jar>lucas-ejbClient.jar</ejb-client-jar>
 </ejb-jar>

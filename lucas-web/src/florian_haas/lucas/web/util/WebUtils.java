@@ -9,12 +9,14 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.logging.*;
 
+import javax.ejb.EJBException;
 import javax.enterprise.inject.spi.CDI;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.imageio.ImageIO;
+import javax.persistence.PersistenceException;
 import javax.validation.*;
 
 import org.apache.shiro.*;
@@ -232,14 +234,28 @@ public class WebUtils {
 			}
 		}
 		catch (ConstraintViolationException e) {
-			for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
-				WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + violation.getPropertyPath() + " " + violation.getMessage(),
-						messageComponentId);
-			}
+			handleConstraintViolationException(e, failMessageKey, messageComponentId, params);
 		}
 		catch (ShiroException e2) {
 			WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + getTranslatedMessage("lucas.application.message.accessDenied")
 					+ e2.getLocalizedMessage(), messageComponentId);
+		}
+		catch (EJBException e25) {
+			Throwable cause = e25.getCause();
+			boolean log = true;
+			if (cause.getCause() instanceof ConstraintViolationException) {
+				handleConstraintViolationException((ConstraintViolationException) cause.getCause(), failMessageKey, messageComponentId, params);
+				log = false;
+			}
+			if (log) {
+				Logger.getAnonymousLogger().log(Level.SEVERE, e25, e25::getMessage);
+				WebUtils.addFatalMessage(getTranslatedMessage(failMessageKey, params) + Utils.getStackTraceAsString(e25), messageComponentId);
+			}
+		}
+		catch (PersistenceException e3) {
+			e3.printStackTrace();
+			WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + getTranslatedMessage("lucas.application.message.persistenceError")
+					+ e3.getLocalizedMessage(), messageComponentId);
 		}
 		catch (Exception e3) {
 			Logger.getAnonymousLogger().log(Level.SEVERE, e3, e3::getMessage);
@@ -247,6 +263,13 @@ public class WebUtils {
 		}
 		return success;
 
+	}
+
+	private static void handleConstraintViolationException(ConstraintViolationException exception, String failMessageKey, String messageComponentId,
+			Object[] params) {
+		for (ConstraintViolation<?> violation : exception.getConstraintViolations()) {
+			WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + violation.getMessage(), messageComponentId);
+		}
 	}
 
 	public static final String JPEG_MIME = "image/jpeg";

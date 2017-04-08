@@ -6,33 +6,33 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-import florian_haas.lucas.model.validation.UniqueValue;
-import florian_haas.lucas.util.validation.*;
+import org.hibernate.validator.constraints.NotBlank;
+
+import florian_haas.lucas.model.validation.*;
+import florian_haas.lucas.util.validation.TypeNotNull;
 
 @Entity
 @DiscriminatorValue(value = "company")
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {
 		"room", "section" }))
+@UniqueCompanyRoomSectionCombination
 public class Company extends AccountOwner {
 
 	private static final long serialVersionUID = -8593998936489707393L;
 
 	@Basic(optional = false)
 	@Column(nullable = false, unique = true)
-	@NotNull
-	@NotBlankString
+	@NotBlank
 	private String name;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
-	@NotNull
-	@NotBlankString
+	@NotBlank
 	private String description;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
-	@NotNull
-	@NotBlankString
+	@NotBlank
 	private String room;
 
 	@Basic(optional = false)

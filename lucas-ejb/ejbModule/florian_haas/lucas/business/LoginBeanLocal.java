@@ -17,7 +17,7 @@ import florian_haas.lucas.util.validation.*;
 @Local
 public interface LoginBeanLocal {
 
-	public Long newLoginUser(@NotNull @NotBlankString String username, @ValidUnhashedPassword char[] password,
+	public Long newLoginUser(@NotBlank String username, @ValidUnhashedPassword char[] password,
 			@NotNull List<@ValidEntityId(entityClass = LoginUserRole.class) Long> userRoleIds);
 
 	public Long newLoginUser(@ValidEntityId(entityClass = User.class) Long user, @ValidUnhashedPassword char[] password,

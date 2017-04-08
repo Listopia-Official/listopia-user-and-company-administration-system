@@ -5,7 +5,9 @@ import java.util.*;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import florian_haas.lucas.model.validation.DefaultLoginUserRequired;
+import org.hibernate.validator.constraints.NotBlank;
+
+import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.util.validation.*;
 
 @Entity
@@ -15,8 +17,8 @@ public class LoginUser extends EntityBase {
 	private static final long serialVersionUID = -3076379041617188865L;
 
 	@Column(name = "username", nullable = false, unique = true)
-	@NotBlankString
-	@NotNull
+	@NotBlank
+	@UniqueLoginUserUsername
 	private String username;
 
 	@Column(name = "password", nullable = false)

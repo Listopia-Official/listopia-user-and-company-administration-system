@@ -55,6 +55,7 @@ public enum EnumPermission {
 	COMPANY_ADD_COMPANY_CARD(COMPANY, "addCompanyCard"),
 	COMPANY_BLOCK_COMPANY_CARD(COMPANY, "blockCompanyCard"),
 	COMPANY_UNBLOCK_COMPANY_CARD(COMPANY, "unblockCompanyCard"),
+	COMPANY_EXISTS_LOCATION(COMPANY, "existsLocation"),
 
 	EMPLOYMENT_ALL(EMPLOYMENT, "*"),
 	EMPLOYMENT_CREATE_DEFAULT(EMPLOYMENT, "createDefault"),
@@ -72,6 +73,7 @@ public enum EnumPermission {
 
 	ENTITY_ALL(ENTITY, "*"),
 	ENTITY_EXISTS(ENTITY, "exists"),
+	ENTITY_IS_UNIQUE(ENTITY, "isUnique"),
 
 	GLOBAL_DATA_ALL(GLOBAL_DATA, "*"),
 	GLOBAL_DATA_GET_SALARIES(GLOBAL_DATA, "getSalaries"),

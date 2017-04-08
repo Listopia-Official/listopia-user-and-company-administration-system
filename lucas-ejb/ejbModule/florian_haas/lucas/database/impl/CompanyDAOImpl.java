@@ -38,4 +38,12 @@ public class CompanyDAOImpl extends DAOImpl<Company> implements CompanyDAO {
 		});
 	}
 
+	@Override
+	public Boolean existsLocation(String room, Integer section) {
+		return !this.readOnlyCriteriaQuery((query, root, builder) -> {
+			return Arrays.asList(builder.and(getSingularRestriction(Company_.room, room, EnumQueryComparator.EQUAL, builder, root),
+					getSingularRestriction(Company_.section, section, EnumQueryComparator.EQUAL, builder, root)));
+		}).isEmpty();
+	}
+
 }

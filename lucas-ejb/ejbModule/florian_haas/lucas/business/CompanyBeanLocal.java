@@ -7,6 +7,8 @@ import java.util.List;
 import javax.ejb.Local;
 import javax.validation.constraints.*;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
@@ -73,4 +75,6 @@ public interface CompanyBeanLocal {
 	public Boolean blockCompanyCard(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId);
 
 	public Boolean unblockCompanyCard(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId);
+
+	public Boolean existsLocation(@NotBlank String room, @NotNull @Min(0) Integer section);
 }
