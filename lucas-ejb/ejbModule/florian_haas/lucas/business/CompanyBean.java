@@ -41,17 +41,24 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Resource
 	private Validator validator;
 
+	@EJB
+	private EmploymentBeanLocal employmentBean;
+
 	@Override
 	@RequiresPermissions(COMPANY_CREATE)
-	public Long createCompany(String name, String description, String room, Integer section, EnumCompanyType companyType, List<Employment> managers,
+	public Long createCompany(String name, String description, String room, Integer section, EnumCompanyType companyType, List<User> managers,
 			Integer requiredEmployeesCount) {
 		checkIsNameUnique(name);
 		checkIsLocationUnique(room, section);
-		Company company = new Company(name, description, room, section, companyType, managers, requiredEmployeesCount);
+		Company company = new Company(name, description, room, section, companyType, requiredEmployeesCount);
 		if (companyType == EnumCompanyType.STATE) {
 			company.getAccount().setIsProtected(Boolean.TRUE);
 		}
 		companyDao.persist(company);
+		companyDao.flush();
+		managers.forEach(user -> {
+			employmentBean.addDefaultEmployment(user.getId(), company.getId(), EnumEmployeePosition.MANAGER);
+		});
 		return company.getId();
 	}
 

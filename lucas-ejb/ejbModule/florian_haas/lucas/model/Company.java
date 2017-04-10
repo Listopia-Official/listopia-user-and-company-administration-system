@@ -82,14 +82,12 @@ public class Company extends AccountOwner {
 
 	Company() {}
 
-	public Company(String name, String description, String room, Integer section, EnumCompanyType companyType, List<Employment> managers,
-			Integer requiredEmployeesCount) {
+	public Company(String name, String description, String room, Integer section, EnumCompanyType companyType, Integer requiredEmployeesCount) {
 		this.name = name;
 		this.description = description;
 		this.room = room;
 		this.section = section;
 		this.companyType = companyType;
-		this.employees.addAll(managers);
 		this.requiredEmployeesCount = requiredEmployeesCount;
 	}
 

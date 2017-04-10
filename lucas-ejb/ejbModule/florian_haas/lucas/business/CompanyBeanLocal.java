@@ -19,7 +19,7 @@ import florian_haas.lucas.util.validation.*;
 public interface CompanyBeanLocal {
 
 	public Long createCompany(@NotNull @NotBlankString String name, @NotNull @NotBlankString String description, @NotNull @NotBlankString String room,
-			@NotNull @Min(value = 0) Integer section, @NotNull EnumCompanyType companyType, List<@TypeNotNull Employment> managers,
+			@NotNull @Min(value = 0) Integer section, @NotNull EnumCompanyType companyType, List<@TypeNotNull User> managers,
 			@NotNull @Min(value = 0) Integer requiredEmployeesCount);
 
 	public List<Company> findAll();
