@@ -18,7 +18,7 @@ import florian_haas.lucas.util.validation.*;
 @Local
 public interface CompanyBeanLocal {
 
-	public Long createCompany(@NotNull @NotBlankString String name, @NotNull @NotBlankString String description, @NotNull @NotBlankString String room,
+	public Long createCompany(@NotNull @NotBlankString String name, @NotBlankString String description, @NotNull @NotBlankString String room,
 			@NotNull @Min(value = 0) Integer section, @NotNull EnumCompanyType companyType, List<@TypeNotNull User> managers,
 			@NotNull @Min(value = 0) Integer requiredEmployeesCount);
 
@@ -42,7 +42,7 @@ public interface CompanyBeanLocal {
 
 	public Boolean setName(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String name);
 
-	public Boolean setDescription(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String description);
+	public Boolean setDescription(@ValidEntityId(entityClass = Company.class) Long companyId, @NotBlankString String description);
 
 	public Boolean setRoom(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String room);
 

@@ -9,7 +9,7 @@ import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.NotBlank;
 
 import florian_haas.lucas.model.validation.UniqueValue;
-import florian_haas.lucas.util.validation.TypeNotNull;
+import florian_haas.lucas.util.validation.*;
 
 @Entity
 @DiscriminatorValue(value = "company")
@@ -24,9 +24,9 @@ public class Company extends AccountOwner {
 	@NotBlank
 	private String name;
 
-	@Basic(optional = false)
-	@Column(nullable = false)
-	@NotBlank
+	@Basic(optional = true)
+	@Column(nullable = true)
+	@NotBlankString
 	private String description;
 
 	@Basic(optional = false)
