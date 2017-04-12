@@ -6,7 +6,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.*;
 
 import javax.validation.*;
-import javax.validation.constraints.NotNull;
 
 import florian_haas.lucas.model.EntityBase;
 
@@ -15,7 +14,6 @@ import florian_haas.lucas.model.EntityBase;
 @Retention(RUNTIME)
 @Constraint(validatedBy = ValidEntityIdValidator.class)
 @Documented
-@NotNull
 public @interface ValidEntityId {
 
 	String message() default "EntityId doesn't exist!";
@@ -25,4 +23,6 @@ public @interface ValidEntityId {
 	Class<? extends Payload>[] payload() default {};
 
 	Class<? extends EntityBase> entityClass();
+
+	boolean nullable() default false;
 }
