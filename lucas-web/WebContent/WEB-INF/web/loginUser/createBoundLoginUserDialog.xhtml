@@ -24,7 +24,7 @@
 						<p:inputNumber id="boundUserIdInputNumber"
 							value="#{loginUserBean.createBoundLoginUserBoundUser}"
 							title="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.boundUserIdInputNumber.tooltip']}"
-							minValue="0" emptyValue="zero" decimalPlaces="0">
+							minValue="0" emptyValue="empty" decimalPlaces="0">
 							<p:ajax event="keyup" delay="250" process="@this"
 								update="createBoundLoginUserDialogForm:boundUserIdOutputInputText boundUserIdInputNumberMessage @this" />
 						</p:inputNumber>

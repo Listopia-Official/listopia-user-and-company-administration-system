@@ -43,7 +43,7 @@
 						<p:inputNumber id="toInputNumber"
 							value="#{accountBean.transactionDialogToId}"
 							title="#{msg['lucas.application.accountScreen.transactionDialog.toInputNumber.tooltip']}"
-							minValue="0" emptyValue="zero" decimalPlaces="0">
+							minValue="0" emptyValue="empty" decimalPlaces="0">
 							<p:ajax event="keyup" delay="250" process="@this"
 								update="transactionDialogForm:toIdOutputInputText toInputNumberMessage @this" />
 						</p:inputNumber>
