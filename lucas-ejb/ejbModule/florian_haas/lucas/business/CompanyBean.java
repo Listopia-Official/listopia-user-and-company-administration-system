@@ -247,6 +247,6 @@ public class CompanyBean implements CompanyBeanLocal {
 	}
 
 	private void checkIsLocationUnique(String room, Integer section) {
-		if (!companyDao.existsLocation(room, section)) throw new LucasException("Another company is assigned to the location");
+		if (companyDao.existsLocation(room, section)) throw new LucasException("Another company is assigned to the location");
 	}
 }
