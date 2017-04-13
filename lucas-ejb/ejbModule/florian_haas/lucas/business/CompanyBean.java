@@ -242,11 +242,15 @@ public class CompanyBean implements CompanyBeanLocal {
 		return companyDao.existsLocation(room, section);
 	}
 
+	public static final String NAME_NOT_UNIQUE_EXCEPTION_MARKER = "notUniqueName";
+	public static final String LOCATION_NOT_UNIQUE_EXCEPTION_MARKER = "notUniqueLocation";
+
 	private void checkIsNameUnique(String name) {
-		if (!companyDao.isNameUnique(name)) throw new LucasException("The name is used by another company");
+		if (!companyDao.isNameUnique(name)) throw new LucasException("The name is used by another company", NAME_NOT_UNIQUE_EXCEPTION_MARKER);
 	}
 
 	private void checkIsLocationUnique(String room, Integer section) {
-		if (companyDao.existsLocation(room, section)) throw new LucasException("Another company is assigned to the location");
+		if (companyDao.existsLocation(room, section))
+			throw new LucasException("Another company is assigned to the location", LOCATION_NOT_UNIQUE_EXCEPTION_MARKER);
 	}
 }
