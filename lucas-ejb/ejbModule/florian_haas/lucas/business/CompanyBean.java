@@ -156,10 +156,10 @@ public class CompanyBean implements CompanyBeanLocal {
 	private Boolean setParentCompanyHelper(Long companyId, Long newParentCompany) {
 		Company comp = companyDao.findById(companyId);
 		Company parent = newParentCompany != null ? findById(newParentCompany) : null;
-		if (comp.getParentCompany().equals(parent)) return Boolean.FALSE;
+		Company oldParentCompany = comp.getParentCompany();
+		if ((oldParentCompany == null && parent == null) || (oldParentCompany != null && oldParentCompany.equals(parent))) return Boolean.FALSE;
 		if (comp.getParentCompany() != null) {
-			Company parent2 = comp.getParentCompany();
-			parent2.removeChildCompany(comp);
+			oldParentCompany.removeChildCompany(comp);
 		}
 		comp.setParentCompany(parent);
 		if (parent != null) parent.addChildCompany(comp);
