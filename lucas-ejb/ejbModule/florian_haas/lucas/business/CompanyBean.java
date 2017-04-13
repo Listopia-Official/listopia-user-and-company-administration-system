@@ -47,7 +47,7 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions(COMPANY_CREATE)
 	public Long createCompany(String name, String description, String room, Integer section, EnumCompanyType companyType, Long parentCompanyId,
-			List<User> managers, Integer requiredEmployeesCount) {
+			List<Long> managerUserIds, Integer requiredEmployeesCount) {
 		checkIsNameUnique(name);
 		checkIsLocationUnique(room, section);
 		Company company = new Company(name, description, room, section, companyType, requiredEmployeesCount);
@@ -56,8 +56,8 @@ public class CompanyBean implements CompanyBeanLocal {
 		}
 		companyDao.persist(company);
 		companyDao.flush();
-		managers.forEach(user -> {
-			employmentBean.addDefaultEmployment(user.getId(), company.getId(), EnumEmployeePosition.MANAGER);
+		managerUserIds.forEach(userId -> {
+			employmentBean.addDefaultEmployment(userId, company.getId(), EnumEmployeePosition.MANAGER);
 		});
 		if (parentCompanyId != null) {
 			setParentCompany(company.getId(), parentCompanyId);

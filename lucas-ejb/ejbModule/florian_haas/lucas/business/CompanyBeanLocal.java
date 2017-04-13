@@ -13,15 +13,15 @@ import florian_haas.lucas.database.*;
 import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.ValidEntityId;
-import florian_haas.lucas.util.validation.*;
+import florian_haas.lucas.util.validation.NotBlankString;
 
 @Local
 public interface CompanyBeanLocal {
 
 	public Long createCompany(@NotNull @NotBlankString String name, @NotBlankString String description, @NotNull @NotBlankString String room,
 			@NotNull @Min(value = 0) Integer section, @NotNull EnumCompanyType companyType,
-			@ValidEntityId(entityClass = Company.class, nullable = true) Long parentCompanyId, List<@TypeNotNull User> managers,
-			@NotNull @Min(value = 0) Integer requiredEmployeesCount);
+			@ValidEntityId(entityClass = Company.class, nullable = true) Long parentCompanyId,
+			List<@ValidEntityId(entityClass = User.class) Long> managerUserIds, @NotNull @Min(value = 0) Integer requiredEmployeesCount);
 
 	public List<Company> findAll();
 
