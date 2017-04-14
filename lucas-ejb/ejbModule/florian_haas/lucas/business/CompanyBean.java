@@ -18,7 +18,6 @@ import florian_haas.lucas.security.*;
 import florian_haas.lucas.util.Utils;
 
 @Stateless
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 @ValidateOnExecution(type = ExecutableType.IMPLICIT)
 @Secured
 public class CompanyBean implements CompanyBeanLocal {

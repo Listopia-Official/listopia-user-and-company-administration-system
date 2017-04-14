@@ -4,7 +4,7 @@ import static florian_haas.lucas.security.EnumPermission.*;
 
 import java.util.*;
 
-import javax.ejb.*;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.executable.*;
 
@@ -13,7 +13,6 @@ import florian_haas.lucas.model.LoginUserRole;
 import florian_haas.lucas.security.*;
 
 @Stateless
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 @ValidateOnExecution(type = ExecutableType.IMPLICIT)
 @Secured
 public class LoginUserRoleBean implements LoginUserRoleBeanLocal {

@@ -21,7 +21,6 @@ import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.*;
 
 @Stateless
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 @ValidateOnExecution(type = ExecutableType.IMPLICIT)
 @Secured
 public class LoginBean implements LoginBeanLocal {

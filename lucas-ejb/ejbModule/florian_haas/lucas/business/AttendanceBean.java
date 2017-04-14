@@ -16,7 +16,6 @@ import florian_haas.lucas.model.*;
 import florian_haas.lucas.security.*;
 
 @Stateless
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 @ValidateOnExecution(type = ExecutableType.IMPLICIT)
 @Secured
 public class AttendanceBean implements AttendanceBeanLocal {
