@@ -111,7 +111,7 @@ public class Company extends AccountOwner {
 		return getEmployeesFromPosition(EnumEmployeePosition.MANAGER);
 	}
 
-	public List<Employment> getKeepers() {
+	public List<Employment> getAdvisors() {
 		return getEmployeesFromPosition(EnumEmployeePosition.ADVISOR);
 	}
 
