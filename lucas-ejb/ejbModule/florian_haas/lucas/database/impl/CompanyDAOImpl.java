@@ -2,7 +2,7 @@ package florian_haas.lucas.database.impl;
 
 import java.util.*;
 
-import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.*;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
@@ -31,9 +31,15 @@ public class CompanyDAOImpl extends DAOImpl<Company> implements CompanyDAO {
 					root.get(Company_.parentCompany));
 			getSingularRestriction(Company_.requiredEmployeesCount, requiredEmployeesCount, useRequiredEmployeesCount,
 					requiredEmployeesCountComparator, predicates, builder, root);
-			getSingularRestriction(Company_.requiredEmployeesCount, 0, useAreEmployeesRequired, EnumQueryComparator.GREATER_THAN, predicates, builder,
-					root);
-
+			if (useAreEmployeesRequired) {
+				Subquery<Long> subquery = query.subquery(Long.class);
+				Root<Employment> employmentRoot = subquery.from(Employment.class);
+				subquery.select(builder.count(employmentRoot));
+				subquery.where(builder.equal(employmentRoot.get(Employment_.position), EnumEmployeePosition.EMPLOYEE));
+				Predicate pred = builder.lessThan(subquery, builder.toLong(root.get(Company_.requiredEmployeesCount)));
+				if (!areEmployeesRequired) pred = pred.not();
+				predicates.add(pred);
+			}
 			return predicates;
 		});
 	}
