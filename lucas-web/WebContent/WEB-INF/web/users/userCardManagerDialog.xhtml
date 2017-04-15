@@ -97,7 +97,8 @@
 						disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
 					<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 				</ui:fragment>
-				<p:commandButton rendered="#{loginBean.hasPermission(EnumPermission.USER_REMOVE_USER_CARD)}"
+				<p:commandButton
+					rendered="#{loginBean.hasPermission(EnumPermission.USER_REMOVE_USER_CARD)}"
 					value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardsButton.name']}"
 					title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardsButton.tooltip']}"
 					icon="fa fa-remove"
@@ -125,6 +126,7 @@
 		<p:messages for="userCardManagerDialogMessages" showDetail="true"
 			showIcon="true" showSummary="true" closable="true" autoUpdate="true" />
 		<p:dataTable id="userCardManagerDialogUserCardTable"
+			tableStyle="table-layout: auto;"
 			selection="#{userBean.userCardManagerDialogSelectedUserCards}"
 			style="margin-top:5px;max-height:350px" resizableColumns="true"
 			liveResize="true" value="#{userBean.userCardManagerDialogUserCards}"
@@ -148,7 +150,8 @@
 			</p:column>
 			<p:column
 				headerText="#{msg['lucas.application.userScreen.userCardManagerDialog.validDayHeader']}">
-				<h:outputText value="#{userCard.validDay}" converter="lucas:localDateStringConverter"/>
+				<h:outputText value="#{userCard.validDay}"
+					converter="lucas:localDateStringConverter" />
 			</p:column>
 		</p:dataTable>
 		<p:separator />

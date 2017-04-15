@@ -22,7 +22,7 @@
 			style="font-weight:bold"
 			converter="lucas:accountOwnerStringConverter" />
 		<p:dataTable style="margin-top:5px;max-height:500px"
-			id="transactionLogsTable"
+			id="transactionLogsTable" tableStyle="table-layout: auto;"
 			rowStyleClass="#{transactionLog.action == 'CREDIT' ? 'credit' : 'debit'}"
 			resizableColumns="true" liveResize="true"
 			value="#{accountBean.transactionLogsDialogTransactionLogs}"

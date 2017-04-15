@@ -66,7 +66,7 @@
 							value="#{msg['lucas.application.dataTemplate.searchResults.name1']}#{searchResults.size()}#{msg['lucas.application.dataTemplate.searchResults.name2']}" />
 					</f:facet>
 					<h:form id="#{sitePrefix}SearchResultsForm">
-						<p:dataTable id="#{sitePrefix}SearchResultsTable"
+						<p:dataTable id="#{sitePrefix}SearchResultsTable" tableStyle="table-layout: auto;"
 							styleClass="searchResults" resizableColumns="true"
 							liveResize="true" value="#{searchResults}" var="entity"
 							rowKey="#{entity.id}" selection="#{selectedResults}" rows="10"
