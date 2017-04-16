@@ -26,7 +26,7 @@
 			<h:form>
 				<p:toolbar
 					style="width:99%!important;margin-left:auto;margin-right:auto;margin-top:10px!important"
-					styleClass="toolbar">
+					styleClass="toolbar dataToolbar">
 					<ui:insert name="buttonArea" />
 				</p:toolbar>
 			</h:form>
@@ -51,7 +51,7 @@
 											title="#{msg['lucas.application.'+=sitePrefix+='Screen.searchButton.tooltip']}"
 											styleClass="blockAllTrigger" icon="fa fa-search"
 											action="#{searchBean[searchFunction]}" process="@form"
-											update="@(.toolbar) dataAccorditionPanel" />
+											update="@(.dataToolbar) dataAccorditionPanel" />
 									</p:column>
 								</p:row>
 							</p:panelGrid>
@@ -66,11 +66,12 @@
 							value="#{msg['lucas.application.dataTemplate.searchResults.name1']}#{searchResults.size()}#{msg['lucas.application.dataTemplate.searchResults.name2']}" />
 					</f:facet>
 					<h:form id="#{sitePrefix}SearchResultsForm">
-						<p:dataTable id="#{sitePrefix}SearchResultsTable" tableStyle="table-layout: auto;"
-							styleClass="searchResults" resizableColumns="true"
-							liveResize="true" value="#{searchResults}" var="entity"
-							rowKey="#{entity.id}" selection="#{selectedResults}" rows="10"
-							draggableColumns="true" paginator="true"
+						<p:dataTable id="#{sitePrefix}SearchResultsTable"
+							tableStyle="table-layout: auto;" styleClass="searchResults"
+							resizableColumns="true" liveResize="true"
+							value="#{searchResults}" var="entity" rowKey="#{entity.id}"
+							selection="#{selectedResults}" rows="10" draggableColumns="true"
+							paginator="true"
 							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {AdditionalComponents}"
 							currentPageReportTemplate="#{msg['lucas.application.dataTemplate.searchResults.currentPageReport1']} {currentPage} #{msg['lucas.application.dataTemplate.searchResults.currentPageReport2']} {totalPages}"
 							rowsPerPageTemplate="10,20,50,75,100,200,500,750,1000"
@@ -92,11 +93,11 @@
 									<p:ajax event="toggle" listener="#{searchBean.onToggle}" />
 								</p:columnToggler>
 							</f:facet>
-							<p:ajax event="toggleSelect" update="@(.toolbar)" />
-							<p:ajax event="rowUnselectCheckbox" update="@(.toolbar)" />
-							<p:ajax event="rowSelectCheckbox" update="@(.toolbar)" />
-							<p:ajax event="rowUnselect" update="@(.toolbar)" />
-							<p:ajax event="rowSelect" update="@(.toolbar)" />
+							<p:ajax event="toggleSelect" update="@(.dataToolbar)" />
+							<p:ajax event="rowUnselectCheckbox" update="@(.dataToolbar)" />
+							<p:ajax event="rowSelectCheckbox" update="@(.dataToolbar)" />
+							<p:ajax event="rowUnselect" update="@(.dataToolbar)" />
+							<p:ajax event="rowSelect" update="@(.dataToolbar)" />
 							<p:column selectionMode="multiple" toggleable="false"
 								style="width:16px;text-align:center" exportable="false" />
 							<ui:insert name="searchResults" />
