@@ -33,7 +33,7 @@ public class CurrencyConverter implements Converter {
 	public String getAsString(FacesContext arg0, UIComponent arg1, Object arg2) {
 		return arg2 != null
 				? ((DecimalFormat) DecimalFormat.getNumberInstance(arg0.getViewRoot().getLocale())).format((BigDecimal) arg2)
-						+ (!(arg1 != null && arg1 instanceof InputNumber) ? globalData.getCurrencySymbol() : "")
+						+ (!(arg1 != null && arg1 instanceof InputNumber) ? " " + globalData.getCurrencySymbol() : "")
 				: WebUtils.getTranslatedMessage(NULL_KEY);
 	}
 }
