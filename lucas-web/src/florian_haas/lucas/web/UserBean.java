@@ -10,7 +10,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.validation.constraints.*;
 
-import org.apache.shiro.SecurityUtils;
 import org.hibernate.validator.constraints.NotBlank;
 import org.primefaces.event.*;
 import org.primefaces.model.*;
@@ -642,24 +641,24 @@ public class UserBean implements Serializable {
 		if (editUserDialogSelectedUser != null) {
 			WebUtils.executeTask(params -> {
 				Long id = editUserDialogSelectedUser.getId();
-				if (SecurityUtils.getSubject().isPermitted(EnumPermission.USER_SET_FORENAME.getPermissionString())) {
+				if (WebUtils.isPermitted(EnumPermission.USER_SET_FORENAME)) {
 					userBean.setForename(id, editUserDialogForename);
 				}
-				if (SecurityUtils.getSubject().isPermitted(EnumPermission.USER_SET_SURNAME.getPermissionString())) {
+				if (WebUtils.isPermitted(EnumPermission.USER_SET_SURNAME)) {
 					userBean.setSurname(id, editUserDialogSurname);
 				}
-				if (SecurityUtils.getSubject().isPermitted(EnumPermission.USER_SET_SCHOOL_CLASS.getPermissionString())) {
+				if (WebUtils.isPermitted(EnumPermission.USER_SET_SCHOOL_CLASS)) {
 					userBean.setSchoolClass(id, editUserDialogSchoolClass);
 				}
 				User tmp = userBean.findById(id);
-				if (SecurityUtils.getSubject().isPermitted(EnumPermission.USER_ADD_RANK.getPermissionString())) {
+				if (WebUtils.isPermitted(EnumPermission.USER_ADD_RANK)) {
 					editUserDialogRanks.forEach(rank -> {
 						if (!tmp.getRanks().contains(rank)) {
 							userBean.addRank(id, rank);
 						}
 					});
 				}
-				if (SecurityUtils.getSubject().isPermitted(EnumPermission.USER_REMOVE_RANK.getPermissionString())) {
+				if (WebUtils.isPermitted(EnumPermission.USER_REMOVE_RANK)) {
 					tmp.getRanks().forEach(rank -> {
 						if (!editUserDialogRanks.contains(rank)) {
 							userBean.removeRank(id, rank);
