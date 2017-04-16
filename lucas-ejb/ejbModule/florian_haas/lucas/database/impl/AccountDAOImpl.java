@@ -19,15 +19,15 @@ public class AccountDAOImpl extends ReadOnlyDAOImpl<Account> implements AccountD
 		return this.readOnlyCriteriaQuery((query, root, builder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 
-			Root<AccountOwner> ownerRoot = query.from(AccountOwner.class);
+			Path<AccountOwner> ownerRoot = root.get(Account_.owner);
 			getSingularRestriction(Account_.id, id, useId, idComparator, predicates, builder, root);
 			getSingularRestriction(root.join(Account_.owner).get(AccountOwner_.id), ownerId, useOwnerId, ownerIdComparator, predicates, builder,
 					root);
 			if (useOwnerType) {
 				Expression<Class<? extends AccountOwner>> expr = builder
 						.literal(ownerType == EnumAccountOwnerType.COMPANY ? Company.class : User.class);
-				predicates.add(ownerTypeComparator == null || ownerTypeComparator == EnumQueryComparator.EQUAL ? builder.equal(expr, ownerRoot.type())
-						: builder.notEqual(expr, ownerRoot.type()));
+				predicates.add((ownerTypeComparator == null || ownerTypeComparator == EnumQueryComparator.EQUAL)
+						? builder.equal(expr, ownerRoot.type()) : builder.notEqual(expr, ownerRoot.type()));
 			}
 			getSingularRestriction(Account_.bankBalance, bankBalance, useBankBalance, bankBalanceComparator, predicates, builder, root);
 			getSingularRestriction(Account_.blocked, blocked, useBlocked, null, predicates, builder, root);
