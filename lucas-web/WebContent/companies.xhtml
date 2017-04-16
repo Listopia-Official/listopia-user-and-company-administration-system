@@ -1,0 +1,418 @@
+<ui:composition template="/WEB-INF/web/template/dataTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="pageTitle"
+		value="#{msg['lucas.application.companyScreen.title']}" />
+	<ui:param name="sitePrefix" value="company" />
+	<ui:param name="searchBean" value="#{companyBean}" />
+	<ui:param name="searchResults"
+		value="#{companyBean.searchCompanyResults}" />
+	<ui:param name="selectedResults"
+		value="#{companyBean.selectedCompanies}" />
+	<ui:param name="searchFunction" value="searchCompanies" />
+	<ui:param name="refreshFunction" value="refreshCompanies" />
+	<ui:param name="findDynamicPermission" value="COMPANY_FIND_DYNAMIC" />
+	<ui:define name="dialogs">
+		<ui:include src="/WEB-INF/web/companies/createCompanyDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/companies/editCompanyDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/companies/viewEmployeesDialog.xhtml" />
+		<ui:include
+			src="/WEB-INF/web/companies/companyCardManagerDialog.xhtml" />
+	</ui:define>
+	<ui:define name="otherContent">
+		<p:importEnum type="florian_haas.lucas.model.EnumCompanyType" />
+	</ui:define>
+	<ui:define name="buttonArea">
+		<p:toolbarGroup align="left">
+			<ui:fragment
+				rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_CREATE)}">
+				<p:commandButton resetValues="true"
+					value="#{msg['lucas.application.companyScreen.createCompanyButton.name']}"
+					title="#{msg['lucas.application.companyScreen.createCompanyButton.tooltip']}"
+					icon="fa fa-plus" oncomplete="PF('createCompanyDialog').show()"
+					action="#{companyBean.initCreateCompanyDialog}" process="@this"
+					update="createCompanyDialogForm" />
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			</ui:fragment>
+			<p:commandButton resetValues="true"
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.COMPANY_SET_NAME,EnumPermission.COMPANY_SET_DESCRIPTION,EnumPermission.COMPANY_SET_ROOM,EnumPermission.COMPANY_SET_SECTION,EnumPermission.COMPANY_SET_COMPANY_TYPE,EnumPermission.COMPANY_SET_PARENT_COMPANY,EnumPermission.COMPANY_SET_REQUIRED_EMPLOYEES_COUNT])}"
+				value="#{msg['lucas.application.companyScreen.editCompanyButton.name']}"
+				title="#{msg['lucas.application.companyScreen.editCompanyButton.tooltip']}"
+				icon="fa fa-edit" oncomplete="PF('editCompanyDialog').show()"
+				action="#{companyBean.initEditCompanyDialog}" process="@this"
+				update="editCompanyDialogForm"
+				disabled="#{companyBean.selectedCompanies.size() !=1}" />
+			<p:commandButton resetValues="true"
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.COMPANY_ADD_COMPANY_CARD,EnumPermission.COMPANY_REMOVE_COMPANY_CARD,EnumPermission.COMPANY_BLOCK_COMPANY_CARD,EnumPermission.COMPANY_UNBLOCK_COMPANY_CARD,EnumPermission.COMPANY_SET_VALID_DATE_COMPANY_CARD]) &amp;&amp; loginBean.hasPermissionsAnd([EnumPermission.COMPANY_FIND_COMPANY_CARD_BY_ID,EnumPermission.COMPANY_GET_COMPANY_CARDS])}"
+				value="#{msg['lucas.application.companyScreen.companyCardManagerButton.name']}"
+				title="#{msg['lucas.application.companyScreen.companyCardManagerButton.tooltip']}"
+				icon="fa fa-credit-card"
+				oncomplete="PF('companyCardManagerDialog').show()"
+				action="#{companyBean.initCompanyCardManagerDialog}" process="@this"
+				update="companyCardManagerDialogForm"
+				disabled="#{companyBean.selectedCompanies.size() !=1}" />
+			<p:commandButton resetValues="true"
+				value="#{msg['lucas.application.companyScreen.taxdataManagerButton.name']}"
+				title="#{msg['lucas.application.companyScreen.taxdataManagerButton.tooltip']}"
+				icon="fa fa-legal" disabled="true" />
+			<ui:remove>oncomplete="PF('createLoginUserRoleDialog').show()"
+			action="#{loginRoleBean.initCreateLoginUserRoleDialog}"editCompanyDialogSelectedCompany
+			process="@this" update="createLoginUserRoleDialogForm"</ui:remove>
+			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			<p:commandButton resetValues="true"
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.COMPANY_GET_MANAGERS,EnumPermission.COMPANY_GET_ADVISORS,EnumPermission.COMPANY_GET_EMPLOYEES])}"
+				value="#{msg['lucas.application.companyScreen.showEmployeesButton.name']}"
+				title="#{msg['lucas.application.companyScreen.showEmployeesButton.tooltip']}"
+				icon="fa fa-group" oncomplete="PF('viewEmployeesDialog').show()"
+				action="#{companyBean.initViewEmployeesDialog}" process="@this"
+				update="viewEmployeesDialogForm"
+				disabled="#{companyBean.selectedCompanies.size() !=1}" />
+			<p:commandButton resetValues="true"
+				value="#{msg['lucas.application.companyScreen.showPurchaseLogsButton.name']}"
+				title="#{msg['lucas.application.companyScreen.showPurchaseLogsButton.tooltip']}"
+				icon="fa fa-list-ul" disabled="true" />
+			<ui:remove>oncomplete="PF('createLoginUserRoleDialog').show()"
+			action="#{loginRoleBean.initCreateLoginUserRoleDialog}"
+			process="@this" update="createLoginUserRoleDialogForm"
+			disabled="#{companyBean.selectedCompanies.size() !=1}"</ui:remove>
+			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			<p:commandButton resetValues="true"
+				value="#{msg['lucas.application.companyScreen.removeCompanyButton.name']}"
+				title="#{msg['lucas.application.companyScreen.removeCompanyButton.tooltip']}"
+				icon="fa fa-remove" disabled="true" />
+			<ui:remove>oncomplete="PF('createLoginUserRoleDialog').show()"
+			action="#{loginRoleBean.initCreateLoginUserRoleDialog}"
+			process="@this" update="createLoginUserRoleDialogForm"
+			disabled="#{companyBean.selectedCompanies.size() &lt;=0}"</ui:remove>
+		</p:toolbarGroup>
+	</ui:define>
+	<ui:define name="searchCriteria">
+		<p:row>
+			<p:column>
+				<p:selectBooleanCheckbox id="searchCompanyIdSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{companyBean.useSearchCompanyId}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="companySearchCriteriaForm:searchCompanyIdInputNumber companySearchCriteriaForm:searchCompanyIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchCompanyIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.companyScreen.searchCompanyIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox id="searchCompanyNameSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{companyBean.useSearchCompanyName}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyNameSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="companySearchCriteriaForm:searchCompanyNameInputText companySearchCriteriaForm:searchCompanyNameComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchCompanyNameSelectBooleanCheckbox"
+					value="#{msg['lucas.application.companyScreen.searchCompanyNameSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyNameSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchCompanyDescriptionSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{companyBean.useSearchCompanyDescription}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyDescriptionSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="companySearchCriteriaForm:searchCompanyDescriptionInputText companySearchCriteriaForm:searchCompanyDescriptionComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchCompanyDescriptionSelectBooleanCheckbox"
+					value="#{msg['lucas.application.companyScreen.searchCompanyDescriptionSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyDescriptionSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox id="searchCompanyRoomSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{companyBean.useSearchCompanyRoom}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyRoomSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="companySearchCriteriaForm:searchCompanyRoomInputText companySearchCriteriaForm:searchCompanyRoomComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchCompanyRoomSelectBooleanCheckbox"
+					value="#{msg['lucas.application.companyScreen.searchCompanyRoomSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyRoomSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchCompanySectionSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{companyBean.useSearchCompanySection}"
+					title="#{msg['lucas.application.companyScreen.searchCompanySectionSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="companySearchCriteriaForm:searchCompanySectionInputNumber companySearchCriteriaForm:searchCompanySectionComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchCompanySectionSelectBooleanCheckbox"
+					value="#{msg['lucas.application.companyScreen.searchCompanySectionSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.companyScreen.searchCompanySectionSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchCompanyCompanyTypeSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{companyBean.useSearchCompanyCompanyType}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyCompanyTypeSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="companySearchCriteriaForm:searchCompanyTypeSelectOneMenu companySearchCriteriaForm:searchCompanyCompanyTypeComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchCompanyCompanyTypeSelectBooleanCheckbox"
+					value="#{msg['lucas.application.companyScreen.searchCompanyCompanyTypeSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyCompanyTypeSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchCompanyParentCompanyIdSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{companyBean.useSearchCompanyParentCompanyId}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyParentCompanyIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="companySearchCriteriaForm:searchCompanyParentCompanyIdInputNumber companySearchCriteriaForm:searchCompanyParentCompanyIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchCompanyParentCompanyIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.companyScreen.searchCompanyParentCompanyIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyParentCompanyIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchCompanyRequiredEmployeesCountSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{companyBean.useSearchCompanyRequiredEmployeesCount}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyRequiredEmployeesCountSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="companySearchCriteriaForm:searchCompanyRequiredEmployeesCountInputNumber companySearchCriteriaForm:searchCompanyRequiredEmployeesCountComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchCompanyRequiredEmployeesCountSelectBooleanCheckbox"
+					value="#{msg['lucas.application.companyScreen.searchCompanyRequiredEmployeesCountSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyRequiredEmployeesCountSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchCompanyAreEmployeesRequiredSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{companyBean.useSearchCompanyAreEmployeesRequired}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyAreEmployeesRequiredSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="companySearchCriteriaForm:searchCompanyAreEmployeesRequiredBooleanButton"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchCompanyAreEmployeesRequiredSelectBooleanCheckbox"
+					value="#{msg['lucas.application.companyScreen.searchCompanyAreEmployeesRequiredSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyAreEmployeesRequiredSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:selectOneMenu id="searchCompanyIdComparator"
+					disabled="#{not companyBean.useSearchCompanyId}"
+					value="#{companyBean.searchCompanyIdComparator}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchCompanyNameComparator"
+					disabled="#{not companyBean.useSearchCompanyName}"
+					value="#{companyBean.searchCompanyNameComparator}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyNameComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchCompanyDescriptionComparator"
+					disabled="#{not companyBean.useSearchCompanyDescription}"
+					value="#{companyBean.searchCompanyDescriptionComparator}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyDescriptionComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchCompanyRoomComparator"
+					disabled="#{not companyBean.useSearchCompanyRoom}"
+					value="#{companyBean.searchCompanyRoomComparator}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyRoomComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchCompanySectionComparator"
+					disabled="#{not companyBean.useSearchCompanySection}"
+					value="#{companyBean.searchCompanySectionComparator}"
+					title="#{msg['lucas.application.companyScreen.searchCompanySectionComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchCompanyCompanyTypeComparator"
+					disabled="#{not companyBean.useSearchCompanyCompanyType}"
+					value="#{companyBean.searchCompanyCompanyTypeComparator}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyCompanyTypeComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchCompanyParentCompanyIdComparator"
+					disabled="#{not companyBean.useSearchCompanyParentCompanyId}"
+					value="#{companyBean.searchCompanyParentCompanyIdComparator}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyParentCompanyIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchCompanyRequiredEmployeesCountComparator"
+					disabled="#{not companyBean.useSearchCompanyRequiredEmployeesCount}"
+					value="#{companyBean.searchCompanyRequiredEmployeesCountComparator}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyRequiredEmployeesCountComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column />
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:inputNumber value="#{companyBean.searchCompanyId}" minValue="0"
+					decimalPlaces="0" id="searchCompanyIdInputNumber"
+					disabled="#{not companyBean.useSearchCompanyId}" />
+			</p:column>
+			<p:column>
+				<p:inputText value="#{companyBean.searchCompanyName}"
+					id="searchCompanyNameInputText"
+					disabled="#{not companyBean.useSearchCompanyName}" />
+			</p:column>
+			<p:column>
+				<p:inputText value="#{companyBean.searchCompanyDescription}"
+					id="searchCompanyDescriptionInputText"
+					converter="lucas:nullStringConverterNoText"
+					disabled="#{not companyBean.useSearchCompanyDescription}" />
+			</p:column>
+			<p:column>
+				<p:inputText value="#{companyBean.searchCompanyRoom}"
+					id="searchCompanyRoomInputText"
+					disabled="#{not companyBean.useSearchCompanyRoom}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{companyBean.searchCompanySection}"
+					minValue="0" decimalPlaces="0" id="searchCompanySectionInputNumber"
+					disabled="#{not companyBean.useSearchCompanySection}" />
+			</p:column>
+			<p:column>
+				<p:selectOneMenu value="#{companyBean.searchCompanyCompanyType}"
+					id="searchCompanyTypeSelectOneMenu"
+					disabled="#{not companyBean.useSearchCompanyCompanyType}">
+					<f:selectItems value="#{EnumCompanyType.ALL_VALUES}"
+						var="companyType" itemValue="#{companyType}"
+						itemLabel="#{converterBean.convertEnum(companyType)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{companyBean.searchCompanyParentCompanyId}"
+					minValue="0" decimalPlaces="0" emptyValue="empty"
+					id="searchCompanyParentCompanyIdInputNumber"
+					disabled="#{not companyBean.useSearchCompanyParentCompanyId}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber
+					value="#{companyBean.searchCompanyRequiredEmployeesCount}"
+					minValue="0" decimalPlaces="0"
+					id="searchCompanyRequiredEmployeesCountInputNumber"
+					disabled="#{not companyBean.useSearchCompanyRequiredEmployeesCount}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanButton
+					offLabel="#{msg['lucas.application.booleanConverter.false']}"
+					onLabel="#{msg['lucas.application.booleanConverter.true']}"
+					id="searchCompanyAreEmployeesRequiredBooleanButton"
+					value="#{companyBean.searchCompanyAreEmployeesRequired}"
+					disabled="#{not companyBean.useSearchCompanyAreEmployeesRequired}" />
+			</p:column>
+		</p:row>
+	</ui:define>
+	<ui:define name="searchResults">
+		<p:column
+			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.idColumn.name']}"
+			sortBy="#{entity.id}"
+			visible="#{companyBean.resultsDatatableColumns[0]}">
+			<h:outputText value="#{entity.id}" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.nameColumn.name']}"
+			sortBy="#{entity.name}"
+			visible="#{companyBean.resultsDatatableColumns[1]}">
+			<h:outputText value="#{entity.name}" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.descriptionColumn.name']}"
+			sortBy="#{entity.description}"
+			visible="#{companyBean.resultsDatatableColumns[2]}">
+			<h:outputText value="#{entity.description}"
+				converter="lucas:NullStringConverter" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.roomColumn.name']}"
+			sortBy="#{entity.room}"
+			visible="#{companyBean.resultsDatatableColumns[3]}">
+			<h:outputText value="#{entity.room}" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.sectionColumn.name']}"
+			sortBy="#{entity.section}"
+			visible="#{companyBean.resultsDatatableColumns[4]}">
+			<h:outputText value="#{entity.section}" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.companyTypeColumn.name']}"
+			sortBy="#{entity.companyType}"
+			visible="#{companyBean.resultsDatatableColumns[5]}">
+			<h:outputText value="#{entity.companyType}" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.parentCompanyColumn.name']}"
+			sortBy="#{entity.parentCompany}"
+			visible="#{companyBean.resultsDatatableColumns[6]}">
+			<h:outputText value="#{entity.parentCompany}"
+				converter="lucas:companyStringConverter" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.childCompaniesColumn.name']}"
+			sortable="false" visible="#{companyBean.resultsDatatableColumns[7]}">
+			<h:outputText value="#{entity.childCompanies}" escape="false"
+				converter="lucas:companiesConverter" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.requiredEmployeesCount.name']}"
+			sortBy="#{entity.requiredEmployeesCount}"
+			visible="#{companyBean.resultsDatatableColumns[8]}">
+			<h:outputText value="#{entity.requiredEmployeesCount}" />
+		</p:column>
+	</ui:define>
+</ui:composition>

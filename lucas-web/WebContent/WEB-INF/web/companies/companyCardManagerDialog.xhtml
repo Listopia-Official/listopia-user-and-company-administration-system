@@ -1,0 +1,164 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.companyScreen.companyCardManagerDialog.title" />
+	<ui:param name="closeable" value="true" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="companyCardManagerDialog" />
+	<ui:param name="formId" value="companyCardManagerDialogForm" />
+	<ui:define name="dialogContent">
+		<h:outputText
+			value="#{companyBean.companyCardManagerDialogCompanyCards.size()} "
+			style="font-weight:bold" />
+		<h:outputText
+			value="#{msg['lucas.application.companyScreen.companyCardManagerDialog.header']}"
+			style="font-weight:bold" />
+		<h:outputText value="#{companyBean.companyCardManagerDialogSelectedCompany}"
+			style="font-weight:bold" converter="lucas:companyStringConverter" />
+		<p:toolbar id="companyCardManagerDialogToolbar" style="margin-top:5px"
+			styleClass="dialogToolbar">
+			<p:toolbarGroup align="left">
+				<p:commandButton
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_ADD_COMPANY_CARD)}"
+					value="#{msg['lucas.application.companyScreen.companyCardManagerDialog.newCompanyCardButton.name']}"
+					title="#{msg['lucas.application.companyScreen.companyCardManagerDialog.newCompanyCardButton.tooltip']}"
+					icon="fa fa-plus"
+					action="#{companyBean.companyCardManagerDialogNewCompanyCard}"
+					update="@form" />
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+				<p:commandButton
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_BLOCK_COMPANY_CARD)}"
+					value="#{msg['lucas.application.companyScreen.companyCardManagerDialog.blockCompanyCardButton.name']}"
+					title="#{msg['lucas.application.companyScreen.companyCardManagerDialog.blockCompanyCardButton.tooltip']}"
+					icon="fa fa-lock"
+					action="#{companyBean.companyCardManagerDialogBlockCompanyCards}"
+					update="@form"
+					disabled="#{empty companyBean.companyCardManagerDialogSelectedCompanyCards}" />
+				<p:commandButton
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_UNBLOCK_COMPANY_CARD)}"
+					value="#{msg['lucas.application.companyScreen.companyCardManagerDialog.unblockCompanyCardButton.name']}"
+					title="#{msg['lucas.application.companyScreen.companyCardManagerDialog.unblockCompanyCardButton.tooltip']}"
+					icon="fa fa-unlock"
+					action="#{companyBean.companyCardManagerDialogUnblockCompanyCards}"
+					update="@form"
+					disabled="#{empty companyBean.companyCardManagerDialogSelectedCompanyCards}" />
+				<ui:fragment
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_VALID_DATE_COMPANY_CARD)}">
+					<p:commandButton id="companyCardManagerSetValidDayButton"
+						value="#{msg['lucas.application.companyScreen.companyCardManagerDialog.setValidDayButton.name']}"
+						title="#{msg['lucas.application.companyScreen.companyCardManagerDialog.setValidDayButton.tooltip']}"
+						icon="fa fa-calendar"
+						action="#{companyBean.initCompanyCardManagerDialogSetValidDayOverlay}"
+						update="validDayCalendar"
+						disabled="#{empty companyBean.companyCardManagerDialogSelectedCompanyCards}" />
+					<p:overlayPanel for="companyCardManagerSetValidDayButton"
+						widgetVar="calendarOverlayPanel" showCloseIcon="true" modal="true"
+						appendToBody="true">
+						<div class="ui-fluid">
+							<p:panelGrid>
+								<p:row>
+									<p:column colspan="2">
+										<p:calendar id="validDayCalendar"
+											value="#{companyBean.companyCardManagerDialogValidDate}"
+											mode="inline">
+											<p:ajax event="dateSelect" process="@this"
+												partialSubmit="true" />
+										</p:calendar>
+									</p:column>
+								</p:row>
+								<p:row>
+									<p:column>
+										<p:commandButton
+											value="#{msg['lucas.application.companyScreen.companyCardManagerDialog.selectOkValidDayButton.name']}"
+											title="#{msg['lucas.application.companyScreen.companyCardManagerDialog.selectOkValidDayButton.tooltip']}"
+											process="validDayCalendar @this" update="@form"
+											action="#{companyBean.companyCardManagerDialogSetValidDay}"
+											oncomplete="PF('calendarOverlayPanel').hide();" />
+									</p:column>
+									<p:column>
+										<p:commandButton
+											value="#{msg['lucas.application.companyScreen.companyCardManagerDialog.selectCancelValidDayButton.name']}"
+											title="#{msg['lucas.application.companyScreen.companyCardManagerDialog.selectCancelValidDayButton.tooltip']}"
+											oncomplete="PF('calendarOverlayPanel').hide();" />
+									</p:column>
+								</p:row>
+							</p:panelGrid>
+						</div>
+					</p:overlayPanel>
+					<p:commandButton
+						value="#{msg['lucas.application.companyScreen.companyCardManagerDialog.removeValidDayButton.name']}"
+						title="#{msg['lucas.application.companyScreen.companyCardManagerDialog.removeValidDayButton.tooltip']}"
+						action="#{companyBean.companyCardManagerDialogRemoveValidDay}"
+						icon="fa fa-calendar-o" update="@form"
+						disabled="#{empty companyBean.companyCardManagerDialogSelectedCompanyCards}" />
+					<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+				</ui:fragment>
+				<p:commandButton
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_REMOVE_COMPANY_CARD)}"
+					value="#{msg['lucas.application.companyScreen.companyCardManagerDialog.removeCompanyCardsButton.name']}"
+					title="#{msg['lucas.application.companyScreen.companyCardManagerDialog.removeCompanyCardsButton.tooltip']}"
+					icon="fa fa-remove"
+					disabled="#{empty companyBean.companyCardManagerDialogSelectedCompanyCards}"
+					actionListener="#{companyBean.companyCardManagerDialogRemoveCompanyCards}"
+					update="@form">
+					<p:confirm
+						header="#{msg['lucas.application.companyScreen.companyCardManagerDialog.removeCompanyCardConfirmationDialog.header']}"
+						message="#{msg['lucas.application.companyScreen.companyCardManagerDialog.removeCompanyCardConfirmationDialog.message']}" />
+				</p:commandButton>
+			</p:toolbarGroup>
+			<p:toolbarGroup align="right">
+				<p:commandButton icon="fa fa-refresh"
+					id="companyCardManagerRefreshTableButton"
+					update="companyCardManagerDialogCompanyCardTable"
+					disabled="#{companyBean.companyCardManagerDialogCompanyCards.size() &lt;= 0}"
+					title="#{msg['lucas.application.companyScreen.companyCardManagerDialog.refreshTableButton.tooltip']}"
+					action="#{companyBean.companyCardManagerDialogRefreshCompanyCards}" />
+				<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
+					<ui:param name="block" value="companyCardManagerDialogCompanyCardTable" />
+					<ui:param name="trigger" value="companyCardManagerRefreshTableButton" />
+				</ui:include>
+			</p:toolbarGroup>
+		</p:toolbar>
+		<p:messages for="companyCardManagerDialogMessages" showDetail="true"
+			showIcon="true" showSummary="true" closable="true" autoUpdate="true" />
+		<p:dataTable id="companyCardManagerDialogCompanyCardTable"
+			tableStyle="table-layout: auto;"
+			selection="#{companyBean.companyCardManagerDialogSelectedCompanyCards}"
+			style="margin-top:5px;max-height:350px" resizableColumns="true"
+			liveResize="true" value="#{companyBean.companyCardManagerDialogCompanyCards}"
+			var="companyCard" rowKey="#{companyCard.id}" draggableColumns="true"
+			rowSelectMode="add"
+			emptyMessage="#{msg['lucas.application.companyScreen.companyCardManagerDialog.noResults']}">
+			<p:ajax event="toggleSelect" update="@(.dialogToolbar)" />
+			<p:ajax event="rowUnselectCheckbox" update="@(.dialogToolbar)" />
+			<p:ajax event="rowSelectCheckbox" update="@(.dialogToolbar)" />
+			<p:ajax event="rowUnselect" update="@(.dialogToolbar)" />
+			<p:ajax event="rowSelect" update="@(.dialogToolbar)" />
+			<p:column selectionMode="multiple"
+				style="width:16px;text-align:center" exportable="false" />
+			<p:column
+				headerText="#{msg['lucas.application.companyScreen.companyCardManagerDialog.idHeader']}">
+				<h:outputText value="#{companyCard.id}" />
+			</p:column>
+			<p:column
+				headerText="#{msg['lucas.application.companyScreen.companyCardManagerDialog.blockedHeader']}">
+				<h:outputText value="#{companyCard.blocked}" />
+			</p:column>
+			<p:column
+				headerText="#{msg['lucas.application.companyScreen.companyCardManagerDialog.validDayHeader']}">
+				<h:outputText value="#{companyCard.validDay}"
+					converter="lucas:localDateStringConverter" />
+			</p:column>
+		</p:dataTable>
+		<p:separator />
+		<p:commandButton style="float:right" process="@this"
+			value="#{msg['lucas.application.companyScreen.companyCardManagerDialog.closeButton.name']}"
+			title="#{msg['lucas.application.companyScreen.companyCardManagerDialog.closeButton.tooltip']}"
+			oncomplete="PF('companyCardManagerDialog').hide()" immediate="true">
+		</p:commandButton>
+	</ui:define>
+</ui:composition>

@@ -2,7 +2,7 @@ package florian_haas.lucas.business;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 
 import javax.ejb.Local;
 import javax.validation.constraints.*;
@@ -27,8 +27,8 @@ public interface CompanyBeanLocal {
 
 	public Company findById(@ValidEntityId(entityClass = Company.class) Long companyId);
 
-	public List<Company> findCompanies(@NotNull Long companyId, @NotNull String name, @NotNull String description, @NotNull String room,
-			@NotNull Integer section, @NotNull EnumCompanyType companyType, @NotNull Long parentCompanyId, @NotNull Integer requiredEmployeesCount,
+	public List<Company> findCompanies(@NotNull Long companyId, @NotNull String name, String description, @NotNull String room,
+			@NotNull Integer section, @NotNull EnumCompanyType companyType, Long parentCompanyId, @NotNull Integer requiredEmployeesCount,
 			@NotNull Boolean areEmployeesRequired, @NotNull Boolean useId, @NotNull Boolean useName, @NotNull Boolean useDescription,
 			@NotNull Boolean useRoom, @NotNull Boolean useSection, @NotNull Boolean useCompanyType, @NotNull Boolean useParentCompanyId,
 			@NotNull Boolean useRequiredEmployeesCount, @NotNull Boolean useAreEmployeesRequired,
@@ -52,7 +52,7 @@ public interface CompanyBeanLocal {
 	public Boolean setCompanyType(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull EnumCompanyType companyType);
 
 	public Boolean setParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId,
-			@ValidEntityId(entityClass = Company.class) Long parentCompanyId);
+			@ValidEntityId(entityClass = Company.class, nullable = true) Long parentCompanyId);
 
 	public Boolean removeParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId);
 
@@ -71,11 +71,25 @@ public interface CompanyBeanLocal {
 	public Boolean setOutgoings(@ValidEntityId(entityClass = Taxdata.class) Long taxdataId,
 			@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal outgoings);
 
-	public Boolean addCompanyCard(@ValidEntityId(entityClass = Company.class) Long companyId);
+	public Long addCompanyCard(@ValidEntityId(entityClass = Company.class) Long companyId);
+
+	public Boolean removeCompanyCard(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId);
 
 	public Boolean blockCompanyCard(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId);
 
 	public Boolean unblockCompanyCard(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId);
 
+	public Boolean setValidDate(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId, LocalDate validDate);
+
+	public Set<CompanyCard> getCompanyCards(@ValidEntityId(entityClass = Company.class) Long companyId);
+
 	public Boolean existsLocation(@NotBlank String room, @NotNull @Min(0) Integer section);
+
+	public List<Employment> getManagers(@ValidEntityId(entityClass = Company.class) Long companyId);
+
+	public List<Employment> getAdvisors(@ValidEntityId(entityClass = Company.class) Long companyId);
+
+	public List<Employment> getEmployees(@ValidEntityId(entityClass = Company.class) Long companyId);
+
+	public CompanyCard findCompanyCardById(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId);
 }

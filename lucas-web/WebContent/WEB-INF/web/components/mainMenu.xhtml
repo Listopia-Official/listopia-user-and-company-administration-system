@@ -17,7 +17,8 @@
 			<p:menuitem outcome="/users.xhtml"
 				rendered="#{loginBean.hasPermission(EnumPermission.USER_ACCESS_VIEW)}"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.usersMenuItem.name']}" />
-			<p:menuitem disabled="true"
+			<p:menuitem outcome="/companies.xhtml"
+				rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_ACCESS_VIEW)}"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.companiesMenuItem.name']}" />
 			<p:menuitem disabled="true"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.employmentsMenuItem.name']}" />
@@ -36,8 +37,6 @@
 			<p:menuitem outcome="/accounts.xhtml"
 				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_ACCESS_VIEW)}"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.accountsMenuItem.name']}" />
-			<p:menuitem disabled="true"
-				value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.taxdataItem.name']}" />
 		</p:submenu>
 		<p:submenu
 			label="#{msg['lucas.application.mainScreen.navigationMenu.warehouseSubmenu.name']}">

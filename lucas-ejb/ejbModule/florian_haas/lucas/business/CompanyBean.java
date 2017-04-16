@@ -4,7 +4,7 @@ import static florian_haas.lucas.security.EnumPermission.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 
 import javax.annotation.Resource;
 import javax.ejb.*;
@@ -14,6 +14,7 @@ import javax.validation.executable.*;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
+import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.security.*;
 import florian_haas.lucas.util.Utils;
 
@@ -105,7 +106,8 @@ public class CompanyBean implements CompanyBeanLocal {
 	@RequiresPermissions(COMPANY_SET_DESCRIPTION)
 	public Boolean setDescription(Long companyId, String description) {
 		Company comp = companyDao.findById(companyId);
-		if (comp.getDescription().equals(description)) return Boolean.FALSE;
+		if ((comp.getDescription() == null && description == null) || (comp.getDescription() != null && comp.getDescription().equals(description)))
+			return Boolean.FALSE;
 		comp.setDescription(description);
 		return Boolean.TRUE;
 	}
@@ -211,10 +213,12 @@ public class CompanyBean implements CompanyBeanLocal {
 
 	@Override
 	@RequiresPermissions(COMPANY_ADD_COMPANY_CARD)
-	public Boolean addCompanyCard(Long companyId) {
+	public Long addCompanyCard(Long companyId) {
 		Company company = companyDao.findById(companyId);
 		CompanyCard companyCard = new CompanyCard(company);
-		return company.addCompanyCard(companyCard);
+		company.addCompanyCard(companyCard);
+		companyDao.flush();
+		return companyCard.getId();
 	}
 
 	@Override
@@ -252,4 +256,58 @@ public class CompanyBean implements CompanyBeanLocal {
 		if (companyDao.existsLocation(room, section))
 			throw new LucasException("Another company is assigned to the location", LOCATION_NOT_UNIQUE_EXCEPTION_MARKER);
 	}
+
+	@Override
+	@RequiresPermissions(COMPANY_GET_MANAGERS)
+	public List<Employment> getManagers(Long companyId) {
+		return companyDao.findById(companyId).getManagers();
+	}
+
+	@Override
+	@RequiresPermissions(COMPANY_GET_ADVISORS)
+	public List<Employment> getAdvisors(Long companyId) {
+		return companyDao.findById(companyId).getAdvisors();
+	}
+
+	@Override
+	@RequiresPermissions(COMPANY_GET_EMPLOYEES)
+	public List<Employment> getEmployees(Long companyId) {
+		return companyDao.findById(companyId).getEmployees();
+	}
+
+	@Override
+	@RequiresPermissions(COMPANY_FIND_COMPANY_CARD_BY_ID)
+	public CompanyCard findCompanyCardById(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId) {
+		return companyCardDao.findById(companyCardId);
+	}
+
+	@Override
+	@RequiresPermissions(COMPANY_GET_COMPANY_CARDS)
+	public Set<CompanyCard> getCompanyCards(Long companyId) {
+		Company company = companyDao.findById(companyId);
+		return company.getCompanyCards();
+	}
+
+	@Override
+	@RequiresPermissions(COMPANY_SET_VALID_DATE_COMPANY_CARD)
+	public Boolean setValidDate(Long companyCardId, LocalDate validDate) {
+		CompanyCard companyCard = companyCardDao.findById(companyCardId);
+		if (companyCard.getValidDay() != null && companyCard.getValidDay().equals(validDate)
+				|| companyCard.getValidDay() == null && validDate == null)
+			return Boolean.FALSE;
+		companyCard.setValidDay(validDate);
+		return Boolean.TRUE;
+	}
+
+	@Override
+	@RequiresPermissions(COMPANY_REMOVE_COMPANY_CARD)
+	public Boolean removeCompanyCard(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId) {
+		CompanyCard card = companyCardDao.findById(companyCardId);
+		Boolean removed = card.getCompany().removeCompanyCard(card);
+		if (removed) {
+			companyCardDao.delete(card);
+		}
+		return removed;
+	}
+
 }

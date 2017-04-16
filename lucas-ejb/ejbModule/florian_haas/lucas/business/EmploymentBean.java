@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.validation.executable.*;
 
+import org.apache.shiro.authz.annotation.Logical;
+
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.security.*;
@@ -43,7 +45,8 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	private Validator validator;
 
 	@Override
-	@RequiresPermissions(EMPLOYMENT_CREATE_DEFAULT)
+	@RequiresPermissions(value = {
+			EMPLOYMENT_CREATE_DEFAULT, COMPANY_CREATE }, logical = Logical.OR)
 	public Long addDefaultEmployment(Long userId, Long companyId, EnumEmployeePosition position) {
 		User user = userBean.findById(userId);
 		Company company = companyBean.findById(companyId);

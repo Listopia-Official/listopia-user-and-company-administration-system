@@ -1,0 +1,260 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.companyScreen.createCompanyDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="createCompanyDialog" />
+	<ui:param name="formId" value="createCompanyDialogForm" />
+	<ui:define name="dialogContent">
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.companyScreen.createCompanyDialog.nameInputText.name']}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.nameInputText.tooltip']}"
+							for="nameInputText" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="nameInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputText id="nameInputText"
+							value="#{companyBean.createCompanyDialogName}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.nameInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.companyScreen.createCompanyDialog.descriptionInputTextarea.name']}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.descriptionInputTextarea.tooltip']}"
+							for="descriptionInputTextarea" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="descriptionInputTextarea" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputTextarea id="descriptionInputTextarea" scrollHeight="200"
+							autoResize="false"
+							value="#{companyBean.createCompanyDialogDescription}"
+							converter="lucas:nullStringConverterNoText"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.descriptionInputTextarea.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.companyScreen.createCompanyDialog.roomInputText.name']}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.roomInputText.tooltip']}"
+							for="roomInputText" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="roomInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputText id="roomInputText"
+							value="#{companyBean.createCompanyDialogRoom}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.roomInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.companyScreen.createCompanyDialog.sectionInputNumber.name']}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.sectionInputNumber.tooltip']}"
+							for="sectionInputNumber" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="sectionInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputNumber value="#{companyBean.createCompanyDialogSection}"
+							minValue="0" id="sectionInputNumber" decimalPlaces="0"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.sectionInputNumber.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.companyScreen.createCompanyDialog.companyTypeSelectOneMenu.name']}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.companyTypeSelectOneMenu.tooltip']}"
+							for="companyTypeSelectOneMenu" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="companyTypeSelectOneMenu" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:selectOneMenu id="companyTypeSelectOneMenu"
+							value="#{companyBean.createCompanyDialogCompanyType}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.companyTypeSelectOneMenu.tooltip']}">
+							<f:selectItems value="#{EnumCompanyType.ALL_VALUES}" var="type"
+								itemValue="#{type}"
+								itemLabel="#{converterBean.convertEnum(type)}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.companyScreen.createCompanyDialog.parentCompanyIdInputNumber.name']}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.parentCompanyIdInputNumber.tooltip']}"
+							for="parentCompanyInputNumber" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="parentCompanyInputNumber"
+							id="companyIdInputNumberMessage" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputNumber id="parentCompanyInputNumber"
+							value="#{companyBean.createCompanyDialogParentCompanyId}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.parentCompanyIdInputNumber.tooltip']}"
+							minValue="0" emptyValue="empty" decimalPlaces="0">
+							<p:ajax event="keyup" delay="250" process="@this"
+								update="createCompanyDialogForm:companyIdOutputInputText companyIdInputNumberMessage @this" />
+						</p:inputNumber>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputText
+							title="#{companyBean.createCompanyDialogParentCompanyFromId}"
+							placeholder="#{companyBean.createCompanyDialogParentCompanyFromId}"
+							id="companyIdOutputInputText" readonly="true" />
+					</p:column>
+					<p:column colspan="2" />
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.companyScreen.createCompanyDialog.requiredEmployeesCountInputNumber.name']}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.requiredEmployeesCountInputNumber.tooltip']}"
+							for="requiredEmployeesCountInputNumber" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="requiredEmployeesCountInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputNumber
+							value="#{companyBean.createCompanyDialogRequiredEmployeesCount}"
+							minValue="0" id="requiredEmployeesCountInputNumber"
+							decimalPlaces="0"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.requiredEmployeesCountInputNumber.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel id="managerOutputLabel" for="managerInputNumber"
+							value="#{msg['lucas.application.companyScreen.createCompanyDialog.managerInputNumber.name']}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.managerInputNumber.tooltip']}" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message id="managerInputMessage" for="managerInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputNumber id="managerInputNumber"
+							onkeyup="if (event.keyCode == 13) return false;"
+							value="#{companyBean.createCompanyDialogTmpManagerId}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.managerInputNumber.tooltip']}"
+							minValue="0" emptyValue="empty" decimalPlaces="0">
+							<p:ajax event="keyup" delay="250" process="@this"
+								update="createCompanyDialogForm:managerIdOutputInputText managerInputMessage @this" />
+						</p:inputNumber>
+					</p:column>
+				</p:row>
+				<p:column colspan="3">
+					<p:inputText
+						title="#{companyBean.createCompanyDialogTmpManagerFromId}"
+						placeholder="#{companyBean.createCompanyDialogTmpManagerFromId}"
+						id="managerIdOutputInputText" readonly="true" />
+				</p:column>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							value="#{msg['lucas.application.companyScreen.createCompanyDialog.addManagerButton.name']}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.addManagerButton.tooltip']}"
+							process="managerInputNumber @this"
+							update="createCompanyDialogForm:managersDataList managerOutputLabel managerIdOutputInputText managerInputNumber managerInputMessage"
+							action="#{companyBean.resetCreateCompanyDialogTmpManagerId}">
+							<p:collector
+								value="#{companyBean.createCompanyDialogTmpManagerId}"
+								addTo="#{companyBean.createCompanyDialogManagerUserIds}"
+								unique="true" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton
+							value="#{msg['lucas.application.companyScreen.createCompanyDialog.editManagerButton.name']}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.editManagerButton.tooltip']}"
+							action="#{companyBean.createCompanyDialogEditSelectedRank}"
+							process="createCompanyDialogForm:managersDataList @this"
+							update="createCompanyDialogForm:managersDataList createCompanyDialogForm:managerInputNumber" />
+					</p:column>
+					<p:column>
+						<p:commandButton
+							value="#{msg['lucas.application.companyScreen.createCompanyDialog.removeManagerButton.name']}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.removeManagerButton.tooltip']}"
+							process="createCompanyDialogForm:managersDataList @this"
+							update="createCompanyDialogForm:managersDataList">
+							<p:collector
+								removeFrom="#{companyBean.createCompanyDialogManagerUserIds}"
+								value="#{companyBean.createCompanyDialogSelectedManagerId}" />
+						</p:commandButton>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:selectOneListbox id="managersDataList" var="managerId"
+							value="#{companyBean.createCompanyDialogSelectedManagerId}"
+							style="min-height:100px">
+							<f:selectItems
+								value="#{companyBean.createCompanyDialogManagerUserIds}" />
+							<p:column>
+								<h:outputText value="#{companyBean.getUserAsString(managerId)}" />
+							</p:column>
+						</p:selectOneListbox>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this nameInputText descriptionInputTextarea roomInputText sectionInputNumber companyTypeSelectOneMenu parentCompanyInputNumber requiredEmployeesCountInputNumber managersDataList"
+							update="@form" action="#{companyBean.createCompany}"
+							value="#{msg['lucas.application.companyScreen.createCompanyDialog.createCompanyButton.name']}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.createCompanyButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('createCompanyDialog').hide()}" />
+					</p:column>
+					<p:column />
+					<p:column>
+						<p:commandButton process="@this" immediate="true"
+							value="#{msg['lucas.application.companyScreen.createCompanyDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.cancelButton.tooltip']}"
+							oncomplete="PF('createCompanyDialog').hide()">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

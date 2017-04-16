@@ -1,0 +1,201 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.companyScreen.editCompanyDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="editCompanyDialog" />
+	<ui:param name="formId" value="editCompanyDialogForm" />
+	<ui:define name="dialogContent">
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_NAME)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.companyScreen.editCompanyDialog.nameInputText.name']}"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.nameInputText.tooltip']}"
+							for="nameInputText" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="nameInputText" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_NAME)}">
+					<p:column colspan="3">
+						<p:inputText id="nameInputText"
+							value="#{companyBean.editCompanyDialogName}"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.nameInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_DESCRIPTION)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.companyScreen.editCompanyDialog.descriptionInputTextarea.name']}"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.descriptionInputTextarea.tooltip']}"
+							for="descriptionInputTextarea" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="descriptionInputTextarea" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_DESCRIPTION)}">
+					<p:column colspan="3">
+						<p:inputTextarea id="descriptionInputTextarea" scrollHeight="200"
+							autoResize="false"
+							value="#{companyBean.editCompanyDialogDescription}"
+							converter="lucas:nullStringConverterNoText"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.descriptionInputTextarea.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_ROOM)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.companyScreen.editCompanyDialog.roomInputText.name']}"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.roomInputText.tooltip']}"
+							for="roomInputText" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="roomInputText" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_ROOM)}">
+					<p:column colspan="3">
+						<p:inputText id="roomInputText"
+							value="#{companyBean.editCompanyDialogRoom}"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.roomInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_SECTION)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.companyScreen.editCompanyDialog.sectionInputNumber.name']}"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.sectionInputNumber.tooltip']}"
+							for="sectionInputNumber" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="sectionInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_SECTION)}">
+					<p:column colspan="3">
+						<p:inputNumber value="#{companyBean.editCompanyDialogSection}"
+							minValue="0" id="sectionInputNumber" decimalPlaces="0"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.sectionInputNumber.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_COMPANY_TYPE)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.companyScreen.editCompanyDialog.companyTypeSelectOneMenu.name']}"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.companyTypeSelectOneMenu.tooltip']}"
+							for="companyTypeSelectOneMenu" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="companyTypeSelectOneMenu" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_COMPANY_TYPE)}">
+					<p:column colspan="3">
+						<p:selectOneMenu id="companyTypeSelectOneMenu"
+							value="#{companyBean.editCompanyDialogCompanyType}"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.companyTypeSelectOneMenu.tooltip']}">
+							<f:selectItems value="#{EnumCompanyType.ALL_VALUES}" var="type"
+								itemValue="#{type}"
+								itemLabel="#{converterBean.convertEnum(type)}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_PARENT_COMPANY)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.companyScreen.editCompanyDialog.parentCompanyIdInputNumber.name']}"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.parentCompanyIdInputNumber.tooltip']}"
+							for="parentCompanyInputNumber" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="parentCompanyInputNumber"
+							id="companyIdInputNumberMessage" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_PARENT_COMPANY)}">
+					<p:column colspan="3">
+						<p:inputNumber id="parentCompanyInputNumber"
+							value="#{companyBean.editCompanyDialogParentCompanyId}"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.parentCompanyIdInputNumber.tooltip']}"
+							minValue="0" emptyValue="empty" decimalPlaces="0">
+							<p:ajax event="keyup" delay="250" process="@this"
+								update="editCompanyDialogForm:companyIdOutputInputText companyIdInputNumberMessage @this" />
+						</p:inputNumber>
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_PARENT_COMPANY)}">
+					<p:column colspan="3">
+						<p:inputText
+							title="#{companyBean.editCompanyDialogParentCompanyFromId}"
+							placeholder="#{companyBean.editCompanyDialogParentCompanyFromId}"
+							id="companyIdOutputInputText" readonly="true" />
+					</p:column>
+					<p:column colspan="2" />
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_REQUIRED_EMPLOYEES_COUNT)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.companyScreen.editCompanyDialog.requiredEmployeesCountInputNumber.name']}"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.requiredEmployeesCountInputNumber.tooltip']}"
+							for="requiredEmployeesCountInputNumber" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="requiredEmployeesCountInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_REQUIRED_EMPLOYEES_COUNT)}">
+					<p:column colspan="3">
+						<p:inputNumber
+							value="#{companyBean.editCompanyDialogRequiredEmployeesCount}"
+							minValue="0" id="requiredEmployeesCountInputNumber"
+							decimalPlaces="0"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.requiredEmployeesCountInputNumber.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this nameInputText descriptionInputTextarea roomInputText sectionInputNumber companyTypeSelectOneMenu parentCompanyInputNumber requiredEmployeesCountInputNumber"
+							update="@form dataAccorditionPanel:companySearchResultsForm:companySearchResultsTable"
+							action="#{companyBean.editCompany}"
+							value="#{msg['lucas.application.companyScreen.editCompanyDialog.saveChangesButton.name']}"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.saveChangesButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('editCompanyDialog').hide()}" />
+					</p:column>
+					<p:column />
+					<p:column>
+						<p:commandButton process="@this" immediate="true"
+							value="#{msg['lucas.application.companyScreen.editCompanyDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.cancelButton.tooltip']}"
+							oncomplete="PF('editCompanyDialog').hide()">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

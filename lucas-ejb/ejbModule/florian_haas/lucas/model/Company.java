@@ -229,4 +229,8 @@ public class Company extends AccountOwner {
 	public Boolean addCompanyCard(CompanyCard companyCard) {
 		return this.companyCards.add(companyCard);
 	}
+
+	public Boolean removeCompanyCard(CompanyCard companyCard) {
+		return this.companyCards.remove(companyCard);
+	}
 }

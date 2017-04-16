@@ -1,0 +1,77 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.companyScreen.viewEmployeesDialog.title" />
+	<ui:param name="closeable" value="true" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="viewEmployeesDialog" />
+	<ui:param name="formId" value="viewEmployeesDialogForm" />
+	<ui:define name="dialogContent">
+		<div class="ui-fluid">
+			<h:outputText
+				value="#{msg['lucas.application.companyScreen.viewEmployeesDialog.header']}"
+				style="font-weight:bold" />
+			<h:outputText
+				value="#{companyBean.viewEmployeesDialogSelectedCompanyString} "
+				style="font-weight:bold" />
+			<p:separator />
+			<p:panelGrid>
+				<p:row>
+					<p:column
+						rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_GET_MANAGERS)}">
+						<p:dataList value="#{companyBean.viewEmployeesDialogManagers}"
+							type="ordered" id="managersDataList" paginator="true" rows="10"
+							var="manager" paginatorAlwaysVisible="false"
+							emptyMessage="#{msg['lucas.application.companyScreen.viewEmployeesDialog.managersDataList.noResults']}">
+							<f:facet name="header">
+								<h:outputLabel for="managersDataList"
+									value="#{msg['lucas.application.companyScreen.viewEmployeesDialog.managersDataList.name1']+=companyBean.viewEmployeesDialogManagers.size()+=msg['lucas.application.companyScreen.viewEmployeesDialog.managersDataList.name2']}"
+									title="#{msg['lucas.application.companyScreen.viewEmployeesDialog.managersDataList.tooltip']}" />
+							</f:facet>
+							<h:outputText value="#{manager}" />
+						</p:dataList>
+					</p:column>
+					<p:column
+						rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_GET_ADVISORS)}">
+						<p:dataList value="#{companyBean.viewEmployeesDialogAdvisors}"
+							type="ordered" paginator="true" rows="10" var="advisor"
+							id="advisorsDataList" paginatorAlwaysVisible="false"
+							emptyMessage="#{msg['lucas.application.companyScreen.viewEmployeesDialog.advisorsDataList.noResults']}">
+							<f:facet name="header">
+								<h:outputLabel for="advisorsDataList"
+									value="#{msg['lucas.application.companyScreen.viewEmployeesDialog.advisorsDataList.name1']+=companyBean.viewEmployeesDialogAdvisors.size()+=msg['lucas.application.companyScreen.viewEmployeesDialog.advisorsDataList.name2']}"
+									title="#{msg['lucas.application.companyScreen.viewEmployeesDialog.advisorsDataList.tooltip']}" />
+							</f:facet>
+							<h:outputText value="#{advisor}" />
+						</p:dataList>
+					</p:column>
+					<p:column
+						rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_GET_EMPLOYEES)}">
+						<p:dataList value="#{companyBean.viewEmployeesDialogEmployees}"
+							type="ordered" paginator="true" rows="10" var="employee"
+							id="employeesDataList" paginatorAlwaysVisible="false"
+							emptyMessage="#{msg['lucas.application.companyScreen.viewEmployeesDialog.employeesDataList.noResults']}">
+							<f:facet name="header">
+								<h:outputLabel for="employeesDataList"
+									value="#{msg['lucas.application.companyScreen.viewEmployeesDialog.employeesDataList.name1']+=companyBean.viewEmployeesDialogEmployees.size()+=msg['lucas.application.companyScreen.viewEmployeesDialog.employeesDataList.name2']}"
+									title="#{msg['lucas.application.companyScreen.viewEmployeesDialog.employeesDataList.tooltip']}" />
+							</f:facet>
+							<h:outputText value="#{employee}" />
+						</p:dataList>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<p:separator />
+		</div>
+		<p:commandButton process="@this" style="float:right"
+			value="#{msg['lucas.application.companyScreen.viewEmployeesDialog.closeButton.name']}"
+			title="#{msg['lucas.application.companyScreen.viewEmployeesDialog.closeButton.tooltip']}"
+			oncomplete="PF('viewEmployeesDialog').hide()" immediate="true">
+		</p:commandButton>
+
+	</ui:define>
+</ui:composition>
