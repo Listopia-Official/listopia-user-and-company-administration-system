@@ -6,7 +6,8 @@ import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.context.FacesContext;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.*;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 
@@ -92,14 +93,14 @@ public class LoginBean {
 				FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/WEB-INF/resources/images/user_male.svg")) : ret;
 	}
 
-	public void logout() {
+	public void logout() throws IOException {
+		String username = getAdvancedUsername();
 		loginBean.logout();
-		try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect("/lucas-web/login.jsf");
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+		FacesContext context = FacesContext.getCurrentInstance();
+		context.addMessage(null, new FacesMessage(WebUtils.getTranslatedMessage("lucas.application.logout.message", username)));
+		ExternalContext externalContext = context.getExternalContext();
+		externalContext.getFlash().setKeepMessages(true);
+		externalContext.redirect("/lucas-web/login.jsf");
 	}
 
 	public Long getIdleTimeout() {

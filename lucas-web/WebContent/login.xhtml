@@ -10,15 +10,16 @@
 				<h1>
 					<h:outputText value="#{msg['lucas.application.login.heading']}" />
 				</h1>
-				<div style="display:inline-block">
-				<ui:fragment rendered="#{not empty shiroLoginFailure}">
-					<div aria-live="polite"
-						class="ui-message ui-message-error ui-widget ui-corner-all">
-						<span class="ui-message-error-icon" />
-						<h:outputText styleClass="ui-message-error-detail"
-							value="#{msg['lucas.application.login.loginFailureMessage']}" />
-					</div>
-				</ui:fragment>
+				<div style="display: inline-block">
+					<p:messages autoUpdate="true" globalOnly="true" />
+					<ui:fragment rendered="#{not empty shiroLoginFailure}">
+						<div aria-live="polite"
+							class="ui-message ui-message-error ui-widget ui-corner-all">
+							<span class="ui-message-error-icon" />
+							<h:outputText styleClass="ui-message-error-detail"
+								value="#{msg['lucas.application.login.loginFailureMessage']}" />
+						</div>
+					</ui:fragment>
 				</div>
 				<p:panelGrid styleClass="ui-noborder">
 					<p:row>
