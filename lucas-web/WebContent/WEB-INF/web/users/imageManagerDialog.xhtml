@@ -11,24 +11,57 @@
 	<ui:param name="widgetVar" value="imageManagerDialog" />
 	<ui:param name="formId" value="imageManagerDialogForm" />
 	<ui:define name="dialogContent">
+		<h:outputText
+			value="#{msg['lucas.application.userScreen.imageManagerDialog.userLabel1']}"
+			style="font-weight:bold" />
+		<h:outputText value="#{userBean.imageManagerDialogSelectedUser}"
+			converter="lucas:userStringConverter" style="font-weight:bold" />
+		<p:toolbar style="margin-top:5px;margin-bottom:5px"
+			rendered="#{loginBean.hasPermission(EnumPermission.USER_SET_IMAGE)}">
+			<p:toolbarGroup align="left">
+				<p:commandButton id="changeImageButton" icon="fa fa-exchange"
+					value="#{msg['lucas.application.userScreen.imageManagerDialog.changeImageButton.name']}"
+					title="#{msg['lucas.application.userScreen.imageManagerDialog.changeImageButton.tooltip']}" />
+				<p:overlayPanel for="changeImageButton"
+					widgetVar="setImageOverlayPanel" showCloseIcon="true" modal="true"
+					appendToBody="true">
+					<div class="ui-fluid">
+						<p:panelGrid>
+							<p:row>
+								<p:column colspan="2">
+									<p:fileUpload allowTypes="/jpeg|jpg/"
+										sizeLimit="#{userBean.maxUserImageUploadSizeBytes}"
+										fileUploadListener="#{userBean.onImageUpload}" update="@form"
+										cancelLabel="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.cancelLabel']}"
+										uploadLabel="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.uploadLabel']}"
+										label="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.chooseLabel']}"
+										invalidFileMessage="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.invalidFileMessage']}"
+										invalidSizeMessage="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.invalidFileSizeMessage']}"
+										fileLimitMessage="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.fileLimitMessage']}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<p:commandButton
+										value="#{msg['lucas.application.userScreen.imageManagerDialog.closeButton.name']}"
+										title="#{msg['lucas.application.userScreen.imageManagerDialog.closeButton.tooltip']}"
+										oncomplete="PF('setImageOverlayPanel').hide();" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</div>
+				</p:overlayPanel>
+				<p:commandButton style="float:right" icon="fa fa-remove"
+					value="#{msg['lucas.application.userScreen.imageManagerDialog.removeImageButton.name']}"
+					process="@this" update="@form"
+					title="#{msg['lucas.application.userScreen.imageManagerDialog.removeImageButton.tooltip']}"
+					action="#{userBean.removeImage}" />
+			</p:toolbarGroup>
+		</p:toolbar>
+		<p:messages for="imageManagerDialogMessages" autoUpdate="true"
+			showDetail="true" showIcon="true" showSummary="true" closable="true" />
 		<div class="ui-fluid">
 			<p:panelGrid>
-				<p:row>
-					<p:column styleClass="center" colspan="2">
-						<h:outputText
-							value="#{msg['lucas.application.userScreen.imageManagerDialog.userLabel1']}"
-							style="font-weight:bold" />
-						<h:outputText value="#{userBean.imageManagerDialogSelectedUser}"
-							converter="lucas:userStringConverter" style="font-weight:bold" />
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column colspan="2">
-						<p:messages for="imageManagerDialogMessages" autoUpdate="true"
-							showDetail="true" showIcon="true" showSummary="true"
-							closable="true" />
-					</p:column>
-				</p:row>
 				<p:row>
 					<p:column colspan="2" styleClass="center">
 						<ui:fragment
@@ -41,19 +74,6 @@
 						<h:outputText
 							value="#{msg['lucas.application.userScreen.imageManagerDialog.noImage']}"
 							rendered="#{empty userBean.imageManagerDialogDisplayImageAsBase64}" />
-					</p:column>
-				</p:row>
-				<p:row
-					rendered="#{loginBean.hasPermission(EnumPermission.USER_SET_IMAGE)}">
-					<p:column colspan="2">
-						<p:fileUpload allowTypes="/jpeg|jpg/" sizeLimit="#{userBean.maxUserImageUploadSizeBytes}"
-							fileUploadListener="#{userBean.onImageUpload}" update="@form"
-							cancelLabel="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.cancelLabel']}"
-							uploadLabel="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.uploadLabel']}"
-							label="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.chooseLabel']}"
-							invalidFileMessage="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.invalidFileMessage']}"
-							invalidSizeMessage="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.invalidFileSizeMessage']}"
-							fileLimitMessage="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.fileLimitMessage']}" />
 					</p:column>
 				</p:row>
 				<p:row>

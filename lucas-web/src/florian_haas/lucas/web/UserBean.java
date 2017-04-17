@@ -739,6 +739,15 @@ public class UserBean implements Serializable {
 		}, "lucas.application.userScreen.uploadUserImage.message", IMAGE_DIALOG_MESSAGES_ID, Utils.asList(file.getFileName()));
 	}
 
+	public void removeImage() {
+		WebUtils.executeTask((params) -> {
+			imageManagerDialogUploadedImage = null;
+			imageManagerDialogDisplayImageAsBase64 = null;
+			return true;
+		}, "lucas.application.userScreen.removeUserImage.message", IMAGE_DIALOG_MESSAGES_ID,
+				Utils.asList(WebUtils.getAsString(imageManagerDialogSelectedUser, "lucas:userStringConverter")));
+	}
+
 	public void onSave() {
 		WebUtils.executeTask(params -> {
 			return userBean.setImage(imageManagerDialogSelectedUser.getId(), imageManagerDialogUploadedImage);
