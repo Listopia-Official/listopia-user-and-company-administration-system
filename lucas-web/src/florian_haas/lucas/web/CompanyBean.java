@@ -689,7 +689,7 @@ public class CompanyBean implements Serializable {
 			}
 			Company tmp2 = companyBean.findById(id);
 			params.add(WebUtils.getAsString(tmp2, "lucas:companyStringConverter"));
-			WebUtils.refreshEntities(Company.class, searchCompanyResults, selectedCompanies, tmp2, companyBean::findById, false);// TODO
+			WebUtils.refreshEntities(Company.class, searchCompanyResults, selectedCompanies, tmp2, companyBean::findById, true);
 			return true;
 		}, "lucas.application.companyScreen.editCompany.message", (exception, params) -> {
 			if (exception.getMark().equals(florian_haas.lucas.business.CompanyBean.NAME_NOT_UNIQUE_EXCEPTION_MARKER)) {

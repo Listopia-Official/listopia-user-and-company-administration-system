@@ -423,8 +423,8 @@ public class AccountBean implements Serializable {
 	}
 
 	public void transaction() {
+		AccountOwner owner = accountBean.findAccountOwnerById(transactionDialogToId);
 		for (Account account : selectedAccounts) {
-			AccountOwner owner = accountBean.findAccountOwnerById(transactionDialogToId);
 			WebUtils.executeTask(params -> {
 				accountBean.transaction(account.getId(), owner.getAccount().getId(), transactionDialogTransactionAmount, transactionDialogComment);
 				params.add(WebUtils.getCurrencyAsString(transactionDialogTransactionAmount));
@@ -434,7 +434,8 @@ public class AccountBean implements Serializable {
 					Utils.asList(WebUtils.getAsString(account.getOwner(), "lucas:accountOwnerStringConverter"),
 							WebUtils.getAsString(owner, "lucas:accountOwnerStringConverter")));
 		}
-		WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, accountBean::findById, true);
+		WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, Arrays.asList(owner.getAccount()), accountBean::findById,
+				true);
 	}
 
 	/*

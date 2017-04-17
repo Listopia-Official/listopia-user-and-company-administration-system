@@ -362,34 +362,45 @@ public class WebUtils {
 	}
 
 	public static <E extends EntityBase> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,
+			List<E> additionalEntitiesToRefresh, Function<Long, E> entityDao, Boolean onlySelected) {
+		refreshEntities(entityClass, entityList, selectedEntities, additionalEntitiesToRefresh, (Map<Long, E>) null, entityDao, onlySelected);
+	}
+
+	public static <E extends EntityBase> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,
 			Function<Long, E> entityDao, Boolean onlySelected) {
-		refreshEntities(entityClass, entityList, selectedEntities, (Map<Long, E>) null, entityDao, onlySelected);
+		refreshEntities(entityClass, entityList, selectedEntities, null, (Map<Long, E>) null, entityDao, onlySelected);
 	}
 
 	public static <E extends EntityBase> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities, E replacement,
 			Function<Long, E> entityDao, Boolean onlySelected) {
-		refreshEntities(entityClass, entityList, selectedEntities, Utils.asMap(replacement.getId(), replacement), entityDao, onlySelected);
+		refreshEntities(entityClass, entityList, selectedEntities, null, Utils.asMap(replacement.getId(), replacement), entityDao, onlySelected);
 	}
 
 	public static <E extends EntityBase> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,
-			Map<Long, E> replacements, Function<Long, E> entityDao, Boolean onlySelected) {
-		ListIterator<E> it = entityList.listIterator();
+			List<E> additionalEntitiesToRefresh, E replacement, Function<Long, E> entityDao, Boolean onlySelected) {
+		refreshEntities(entityClass, entityList, selectedEntities, additionalEntitiesToRefresh, Utils.asMap(replacement.getId(), replacement),
+				entityDao, onlySelected);
+	}
+
+	public static <E extends EntityBase> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,
+			List<E> additionalEntitiesToRefresh, Map<Long, E> replacements, Function<Long, E> entityDao, Boolean onlySelected) {
+		List<E> allEntities = new ArrayList<>();
+		allEntities.addAll(entityList);
+		if (additionalEntitiesToRefresh != null) allEntities.addAll(additionalEntitiesToRefresh);
+		ListIterator<E> it = allEntities.listIterator();
 		while (it.hasNext()) {
-			E tmp = it.next();
-			Long id = tmp.getId();
+			E tmpEntity = it.next();
+			Long id = tmpEntity.getId();
 			if (getCDIManagerBean(EntityBean.class).exists(id, entityClass)) {
-				if (onlySelected ? selectedEntities.contains(tmp) : true) {
+				if (onlySelected ? (selectedEntities.contains(tmpEntity)
+						|| (additionalEntitiesToRefresh != null && additionalEntitiesToRefresh.contains(tmpEntity))) : true) {
 					E refreshed = replacements != null && replacements.get(id) != null ? replacements.get(id) : entityDao.apply(id);
-					it.set(refreshed);
-					if (selectedEntities.contains(tmp)) {
-						selectedEntities.set(selectedEntities.indexOf(tmp), refreshed);
-					}
+					if (entityList.contains(tmpEntity)) entityList.set(entityList.indexOf(tmpEntity), refreshed);
+					if (selectedEntities.contains(tmpEntity)) selectedEntities.set(selectedEntities.indexOf(tmpEntity), refreshed);
 				}
 			} else {
-				it.remove();
-				if (selectedEntities.contains(tmp)) {
-					selectedEntities.remove(tmp);
-				}
+				if (entityList.contains(tmpEntity)) entityList.remove(tmpEntity);
+				if (selectedEntities.contains(tmpEntity)) selectedEntities.remove(tmpEntity);
 			}
 		}
 	}
