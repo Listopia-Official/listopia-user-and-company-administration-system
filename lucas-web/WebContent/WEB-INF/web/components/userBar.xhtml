@@ -3,6 +3,18 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
 	<h:form>
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton
+				value="#{msg['lucas.application.dataTemplate.confirm.yesButton.name']}"
+				type="button"
+				title="#{msg['lucas.application.dataTemplate.confirm.yesButton.tooltip']}"
+				styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton
+				value="#{msg['lucas.application.dataTemplate.confirm.noButton.name']}"
+				type="button"
+				title="#{msg['lucas.application.dataTemplate.confirm.noButton.tooltip']}"
+				styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
 		<p:toolbar styleClass="toolbar">
 			<p:toolbarGroup align="left" styleClass="noFloat">
 				<p:panelGrid styleClass="ui-noborder userBarPanelGrid">
@@ -31,7 +43,11 @@
 								<p:menuitem icon="fa fa-sign-out"
 									value="#{msg['lucas.application.userBar.logoutButton.name']}"
 									title="#{msg['lucas.application.userBar.logoutButton.tooltip']}"
-									action="#{loginBean.logout}" />
+									action="#{loginBean.logout}">
+									<p:confirm
+										header="#{msg['lucas.application.logout.confirmation.header']}"
+										message="#{msg['lucas.application.logout.confirmation.message']}" />
+								</p:menuitem>
 							</p:menuButton>
 						</p:column>
 					</p:row>
