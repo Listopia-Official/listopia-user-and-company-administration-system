@@ -47,17 +47,26 @@
 				</p:row>
 				<p:row
 					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_DESCRIPTION)}">
-					<p:column colspan="3">
+					<p:column colspan="3" style="padding-bottom:0px">
 						<p:inputTextarea id="descriptionInputTextarea" scrollHeight="200"
-							autoResize="false"
+							style="resize: none;" autoResize="false" maxlength="255"
+							counter="descriptionInputTextareaOutputText"
 							value="#{companyBean.editCompanyDialogDescription}"
 							converter="lucas:nullStringConverterNoText"
+							counterTemplate="{0}#{msg['lucas.application.companyScreen.editCompanyDialog.descriptionInputTextarea.remainingCharacters']}"
 							title="#{msg['lucas.application.companyScreen.editCompanyDialog.descriptionInputTextarea.tooltip']}" />
 					</p:column>
 				</p:row>
 				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_DESCRIPTION)}">
+					<p:column colspan="3" style="padding-bottom:0px;padding-top:0px">
+						<h:outputText id="descriptionInputTextareaOutputText"
+							style="float:right;font-style:italic" />
+					</p:column>
+				</p:row>
+				<p:row
 					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_ROOM)}">
-					<p:column>
+					<p:column style="padding-top:0px">
 						<p:outputLabel
 							value="#{msg['lucas.application.companyScreen.editCompanyDialog.roomInputText.name']}"
 							title="#{msg['lucas.application.companyScreen.editCompanyDialog.roomInputText.tooltip']}"

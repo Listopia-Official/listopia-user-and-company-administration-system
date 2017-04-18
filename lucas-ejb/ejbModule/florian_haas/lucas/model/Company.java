@@ -27,6 +27,7 @@ public class Company extends AccountOwner {
 	@Basic(optional = true)
 	@Column(nullable = true)
 	@NotBlankString
+	@Size(max = 255)
 	private String description;
 
 	@Basic(optional = false)

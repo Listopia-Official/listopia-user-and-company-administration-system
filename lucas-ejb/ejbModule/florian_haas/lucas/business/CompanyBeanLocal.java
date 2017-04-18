@@ -18,8 +18,8 @@ import florian_haas.lucas.util.validation.NotBlankString;
 @Local
 public interface CompanyBeanLocal {
 
-	public Long createCompany(@NotNull @NotBlankString String name, @NotBlankString String description, @NotNull @NotBlankString String room,
-			@NotNull @Min(value = 0) Integer section, @NotNull EnumCompanyType companyType,
+	public Long createCompany(@NotNull @NotBlankString String name, @Size(max = 255) @NotBlankString String description,
+			@NotNull @NotBlankString String room, @NotNull @Min(value = 0) Integer section, @NotNull EnumCompanyType companyType,
 			@ValidEntityId(entityClass = Company.class, nullable = true) Long parentCompanyId,
 			List<@ValidEntityId(entityClass = User.class) Long> managerUserIds, @NotNull @Min(value = 0) Integer requiredEmployeesCount);
 
@@ -43,7 +43,7 @@ public interface CompanyBeanLocal {
 
 	public Boolean setName(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String name);
 
-	public Boolean setDescription(@ValidEntityId(entityClass = Company.class) Long companyId, @NotBlankString String description);
+	public Boolean setDescription(@ValidEntityId(entityClass = Company.class) Long companyId, @Size(max = 255) @NotBlankString String description);
 
 	public Boolean setRoom(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String room);
 

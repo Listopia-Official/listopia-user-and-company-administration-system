@@ -88,6 +88,7 @@ public class CompanyBean implements Serializable {
 	private EnumQueryComparator searchCompanyNameComparator = EnumQueryComparator.EQUAL;
 
 	@NotBlankString
+	@Size(max = 255)
 	private String searchCompanyDescription = null;
 
 	@NotNull
@@ -390,6 +391,7 @@ public class CompanyBean implements Serializable {
 	private String createCompanyDialogName = "";
 
 	@NotBlankString
+	@Size(max = 255)
 	private String createCompanyDialogDescription = null;
 
 	@NotBlank
@@ -567,6 +569,7 @@ public class CompanyBean implements Serializable {
 	private String editCompanyDialogName = "";
 
 	@NotBlankString
+	@Size(max = 255)
 	private String editCompanyDialogDescription = null;
 
 	@NotBlank

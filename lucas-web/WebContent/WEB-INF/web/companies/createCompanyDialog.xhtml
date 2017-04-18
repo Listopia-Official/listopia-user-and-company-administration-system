@@ -43,16 +43,24 @@
 					</p:column>
 				</p:row>
 				<p:row>
-					<p:column colspan="3">
+					<p:column colspan="3" style="padding-bottom:0px">
 						<p:inputTextarea id="descriptionInputTextarea" scrollHeight="200"
-							autoResize="false"
+							style="resize: none;" autoResize="false" maxlength="255"
+							counter="descriptionInputTextareaOutputText"
 							value="#{companyBean.createCompanyDialogDescription}"
 							converter="lucas:nullStringConverterNoText"
+							counterTemplate="{0}#{msg['lucas.application.companyScreen.createCompanyDialog.descriptionInputTextarea.remainingCharacters']}"
 							title="#{msg['lucas.application.companyScreen.createCompanyDialog.descriptionInputTextarea.tooltip']}" />
 					</p:column>
 				</p:row>
 				<p:row>
-					<p:column>
+					<p:column colspan="3" style="padding-bottom:0px;padding-top:0px">
+						<h:outputText id="descriptionInputTextareaOutputText"
+							style="float:right;font-style:italic" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="padding-top:0px">
 						<p:outputLabel
 							value="#{msg['lucas.application.companyScreen.createCompanyDialog.roomInputText.name']}"
 							title="#{msg['lucas.application.companyScreen.createCompanyDialog.roomInputText.tooltip']}"
