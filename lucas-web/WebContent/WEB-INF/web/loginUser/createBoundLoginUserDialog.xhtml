@@ -112,6 +112,14 @@
 					<p:column colspan="2" />
 				</p:row>
 				<p:row>
+					<p:column />
+					<p:column colspan="5">
+						<h:outputText
+							value="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.info']}"
+							style="font-style:italic" />
+					</p:column>
+				</p:row>
+				<p:row>
 					<p:column>
 						<p:commandButton
 							process="@this boundUserIdInputNumber loginUserPasswordInputPassword loginUserConfirmPasswordInputPassword rolesPickList"
