@@ -15,6 +15,8 @@
 			type="florian_haas.lucas.web.util.converter.CompanyConverter" />
 		<p:importConstants
 			type="florian_haas.lucas.web.util.converter.LocalDateConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.BooleanConverter" />
 		<h:outputText
 			value="#{companyBean.companyCardManagerDialogCompanyCards.size()} "
 			style="font-weight:bold" />
@@ -23,7 +25,8 @@
 			style="font-weight:bold" />
 		<h:outputText
 			value="#{companyBean.companyCardManagerDialogSelectedCompany}"
-			style="font-weight:bold" converter="#{converterBean.getConverter(CompanyConverter.CONVERTER_ID)}" />
+			style="font-weight:bold"
+			converter="#{converterBean.getConverter(CompanyConverter.CONVERTER_ID)}" />
 		<p:toolbar id="companyCardManagerDialogToolbar" style="margin-top:5px"
 			styleClass="dialogToolbar">
 			<p:toolbarGroup align="left">
@@ -154,7 +157,8 @@
 			</p:column>
 			<p:column
 				headerText="#{msg['lucas.application.companyScreen.companyCardManagerDialog.blockedHeader']}">
-				<h:outputText value="#{companyCard.blocked}" />
+				<h:outputText value="#{companyCard.blocked}"
+					converter="#{converterBean.getConverter(BooleanConverter.CONVERTER_ID)}" />
 			</p:column>
 			<p:column
 				headerText="#{msg['lucas.application.companyScreen.companyCardManagerDialog.validDayHeader']}">

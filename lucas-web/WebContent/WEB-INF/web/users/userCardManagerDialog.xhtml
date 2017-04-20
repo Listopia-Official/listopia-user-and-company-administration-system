@@ -13,8 +13,10 @@
 	<ui:define name="dialogContent">
 		<p:importConstants
 			type="florian_haas.lucas.web.util.converter.LocalDateConverter" />
-			<p:importConstants
+		<p:importConstants
 			type="florian_haas.lucas.web.util.converter.UserConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.BooleanConverter" />
 		<h:outputText
 			value="#{userBean.userCardManagerDialogUserCards.size()} "
 			style="font-weight:bold" />
@@ -22,7 +24,8 @@
 			value="#{msg['lucas.application.userScreen.userCardManagerDialog.header']}"
 			style="font-weight:bold" />
 		<h:outputText value="#{userBean.userCardManagerDialogSelectedUser}"
-			style="font-weight:bold" converter="#{converterBean.getConverter(UserConverter.CONVERTER_ID)}" />
+			style="font-weight:bold"
+			converter="#{converterBean.getConverter(UserConverter.CONVERTER_ID)}" />
 		<p:toolbar id="userCardManagerDialogToolbar" style="margin-top:5px"
 			styleClass="dialogToolbar">
 			<p:toolbarGroup align="left">
@@ -150,7 +153,8 @@
 			</p:column>
 			<p:column
 				headerText="#{msg['lucas.application.userScreen.userCardManagerDialog.blockedHeader']}">
-				<h:outputText value="#{userCard.blocked}" />
+				<h:outputText value="#{userCard.blocked}"
+					converter="#{converterBean.getConverter(BooleanConverter.CONVERTER_ID)}" />
 			</p:column>
 			<p:column
 				headerText="#{msg['lucas.application.userScreen.userCardManagerDialog.validDayHeader']}">
