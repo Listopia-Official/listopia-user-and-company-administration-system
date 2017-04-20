@@ -20,8 +20,8 @@ import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
+import florian_haas.lucas.web.converter.AccountOwnerConverter;
 import florian_haas.lucas.web.util.WebUtils;
-import florian_haas.lucas.web.util.converter.AccountOwnerConverter;
 
 @Named("accountBean")
 @ViewScoped

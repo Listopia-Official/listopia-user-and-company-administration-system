@@ -1,4 +1,4 @@
-package florian_haas.lucas.web.util.converter;
+package florian_haas.lucas.web.converter;
 
 import java.util.Collection;
 

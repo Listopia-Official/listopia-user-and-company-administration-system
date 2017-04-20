@@ -26,7 +26,7 @@ import florian_haas.lucas.business.LucasException;
 import florian_haas.lucas.model.EntityBase;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
-import florian_haas.lucas.web.util.converter.CurrencyConverter;
+import florian_haas.lucas.web.converter.CurrencyConverter;
 
 public class WebUtils {
 

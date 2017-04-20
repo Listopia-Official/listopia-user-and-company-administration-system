@@ -1,4 +1,4 @@
-package florian_haas.lucas.web.util.renderer;
+package florian_haas.lucas.web.renderer;
 
 import javax.faces.component.*;
 import javax.faces.context.FacesContext;

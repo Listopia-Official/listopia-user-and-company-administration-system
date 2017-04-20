@@ -12,15 +12,15 @@
 	<ui:param name="formId" value="transactionLogDialogForm" />
 	<ui:define name="dialogContent">
 		<p:importConstants
-			type="florian_haas.lucas.web.util.converter.LocalDateTimeConverter" />
+			type="florian_haas.lucas.web.converter.LocalDateTimeConverter" />
 		<p:importConstants
-			type="florian_haas.lucas.web.util.converter.CurrencyConverter" />
+			type="florian_haas.lucas.web.converter.CurrencyConverter" />
 		<p:importConstants
-			type="florian_haas.lucas.web.util.converter.AccountOwnerConverter" />
+			type="florian_haas.lucas.web.converter.AccountOwnerConverter" />
 		<p:importConstants
-			type="florian_haas.lucas.web.util.converter.LoginUserConverter$ShortLoginUserConverter" />
+			type="florian_haas.lucas.web.converter.LoginUserConverter$ShortLoginUserConverter" />
 		<p:importConstants
-			type="florian_haas.lucas.web.util.converter.NullConverter" />
+			type="florian_haas.lucas.web.converter.NullConverter" />
 		<h:outputText
 			value="#{accountBean.transactionLogsDialogTransactionLogs.size()} "
 			style="font-weight:bold" />

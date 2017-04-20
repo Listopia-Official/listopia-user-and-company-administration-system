@@ -21,8 +21,8 @@ import florian_haas.lucas.model.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.util.validation.*;
+import florian_haas.lucas.web.converter.*;
 import florian_haas.lucas.web.util.WebUtils;
-import florian_haas.lucas.web.util.converter.*;
 
 @Named("userBean")
 @ViewScoped

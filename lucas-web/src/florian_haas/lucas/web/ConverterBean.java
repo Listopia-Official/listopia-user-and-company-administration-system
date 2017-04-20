@@ -8,8 +8,8 @@ import javax.faces.convert.Converter;
 import javax.inject.Named;
 
 import florian_haas.lucas.util.Utils;
+import florian_haas.lucas.web.converter.EnumConverter;
 import florian_haas.lucas.web.util.WebUtils;
-import florian_haas.lucas.web.util.converter.EnumConverter;
 
 @Named
 @ApplicationScoped

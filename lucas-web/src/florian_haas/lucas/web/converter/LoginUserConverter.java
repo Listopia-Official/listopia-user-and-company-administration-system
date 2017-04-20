@@ -1,10 +1,10 @@
-package florian_haas.lucas.web.util.converter;
+package florian_haas.lucas.web.converter;
 
 import javax.faces.convert.FacesConverter;
 
 import florian_haas.lucas.model.LoginUser;
+import florian_haas.lucas.web.converter.UserConverter.ShortUserConverter;
 import florian_haas.lucas.web.util.WebUtils;
-import florian_haas.lucas.web.util.converter.UserConverter.ShortUserConverter;
 
 @FacesConverter(LoginUserConverter.CONVERTER_ID)
 public class LoginUserConverter extends DefaultConverter<LoginUser> {

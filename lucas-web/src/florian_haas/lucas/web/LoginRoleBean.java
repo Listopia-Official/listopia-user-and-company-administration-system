@@ -19,8 +19,8 @@ import florian_haas.lucas.model.LoginUserRole;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.util.validation.*;
+import florian_haas.lucas.web.converter.LoginUserRoleConverter;
 import florian_haas.lucas.web.util.WebUtils;
-import florian_haas.lucas.web.util.converter.LoginUserRoleConverter;
 
 @Named
 @ViewScoped

@@ -12,11 +12,11 @@
 	<ui:param name="formId" value="companyCardManagerDialogForm" />
 	<ui:define name="dialogContent">
 		<p:importConstants
-			type="florian_haas.lucas.web.util.converter.CompanyConverter" />
+			type="florian_haas.lucas.web.converter.CompanyConverter" />
 		<p:importConstants
-			type="florian_haas.lucas.web.util.converter.LocalDateConverter" />
+			type="florian_haas.lucas.web.converter.LocalDateConverter" />
 		<p:importConstants
-			type="florian_haas.lucas.web.util.converter.BooleanConverter" />
+			type="florian_haas.lucas.web.converter.BooleanConverter" />
 		<h:outputText
 			value="#{companyBean.companyCardManagerDialogCompanyCards.size()} "
 			style="font-weight:bold" />
