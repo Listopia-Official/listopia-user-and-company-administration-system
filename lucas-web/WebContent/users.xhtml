@@ -24,6 +24,14 @@
 	<ui:define name="otherContent">
 		<p:importConstants type="florian_haas.lucas.model.EnumSchoolClass" />
 		<p:importEnum type="florian_haas.lucas.model.EnumUserType" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.RanksConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.NullConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.NullConverterNoText" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.EnumConverter" />
 	</ui:define>
 	<ui:define name="buttonArea">
 		<p:toolbarGroup>
@@ -288,13 +296,13 @@
 				<p:inputText value="#{userBean.searchUserForename}"
 					id="searchUserForenameInputText"
 					disabled="#{not userBean.useSearchUserForename}"
-					converter="lucas:nullStringConverterNoText" />
+					converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}" />
 			</p:column>
 			<p:column>
 				<p:inputText value="#{userBean.searchUserSurname}"
 					id="searchUserSurnameInputText"
 					disabled="#{not userBean.useSearchUserSurname}"
-					converter="lucas:nullStringConverterNoText" />
+					converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}" />
 			</p:column>
 			<p:column>
 				<p:selectOneMenu value="#{userBean.searchUserType}"
@@ -338,33 +346,35 @@
 			sortBy="#{entity.forename}"
 			visible="#{userBean.resultsDatatableColumns[1]}">
 			<h:outputText value="#{entity.forename}"
-				converter="lucas:NullStringConverter" />
+				converter="#{converterBean.getConverter(NullConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.surnameColumn.name']}"
 			sortBy="#{entity.surname}"
 			visible="#{userBean.resultsDatatableColumns[2]}">
 			<h:outputText value="#{entity.surname}"
-				converter="lucas:NullStringConverter" />
+				converter="#{converterBean.getConverter(NullConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.userTypeColumn.name']}"
 			sortBy="#{entity.userType}"
 			visible="#{userBean.resultsDatatableColumns[3]}">
-			<h:outputText value="#{entity.userType}" />
+			<h:outputText value="#{entity.userType}"
+				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.schoolClassColumn.name']}"
 			sortBy="#{entity.schoolClass}"
 			visible="#{userBean.resultsDatatableColumns[4]}">
-			<h:outputText
-				value="#{converterBean.convertEnum(entity.schoolClass)}" />
+			<h:outputText value="#{entity.schoolClass}"
+				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.ranksColumn.name']}"
 			visible="#{userBean.resultsDatatableColumns[5]}">
 			<h:outputText value="#{entity.ranks}"
-				converter="lucas:ranksConverter" escape="false" />
+				converter="#{converterBean.getConverter(RanksConverter.CONVERTER_ID)}"
+				escape="false" />
 		</p:column>
 	</ui:define>
 </ui:composition>

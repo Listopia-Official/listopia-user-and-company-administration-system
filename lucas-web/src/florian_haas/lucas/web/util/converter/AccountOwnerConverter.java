@@ -7,22 +7,21 @@ import javax.faces.convert.FacesConverter;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.web.util.WebUtils;
 
-@FacesConverter(value = "lucas:accountOwnerStringConverter")
-public class AccountOwnerConverter extends ReadOnlyConverter {
+@FacesConverter(AccountOwnerConverter.CONVERTER_ID)
+public class AccountOwnerConverter extends BasicConverter<AccountOwner> {
 
-	public static final String NULL_KEY = "lucas.application.accountOwnerConverter.none";
+	public static final String CONVERTER_ID = "lucas:accountOwnerConverter";
 
 	@Override
-	public String getAsString(FacesContext context, UIComponent component, Object value) {
-		AccountOwner owner = value != null ? (AccountOwner) value : null;
-		String ret = WebUtils.getTranslatedMessage(NULL_KEY);
-		if (owner != null) {
-			switch (owner.getOwnerType()) {
+	protected String getString(FacesContext context, UIComponent uiComponent, AccountOwner value) {
+		String ret = WebUtils.getTranslatedMessage("lucas.application.accountOwnerConverter.null");
+		if (value != null) {
+			switch (value.getOwnerType()) {
 				case COMPANY:
-					ret = WebUtils.getAsString((Company) owner, "lucas:companyStringConverter");
+					ret = WebUtils.getAsString((Company) value, CompanyConverter.CONVERTER_ID);
 					break;
 				case USER:
-					ret = WebUtils.getAsString((User) owner, "lucas:userStringConverter");
+					ret = WebUtils.getAsString((User) value, UserConverter.CONVERTER_ID);
 					break;
 			}
 		}

@@ -6,16 +6,14 @@ import javax.faces.convert.FacesConverter;
 
 import florian_haas.lucas.web.util.WebUtils;
 
-@FacesConverter(value = "lucas:themeConverter")
-public class ThemeConverter extends ReadOnlyConverter {
+@FacesConverter(ThemeConverter.CONVERTER_ID)
+public class ThemeConverter extends BasicConverter<String> {
 
-	public static final String NULL_KEY = "lucas.application.theme.none";
-	public static final String BASE_KEY = "lucas.application.theme.#.name";
+	public static final String CONVERTER_ID = "lucas:themeConverter";
 
 	@Override
-	public String getAsString(FacesContext arg0, UIComponent arg1, Object arg2) {
-		String themeName = arg2 != null ? arg2.toString() : null;
-		return WebUtils.getTranslatedMessage(themeName == null ? NULL_KEY : BASE_KEY.replaceAll("#", themeName));
+	public String getString(FacesContext context, UIComponent component, String value) {
+		return WebUtils.getTranslatedMessage(value == null ? "lucas.application.theme.null" : "lucas.application.theme." + value + ".name");
 	}
 
 }

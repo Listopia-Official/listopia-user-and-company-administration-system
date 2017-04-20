@@ -358,7 +358,11 @@ public class WebUtils {
 	}
 
 	public static String getAsString(Object object, String converterId) {
-		return getAsString(object, FacesContext.getCurrentInstance().getApplication().createConverter(converterId));
+		return getAsString(object, getConverterFromId(converterId));
+	}
+
+	public static Converter getConverterFromId(String converterId) {
+		return FacesContext.getCurrentInstance().getApplication().createConverter(converterId);
 	}
 
 	public static <E extends EntityBase> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,

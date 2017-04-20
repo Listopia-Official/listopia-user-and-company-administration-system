@@ -15,25 +15,27 @@ import org.primefaces.component.inputnumber.InputNumber;
 import florian_haas.lucas.business.GlobalDataBeanLocal;
 import florian_haas.lucas.web.util.WebUtils;
 
-@Named(value = "currencyConverter")
+@Named(CurrencyConverter.CONVERTER_ID)
 @RequestScoped
 public class CurrencyConverter implements Converter {
 
-	public static final String NULL_KEY = "lucas.application.currencyConverter.none";
+	public static final String CONVERTER_ID = "currencyConverter";
+
+	public static final String NULL_KEY = "lucas.application.currencyConverter.null";
 
 	@EJB
 	private GlobalDataBeanLocal globalData;
 
 	@Override
-	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
-		return arg2.equals(WebUtils.getTranslatedMessage(NULL_KEY)) ? null : new BigDecimal(arg2);
+	public Object getAsObject(FacesContext context, UIComponent component, String value) {
+		return value.equals(WebUtils.getTranslatedMessage(NULL_KEY)) ? null : new BigDecimal(value);
 	}
 
 	@Override
-	public String getAsString(FacesContext arg0, UIComponent arg1, Object arg2) {
-		return arg2 != null
-				? ((DecimalFormat) DecimalFormat.getNumberInstance(arg0.getViewRoot().getLocale())).format((BigDecimal) arg2)
-						+ (!(arg1 != null && arg1 instanceof InputNumber) ? " " + globalData.getCurrencySymbol() : "")
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
+		return value != null
+				? ((DecimalFormat) DecimalFormat.getNumberInstance(context.getViewRoot().getLocale())).format((BigDecimal) value)
+						+ (!(component != null && component instanceof InputNumber) ? " " + globalData.getCurrencySymbol() : "")
 				: WebUtils.getTranslatedMessage(NULL_KEY);
 	}
 }

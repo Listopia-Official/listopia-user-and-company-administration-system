@@ -20,6 +20,7 @@ import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.util.validation.*;
 import florian_haas.lucas.web.util.WebUtils;
+import florian_haas.lucas.web.util.converter.LoginUserRoleConverter;
 
 @Named
 @ViewScoped
@@ -217,11 +218,8 @@ public class LoginRoleBean implements Serializable {
 
 	public void createLoginRole() {
 		WebUtils.executeTask(params -> {
-			params.add(
-					WebUtils.getAsString(
-							loginUserRoleBean.findById(loginUserRoleBean.newLoginUserRole(createLoginUserRoleDialogName,
-									new HashSet<>(createLoginUserRoleDialogPermissionsListModel.getTarget()))),
-							"lucas:loginUserRoleStringConverter"));
+			params.add(WebUtils.getAsString(loginUserRoleBean.findById(loginUserRoleBean.newLoginUserRole(createLoginUserRoleDialogName,
+					new HashSet<>(createLoginUserRoleDialogPermissionsListModel.getTarget()))), LoginUserRoleConverter.CONVERTER_ID));
 			return true;
 		}, "lucas.application.loginRoleScreen.createLoginUserRole", (exception, params) -> {
 			return WebUtils.getTranslatedMessage("lucas.application.loginRoleScreen.createLoginUserRole.notUnique",
@@ -252,7 +250,7 @@ public class LoginRoleBean implements Serializable {
 	public void initPermissionsDialog() {
 		if (!selectedLoginRoles.isEmpty()) {
 			LoginUserRole tmp = selectedLoginRoles.get(0);
-			permissionsDialogSelectedRoleString = WebUtils.getAsString(tmp, "lucas:loginUserRoleStringConverter");
+			permissionsDialogSelectedRoleString = WebUtils.getAsString(tmp, LoginUserRoleConverter.CONVERTER_ID);
 			permissionsDialogPermissions.clear();
 			permissionsDialogPermissions.addAll(loginUserRoleBean.getPermissions(tmp.getId()));
 		}
@@ -267,7 +265,7 @@ public class LoginRoleBean implements Serializable {
 		while (it.hasNext()) {
 			LoginUserRole role = it.next();
 			WebUtils.executeTask(params -> {
-				params.add(WebUtils.getAsString(role, "lucas:loginUserRoleStringConverter"));
+				params.add(WebUtils.getAsString(role, LoginUserRoleConverter.CONVERTER_ID));
 				Boolean ret = loginUserRoleBean.removeLoginUserRole(role.getId());
 				if (ret) {
 					searchLoginRoleResults.remove(role);
@@ -349,7 +347,7 @@ public class LoginRoleBean implements Serializable {
 		}, "lucas.application.loginRoleScreen.editLoginUserRole", (exception, params) -> {
 			return WebUtils.getTranslatedMessage("lucas.application.loginRoleScreen.editLoginUserRole.notUnique",
 					params.toArray(new Object[params.size()]));
-		}, Utils.asList(WebUtils.getAsString(editLoginUserRole, "lucas:loginUserRoleStringConverter"), editLoginUserRoleDialogName));
+		}, Utils.asList(WebUtils.getAsString(editLoginUserRole, LoginUserRoleConverter.CONVERTER_ID), editLoginUserRoleDialogName));
 	}
 
 	/*

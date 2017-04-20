@@ -24,6 +24,10 @@
 		<ui:include src="/WEB-INF/web/loginUser/changePasswordDialog.xhtml" />
 	</ui:define>
 	<ui:define name="buttonArea">
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.RolesConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.UserConverter" />
 		<p:toolbarGroup>
 			<ui:fragment
 				rendered="#{loginBean.hasPermissionsOr([EnumPermission.LOGIN_USER_CREATE_REGISTERED,EnumPermission.LOGIN_USER_CREATE_RAW])}">
@@ -187,14 +191,14 @@
 			sortBy="#{entity.user}"
 			visible="#{loginUserBean.resultsDatatableColumns[2]}">
 			<h:outputText value="#{entity.user}"
-				converter="lucas:userStringConverter" />
+				converter="#{converterBean.getConverter(UserConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.loginUserScreen.loginUserSearchResultsTable.roles.name']}"
 			sortable="false"
 			visible="#{loginUserBean.resultsDatatableColumns[3]}">
 			<h:outputText value="#{entity.roles}"
-				converter="lucas:rolesConverter" escape="false" />
+				converter="#{converterBean.getConverter(RolesConverter.CONVERTER_ID)}" escape="false" />
 		</p:column>
 	</ui:define>
 </ui:composition>

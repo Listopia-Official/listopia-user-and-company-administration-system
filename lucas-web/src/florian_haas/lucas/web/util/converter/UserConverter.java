@@ -1,42 +1,54 @@
 package florian_haas.lucas.web.util.converter;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.FacesConverter;
 
 import florian_haas.lucas.model.User;
-import florian_haas.lucas.web.util.WebUtils;
 
-@FacesConverter(value = "lucas:userStringConverter")
-public class UserConverter extends ReadOnlyConverter {
+@FacesConverter(UserConverter.CONVERTER_ID)
+public class UserConverter extends DefaultConverter<User> {
 
-	public static final String PUPIL_KEY = "lucas.application.userConverter.pupil";
-	public static final String TEACHER_KEY = "lucas.application.userConverter.teacher";
-	public static final String GUEST_KEY = "lucas.application.userConverter.guest";
-	public static final String NULL_KEY = "lucas.application.userConverter.none";
+	public static final String CONVERTER_ID = "lucas:userConverter";
 
-	@Override
-	public String getAsString(FacesContext context, UIComponent component, Object value) {
-		User user = value != null ? (User) value : null;
-		String key = NULL_KEY;
-		if (user != null) {
-			switch (user.getUserType()) {
-				case PUPIL:
-					key = PUPIL_KEY;
-					break;
-				case TEACHER:
-					key = TEACHER_KEY;
-					break;
-				case GUEST:
-					key = GUEST_KEY;
-					break;
-				default:
-					key = NULL_KEY;
-					break;
-			}
-		}
-		return key != NULL_KEY ? WebUtils.getTranslatedMessage(key, user.getForename(), user.getSurname(), user.getSchoolClass(), user.getId())
-				: WebUtils.getTranslatedMessage(key);
+	public UserConverter() {
+		this(Boolean.FALSE);
 	}
 
+	protected UserConverter(Boolean isShortConverter) {
+		super(isShortConverter, "lucas.application.userConverter");
+	}
+
+	@Override
+	protected Object[] getParamsFromValue(User value) {
+		return new Object[] {
+				value.getForename(), value.getSurname(), value.getSchoolClass(), value.getId() };
+	}
+
+	@Override
+	protected String getModifiedDefaultKey(User value, String defaultKey) {
+		String keySuffix = ".guest";
+		switch (value.getUserType()) {
+			case PUPIL:
+				keySuffix = ".pupil";
+				break;
+			case TEACHER:
+				keySuffix = ".teacher";
+				break;
+			case GUEST:
+			default:
+				keySuffix = ".guest";
+				break;
+		}
+		return defaultKey.concat(keySuffix);
+	}
+
+	@FacesConverter(ShortUserConverter.CONVERTER_ID)
+	public static class ShortUserConverter extends UserConverter {
+
+		public static final String CONVERTER_ID = "lucas:shortUserConverter";
+
+		public ShortUserConverter() {
+			super(Boolean.TRUE);
+		}
+
+	}
 }

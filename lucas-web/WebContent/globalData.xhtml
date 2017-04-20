@@ -10,6 +10,8 @@
 		<ui:include src="/WEB-INF/web/globalData/editThemesDialog.xhtml" />
 	</ui:define>
 	<ui:define name="content">
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.ThemeConverter" />
 		<div class="ui-fluid">
 			<h:form>
 				<p:panelGrid>
@@ -159,7 +161,7 @@
 								<f:selectItems
 									value="#{globalDataBean.defaultUiThemeThemesList}" var="theme"
 									itemValue="#{theme}"
-									itemLabel="#{converterBean.getAsString(theme,'lucas:themeConverter')}" />
+									itemLabel="#{converterBean.getAsString(theme,ThemeConverter.CONVERTER_ID)}" />
 							</p:selectOneMenu>
 						</p:column>
 						<p:column

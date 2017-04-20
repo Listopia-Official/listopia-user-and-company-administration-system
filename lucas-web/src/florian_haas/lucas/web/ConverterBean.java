@@ -3,12 +3,13 @@ package florian_haas.lucas.web;
 import java.io.Serializable;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
+import javax.enterprise.inject.spi.*;
+import javax.faces.convert.Converter;
 import javax.inject.Named;
 
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.web.util.WebUtils;
+import florian_haas.lucas.web.util.converter.EnumConverter;
 
 @Named
 @ApplicationScoped
@@ -18,16 +19,20 @@ public class ConverterBean implements Serializable {
 
 	public static final String NULL_KEY = "lucas.application.converterBean.nullValue";
 
+	public Converter getConverter(String converterId) {
+		return WebUtils.getConverterFromId(converterId);
+	}
+
+	@SuppressWarnings({
+			"unchecked", "rawtypes" })
+	public Converter getManagedConverter(String converterId) {
+		BeanManager manager = CDI.current().getBeanManager();
+		Bean bean = manager.getBeans(converterId).iterator().next();
+		return (Converter) manager.getReference(bean, bean.getBeanClass(), manager.createCreationalContext(bean));
+	}
+
 	public <E extends Enum<E>> String convertEnum(E enumValue) {
-		String ret;
-		if (enumValue != null) {
-			FacesContext context = FacesContext.getCurrentInstance();
-			ret = context.getApplication().createConverter(enumValue.getClass()).getAsString(context, UIComponent.getCurrentComponent(context),
-					enumValue);
-		} else {
-			ret = WebUtils.getTranslatedMessage(NULL_KEY);
-		}
-		return ret;
+		return WebUtils.getAsString(enumValue, EnumConverter.CONVERTER_ID);
 	}
 
 	public String getAsString(Object object, String converterId) {

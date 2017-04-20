@@ -6,12 +6,14 @@ import javax.faces.convert.*;
 
 import florian_haas.lucas.web.util.WebUtils;
 
-@FacesConverter(value = "lucas:BooleanStringConverter")
+@FacesConverter(BooleanConverter.CONVERTER_ID)
 public class BooleanConverter implements Converter {
 
+	public static final String CONVERTER_ID = "lucas:booleanConverter";
+
 	public static final String NULL_KEY = "lucas.application.booleanConverter.null";
-	public static final String TRUE_KEY = "lucas.application.booleanConverter.true";
-	public static final String FALSE_KEY = "lucas.application.booleanConverter.false";
+	public static final String TRUE_KEY = "lucas.application.booleanConverter.normal.true";
+	public static final String FALSE_KEY = "lucas.application.booleanConverter.normal.false";
 
 	@Override
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {

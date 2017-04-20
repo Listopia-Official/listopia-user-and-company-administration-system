@@ -24,6 +24,16 @@
 	</ui:define>
 	<ui:define name="otherContent">
 		<p:importEnum type="florian_haas.lucas.model.EnumCompanyType" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.CompanyConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.CompaniesConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.NullConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.NullConverterNoText" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.EnumConverter" />
 	</ui:define>
 	<ui:define name="buttonArea">
 		<p:toolbarGroup align="left">
@@ -312,7 +322,7 @@
 			<p:column>
 				<p:inputText value="#{companyBean.searchCompanyDescription}"
 					id="searchCompanyDescriptionInputText"
-					converter="lucas:nullStringConverterNoText"
+					converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}"
 					disabled="#{not companyBean.useSearchCompanyDescription}" />
 			</p:column>
 			<p:column>
@@ -349,8 +359,8 @@
 			</p:column>
 			<p:column>
 				<p:selectBooleanButton
-					offLabel="#{msg['lucas.application.booleanConverter.false']}"
-					onLabel="#{msg['lucas.application.booleanConverter.true']}"
+					offLabel="#{msg['lucas.application.booleanConverter.normal.false']}"
+					onLabel="#{msg['lucas.application.booleanConverter.normal.true']}"
 					id="searchCompanyAreEmployeesRequiredBooleanButton"
 					value="#{companyBean.searchCompanyAreEmployeesRequired}"
 					disabled="#{not companyBean.useSearchCompanyAreEmployeesRequired}" />
@@ -375,7 +385,7 @@
 			sortBy="#{entity.description}"
 			visible="#{companyBean.resultsDatatableColumns[2]}">
 			<h:outputText value="#{entity.description}"
-				converter="lucas:NullStringConverter" />
+				converter="#{converterBean.getConverter(NullConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.roomColumn.name']}"
@@ -393,20 +403,21 @@
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.companyTypeColumn.name']}"
 			sortBy="#{entity.companyType}"
 			visible="#{companyBean.resultsDatatableColumns[5]}">
-			<h:outputText value="#{entity.companyType}" />
+			<h:outputText value="#{entity.companyType}"
+				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.parentCompanyColumn.name']}"
 			sortBy="#{entity.parentCompany}"
 			visible="#{companyBean.resultsDatatableColumns[6]}">
 			<h:outputText value="#{entity.parentCompany}"
-				converter="lucas:companyStringConverter" />
+				converter="#{converterBean.getConverter(CompanyConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.childCompaniesColumn.name']}"
 			sortable="false" visible="#{companyBean.resultsDatatableColumns[7]}">
 			<h:outputText value="#{entity.childCompanies}" escape="false"
-				converter="lucas:companiesConverter" />
+				converter="#{converterBean.getConverter(CompaniesConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.requiredEmployeesCount.name']}"

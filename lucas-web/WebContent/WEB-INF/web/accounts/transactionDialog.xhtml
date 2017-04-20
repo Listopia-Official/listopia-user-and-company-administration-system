@@ -11,6 +11,8 @@
 	<ui:param name="widgetVar" value="transactionDialog" />
 	<ui:param name="formId" value="transactionDialogForm" />
 	<ui:define name="dialogContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.NullConverterNoText" />
 		<div class="ui-fluid">
 			<p:panelGrid>
 				<p:row>
@@ -71,7 +73,7 @@
 					<p:column>
 						<p:inputText id="commentInputText"
 							value="#{accountBean.transactionDialogComment}"
-							converter="lucas:nullStringConverterNoText" maxlength="64"
+							converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}" maxlength="64"
 							title="#{msg['lucas.application.accountScreen.transactionDialog.commentInputText.tooltip']}" />
 					</p:column>
 					<p:column>

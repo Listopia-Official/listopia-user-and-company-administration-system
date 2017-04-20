@@ -11,11 +11,13 @@
 	<ui:param name="widgetVar" value="imageManagerDialog" />
 	<ui:param name="formId" value="imageManagerDialogForm" />
 	<ui:define name="dialogContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.UserConverter" />
 		<h:outputText
 			value="#{msg['lucas.application.userScreen.imageManagerDialog.userLabel1']}"
 			style="font-weight:bold" />
 		<h:outputText value="#{userBean.imageManagerDialogSelectedUser}"
-			converter="lucas:userStringConverter" style="font-weight:bold" />
+			converter="#{converterBean.getConverter(UserConverter.CONVERTER_ID)}" style="font-weight:bold" />
 		<p:toolbar style="margin-top:5px;margin-bottom:5px"
 			rendered="#{loginBean.hasPermission(EnumPermission.USER_SET_IMAGE)}">
 			<p:toolbarGroup align="left">

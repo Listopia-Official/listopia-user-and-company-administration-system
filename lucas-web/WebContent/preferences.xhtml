@@ -10,6 +10,8 @@
 		<ui:include src="/WEB-INF/web/preferences/changePasswordDialog.xhtml" />
 	</ui:define>
 	<ui:define name="content">
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.ThemeConverter" />
 		<p:panelGrid>
 			<p:row>
 				<p:column>
@@ -37,7 +39,7 @@
 											<p:ajax listener="#{loginBean.preferencesScreenSetUITheme}" />
 											<f:selectItems value="#{loginBean.UIThemes}" var="theme"
 												itemValue="#{theme}"
-												itemLabel="#{converterBean.getAsString(theme,'lucas:themeConverter')}" />
+												itemLabel="#{converterBean.getAsString(theme,ThemeConverter.CONVERTER_ID)}" />
 										</p:themeSwitcher>
 									</p:column>
 									<p:column>

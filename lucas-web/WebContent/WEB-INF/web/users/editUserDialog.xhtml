@@ -11,6 +11,8 @@
 	<ui:param name="widgetVar" value="editUserDialog" />
 	<ui:param name="formId" value="editUserDialogForm" />
 	<ui:define name="dialogContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.NullConverterNoText" />
 		<div class="ui-fluid">
 			<p:panelGrid>
 				<p:row
@@ -29,7 +31,7 @@
 					rendered="#{loginBean.hasPermission(EnumPermission.USER_SET_FORENAME)}">
 					<p:column colspan="3">
 						<p:inputText id="forenameInputText"
-							converter="lucas:nullStringConverterNoText"
+							converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}"
 							value="#{userBean.editUserDialogForename}"
 							title="#{msg['lucas.application.userScreen.editUserDialog.forenameInputText.tooltip']}">
 							<p:ajax event="keyup" delay="50" update="@(.userTypeOutput)"
@@ -53,7 +55,7 @@
 					rendered="#{loginBean.hasPermission(EnumPermission.USER_SET_SURNAME)}">
 					<p:column colspan="3">
 						<p:inputText id="surnameInputText"
-							converter="lucas:nullStringConverterNoText"
+							converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}"
 							value="#{userBean.editUserDialogSurname}"
 							title="#{msg['lucas.application.userScreen.editUserDialog.surnameInputText.tooltip']}">
 							<p:ajax event="keyup" delay="50" update="@(.userTypeOutput)"

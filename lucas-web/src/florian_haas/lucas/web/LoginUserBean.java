@@ -21,6 +21,7 @@ import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.util.validation.*;
 import florian_haas.lucas.web.util.WebUtils;
+import florian_haas.lucas.web.util.converter.*;
 
 @Named
 @ViewScoped
@@ -271,7 +272,7 @@ public class LoginUserBean implements Serializable {
 			createDefaultLoginUserRolesListModel.getTarget().forEach(role -> ids.add(role.getId()));
 			params.add(WebUtils.getAsString(
 					loginBean.findLoginUserById(loginBean.newLoginUser(createDefaultLoginUserUsername, createDefaultLoginUserPassword, ids)),
-					"lucas:loginUserStringConverter"));
+					LoginUserConverter.CONVERTER_ID));
 			Arrays.fill(createDefaultLoginUserPassword, 'c');
 			return true;
 		}, "lucas.application.loginUserScreen.createDefaultLoginUser", (exception, params) -> {
@@ -323,7 +324,7 @@ public class LoginUserBean implements Serializable {
 	public String getCreateBoundLoginUserBoundUserFromId() {
 		User user = createBoundLoginUserBoundUser != null
 				? entityBean.exists(createBoundLoginUserBoundUser, User.class) ? userBean.findById(createBoundLoginUserBoundUser) : null : null;
-		return WebUtils.getAsString(user, "lucas:userStringConverter");
+		return WebUtils.getAsString(user, UserConverter.CONVERTER_ID);
 	}
 
 	public void initCreateBoundLoginUserDialog() {
@@ -338,7 +339,7 @@ public class LoginUserBean implements Serializable {
 			createBoundLoginUserRolesListModel.getTarget().forEach(role -> ids.add(role.getId()));
 			params.add(WebUtils.getAsString(
 					loginBean.findLoginUserById(loginBean.newLoginUser(createBoundLoginUserBoundUser, createBoundLoginUserPassword, ids)),
-					"lucas:loginUserStringConverter"));
+					LoginUserConverter.CONVERTER_ID));
 			Arrays.fill(createBoundLoginUserPassword, 'c');
 			return true;
 		}, "lucas.application.loginUserScreen.createBoundLoginUser", (exception, params) -> {
@@ -347,7 +348,7 @@ public class LoginUserBean implements Serializable {
 							? "lucas.application.loginUserScreen.createBoundLoginUser.notUniqueUser"
 							: "lucas.application.loginUserScreen.createBoundLoginUser.notUniqueUsername"),
 					params.toArray(new Object[params.size()]));
-		}, Utils.asList(WebUtils.getAsString(userBean.findById(createBoundLoginUserBoundUser), "lucas:userStringConverter")));
+		}, Utils.asList(WebUtils.getAsString(userBean.findById(createBoundLoginUserBoundUser), UserConverter.CONVERTER_ID)));
 	}
 
 	/*
@@ -431,7 +432,7 @@ public class LoginUserBean implements Serializable {
 				});
 			}
 			LoginUser newUser = loginBean.findLoginUserById(id);
-			params.add(WebUtils.getAsString(newUser, "lucas:loginUserStringConverter"));
+			params.add(WebUtils.getAsString(newUser, LoginUserConverter.CONVERTER_ID));
 			WebUtils.refreshEntities(LoginUser.class, searchLoginUserResults, selectedLoginUsers, newUser, loginBean::findLoginUserById, true);
 			return true;
 		}, "lucas.application.loginUserScreen.editLoginUser", (exception, params) -> {
@@ -477,7 +478,7 @@ public class LoginUserBean implements Serializable {
 			Arrays.fill(changePasswordDialogPassword, 'c');
 			return true;
 		}, "lucas.application.loginUserScreen.changePassword",
-				Utils.asList(WebUtils.getAsString(changePasswordDialogSelectedUser, "lucas:loginUserStringConverter")));
+				Utils.asList(WebUtils.getAsString(changePasswordDialogSelectedUser, LoginUserConverter.CONVERTER_ID)));
 	}
 
 	/*

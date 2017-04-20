@@ -11,6 +11,10 @@
 	<ui:param name="widgetVar" value="createDefaultLoginUserDialog" />
 	<ui:param name="formId" value="createDefaultLoginUserDialogForm" />
 	<ui:define name="dialogContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.CharArrayConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.LoginUserRoleConverter$ShortLoginUserRoleConverter" />
 		<div class="ui-fluid">
 			<p:panelGrid>
 				<p:row>
@@ -45,7 +49,8 @@
 							promptLabel="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.passwordInputText.promptLabel']}"
 							match="createDefaultLoginUserDialogForm:loginUserConfirmPasswordInputPassword"
 							validatorMessage="#{msg['lucas.application.loginUserScreen.createDefaultLoginUserDialog.passwordInputText.matchLabel']}"
-							converter="lucas:StringChar[]Converter" maxlength="16"
+							converter="#{converterBean.getConverter(CharArrayConverter.CONVERTER_ID)}"
+							maxlength="16"
 							value="#{loginUserBean.createDefaultLoginUserPassword}"
 							title="#{msg['lucas.application.loginUserScreen.createDefaultLoginUserDialog.passwordInputText.tooltip']}" />
 					</p:column>
@@ -62,7 +67,8 @@
 					</p:column>
 					<p:column colspan="3">
 						<p:password id="loginUserConfirmPasswordInputPassword"
-							converter="lucas:StringChar[]Converter" maxlength="16"
+							converter="#{converterBean.getConverter(CharArrayConverter.CONVERTER_ID)}"
+							maxlength="16"
 							value="#{loginUserBean.createDefaultLoginUserPassword}"
 							title="#{msg['lucas.application.loginUserScreen.createDefaultLoginUserDialog.confirmPasswordInputText.tooltip']}" />
 					</p:column>
@@ -82,16 +88,13 @@
 							showTargetFilter="true" filterMatchMode="contains"
 							value="#{loginUserBean.createDefaultLoginUserRolesListModel}"
 							var="role"
-							itemLabel="#{converterBean.getAsString(role,'lucas:shortLoginUserRoleConverter')}"
+							converter="#{converterBean.getConverter(ShortLoginUserRoleConverter.CONVERTER_ID)}"
+							itemLabel="#{converterBean.getAsString(role,ShortLoginUserRoleConverter.CONVERTER_ID)}"
 							itemValue="#{role}"
 							addLabel="#{msg['lucas.application.loginUserScreen.createDefaultLoginUserDialog.rolesPickList.addLabel']}"
 							addAllLabel="#{msg['lucas.application.loginUserScreen.createDefaultLoginUserDialog.rolesPickList.addAllLabel']}"
 							removeLabel="#{msg['lucas.application.loginUserScreen.createDefaultLoginUserDialog.rolesPickList.removeLabel']}"
 							removeAllLabel="#{msg['lucas.application.loginUserScreen.createDefaultLoginUserDialog.rolesPickList.removeAllLabel']}">
-							<p:column>
-								<h:outputText value="#{role}"
-									converter="lucas:shortLoginUserRoleConverter" />
-							</p:column>
 						</p:pickList>
 					</p:column>
 					<p:column colspan="2" />

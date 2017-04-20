@@ -1,58 +1,40 @@
 package florian_haas.lucas.web.util.converter;
 
-import java.lang.reflect.Field;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.ConverterException;
+import javax.faces.convert.*;
 
-import florian_haas.lucas.util.Utils;
-import florian_haas.lucas.web.util.*;
+import florian_haas.lucas.web.util.WebUtils;
 
-public abstract class EnumConverter<E extends Enum<E>> extends javax.faces.convert.EnumConverter {
+@FacesConverter(EnumConverter.CONVERTER_ID)
+public class EnumConverter implements Converter {
 
-	public static final String MESSAGE_PREFIX = "lucas.application.";
-	public static final String MESSAGE_NULL_KEY = "NULL";
+	public static final String CONVERTER_ID = "lucas:enumConverter";
 
-	protected final Class<E> enumClass;
-	protected final String messageName;
-
-	// Better solution?
-	protected EnumConverter() throws Exception {
-		this.enumClass = Utils.getClassFromArgs(this.getClass());
-		try {
-			Field targetClass = javax.faces.convert.EnumConverter.class.getDeclaredField("targetClass");
-			targetClass.setAccessible(true);
-			targetClass.set(this, enumClass);
-		}
-		catch (Exception e) {
-			throw e;
-		}
-		String enumClassName = this.enumClass.getSimpleName();
-		char firstChar = enumClassName.charAt(0);
-		this.messageName = this.enumClass.getSimpleName().replace(firstChar, Character.toLowerCase(firstChar));
-	}
+	public static final String ENUM_ATTRIBUTE_KEY = "lucas:enumConverterAttribute";
 
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
-		String enumString = super.getAsString(context, component, value);
-		if (enumString.trim().isEmpty()) enumString = MESSAGE_NULL_KEY;
-		return getTranslatedName(enumString);
+		if (value != null) {
+			if (!(value instanceof Enum)) throw new IllegalArgumentException(value.getClass().getName() + " cannot be cast to Enum");
+			component.getAttributes().put(ENUM_ATTRIBUTE_KEY, value.getClass());
+		}
+		return getTranslatedName((Enum<?>) value);
 	}
 
 	@Override
+	@SuppressWarnings({
+			"unchecked", "rawtypes" })
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
-		if ((context == null) || (component == null)) throw new NullPointerException();
-
-		if (value == null || value.isEmpty() || value.equals(WebUtils.getTranslatedMessage(MESSAGE_PREFIX + messageName + "." + MESSAGE_NULL_KEY)))
-			return null;
+		if (value == null || value.trim().isEmpty() || value.equals(getTranslatedName(null))) return null;
 
 		value = value.trim();
+		Class<Enum> enumClass = (Class<Enum>) component.getAttributes().get(ENUM_ATTRIBUTE_KEY);
 
-		Enum<E> matchingEnum = null;
+		Enum<?> matchingEnum = null;
 
-		for (Enum<E> enumValue : getEnumValues()) {
-			String translatedName = getTranslatedName(enumValue.name());
+		for (Enum<?> enumValue : getEnumValues(enumClass)) {
+			String translatedName = getTranslatedName(enumValue);
 			if (value.equals(translatedName)) {
 				matchingEnum = enumValue;
 			}
@@ -70,11 +52,19 @@ public abstract class EnumConverter<E extends Enum<E>> extends javax.faces.conve
 		return matchingEnum;
 	}
 
-	private String getTranslatedName(String enumString) {
-		return WebUtils.getTranslatedMessage(MESSAGE_PREFIX + messageName + "." + enumString);
+	private String getTranslatedName(Enum<?> enumValue) {
+		return WebUtils.getTranslatedMessage(enumValue == null ? "lucas.application.enumConverter.null"
+				: "lucas.application." + getEnumClassName(enumValue) + "." + enumValue.name());
 	}
 
-	private Enum<E>[] getEnumValues() {
+	private String getEnumClassName(Enum<?> enumInstance) {
+		String clazzName = enumInstance.getClass().getSimpleName();
+		char firstChar = clazzName.charAt(0);
+		return clazzName.replace(firstChar, Character.toLowerCase(firstChar));
+	}
+
+	@SuppressWarnings("rawtypes")
+	private Enum<?>[] getEnumValues(Class<Enum> enumClass) {
 		return enumClass.getEnumConstants();
 	}
 

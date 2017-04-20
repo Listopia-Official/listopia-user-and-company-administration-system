@@ -22,6 +22,7 @@ import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.util.validation.NotBlankString;
 import florian_haas.lucas.web.util.WebUtils;
+import florian_haas.lucas.web.util.converter.*;
 
 @Named
 @ViewScoped
@@ -469,7 +470,7 @@ public class CompanyBean implements Serializable {
 	public String getCreateCompanyDialogParentCompanyFromId() {
 		Company company = createCompanyDialogParentCompanyId != null ? entityBean.exists(createCompanyDialogParentCompanyId, Company.class)
 				? companyBean.findById(createCompanyDialogParentCompanyId) : null : null;
-		return WebUtils.getAsString(company, "lucas:companyStringConverter");
+		return WebUtils.getAsString(company, CompanyConverter.CONVERTER_ID);
 	}
 
 	public Integer getCreateCompanyDialogRequiredEmployeesCount() {
@@ -489,7 +490,7 @@ public class CompanyBean implements Serializable {
 	}
 
 	public String getUserAsString(Long id) {
-		return WebUtils.getAsString(id != null ? userBean.findById(id) : null, "lucas:userStringConverter");
+		return WebUtils.getAsString(id != null ? userBean.findById(id) : null, UserConverter.CONVERTER_ID);
 	}
 
 	public Long getCreateCompanyDialogTmpManagerId() {
@@ -543,7 +544,7 @@ public class CompanyBean implements Serializable {
 					companyBean.findById(companyBean.createCompany(createCompanyDialogName, createCompanyDialogDescription, createCompanyDialogRoom,
 							createCompanyDialogSection, createCompanyDialogCompanyType, createCompanyDialogParentCompanyId,
 							createCompanyDialogManagerUserIds, createCompanyDialogRequiredEmployeesCount)),
-					"lucas:companyStringConverter"));
+					CompanyConverter.CONVERTER_ID));
 			return true;
 		}, "lucas.application.companyScreen.createCompany.message", (exception, params) -> {
 			if (exception.getMark().equals(florian_haas.lucas.business.CompanyBean.NAME_NOT_UNIQUE_EXCEPTION_MARKER)) {
@@ -641,7 +642,7 @@ public class CompanyBean implements Serializable {
 		Company company = editCompanyDialogParentCompanyId != null
 				? entityBean.exists(editCompanyDialogParentCompanyId, Company.class) ? companyBean.findById(editCompanyDialogParentCompanyId) : null
 				: null;
-		return WebUtils.getAsString(company, "lucas:companyStringConverter");
+		return WebUtils.getAsString(company, CompanyConverter.CONVERTER_ID);
 	}
 
 	public Integer getEditCompanyDialogRequiredEmployeesCount() {
@@ -691,7 +692,7 @@ public class CompanyBean implements Serializable {
 				companyBean.setRequiredEmployeesCount(id, editCompanyDialogRequiredEmployeesCount);
 			}
 			Company tmp2 = companyBean.findById(id);
-			params.add(WebUtils.getAsString(tmp2, "lucas:companyStringConverter"));
+			params.add(WebUtils.getAsString(tmp2, CompanyConverter.CONVERTER_ID));
 			WebUtils.refreshEntities(Company.class, searchCompanyResults, selectedCompanies, tmp2, companyBean::findById, true);
 			return true;
 		}, "lucas.application.companyScreen.editCompany.message", (exception, params) -> {
@@ -739,7 +740,7 @@ public class CompanyBean implements Serializable {
 	private List<String> getStringFromEmployment(List<Employment> employments) {
 		List<String> ret = new ArrayList<>();
 		employments.forEach(employment -> {
-			ret.add(WebUtils.getAsString(employment.getUser(), "lucas:userStringConverter"));
+			ret.add(WebUtils.getAsString(employment.getUser(), UserConverter.CONVERTER_ID));
 		});
 		return ret;
 	}
@@ -747,7 +748,7 @@ public class CompanyBean implements Serializable {
 	public void initViewEmployeesDialog() {
 		if (!selectedCompanies.isEmpty()) {
 			Company tmp = selectedCompanies.get(0);
-			viewEmployeesDialogSelectedCompanyString = WebUtils.getAsString(tmp, "lucas:companyStringConverter");
+			viewEmployeesDialogSelectedCompanyString = WebUtils.getAsString(tmp, CompanyConverter.CONVERTER_ID);
 			viewEmployeesDialogManagers.clear();
 			viewEmployeesDialogEmployees.clear();
 			viewEmployeesDialogAdvisors.clear();
@@ -817,7 +818,7 @@ public class CompanyBean implements Serializable {
 				params.add(id);
 				return true;
 			}, "lucas.application.companyScreen.createCompanyCard", COMPANY_CARD_MANAGER_DIALOG_MESSAGES_ID,
-					Utils.asList(WebUtils.getAsString(companyCardManagerDialogSelectedCompany, "lucas:companyStringConverter")));
+					Utils.asList(WebUtils.getAsString(companyCardManagerDialogSelectedCompany, CompanyConverter.CONVERTER_ID)));
 		}
 	}
 
@@ -828,7 +829,7 @@ public class CompanyBean implements Serializable {
 				params.add(id);
 				return companyBean.blockCompanyCard(id);
 			}, "lucas.application.companyScreen.blockCompanyCard", COMPANY_CARD_MANAGER_DIALOG_MESSAGES_ID,
-					Utils.asList(WebUtils.getAsString(companyCardManagerDialogSelectedCompany, "lucas:companyStringConverter")))) {
+					Utils.asList(WebUtils.getAsString(companyCardManagerDialogSelectedCompany, CompanyConverter.CONVERTER_ID)))) {
 				CompanyCard newCard = companyBean.findCompanyCardById(id);
 				WebUtils.refreshEntities(CompanyCard.class, companyCardManagerDialogCompanyCards, companyCardManagerDialogSelectedCompanyCards,
 						newCard, companyBean::findCompanyCardById, true);
@@ -843,7 +844,7 @@ public class CompanyBean implements Serializable {
 				params.add(id);
 				return companyBean.unblockCompanyCard(id);
 			}, "lucas.application.companyScreen.unblockCompanyCard", COMPANY_CARD_MANAGER_DIALOG_MESSAGES_ID,
-					Utils.asList(WebUtils.getAsString(companyCardManagerDialogSelectedCompany, "lucas:companyStringConverter")))) {
+					Utils.asList(WebUtils.getAsString(companyCardManagerDialogSelectedCompany, CompanyConverter.CONVERTER_ID)))) {
 				CompanyCard newCard = companyBean.findCompanyCardById(id);
 				WebUtils.refreshEntities(CompanyCard.class, companyCardManagerDialogCompanyCards, companyCardManagerDialogSelectedCompanyCards,
 						newCard, companyBean::findCompanyCardById, true);
@@ -863,8 +864,8 @@ public class CompanyBean implements Serializable {
 			Long id = card.getId();
 			if (WebUtils.executeTask(params -> {
 				params.add(card.getId());
-				params.add(WebUtils.getAsString(Utils.asLocalDate(companyCardManagerDialogValidDate), "lucas:localDateStringConverter"));
-				params.add(WebUtils.getAsString(card.getValidDay(), "lucas:localDateStringConverter"));
+				params.add(WebUtils.getAsString(Utils.asLocalDate(companyCardManagerDialogValidDate), LocalDateConverter.CONVERTER_ID));
+				params.add(WebUtils.getAsString(card.getValidDay(), LocalDateConverter.CONVERTER_ID));
 				return companyBean.setValidDate(id, Utils.asLocalDate(companyCardManagerDialogValidDate));
 			}, "lucas.application.companyScreen.setValidDay", COMPANY_CARD_MANAGER_DIALOG_MESSAGES_ID)) {
 				CompanyCard newCard = companyBean.findCompanyCardById(id);
@@ -903,7 +904,7 @@ public class CompanyBean implements Serializable {
 					params.add(id);
 					return removed;
 				}, "lucas.application.companyScreen.deleteCompanyCard", COMPANY_CARD_MANAGER_DIALOG_MESSAGES_ID,
-						Utils.asList(WebUtils.getAsString(companyCardManagerDialogSelectedCompany, "lucas:companyStringConverter")));
+						Utils.asList(WebUtils.getAsString(companyCardManagerDialogSelectedCompany, CompanyConverter.CONVERTER_ID)));
 
 			}
 		}

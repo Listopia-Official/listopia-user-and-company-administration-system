@@ -7,23 +7,27 @@ import javax.faces.context.FacesContext;
 
 import florian_haas.lucas.web.util.WebUtils;
 
-public abstract class CollectionConverter<T> extends ReadOnlyConverter {
+public abstract class CollectionConverter<T> extends BasicConverter<Collection<T>> {
 
-	private final String NO_VALUE_KEY;
+	private final String emptyLangKey;
 
-	protected CollectionConverter(String noValueKey) {
-		NO_VALUE_KEY = noValueKey;
+	protected CollectionConverter(String emptyLangKey) {
+		super(Boolean.FALSE);
+		this.emptyLangKey = emptyLangKey;
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public String getAsString(FacesContext context, UIComponent component, Object value) {
-		Collection<T> collection = (Collection<T>) value;
+	protected Class<?> getValueClass() {
+		return Collection.class;
+	}
+
+	@Override
+	public String getString(FacesContext context, UIComponent component, Collection<T> value) {
 		StringBuilder builder = new StringBuilder();
-		if (collection.isEmpty()) {
-			builder.append(WebUtils.getTranslatedMessage(NO_VALUE_KEY));
+		if (value.isEmpty()) {
+			builder.append(WebUtils.getTranslatedMessage(emptyLangKey));
 		} else {
-			collection.forEach(entry -> {
+			value.forEach(entry -> {
 				builder.append(entryToString(entry) + "<br />");
 			});
 		}

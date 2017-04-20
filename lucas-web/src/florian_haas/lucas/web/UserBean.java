@@ -22,6 +22,7 @@ import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.util.validation.*;
 import florian_haas.lucas.web.util.WebUtils;
+import florian_haas.lucas.web.util.converter.*;
 
 @Named("userBean")
 @ViewScoped
@@ -111,7 +112,7 @@ public class UserBean implements Serializable {
 		WebUtils.executeTask((params) -> {
 			params.add(WebUtils.getAsString(userBean.findById(
 					userBean.createPupil(createPupilDialogForename, createPupilDialogSurname, createPupilDialogSchoolClass, createPupilDialogRanks)),
-					"lucas:userStringConverter"));
+					UserConverter.CONVERTER_ID));
 			return true;
 		}, "lucas.application.userScreen.createPupil.message");
 	}
@@ -198,7 +199,7 @@ public class UserBean implements Serializable {
 		WebUtils.executeTask((params) -> {
 			params.add(WebUtils.getAsString(
 					userBean.findById(userBean.createTeacher(createTeacherDialogForename, createTeacherDialogSurname, createTeacherDialogRanks)),
-					"lucas:userStringConverter"));
+					UserConverter.CONVERTER_ID));
 			return true;
 		}, "lucas.application.userScreen.createTeacher.message");
 	}
@@ -666,7 +667,7 @@ public class UserBean implements Serializable {
 					});
 				}
 				User tmp2 = userBean.findById(id);
-				params.add(WebUtils.getAsString(tmp, "lucas:userStringConverter"));
+				params.add(WebUtils.getAsString(tmp, UserConverter.CONVERTER_ID));
 				WebUtils.refreshEntities(User.class, searchUserResults, selectedUsers, tmp2, userBean::findById, true);
 				return true;
 			}, "lucas.application.userScreen.editUser.message");
@@ -745,14 +746,14 @@ public class UserBean implements Serializable {
 			imageManagerDialogDisplayImageAsBase64 = null;
 			return true;
 		}, "lucas.application.userScreen.removeUserImage.message", IMAGE_DIALOG_MESSAGES_ID,
-				Utils.asList(WebUtils.getAsString(imageManagerDialogSelectedUser, "lucas:userStringConverter")));
+				Utils.asList(WebUtils.getAsString(imageManagerDialogSelectedUser, UserConverter.CONVERTER_ID)));
 	}
 
 	public void onSave() {
 		WebUtils.executeTask(params -> {
 			return userBean.setImage(imageManagerDialogSelectedUser.getId(), imageManagerDialogUploadedImage);
 		}, "lucas.application.userScreen.changeUserImage.message",
-				Utils.asList(WebUtils.getAsString(imageManagerDialogSelectedUser, "lucas:userStringConverter")));
+				Utils.asList(WebUtils.getAsString(imageManagerDialogSelectedUser, UserConverter.CONVERTER_ID)));
 	}
 
 	/*
@@ -815,7 +816,7 @@ public class UserBean implements Serializable {
 				params.add(id);
 				return true;
 			}, "lucas.application.userScreen.createUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
-					Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter")));
+					Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, UserConverter.CONVERTER_ID)));
 		}
 	}
 
@@ -826,7 +827,7 @@ public class UserBean implements Serializable {
 				params.add(id);
 				return userBean.blockUserCard(id);
 			}, "lucas.application.userScreen.blockUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
-					Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter")))) {
+					Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, UserConverter.CONVERTER_ID)))) {
 				UserCard newCard = userBean.findUserCardById(id);
 				WebUtils.refreshEntities(UserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
 						userBean::findUserCardById, true);
@@ -841,7 +842,7 @@ public class UserBean implements Serializable {
 				params.add(id);
 				return userBean.unblockUserCard(id);
 			}, "lucas.application.userScreen.unblockUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
-					Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter")))) {
+					Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, UserConverter.CONVERTER_ID)))) {
 				UserCard newCard = userBean.findUserCardById(id);
 				WebUtils.refreshEntities(UserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
 						userBean::findUserCardById, true);
@@ -861,8 +862,8 @@ public class UserBean implements Serializable {
 			Long id = card.getId();
 			if (WebUtils.executeTask(params -> {
 				params.add(card.getId());
-				params.add(WebUtils.getAsString(Utils.asLocalDate(userCardManagerDialogValidDate), "lucas:localDateStringConverter"));
-				params.add(WebUtils.getAsString(card.getValidDay(), "lucas:localDateStringConverter"));
+				params.add(WebUtils.getAsString(Utils.asLocalDate(userCardManagerDialogValidDate), LocalDateConverter.CONVERTER_ID));
+				params.add(WebUtils.getAsString(card.getValidDay(), LocalDateConverter.CONVERTER_ID));
 				return userBean.setValidDate(id, Utils.asLocalDate(userCardManagerDialogValidDate));
 			}, "lucas.application.userScreen.setValidDay", USER_CARD_MANAGER_DIALOG_MESSAGES_ID)) {
 				UserCard newCard = userBean.findUserCardById(id);
@@ -901,7 +902,7 @@ public class UserBean implements Serializable {
 					params.add(id);
 					return removed;
 				}, "lucas.application.userScreen.deleteUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
-						Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, "lucas:userStringConverter")));
+						Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, UserConverter.CONVERTER_ID)));
 
 			}
 		}

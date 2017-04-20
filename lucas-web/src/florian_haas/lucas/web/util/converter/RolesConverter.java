@@ -4,18 +4,19 @@ import javax.faces.convert.FacesConverter;
 
 import florian_haas.lucas.model.LoginUserRole;
 import florian_haas.lucas.web.util.WebUtils;
+import florian_haas.lucas.web.util.converter.LoginUserRoleConverter.ShortLoginUserRoleConverter;
 
-@FacesConverter(value = "lucas:rolesConverter")
+@FacesConverter(RolesConverter.CONVERTER_ID)
 public class RolesConverter extends CollectionConverter<LoginUserRole> {
 
-	public static final String NO_VALUE_KEY = "lucas.application.rolesConverter.noValue";
+	public static final String CONVERTER_ID = "lucas:rolesConverter";
 
 	public RolesConverter() {
-		super(NO_VALUE_KEY);
+		super("lucas.application.rolesConverter.empty");
 	}
 
 	@Override
 	protected String entryToString(LoginUserRole entry) {
-		return WebUtils.getAsString(entry, "lucas:shortLoginUserRoleConverter");
+		return WebUtils.getAsString(entry, ShortLoginUserRoleConverter.CONVERTER_ID);
 	}
 }

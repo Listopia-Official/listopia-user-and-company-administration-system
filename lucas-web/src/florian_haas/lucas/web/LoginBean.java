@@ -20,6 +20,8 @@ import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.web.util.WebUtils;
+import florian_haas.lucas.web.util.converter.LoginUserConverter.ShortLoginUserConverter;
+import florian_haas.lucas.web.util.converter.ThemeConverter;
 
 @Named
 @RequestScoped
@@ -67,7 +69,7 @@ public class LoginBean {
 		if (ret != null) {
 			LoginUser user = loginBean.findLoginUserByUsername(ret);
 			if (user != null) {
-				ret = WebUtils.getAsString(user, "lucas:shortLoginUserStringConverter");
+				ret = WebUtils.getAsString(user, ShortLoginUserConverter.CONVERTER_ID);
 			}
 		}
 		return ret;
@@ -145,7 +147,7 @@ public class LoginBean {
 			if (username != null && !username.trim().isEmpty()) {
 				LoginUser user = loginBean.findLoginUserByUsername(username);
 				params.add(username);
-				params.add(WebUtils.getAsString(preferencesScreenSelectedUITheme, "lucas:themeConverter"));
+				params.add(WebUtils.getAsString(preferencesScreenSelectedUITheme, ThemeConverter.CONVERTER_ID));
 				if (user != null) return loginBean.setUITheme(user.getId(), preferencesScreenSelectedUITheme);
 			}
 			return true;

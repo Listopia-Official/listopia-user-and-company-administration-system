@@ -11,14 +11,19 @@
 	<ui:param name="widgetVar" value="companyCardManagerDialog" />
 	<ui:param name="formId" value="companyCardManagerDialogForm" />
 	<ui:define name="dialogContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.CompanyConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.LocalDateConverter" />
 		<h:outputText
 			value="#{companyBean.companyCardManagerDialogCompanyCards.size()} "
 			style="font-weight:bold" />
 		<h:outputText
 			value="#{msg['lucas.application.companyScreen.companyCardManagerDialog.header']}"
 			style="font-weight:bold" />
-		<h:outputText value="#{companyBean.companyCardManagerDialogSelectedCompany}"
-			style="font-weight:bold" converter="lucas:companyStringConverter" />
+		<h:outputText
+			value="#{companyBean.companyCardManagerDialogSelectedCompany}"
+			style="font-weight:bold" converter="#{converterBean.getConverter(CompanyConverter.CONVERTER_ID)}" />
 		<p:toolbar id="companyCardManagerDialogToolbar" style="margin-top:5px"
 			styleClass="dialogToolbar">
 			<p:toolbarGroup align="left">
@@ -118,8 +123,10 @@
 					title="#{msg['lucas.application.companyScreen.companyCardManagerDialog.refreshTableButton.tooltip']}"
 					action="#{companyBean.companyCardManagerDialogRefreshCompanyCards}" />
 				<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
-					<ui:param name="block" value="companyCardManagerDialogCompanyCardTable" />
-					<ui:param name="trigger" value="companyCardManagerRefreshTableButton" />
+					<ui:param name="block"
+						value="companyCardManagerDialogCompanyCardTable" />
+					<ui:param name="trigger"
+						value="companyCardManagerRefreshTableButton" />
 				</ui:include>
 			</p:toolbarGroup>
 		</p:toolbar>
@@ -129,7 +136,8 @@
 			tableStyle="table-layout: auto;"
 			selection="#{companyBean.companyCardManagerDialogSelectedCompanyCards}"
 			style="margin-top:5px;max-height:350px" resizableColumns="true"
-			liveResize="true" value="#{companyBean.companyCardManagerDialogCompanyCards}"
+			liveResize="true"
+			value="#{companyBean.companyCardManagerDialogCompanyCards}"
 			var="companyCard" rowKey="#{companyCard.id}" draggableColumns="true"
 			rowSelectMode="add"
 			emptyMessage="#{msg['lucas.application.companyScreen.companyCardManagerDialog.noResults']}">
@@ -151,7 +159,7 @@
 			<p:column
 				headerText="#{msg['lucas.application.companyScreen.companyCardManagerDialog.validDayHeader']}">
 				<h:outputText value="#{companyCard.validDay}"
-					converter="lucas:localDateStringConverter" />
+					converter="#{converterBean.getConverter(LocalDateConverter.CONVERTER_ID)}" />
 			</p:column>
 		</p:dataTable>
 		<p:separator />

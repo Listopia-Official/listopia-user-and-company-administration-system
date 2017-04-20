@@ -11,6 +11,8 @@
 	<ui:param name="widgetVar" value="editCompanyDialog" />
 	<ui:param name="formId" value="editCompanyDialogForm" />
 	<ui:define name="dialogContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.NullConverterNoText" />
 		<div class="ui-fluid">
 			<p:panelGrid>
 				<p:row
@@ -52,7 +54,7 @@
 							style="resize: none;" autoResize="false" maxlength="255"
 							counter="descriptionInputTextareaOutputText"
 							value="#{companyBean.editCompanyDialogDescription}"
-							converter="lucas:nullStringConverterNoText"
+							converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}"
 							counterTemplate="{0}#{msg['lucas.application.companyScreen.editCompanyDialog.descriptionInputTextarea.remainingCharacters']}"
 							title="#{msg['lucas.application.companyScreen.editCompanyDialog.descriptionInputTextarea.tooltip']}" />
 					</p:column>

@@ -9,16 +9,15 @@ import javax.faces.convert.FacesConverter;
 
 import florian_haas.lucas.web.util.WebUtils;
 
-@FacesConverter(value = "lucas:localDateTimeStringConverter")
-public class LocalDateTimeConverter extends ReadOnlyConverter {
+@FacesConverter(LocalDateTimeConverter.CONVERTER_ID)
+public class LocalDateTimeConverter extends BasicConverter<LocalDateTime> {
 
-	public static final String NULL_KEY = "lucas.application.localDateTimeConverter.null";
+	public static final String CONVERTER_ID = "lucas:localDateTimeConverter";
 
 	@Override
-	public String getAsString(FacesContext arg0, UIComponent arg1, Object arg2) {
-		LocalDateTime dateTime = arg2 != null ? (LocalDateTime) arg2 : null;
-		return dateTime != null ? dateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.MEDIUM))
-				: WebUtils.getTranslatedMessage(NULL_KEY);
+	protected String getString(FacesContext context, UIComponent uiComponent, LocalDateTime value) {
+		return value == null ? WebUtils.getTranslatedMessage("lucas.application.localDateTimeConverter.null")
+				: value.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.MEDIUM));
 	}
 
 }

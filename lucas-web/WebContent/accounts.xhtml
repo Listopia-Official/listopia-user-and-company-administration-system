@@ -23,6 +23,14 @@
 	</ui:define>
 	<ui:define name="otherContent">
 		<p:importEnum type="florian_haas.lucas.model.EnumAccountOwnerType" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.CurrencyConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.BooleanConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.AccountOwnerConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.util.converter.EnumConverter" />
 	</ui:define>
 	<ui:define name="buttonArea">
 		<p:toolbarGroup align="left">
@@ -254,16 +262,16 @@
 			</p:column>
 			<p:column>
 				<p:selectBooleanButton
-					offLabel="#{msg['lucas.application.booleanConverter.false']}"
-					onLabel="#{msg['lucas.application.booleanConverter.true']}"
+					offLabel="#{msg['lucas.application.booleanConverter.normal.false']}"
+					onLabel="#{msg['lucas.application.booleanConverter.normal.true']}"
 					id="searchAccountBlockedBooleanButton"
 					value="#{accountBean.searchAccountBlocked}"
 					disabled="#{not accountBean.useSearchAccountBlocked}" />
 			</p:column>
 			<p:column>
 				<p:selectBooleanButton
-					offLabel="#{msg['lucas.application.booleanConverter.false']}"
-					onLabel="#{msg['lucas.application.booleanConverter.true']}"
+					offLabel="#{msg['lucas.application.booleanConverter.normal.false']}"
+					onLabel="#{msg['lucas.application.booleanConverter.normal.true']}"
 					id="searchAccountProtectedBooleanButton"
 					value="#{accountBean.searchAccountIsProtected}"
 					disabled="#{not accountBean.useSearchAccountIsProtected}" />
@@ -281,34 +289,35 @@
 			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.ownerColumn.name']}"
 			sortable="false" visible="#{accountBean.resultsDatatableColumns[1]}">
 			<h:outputText value="#{entity.owner}"
-				converter="lucas:accountOwnerStringConverter" />
+				converter="#{converterBean.getConverter(AccountOwnerConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.ownerTypeColumn.name']}"
 			sortBy="#{entity.owner.ownerType}"
 			visible="#{accountBean.resultsDatatableColumns[2]}">
-			<h:outputText value="#{entity.owner.ownerType}" />
+			<h:outputText value="#{entity.owner.ownerType}"
+				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.bankBalanceColumn.name']}"
 			sortBy="#{entity.bankBalance}"
 			visible="#{accountBean.resultsDatatableColumns[3]}">
 			<h:outputText value="#{entity.bankBalance}"
-				converter="#{currencyConverter}" />
+				converter="#{converterBean.getManagedConverter(CurrencyConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.blockedColumn.name']}"
 			sortBy="#{entity.blocked}"
 			visible="#{accountBean.resultsDatatableColumns[4]}">
 			<h:outputText value="#{entity.blocked}"
-				converter="lucas:BooleanStringConverter" />
+				converter="#{converterBean.getConverter(BooleanConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.protectedColumn.name']}"
 			sortBy="#{entity.isProtected}"
 			visible="#{accountBean.resultsDatatableColumns[5]}">
 			<h:outputText value="#{entity.isProtected}"
-				converter="lucas:BooleanStringConverter" />
+				converter="#{converterBean.getConverter(BooleanConverter.CONVERTER_ID)}" />
 		</p:column>
 	</ui:define>
 </ui:composition>
