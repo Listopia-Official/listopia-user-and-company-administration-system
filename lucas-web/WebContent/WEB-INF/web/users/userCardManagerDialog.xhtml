@@ -26,6 +26,8 @@
 		<h:outputText value="#{userBean.userCardManagerDialogSelectedUser}"
 			style="font-weight:bold"
 			converter="#{converterBean.getConverter(UserConverter.CONVERTER_ID)}" />
+		<p:messages for="userCardManagerDialogMessages" showDetail="true"
+			showIcon="true" showSummary="true" closable="true" autoUpdate="true" />
 		<p:toolbar id="userCardManagerDialogToolbar" style="margin-top:5px"
 			styleClass="dialogToolbar">
 			<p:toolbarGroup align="left">
@@ -130,8 +132,6 @@
 				</ui:include>
 			</p:toolbarGroup>
 		</p:toolbar>
-		<p:messages for="userCardManagerDialogMessages" showDetail="true"
-			showIcon="true" showSummary="true" closable="true" autoUpdate="true" />
 		<p:dataTable id="userCardManagerDialogUserCardTable"
 			tableStyle="table-layout: auto;"
 			selection="#{userBean.userCardManagerDialogSelectedUserCards}"

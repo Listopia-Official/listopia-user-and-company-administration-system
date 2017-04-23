@@ -27,6 +27,8 @@
 			value="#{companyBean.companyCardManagerDialogSelectedCompany}"
 			style="font-weight:bold"
 			converter="#{converterBean.getConverter(CompanyConverter.CONVERTER_ID)}" />
+		<p:messages for="companyCardManagerDialogMessages" showDetail="true"
+			showIcon="true" showSummary="true" closable="true" autoUpdate="true" />
 		<p:toolbar id="companyCardManagerDialogToolbar" style="margin-top:5px"
 			styleClass="dialogToolbar">
 			<p:toolbarGroup align="left">
@@ -133,8 +135,6 @@
 				</ui:include>
 			</p:toolbarGroup>
 		</p:toolbar>
-		<p:messages for="companyCardManagerDialogMessages" showDetail="true"
-			showIcon="true" showSummary="true" closable="true" autoUpdate="true" />
 		<p:dataTable id="companyCardManagerDialogCompanyCardTable"
 			tableStyle="table-layout: auto;"
 			selection="#{companyBean.companyCardManagerDialogSelectedCompanyCards}"
