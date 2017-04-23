@@ -35,6 +35,10 @@ public class CompanyBean implements CompanyBeanLocal {
 	@JPADAO
 	private CompanyCardDAO companyCardDao;
 
+	@Inject
+	@JPADAO
+	private RoomSectionDAO roomSectionDao;
+
 	@EJB
 	private AccountBeanLocal accountBean;
 
@@ -46,11 +50,12 @@ public class CompanyBean implements CompanyBeanLocal {
 
 	@Override
 	@RequiresPermissions(COMPANY_CREATE)
-	public Long createCompany(String name, String description, String room, Integer section, EnumCompanyType companyType, Long parentCompanyId,
+	public Long createCompany(String name, String description, Long roomSectionId, EnumCompanyType companyType, Long parentCompanyId,
 			List<Long> managerUserIds, Integer requiredEmployeesCount) {
 		checkIsNameUnique(name);
-		checkIsLocationUnique(room, section);
-		Company company = new Company(name, description, room, section, companyType, requiredEmployeesCount);
+		if (roomSectionId != null) checkIsSectionUnique(roomSectionId);
+		RoomSection section = roomSectionId != null ? roomSectionDao.findById(roomSectionId) : null;
+		Company company = new Company(name, description, section, companyType, requiredEmployeesCount);
 		if (companyType == EnumCompanyType.STATE) {
 			company.getAccount().setIsProtected(Boolean.TRUE);
 		}
@@ -61,6 +66,9 @@ public class CompanyBean implements CompanyBeanLocal {
 		});
 		if (parentCompanyId != null) {
 			setParentCompany(company.getId(), parentCompanyId);
+		}
+		if (section != null) {
+			section.setCompany(company);
 		}
 		return company.getId();
 	}
@@ -79,23 +87,22 @@ public class CompanyBean implements CompanyBeanLocal {
 
 	@Override
 	@RequiresPermissions(COMPANY_FIND_DYNAMIC)
-	public List<Company> findCompanies(Long companyId, String name, String description, String room, Integer section, EnumCompanyType companyType,
+	public List<Company> findCompanies(Long companyId, String name, String description, Long roomSectionId, EnumCompanyType companyType,
 			Long parentCompanyId, Integer requiredEmployeesCount, Boolean areEmployeesRequired, Boolean useId, Boolean useName,
-			Boolean useDescription, Boolean useRoom, Boolean useSection, Boolean useCompanyType, Boolean useParentCompanyId,
-			Boolean useRequiredEmployeesCount, Boolean useAreEmployeesRequired, EnumQueryComparator idComparator, EnumQueryComparator nameComparator,
-			EnumQueryComparator descriptionComparator, EnumQueryComparator roomComparator, EnumQueryComparator sectionComparator,
-			EnumQueryComparator companyTypeComparator, EnumQueryComparator parentCompanyIdComparator,
-			EnumQueryComparator requiredEmployeesCountComparator) {
-		return companyDao.findCompanies(companyId, name, description, room, section, companyType, parentCompanyId, requiredEmployeesCount,
-				areEmployeesRequired, useId, useName, useDescription, useRoom, useSection, useCompanyType, useParentCompanyId,
-				useRequiredEmployeesCount, useAreEmployeesRequired, idComparator, nameComparator, descriptionComparator, roomComparator,
-				sectionComparator, companyTypeComparator, parentCompanyIdComparator, requiredEmployeesCountComparator);
+			Boolean useDescription, Boolean useRoomSectionId, Boolean useCompanyType, Boolean useParentCompanyId, Boolean useRequiredEmployeesCount,
+			Boolean useAreEmployeesRequired, EnumQueryComparator idComparator, EnumQueryComparator nameComparator,
+			EnumQueryComparator descriptionComparator, EnumQueryComparator roomSectionIdComparator, EnumQueryComparator companyTypeComparator,
+			EnumQueryComparator parentCompanyIdComparator, EnumQueryComparator requiredEmployeesCountComparator) {
+		return companyDao.findCompanies(companyId, name, description, roomSectionId, companyType, parentCompanyId, requiredEmployeesCount,
+				areEmployeesRequired, useId, useName, useDescription, useRoomSectionId, useCompanyType, useParentCompanyId, useRequiredEmployeesCount,
+				useAreEmployeesRequired, idComparator, nameComparator, descriptionComparator, roomSectionIdComparator, companyTypeComparator,
+				parentCompanyIdComparator, requiredEmployeesCountComparator);
 	}
 
 	@Override
 	@RequiresPermissions(COMPANY_SET_NAME)
 	public Boolean setName(Long companyId, String name) {
-		Company comp = findById(companyId);
+		Company comp = companyDao.findById(companyId);
 		if (comp.getName().equals(name)) return Boolean.FALSE;
 		checkIsNameUnique(name);
 		comp.setName(name);
@@ -113,22 +120,16 @@ public class CompanyBean implements CompanyBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions(COMPANY_SET_ROOM)
-	public Boolean setRoom(Long companyId, String room) {
-		Company comp = companyDao.findById(companyId);
-		if (comp.getRoom().equals(room)) return Boolean.FALSE;
-		checkIsLocationUnique(room, comp.getSection());
-		comp.setRoom(room);
-		return Boolean.TRUE;
-	}
-
-	@Override
 	@RequiresPermissions(COMPANY_SET_SECTION)
-	public Boolean setSection(Long companyId, Integer section) {
+	public Boolean setSection(Long companyId, Long sectionId) {
+		if (sectionId != null) checkIsSectionUnique(sectionId);
 		Company comp = companyDao.findById(companyId);
-		if (comp.getSection().equals(section)) return Boolean.FALSE;
-		checkIsLocationUnique(comp.getRoom(), section);
+		RoomSection oldSection = comp.getSection();
+		RoomSection section = sectionId != null ? roomSectionDao.findById(sectionId) : null;
+		if ((oldSection == null && section == null) || oldSection != null && oldSection.equals(section)) return Boolean.FALSE;
 		comp.setSection(section);
+		if (section != null) section.setCompany(comp);
+		if (oldSection != null) oldSection.setCompany(null);
 		return Boolean.TRUE;
 	}
 
@@ -239,22 +240,16 @@ public class CompanyBean implements CompanyBeanLocal {
 		return Boolean.TRUE;
 	}
 
-	@Override
-	@RequiresPermissions(COMPANY_EXISTS_LOCATION)
-	public Boolean existsLocation(String room, Integer section) {
-		return companyDao.existsLocation(room, section);
-	}
-
 	public static final String NAME_NOT_UNIQUE_EXCEPTION_MARKER = "notUniqueName";
-	public static final String LOCATION_NOT_UNIQUE_EXCEPTION_MARKER = "notUniqueLocation";
+	public static final String SECTION_NOT_UNIQUE_EXCEPTION_MARKER = "notUniqueLocation";
 
 	private void checkIsNameUnique(String name) {
 		if (!companyDao.isNameUnique(name)) throw new LucasException("The name is used by another company", NAME_NOT_UNIQUE_EXCEPTION_MARKER);
 	}
 
-	private void checkIsLocationUnique(String room, Integer section) {
-		if (companyDao.existsLocation(room, section))
-			throw new LucasException("Another company is assigned to the location", LOCATION_NOT_UNIQUE_EXCEPTION_MARKER);
+	private void checkIsSectionUnique(Long sectionId) {
+		if (!companyDao.isRoomSectionUnique(sectionId))
+			throw new LucasException("Another company is assigned to the section", SECTION_NOT_UNIQUE_EXCEPTION_MARKER);
 	}
 
 	@Override

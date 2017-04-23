@@ -1,0 +1,81 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.roomScreen.createRoomDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="createRoomDialog" />
+	<ui:param name="formId" value="createRoomDialogForm" />
+	<ui:define name="dialogContent">
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.roomScreen.createRoomDialog.nameInputText.name']}"
+							title="#{msg['lucas.application.roomScreen.createRoomDialog.nameInputText.tooltip']}"
+							for="roomNameInputText" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="roomNameInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputText id="roomNameInputText"
+							value="#{roomBean.createRoomDialogName}"
+							title="#{msg['lucas.application.roomScreen.createRoomDialog.nameInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.roomScreen.createRoomDialog.sectionCountInputNumber.name']}"
+							title="#{msg['lucas.application.roomScreen.createRoomDialog.sectionCountInputNumber.tooltip']}"
+							for="sectionCountInputNumber" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="sectionCountInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputNumber id="sectionCountInputNumber" maxValue="25"
+							minValue="0" emptyValue="zero" decimalPlaces="0"
+							value="#{roomBean.createRoomDialogSectionCount}"
+							title="#{msg['lucas.application.roomScreen.createRoomDialog.sectionCountInputNumber.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="6">
+						<h:outputText
+							value="#{msg['lucas.application.roomScreen.createRoomDialog.info']}"
+							style="font-style:italic" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this roomNameInputText sectionCountInputNumber"
+							update="@form dataAccorditionPanel:roomSearchResultsForm:roomSearchResultsTable"
+							action="#{roomBean.createRoom}"
+							value="#{msg['lucas.application.roomScreen.createRoomDialog.createRoomButton.name']}"
+							title="#{msg['lucas.application.roomScreen.createRoomDialog.createRoomButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('createRoomDialog').hide()}" />
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this"
+							value="#{msg['lucas.application.roomScreen.createRoomDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.roomScreen.createRoomDialog.cancelButton.tooltip']}"
+							oncomplete="PF('createRoomDialog').hide()" immediate="true">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

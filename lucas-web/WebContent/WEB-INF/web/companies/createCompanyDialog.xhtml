@@ -64,37 +64,19 @@
 				<p:row>
 					<p:column style="padding-top:0px">
 						<p:outputLabel
-							value="#{msg['lucas.application.companyScreen.createCompanyDialog.roomInputText.name']}"
-							title="#{msg['lucas.application.companyScreen.createCompanyDialog.roomInputText.tooltip']}"
-							for="roomInputText" />
+							value="#{msg['lucas.application.companyScreen.createCompanyDialog.sectionIdInputNumber.name']}"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.sectionIdInputNumber.tooltip']}"
+							for="sectionIdInputNumber" />
 					</p:column>
 					<p:column colspan="2">
-						<p:message for="roomInputText" />
+						<p:message for="sectionIdInputNumber" />
 					</p:column>
 				</p:row>
 				<p:row>
 					<p:column colspan="3">
-						<p:inputText id="roomInputText"
-							value="#{companyBean.createCompanyDialogRoom}"
-							title="#{msg['lucas.application.companyScreen.createCompanyDialog.roomInputText.tooltip']}" />
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column>
-						<p:outputLabel
-							value="#{msg['lucas.application.companyScreen.createCompanyDialog.sectionInputNumber.name']}"
-							title="#{msg['lucas.application.companyScreen.createCompanyDialog.sectionInputNumber.tooltip']}"
-							for="sectionInputNumber" />
-					</p:column>
-					<p:column colspan="2">
-						<p:message for="sectionInputNumber" />
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column colspan="3">
-						<p:inputNumber value="#{companyBean.createCompanyDialogSection}"
-							minValue="0" id="sectionInputNumber" decimalPlaces="0"
-							title="#{msg['lucas.application.companyScreen.createCompanyDialog.sectionInputNumber.tooltip']}" />
+						<p:inputNumber value="#{companyBean.createCompanyDialogSectionId}"
+							minValue="0" id="sectionIdInputNumber" decimalPlaces="0"
+							title="#{msg['lucas.application.companyScreen.createCompanyDialog.sectionIdInputNumber.tooltip']}" />
 					</p:column>
 				</p:row>
 				<p:row>
@@ -256,7 +238,7 @@
 				<p:row>
 					<p:column>
 						<p:commandButton
-							process="@this nameInputText descriptionInputTextarea roomInputText sectionInputNumber companyTypeSelectOneMenu parentCompanyInputNumber requiredEmployeesCountInputNumber managersDataList"
+							process="@this nameInputText descriptionInputTextarea sectionIdInputNumber companyTypeSelectOneMenu parentCompanyInputNumber requiredEmployeesCountInputNumber managersDataList"
 							update="@form" action="#{companyBean.createCompany}"
 							value="#{msg['lucas.application.companyScreen.createCompanyDialog.createCompanyButton.name']}"
 							title="#{msg['lucas.application.companyScreen.createCompanyDialog.createCompanyButton.tooltip']}"

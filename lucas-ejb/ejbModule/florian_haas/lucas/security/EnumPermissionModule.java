@@ -12,6 +12,7 @@ public enum EnumPermissionModule {
 	LOGIN("login"),
 	LOGIN_ROLE("loginRole"),
 	LOGIN_USER("loginUser"),
+	ROOM("room"),
 	USER("user");
 
 	private String moduleName;

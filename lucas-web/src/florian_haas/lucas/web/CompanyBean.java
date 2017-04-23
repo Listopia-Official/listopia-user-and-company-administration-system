@@ -43,6 +43,9 @@ public class CompanyBean implements Serializable {
 	@EJB
 	private UserBeanLocal userBean;
 
+	@EJB
+	private RoomBeanLocal roomBean;
+
 	public List<Company> getSearchCompanyResults() {
 		return searchCompanyResults;
 	}
@@ -59,7 +62,7 @@ public class CompanyBean implements Serializable {
 		this.selectedCompanies = selectedCompanies;
 	}
 
-	private List<Boolean> resultsDatatableColumns = Arrays.asList(true, true, true, true, true, true, true, true, true);
+	private List<Boolean> resultsDatatableColumns = Arrays.asList(true, true, true, true, true, true, true, true);
 
 	public void onToggle(ToggleEvent e) {
 		resultsDatatableColumns.set((Integer) e.getData() - 1, e.getVisibility() == Visibility.VISIBLE);
@@ -98,24 +101,14 @@ public class CompanyBean implements Serializable {
 	@QueryComparator(category = EnumQueryComparatorCategory.TEXT)
 	private EnumQueryComparator searchCompanyDescriptionComparator = EnumQueryComparator.EQUAL;
 
-	@NotBlank
-	private String searchCompanyRoom = "";
+	@ValidEntityId(entityClass = RoomSection.class, nullable = true)
+	private Long searchCompanySectionId = null;
 
 	@NotNull
-	private Boolean useSearchCompanyRoom = Boolean.FALSE;
-
-	@QueryComparator(category = EnumQueryComparatorCategory.TEXT)
-	private EnumQueryComparator searchCompanyRoomComparator = EnumQueryComparator.EQUAL;
-
-	@NotNull
-	@Min(0)
-	private Integer searchCompanySection = 0;
-
-	@NotNull
-	private Boolean useSearchCompanySection = Boolean.FALSE;
+	private Boolean useSearchCompanySectionId = Boolean.FALSE;
 
 	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
-	private EnumQueryComparator searchCompanySectionComparator = EnumQueryComparator.EQUAL;
+	private EnumQueryComparator searchCompanySectionIdComparator = EnumQueryComparator.EQUAL;
 
 	@NotNull
 	private EnumCompanyType searchCompanyCompanyType = EnumCompanyType.CIVIL;
@@ -223,52 +216,28 @@ public class CompanyBean implements Serializable {
 		this.searchCompanyDescriptionComparator = searchCompanyDescriptionComparator;
 	}
 
-	public String getSearchCompanyRoom() {
-		return this.searchCompanyRoom;
+	public Long getSearchCompanySectionId() {
+		return searchCompanySectionId;
 	}
 
-	public void setSearchCompanyRoom(String searchCompanyRoom) {
-		this.searchCompanyRoom = searchCompanyRoom;
+	public void setSearchCompanySectionId(Long searchCompanySectionId) {
+		this.searchCompanySectionId = searchCompanySectionId;
 	}
 
-	public Boolean getUseSearchCompanyRoom() {
-		return this.useSearchCompanyRoom;
+	public Boolean getUseSearchCompanySectionId() {
+		return useSearchCompanySectionId;
 	}
 
-	public void setUseSearchCompanyRoom(Boolean useSearchCompanyRoom) {
-		this.useSearchCompanyRoom = useSearchCompanyRoom;
+	public void setUseSearchCompanySectionId(Boolean useSearchCompanySectionId) {
+		this.useSearchCompanySectionId = useSearchCompanySectionId;
 	}
 
-	public EnumQueryComparator getSearchCompanyRoomComparator() {
-		return this.searchCompanyRoomComparator;
+	public EnumQueryComparator getSearchCompanySectionIdComparator() {
+		return searchCompanySectionIdComparator;
 	}
 
-	public void setSearchCompanyRoomComparator(EnumQueryComparator searchCompanyRoomComparator) {
-		this.searchCompanyRoomComparator = searchCompanyRoomComparator;
-	}
-
-	public Integer getSearchCompanySection() {
-		return this.searchCompanySection;
-	}
-
-	public void setSearchCompanySection(Integer searchCompanySection) {
-		this.searchCompanySection = searchCompanySection;
-	}
-
-	public Boolean getUseSearchCompanySection() {
-		return this.useSearchCompanySection;
-	}
-
-	public void setUseSearchCompanySection(Boolean useSearchCompanySection) {
-		this.useSearchCompanySection = useSearchCompanySection;
-	}
-
-	public EnumQueryComparator getSearchCompanySectionComparator() {
-		return this.searchCompanySectionComparator;
-	}
-
-	public void setSearchCompanySectionComparator(EnumQueryComparator searchCompanySectionComparator) {
-		this.searchCompanySectionComparator = searchCompanySectionComparator;
+	public void setSearchCompanySectionIdComparator(EnumQueryComparator searchCompanySectionIdComparator) {
+		this.searchCompanySectionIdComparator = searchCompanySectionIdComparator;
 	}
 
 	public EnumCompanyType getSearchCompanyCompanyType() {
@@ -361,13 +330,12 @@ public class CompanyBean implements Serializable {
 
 	public void searchCompanies() {
 		WebUtils.executeTask((params) -> {
-			List<Company> results = companyBean.findCompanies(searchCompanyId, searchCompanyName, searchCompanyDescription, searchCompanyRoom,
-					searchCompanySection, searchCompanyCompanyType, searchCompanyParentCompanyId, searchCompanyRequiredEmployeesCount,
-					searchCompanyAreEmployeesRequired, useSearchCompanyId, useSearchCompanyName, useSearchCompanyDescription, useSearchCompanyRoom,
-					useSearchCompanySection, useSearchCompanyCompanyType, useSearchCompanyParentCompanyId, useSearchCompanyRequiredEmployeesCount,
-					useSearchCompanyAreEmployeesRequired, searchCompanyIdComparator, searchCompanyNameComparator, searchCompanyDescriptionComparator,
-					searchCompanyRoomComparator, searchCompanySectionComparator, searchCompanyCompanyTypeComparator,
-					searchCompanyParentCompanyIdComparator, searchCompanyRequiredEmployeesCountComparator);
+			List<Company> results = companyBean.findCompanies(searchCompanyId, searchCompanyName, searchCompanyDescription, searchCompanySectionId,
+					searchCompanyCompanyType, searchCompanyParentCompanyId, searchCompanyRequiredEmployeesCount, searchCompanyAreEmployeesRequired,
+					useSearchCompanyId, useSearchCompanyName, useSearchCompanyDescription, useSearchCompanySectionId, useSearchCompanyCompanyType,
+					useSearchCompanyParentCompanyId, useSearchCompanyRequiredEmployeesCount, useSearchCompanyAreEmployeesRequired,
+					searchCompanyIdComparator, searchCompanyNameComparator, searchCompanyDescriptionComparator, searchCompanySectionIdComparator,
+					searchCompanyCompanyTypeComparator, searchCompanyParentCompanyIdComparator, searchCompanyRequiredEmployeesCountComparator);
 			searchCompanyResults.clear();
 			selectedCompanies.clear();
 			searchCompanyResults.addAll(results);
@@ -395,12 +363,8 @@ public class CompanyBean implements Serializable {
 	@Size(max = 255)
 	private String createCompanyDialogDescription = null;
 
-	@NotBlank
-	private String createCompanyDialogRoom = "";
-
-	@NotNull
-	@Min(0)
-	private Integer createCompanyDialogSection = null;
+	@ValidEntityId(entityClass = RoomSection.class, nullable = true)
+	private Long createCompanyDialogSectionId = null;
 
 	@NotNull
 	private EnumCompanyType createCompanyDialogCompanyType = EnumCompanyType.CIVIL;
@@ -435,20 +399,12 @@ public class CompanyBean implements Serializable {
 		this.createCompanyDialogDescription = createCompanyDialogDescription;
 	}
 
-	public String getCreateCompanyDialogRoom() {
-		return createCompanyDialogRoom;
+	public Long getCreateCompanyDialogSectionId() {
+		return createCompanyDialogSectionId;
 	}
 
-	public void setCreateCompanyDialogRoom(String createCompanyDialogRoom) {
-		this.createCompanyDialogRoom = createCompanyDialogRoom;
-	}
-
-	public Integer getCreateCompanyDialogSection() {
-		return createCompanyDialogSection;
-	}
-
-	public void setCreateCompanyDialogSection(Integer createCompanyDialogSection) {
-		this.createCompanyDialogSection = createCompanyDialogSection;
+	public void setCreateCompanyDialogSectionId(Long createCompanyDialogSectionId) {
+		this.createCompanyDialogSectionId = createCompanyDialogSectionId;
 	}
 
 	public EnumCompanyType getCreateCompanyDialogCompanyType() {
@@ -528,8 +484,7 @@ public class CompanyBean implements Serializable {
 	public void initCreateCompanyDialog() {
 		createCompanyDialogName = "";
 		createCompanyDialogDescription = null;
-		createCompanyDialogRoom = "";
-		createCompanyDialogSection = null;
+		createCompanyDialogSectionId = null;
 		createCompanyDialogCompanyType = EnumCompanyType.CIVIL;
 		createCompanyDialogParentCompanyId = null;
 		createCompanyDialogRequiredEmployeesCount = 0;
@@ -541,8 +496,8 @@ public class CompanyBean implements Serializable {
 	public void createCompany() {
 		WebUtils.executeTask((params) -> {
 			params.add(WebUtils.getAsString(
-					companyBean.findById(companyBean.createCompany(createCompanyDialogName, createCompanyDialogDescription, createCompanyDialogRoom,
-							createCompanyDialogSection, createCompanyDialogCompanyType, createCompanyDialogParentCompanyId,
+					companyBean.findById(companyBean.createCompany(createCompanyDialogName, createCompanyDialogDescription,
+							createCompanyDialogSectionId, createCompanyDialogCompanyType, createCompanyDialogParentCompanyId,
 							createCompanyDialogManagerUserIds, createCompanyDialogRequiredEmployeesCount)),
 					CompanyConverter.CONVERTER_ID));
 			return true;
@@ -551,7 +506,7 @@ public class CompanyBean implements Serializable {
 				return WebUtils.getTranslatedMessage("lucas.application.companyScreen.createCompany.message.notUniqueName", createCompanyDialogName);
 			} else {
 				return WebUtils.getTranslatedMessage("lucas.application.companyScreen.createCompany.message.notUniqueLocation",
-						createCompanyDialogRoom, createCompanyDialogSection);
+						WebUtils.getAsString(roomBean.findRoomSectionById(createCompanyDialogSectionId), RoomSectionConverter.CONVERTER_ID));
 			}
 		});
 	}
@@ -573,12 +528,8 @@ public class CompanyBean implements Serializable {
 	@Size(max = 255)
 	private String editCompanyDialogDescription = null;
 
-	@NotBlank
-	private String editCompanyDialogRoom = "";
-
-	@NotNull
-	@Min(0)
-	private Integer editCompanyDialogSection = null;
+	@ValidEntityId(entityClass = RoomSection.class, nullable = true)
+	private Long editCompanyDialogSectionId = null;
 
 	@NotNull
 	private EnumCompanyType editCompanyDialogCompanyType = EnumCompanyType.CIVIL;
@@ -606,20 +557,12 @@ public class CompanyBean implements Serializable {
 		this.editCompanyDialogDescription = editCompanyDialogDescription;
 	}
 
-	public String getEditCompanyDialogRoom() {
-		return editCompanyDialogRoom;
+	public Long getEditCompanyDialogSectionId() {
+		return editCompanyDialogSectionId;
 	}
 
-	public void setEditCompanyDialogRoom(String editCompanyDialogRoom) {
-		this.editCompanyDialogRoom = editCompanyDialogRoom;
-	}
-
-	public Integer getEditCompanyDialogSection() {
-		return editCompanyDialogSection;
-	}
-
-	public void setEditCompanyDialogSection(Integer editCompanyDialogSection) {
-		this.editCompanyDialogSection = editCompanyDialogSection;
+	public void setEditCompanyDialogSectionId(Long editCompanyDialogSectionId) {
+		this.editCompanyDialogSectionId = editCompanyDialogSectionId;
 	}
 
 	public EnumCompanyType getEditCompanyDialogCompanyType() {
@@ -658,8 +601,8 @@ public class CompanyBean implements Serializable {
 			editCompanyDialogSelectedCompany = selectedCompanies.get(0);
 			editCompanyDialogName = editCompanyDialogSelectedCompany.getName();
 			editCompanyDialogDescription = editCompanyDialogSelectedCompany.getDescription();
-			editCompanyDialogRoom = editCompanyDialogSelectedCompany.getRoom();
-			editCompanyDialogSection = editCompanyDialogSelectedCompany.getSection();
+			editCompanyDialogSectionId = (editCompanyDialogSelectedCompany.getSection() != null
+					? editCompanyDialogSelectedCompany.getSection().getId() : null);
 			editCompanyDialogCompanyType = editCompanyDialogSelectedCompany.getCompanyType();
 			Company parent = editCompanyDialogSelectedCompany.getParentCompany();
 			editCompanyDialogParentCompanyId = parent == null ? null : parent.getId();
@@ -676,11 +619,8 @@ public class CompanyBean implements Serializable {
 			if (WebUtils.isPermitted(EnumPermission.COMPANY_SET_DESCRIPTION)) {
 				companyBean.setDescription(id, editCompanyDialogDescription);
 			}
-			if (WebUtils.isPermitted(EnumPermission.COMPANY_SET_ROOM)) {
-				companyBean.setRoom(id, editCompanyDialogRoom);
-			}
 			if (WebUtils.isPermitted(EnumPermission.COMPANY_SET_SECTION)) {
-				companyBean.setSection(id, editCompanyDialogSection);
+				companyBean.setSection(id, editCompanyDialogSectionId);
 			}
 			if (WebUtils.isPermitted(EnumPermission.COMPANY_SET_COMPANY_TYPE)) {
 				companyBean.setCompanyType(id, editCompanyDialogCompanyType);
@@ -699,8 +639,8 @@ public class CompanyBean implements Serializable {
 			if (exception.getMark().equals(florian_haas.lucas.business.CompanyBean.NAME_NOT_UNIQUE_EXCEPTION_MARKER)) {
 				return WebUtils.getTranslatedMessage("lucas.application.companyScreen.editCompany.message.notUniqueName", editCompanyDialogName);
 			} else {
-				return WebUtils.getTranslatedMessage("lucas.application.companyScreen.editCompany.message.notUniqueLocation", editCompanyDialogRoom,
-						editCompanyDialogSection);
+				return WebUtils.getTranslatedMessage("lucas.application.companyScreen.editCompany.message.notUniqueLocation",
+						WebUtils.getAsString(roomBean.findRoomSectionById(editCompanyDialogSectionId), RoomSectionConverter.CONVERTER_ID));
 			}
 		});
 	}

@@ -1,0 +1,85 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.roomScreen.sectionManagerDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="sectionManagerDialog" />
+	<ui:param name="formId" value="sectionManagerDialogForm" />
+	<ui:define name="dialogContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.RoomConverter$ShortRoomConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.CompanyConverter" />
+		<h:outputText
+			value="#{roomBean.sectionManagerDialogSelectedRoom.sections.size()} "
+			style="font-weight:bold" />
+		<h:outputText
+			value="#{msg['lucas.application.roomScreen.sectionManagerDialog.header']}"
+			style="font-weight:bold" />
+		<h:outputText value="#{roomBean.sectionManagerDialogSelectedRoom}"
+			style="font-weight:bold"
+			converter="#{converterBean.getConverter(ShortRoomConverter.CONVERTER_ID)}" />
+		<p:messages for="sectionManagerDialogMessages" showDetail="true"
+			showIcon="true" showSummary="true" closable="true" autoUpdate="true" />
+		<p:toolbar id="sectionManagerDialogToolbar" style="margin-top:5px"
+			styleClass="dialogToolbar">
+			<p:toolbarGroup align="left">
+				<p:commandButton
+					rendered="#{loginBean.hasPermission(EnumPermission.ROOM_ADD_SECTION)}"
+					value="#{msg['lucas.application.roomScreen.sectionManagerDialog.addSectionButton.name']}"
+					title="#{msg['lucas.application.roomScreen.sectionManagerDialog.addSectionButton.tooltip']}"
+					icon="fa fa-plus" action="#{roomBean.addSection}"
+					update="@form dataAccorditionPanel:roomSearchResultsForm:roomSearchResultsTable" />
+				<p:commandButton
+					rendered="#{loginBean.hasPermission(EnumPermission.ROOM_REMOVE_SECTION)}"
+					value="#{msg['lucas.application.roomScreen.sectionManagerDialog.removeSectionButton.name']}"
+					title="#{msg['lucas.application.roomScreen.sectionManagerDialog.removeSectionButton.tooltip']}"
+					icon="fa fa-remove"
+					disabled="#{roomBean.sectionManagerDialogSelectedSections.size() &lt;= 0}"
+					action="#{roomBean.removeSection}"
+					update="@form dataAccorditionPanel:roomSearchResultsForm:roomSearchResultsTable" />
+			</p:toolbarGroup>
+		</p:toolbar>
+		<p:dataTable id="sectionManagerDialogDataTable"
+			tableStyle="table-layout: auto;"
+			selection="#{roomBean.sectionManagerDialogSelectedSections}"
+			style="margin-top:5px;max-height:350px" resizableColumns="true"
+			liveResize="true"
+			value="#{roomBean.sectionManagerDialogSelectedRoom.sections}"
+			var="section" rowKey="#{section.id}" draggableColumns="true"
+			rowSelectMode="add"
+			emptyMessage="#{msg['lucas.application.roomScreen.sectionManagerDialog.noResults']}">
+			<p:ajax event="toggleSelect" update="@(.dialogToolbar)" />
+			<p:ajax event="rowUnselectCheckbox" update="@(.dialogToolbar)" />
+			<p:ajax event="rowSelectCheckbox" update="@(.dialogToolbar)" />
+			<p:ajax event="rowUnselect" update="@(.dialogToolbar)" />
+			<p:ajax event="rowSelect" update="@(.dialogToolbar)" />
+			<p:column selectionMode="multiple"
+				style="width:16px;text-align:center" exportable="false" />
+			<p:column
+				headerText="#{msg['lucas.application.roomScreen.sectionManagerDialog.idHeader']}">
+				<h:outputText value="#{section.id}" />
+			</p:column>
+			<p:column
+				headerText="#{msg['lucas.application.roomScreen.sectionManagerDialog.indexHeader']}">
+				<h:outputText value="#{section.sectionIndex}" />
+			</p:column>
+			<p:column
+				headerText="#{msg['lucas.application.roomScreen.sectionManagerDialog.companyHeader']}">
+				<h:outputText value="#{section.company}"
+					converter="#{converterBean.getConverter(CompanyConverter.CONVERTER_ID)}" />
+			</p:column>
+		</p:dataTable>
+		<p:separator />
+		<p:commandButton style="float:right" process="@this"
+			value="#{msg['lucas.application.roomScreen.sectionManagerDialog.closeButton.name']}"
+			title="#{msg['lucas.application.roomScreen.sectionManagerDialog.closeButton.tooltip']}"
+			oncomplete="PF('sectionManagerDialog').hide()" immediate="true">
+		</p:commandButton>
+	</ui:define>
+</ui:composition>

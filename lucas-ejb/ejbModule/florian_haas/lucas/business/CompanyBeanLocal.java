@@ -7,8 +7,6 @@ import java.util.*;
 import javax.ejb.Local;
 import javax.validation.constraints.*;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
@@ -19,7 +17,7 @@ import florian_haas.lucas.util.validation.NotBlankString;
 public interface CompanyBeanLocal {
 
 	public Long createCompany(@NotNull @NotBlankString String name, @Size(max = 255) @NotBlankString String description,
-			@NotNull @NotBlankString String room, @NotNull @Min(value = 0) Integer section, @NotNull EnumCompanyType companyType,
+			@ValidEntityId(entityClass = RoomSection.class, nullable = true) Long roomSectionId, @NotNull EnumCompanyType companyType,
 			@ValidEntityId(entityClass = Company.class, nullable = true) Long parentCompanyId,
 			List<@ValidEntityId(entityClass = User.class) Long> managerUserIds, @NotNull @Min(value = 0) Integer requiredEmployeesCount);
 
@@ -27,16 +25,15 @@ public interface CompanyBeanLocal {
 
 	public Company findById(@ValidEntityId(entityClass = Company.class) Long companyId);
 
-	public List<Company> findCompanies(@NotNull Long companyId, @NotNull String name, String description, @NotNull String room,
-			@NotNull Integer section, @NotNull EnumCompanyType companyType, Long parentCompanyId, @NotNull Integer requiredEmployeesCount,
+	public List<Company> findCompanies(@NotNull Long companyId, @NotNull String name, String description, Long roomSectionId,
+			@NotNull EnumCompanyType companyType, Long parentCompanyId, @NotNull Integer requiredEmployeesCount,
 			@NotNull Boolean areEmployeesRequired, @NotNull Boolean useId, @NotNull Boolean useName, @NotNull Boolean useDescription,
-			@NotNull Boolean useRoom, @NotNull Boolean useSection, @NotNull Boolean useCompanyType, @NotNull Boolean useParentCompanyId,
+			@NotNull Boolean useRoomSectionId, @NotNull Boolean useCompanyType, @NotNull Boolean useParentCompanyId,
 			@NotNull Boolean useRequiredEmployeesCount, @NotNull Boolean useAreEmployeesRequired,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator nameComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator descriptionComparator,
-			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator roomComparator,
-			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator sectionComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator roomSectionIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator companyTypeComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator parentCompanyIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator requiredEmployeesCountComparator);
@@ -45,9 +42,8 @@ public interface CompanyBeanLocal {
 
 	public Boolean setDescription(@ValidEntityId(entityClass = Company.class) Long companyId, @Size(max = 255) @NotBlankString String description);
 
-	public Boolean setRoom(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String room);
-
-	public Boolean setSection(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @Min(value = 0) Integer section);
+	public Boolean setSection(@ValidEntityId(entityClass = Company.class) Long companyId,
+			@ValidEntityId(entityClass = RoomSection.class, nullable = true) Long roomSectionId);
 
 	public Boolean setCompanyType(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull EnumCompanyType companyType);
 
@@ -82,8 +78,6 @@ public interface CompanyBeanLocal {
 	public Boolean setValidDate(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId, LocalDate validDate);
 
 	public Set<CompanyCard> getCompanyCards(@ValidEntityId(entityClass = Company.class) Long companyId);
-
-	public Boolean existsLocation(@NotBlank String room, @NotNull @Min(0) Integer section);
 
 	public List<Employment> getManagers(@ValidEntityId(entityClass = Company.class) Long companyId);
 

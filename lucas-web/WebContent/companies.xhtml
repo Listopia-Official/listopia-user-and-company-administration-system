@@ -34,6 +34,8 @@
 			type="florian_haas.lucas.web.converter.NullConverterNoText" />
 		<p:importConstants
 			type="florian_haas.lucas.web.converter.EnumConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.RoomSectionConverter$ShortRoomSectionConverter" />
 	</ui:define>
 	<ui:define name="buttonArea">
 		<p:toolbarGroup align="left">
@@ -48,7 +50,7 @@
 				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 			</ui:fragment>
 			<p:commandButton resetValues="true"
-				rendered="#{loginBean.hasPermissionsOr([EnumPermission.COMPANY_SET_NAME,EnumPermission.COMPANY_SET_DESCRIPTION,EnumPermission.COMPANY_SET_ROOM,EnumPermission.COMPANY_SET_SECTION,EnumPermission.COMPANY_SET_COMPANY_TYPE,EnumPermission.COMPANY_SET_PARENT_COMPANY,EnumPermission.COMPANY_SET_REQUIRED_EMPLOYEES_COUNT])}"
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.COMPANY_SET_NAME,EnumPermission.COMPANY_SET_DESCRIPTION,EnumPermission.COMPANY_SET_SECTION,EnumPermission.COMPANY_SET_COMPANY_TYPE,EnumPermission.COMPANY_SET_PARENT_COMPANY,EnumPermission.COMPANY_SET_REQUIRED_EMPLOYEES_COUNT])}"
 				value="#{msg['lucas.application.companyScreen.editCompanyButton.name']}"
 				title="#{msg['lucas.application.companyScreen.editCompanyButton.tooltip']}"
 				icon="fa fa-edit" oncomplete="PF('editCompanyDialog').show()"
@@ -140,30 +142,18 @@
 					title="#{msg['lucas.application.companyScreen.searchCompanyDescriptionSelectBooleanCheckbox.tooltip']}" />
 			</p:column>
 			<p:column>
-				<p:selectBooleanCheckbox id="searchCompanyRoomSelectBooleanCheckbox"
-					styleClass="checkbox" value="#{companyBean.useSearchCompanyRoom}"
-					title="#{msg['lucas.application.companyScreen.searchCompanyRoomSelectBooleanCheckbox.tooltip']}">
-					<p:ajax event="change"
-						update="companySearchCriteriaForm:searchCompanyRoomInputText companySearchCriteriaForm:searchCompanyRoomComparator"
-						process="@this" />
-				</p:selectBooleanCheckbox>
-				<p:outputLabel for="searchCompanyRoomSelectBooleanCheckbox"
-					value="#{msg['lucas.application.companyScreen.searchCompanyRoomSelectBooleanCheckbox.name']}"
-					title="#{msg['lucas.application.companyScreen.searchCompanyRoomSelectBooleanCheckbox.tooltip']}" />
-			</p:column>
-			<p:column>
 				<p:selectBooleanCheckbox
-					id="searchCompanySectionSelectBooleanCheckbox"
+					id="searchCompanySectionIdSelectBooleanCheckbox"
 					styleClass="checkbox"
-					value="#{companyBean.useSearchCompanySection}"
-					title="#{msg['lucas.application.companyScreen.searchCompanySectionSelectBooleanCheckbox.tooltip']}">
+					value="#{companyBean.useSearchCompanySectionId}"
+					title="#{msg['lucas.application.companyScreen.searchCompanySectionIdSelectBooleanCheckbox.tooltip']}">
 					<p:ajax event="change"
-						update="companySearchCriteriaForm:searchCompanySectionInputNumber companySearchCriteriaForm:searchCompanySectionComparator"
+						update="companySearchCriteriaForm:searchCompanySectionIdInputNumber companySearchCriteriaForm:searchCompanySectionIdComparator"
 						process="@this" />
 				</p:selectBooleanCheckbox>
-				<p:outputLabel for="searchCompanySectionSelectBooleanCheckbox"
-					value="#{msg['lucas.application.companyScreen.searchCompanySectionSelectBooleanCheckbox.name']}"
-					title="#{msg['lucas.application.companyScreen.searchCompanySectionSelectBooleanCheckbox.tooltip']}" />
+				<p:outputLabel for="searchCompanySectionIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.companyScreen.searchCompanySectionIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.companyScreen.searchCompanySectionIdSelectBooleanCheckbox.tooltip']}" />
 			</p:column>
 			<p:column>
 				<p:selectBooleanCheckbox
@@ -257,20 +247,10 @@
 				</p:selectOneMenu>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchCompanyRoomComparator"
-					disabled="#{not companyBean.useSearchCompanyRoom}"
-					value="#{companyBean.searchCompanyRoomComparator}"
-					title="#{msg['lucas.application.companyScreen.searchCompanyRoomComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
-			</p:column>
-			<p:column>
-				<p:selectOneMenu id="searchCompanySectionComparator"
-					disabled="#{not companyBean.useSearchCompanySection}"
-					value="#{companyBean.searchCompanySectionComparator}"
-					title="#{msg['lucas.application.companyScreen.searchCompanySectionComparator.tooltip']}">
+				<p:selectOneMenu id="searchCompanySectionIdComparator"
+					disabled="#{not companyBean.useSearchCompanySectionId}"
+					value="#{companyBean.searchCompanySectionIdComparator}"
+					title="#{msg['lucas.application.companyScreen.searchCompanySectionIdComparator.tooltip']}">
 					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
 						var="comparator" itemValue="#{comparator}"
 						itemLabel="#{converterBean.convertEnum(comparator)}" />
@@ -326,14 +306,10 @@
 					disabled="#{not companyBean.useSearchCompanyDescription}" />
 			</p:column>
 			<p:column>
-				<p:inputText value="#{companyBean.searchCompanyRoom}"
-					id="searchCompanyRoomInputText"
-					disabled="#{not companyBean.useSearchCompanyRoom}" />
-			</p:column>
-			<p:column>
-				<p:inputNumber value="#{companyBean.searchCompanySection}"
-					minValue="0" decimalPlaces="0" id="searchCompanySectionInputNumber"
-					disabled="#{not companyBean.useSearchCompanySection}" />
+				<p:inputNumber value="#{companyBean.searchCompanySectionId}"
+					minValue="0" decimalPlaces="0"
+					id="searchCompanySectionIdInputNumber"
+					disabled="#{not companyBean.useSearchCompanySectionId}" />
 			</p:column>
 			<p:column>
 				<p:selectOneMenu value="#{companyBean.searchCompanyCompanyType}"
@@ -388,41 +364,36 @@
 				converter="#{converterBean.getConverter(NullConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
-			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.roomColumn.name']}"
-			sortBy="#{entity.room}"
-			visible="#{companyBean.resultsDatatableColumns[3]}">
-			<h:outputText value="#{entity.room}" />
-		</p:column>
-		<p:column
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.sectionColumn.name']}"
 			sortBy="#{entity.section}"
-			visible="#{companyBean.resultsDatatableColumns[4]}">
-			<h:outputText value="#{entity.section}" />
+			visible="#{companyBean.resultsDatatableColumns[3]}">
+			<h:outputText value="#{entity.section}"
+				converter="#{converterBean.getConverter(ShortRoomSectionConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.companyTypeColumn.name']}"
 			sortBy="#{entity.companyType}"
-			visible="#{companyBean.resultsDatatableColumns[5]}">
+			visible="#{companyBean.resultsDatatableColumns[4]}">
 			<h:outputText value="#{entity.companyType}"
 				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.parentCompanyColumn.name']}"
 			sortBy="#{entity.parentCompany}"
-			visible="#{companyBean.resultsDatatableColumns[6]}">
+			visible="#{companyBean.resultsDatatableColumns[5]}">
 			<h:outputText value="#{entity.parentCompany}"
 				converter="#{converterBean.getConverter(CompanyConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.childCompaniesColumn.name']}"
-			sortable="false" visible="#{companyBean.resultsDatatableColumns[7]}">
+			sortable="false" visible="#{companyBean.resultsDatatableColumns[6]}">
 			<h:outputText value="#{entity.childCompanies}" escape="false"
 				converter="#{converterBean.getConverter(CompaniesConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.requiredEmployeesCount.name']}"
 			sortBy="#{entity.requiredEmployeesCount}"
-			visible="#{companyBean.resultsDatatableColumns[8]}">
+			visible="#{companyBean.resultsDatatableColumns[7]}">
 			<h:outputText value="#{entity.requiredEmployeesCount}" />
 		</p:column>
 	</ui:define>

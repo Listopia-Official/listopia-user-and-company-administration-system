@@ -1,0 +1,54 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.roomScreen.editRoomDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="editRoomDialog" />
+	<ui:param name="formId" value="editRoomDialogForm" />
+	<ui:define name="dialogContent">
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.roomScreen.editRoomDialog.nameInputText.name']}"
+							title="#{msg['lucas.application.roomScreen.editRoomDialog.nameInputText.tooltip']}"
+							for="roomNameInputText" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="roomNameInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputText id="roomNameInputText"
+							value="#{roomBean.editRoomDialogName}"
+							title="#{msg['lucas.application.roomScreen.editRoomDialog.nameInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton process="@this roomNameInputText"
+							update="@form dataAccorditionPanel:roomSearchResultsForm:roomSearchResultsTable"
+							action="#{roomBean.editRoom}"
+							value="#{msg['lucas.application.roomScreen.editRoomDialog.saveButton.name']}"
+							title="#{msg['lucas.application.roomScreen.editRoomDialog.saveButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('editRoomDialog').hide()}" />
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this"
+							value="#{msg['lucas.application.roomScreen.editRoomDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.roomScreen.editRoomDialog.cancelButton.tooltip']}"
+							oncomplete="PF('editRoomDialog').hide()" immediate="true">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

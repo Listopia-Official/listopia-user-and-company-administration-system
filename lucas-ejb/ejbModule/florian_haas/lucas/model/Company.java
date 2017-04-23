@@ -13,8 +13,6 @@ import florian_haas.lucas.util.validation.*;
 
 @Entity
 @DiscriminatorValue(value = "company")
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {
-		"room", "section" }))
 @ValidCompanyHierarchy
 public class Company extends AccountOwner {
 
@@ -31,16 +29,10 @@ public class Company extends AccountOwner {
 	@Size(max = 255)
 	private String description;
 
-	@Basic(optional = false)
-	@Column(nullable = false)
-	@NotBlank
-	private String room;
-
-	@Basic(optional = false)
-	@Column(nullable = false)
-	@NotNull
-	@Min(value = 0)
-	private Integer section;
+	@OneToOne(cascade = {
+			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE }, optional = true)
+	@JoinColumn(nullable = true, unique = true)
+	private RoomSection section;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
@@ -84,10 +76,9 @@ public class Company extends AccountOwner {
 
 	Company() {}
 
-	public Company(String name, String description, String room, Integer section, EnumCompanyType companyType, Integer requiredEmployeesCount) {
+	public Company(String name, String description, RoomSection section, EnumCompanyType companyType, Integer requiredEmployeesCount) {
 		this.name = name;
 		this.description = description;
-		this.room = room;
 		this.section = section;
 		this.companyType = companyType;
 		this.requiredEmployeesCount = requiredEmployeesCount;
@@ -148,19 +139,11 @@ public class Company extends AccountOwner {
 		this.description = description;
 	}
 
-	public String getRoom() {
-		return this.room;
-	}
-
-	public void setRoom(String room) {
-		this.room = room;
-	}
-
-	public Integer getSection() {
+	public RoomSection getSection() {
 		return this.section;
 	}
 
-	public void setSection(Integer section) {
+	public void setSection(RoomSection section) {
 		this.section = section;
 	}
 

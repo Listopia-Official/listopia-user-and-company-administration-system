@@ -20,6 +20,8 @@
 		<class>florian_haas.lucas.model.PurchaseLog</class>
 		<class>florian_haas.lucas.model.Taxdata</class>
 		<class>florian_haas.lucas.model.SalaryAttendancedata</class>
+		<class>florian_haas.lucas.model.Room</class>
+		<class>florian_haas.lucas.model.RoomSection</class>
 		<properties>
 			<property name="javax.persistence.schema-generation.database.action" value="create"/>
 			<property name="javax.persistence.schema-generation.scripts.action" value="create"/>

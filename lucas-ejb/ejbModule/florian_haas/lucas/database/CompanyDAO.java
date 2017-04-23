@@ -6,16 +6,15 @@ import florian_haas.lucas.model.*;
 
 public interface CompanyDAO extends DAO<Company> {
 
-	public List<Company> findCompanies(Long companyId, String name, String description, String room, Integer section, EnumCompanyType companyType,
+	public List<Company> findCompanies(Long companyId, String name, String description, Long roomSectionId, EnumCompanyType companyType,
 			Long parentCompanyId, Integer requiredEmployeesCount, Boolean areEmployeesRequired, Boolean useId, Boolean useName,
-			Boolean useDescription, Boolean useRoom, Boolean useSection, Boolean useCompanyType, Boolean useParentCompanyId,
-			Boolean useRequiredEmployeesCount, Boolean useAreEmployeesRequired, EnumQueryComparator idComparator, EnumQueryComparator nameComparator,
-			EnumQueryComparator descriptionComparator, EnumQueryComparator roomComparator, EnumQueryComparator sectionComparator,
-			EnumQueryComparator companyTypeComparator, EnumQueryComparator parentCompanyIdComparator,
-			EnumQueryComparator requiredEmployeesCountComparator);
-
-	public Boolean existsLocation(String room, Integer section);
+			Boolean useDescription, Boolean useRoomSectionId, Boolean useCompanyType, Boolean useParentCompanyId, Boolean useRequiredEmployeesCount,
+			Boolean useAreEmployeesRequired, EnumQueryComparator idComparator, EnumQueryComparator nameComparator,
+			EnumQueryComparator descriptionComparator, EnumQueryComparator roomSectionComparator, EnumQueryComparator companyTypeComparator,
+			EnumQueryComparator parentCompanyIdComparator, EnumQueryComparator requiredEmployeesCountComparator);
 
 	public Boolean isNameUnique(String name);
+
+	public Boolean isRoomSectionUnique(Long roomSectionId);
 
 }

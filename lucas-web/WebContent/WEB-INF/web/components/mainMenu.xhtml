@@ -22,6 +22,9 @@
 				value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.companiesMenuItem.name']}" />
 			<p:menuitem disabled="true"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.employmentsMenuItem.name']}" />
+			<p:menuitem outcome="/rooms.xhtml"
+				rendered="#{loginBean.hasPermission(EnumPermission.ROOM_ACCESS_VIEW)}"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.roomsMenuItem.name']}" />
 		</p:submenu>
 		<p:submenu
 			label="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.name']}">

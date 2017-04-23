@@ -67,43 +67,23 @@
 					</p:column>
 				</p:row>
 				<p:row
-					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_ROOM)}">
+					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_SECTION)}">
 					<p:column style="padding-top:0px">
 						<p:outputLabel
-							value="#{msg['lucas.application.companyScreen.editCompanyDialog.roomInputText.name']}"
-							title="#{msg['lucas.application.companyScreen.editCompanyDialog.roomInputText.tooltip']}"
-							for="roomInputText" />
+							value="#{msg['lucas.application.companyScreen.editCompanyDialog.sectionIdInputNumber.name']}"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.sectionIdInputNumber.tooltip']}"
+							for="sectionIdInputNumber" />
 					</p:column>
 					<p:column colspan="2">
-						<p:message for="roomInputText" />
-					</p:column>
-				</p:row>
-				<p:row
-					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_ROOM)}">
-					<p:column colspan="3">
-						<p:inputText id="roomInputText"
-							value="#{companyBean.editCompanyDialogRoom}"
-							title="#{msg['lucas.application.companyScreen.editCompanyDialog.roomInputText.tooltip']}" />
-					</p:column>
-				</p:row>
-				<p:row
-					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_SECTION)}">
-					<p:column>
-						<p:outputLabel
-							value="#{msg['lucas.application.companyScreen.editCompanyDialog.sectionInputNumber.name']}"
-							title="#{msg['lucas.application.companyScreen.editCompanyDialog.sectionInputNumber.tooltip']}"
-							for="sectionInputNumber" />
-					</p:column>
-					<p:column colspan="2">
-						<p:message for="sectionInputNumber" />
+						<p:message for="sectionIdInputNumber" />
 					</p:column>
 				</p:row>
 				<p:row
 					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_SECTION)}">
 					<p:column colspan="3">
-						<p:inputNumber value="#{companyBean.editCompanyDialogSection}"
-							minValue="0" id="sectionInputNumber" decimalPlaces="0"
-							title="#{msg['lucas.application.companyScreen.editCompanyDialog.sectionInputNumber.tooltip']}" />
+						<p:inputNumber value="#{companyBean.editCompanyDialogSectionId}"
+							minValue="0" id="sectionIdInputNumber" decimalPlaces="0"
+							title="#{msg['lucas.application.companyScreen.editCompanyDialog.sectionIdInputNumber.tooltip']}" />
 					</p:column>
 				</p:row>
 				<p:row
@@ -190,7 +170,7 @@
 				<p:row>
 					<p:column>
 						<p:commandButton
-							process="@this nameInputText descriptionInputTextarea roomInputText sectionInputNumber companyTypeSelectOneMenu parentCompanyInputNumber requiredEmployeesCountInputNumber"
+							process="@this nameInputText descriptionInputTextarea sectionIdInputNumber companyTypeSelectOneMenu parentCompanyInputNumber requiredEmployeesCountInputNumber"
 							update="@form dataAccorditionPanel:companySearchResultsForm:companySearchResultsTable"
 							action="#{companyBean.editCompany}"
 							value="#{msg['lucas.application.companyScreen.editCompanyDialog.saveChangesButton.name']}"

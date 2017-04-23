@@ -1,0 +1,176 @@
+<ui:composition template="/WEB-INF/web/template/dataTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="pageTitle"
+		value="#{msg['lucas.application.roomScreen.title']}" />
+	<ui:param name="sitePrefix" value="room" />
+	<ui:param name="searchBean" value="#{roomBean}" />
+	<ui:param name="searchResults" value="#{roomBean.searchRoomResults}" />
+	<ui:param name="selectedResults" value="#{roomBean.selectedRooms}" />
+	<ui:param name="searchFunction" value="searchRooms" />
+	<ui:param name="refreshFunction" value="refreshRooms" />
+	<ui:param name="findDynamicPermission" value="ROOM_FIND_DYNAMIC" />
+	<ui:define name="dialogs">
+		<ui:include src="/WEB-INF/web/rooms/createRoomDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/rooms/editRoomDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/rooms/sectionManagerDialog.xhtml" />
+	</ui:define>
+	<ui:define name="otherContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.RoomSectionConverter" />
+	</ui:define>
+	<ui:define name="buttonArea">
+		<p:toolbarGroup align="left">
+			<ui:fragment
+				rendered="#{loginBean.hasPermission(EnumPermission.ROOM_CREATE)}">
+				<p:commandButton resetValues="true"
+					value="#{msg['lucas.application.roomScreen.createRoomButton.name']}"
+					title="#{msg['lucas.application.roomScreen.createRoomButton.tooltip']}"
+					icon="fa fa-plus" oncomplete="PF('createRoomDialog').show()"
+					action="#{roomBean.initCreateRoomDialog}" process="@this"
+					update="createRoomDialogForm" />
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			</ui:fragment>
+			<ui:fragment
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.ROOM_SET_NAME,EnumPermission.ROOM_ADD_SECTION,EnumPermission.ROOM_REMOVE_SECTION])}">
+				<p:commandButton resetValues="true"
+					rendered="#{loginBean.hasPermission(EnumPermission.ROOM_SET_NAME)}"
+					value="#{msg['lucas.application.roomScreen.setNameButton.name']}"
+					title="#{msg['lucas.application.roomScreen.setNameButton.tooltip']}"
+					icon="fa fa-edit" oncomplete="PF('editRoomDialog').show()"
+					action="#{roomBean.initEditRoomDialog}" process="@this"
+					update="editRoomDialogForm"
+					disabled="#{roomBean.selectedRooms.size() !=1}" />
+				<p:commandButton resetValues="true"
+					rendered="#{loginBean.hasPermission(EnumPermission.ROOM_FIND_ROOM_SECTION_BY_ID) &amp;&amp; loginBean.hasPermissionsOr([EnumPermission.ROOM_ADD_SECTION,EnumPermission.ROOM_REMOVE_SECTION])}"
+					value="#{msg['lucas.application.roomScreen.sectionManagerButton.name']}"
+					title="#{msg['lucas.application.roomScreen.sectionManagerButton.tooltip']}"
+					icon="fa fa-table" disabled="#{roomBean.selectedRooms.size() !=1}"
+					oncomplete="PF('sectionManagerDialog').show()"
+					action="#{roomBean.initSectionManagerDialog}" process="@this"
+					update="sectionManagerDialogForm" />
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			</ui:fragment>
+			<p:commandButton resetValues="true" disabled="true"
+				value="#{msg['lucas.application.roomScreen.removeRoomButton.name']}"
+				title="#{msg['lucas.application.roomScreen.removeRoomButton.tooltip']}"
+				icon="fa fa-remove" />
+			<ui:remove>oncomplete="PF('createRoomDialog').show()"
+					action="#{roomBean.initCreateRoomDialog}" process="@this"
+					update="createRoomDialogForm" </ui:remove>
+		</p:toolbarGroup>
+	</ui:define>
+	<ui:define name="searchCriteria">
+		<p:row>
+			<p:column>
+				<p:selectBooleanCheckbox id="searchRoomIdSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{roomBean.useSearchRoomId}"
+					title="#{msg['lucas.application.roomScreen.searchRoomIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="roomSearchCriteriaForm:searchRoomIdInputNumber roomSearchCriteriaForm:searchRoomIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchRoomIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.roomScreen.searchRoomIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.roomScreen.searchRoomIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox id="searchRoomNameSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{roomBean.useSearchRoomName}"
+					title="#{msg['lucas.application.roomScreen.searchRoomNameSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="roomSearchCriteriaForm:searchRoomNameInputText roomSearchCriteriaForm:searchRoomNameComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchRoomNameSelectBooleanCheckbox"
+					value="#{msg['lucas.application.roomScreen.searchRoomNameSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.roomScreen.searchRoomNameSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchRoomSectionIdSelectBooleanCheckbox" styleClass="checkbox"
+					value="#{roomBean.useSearchRoomSectionId}"
+					title="#{msg['lucas.application.roomScreen.searchRoomSectionIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="roomSearchCriteriaForm:searchRoomSectionIdInputNumber roomSearchCriteriaForm:searchRoomSectionIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchRoomSectionIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.roomScreen.searchRoomSectionIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.roomScreen.searchRoomSectionIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:selectOneMenu id="searchRoomIdComparator"
+					disabled="#{not roomBean.useSearchRoomId}"
+					value="#{roomBean.searchRoomIdComparator}"
+					title="#{msg['lucas.application.roomScreen.searchRoomIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchRoomNameComparator"
+					disabled="#{not roomBean.useSearchRoomName}"
+					value="#{roomBean.searchRoomNameComparator}"
+					title="#{msg['lucas.application.roomScreen.searchRoomNameComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchRoomSectionIdComparator"
+					disabled="#{not roomBean.useSearchRoomSectionId}"
+					value="#{roomBean.searchRoomSectionIdComparator}"
+					title="#{msg['lucas.application.roomScreen.searchRoomSectionIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:inputNumber value="#{roomBean.searchRoomId}" minValue="0"
+					decimalPlaces="0" id="searchRoomIdInputNumber"
+					disabled="#{not roomBean.useSearchRoomId}" />
+			</p:column>
+			<p:column>
+				<p:inputText value="#{roomBean.searchRoomName}"
+					id="searchRoomNameInputText"
+					disabled="#{not roomBean.useSearchRoomName}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{roomBean.searchRoomSectionId}" minValue="0"
+					decimalPlaces="0" id="searchRoomSectionIdInputNumber"
+					disabled="#{not roomBean.useSearchRoomSectionId}" />
+			</p:column>
+		</p:row>
+	</ui:define>
+	<ui:define name="searchResults">
+		<p:column
+			headerText="#{msg['lucas.application.roomScreen.roomSearchResultsTable.idColumn.name']}"
+			sortBy="#{entity.id}"
+			visible="#{roomBean.resultsDatatableColumns[0]}">
+			<h:outputText value="#{entity.id}" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.roomScreen.roomSearchResultsTable.nameColumn.name']}"
+			sortBy="#{entity.name}"
+			visible="#{roomBean.resultsDatatableColumns[1]}">
+			<h:outputText value="#{entity.name}" />
+		</p:column>
+		<p:column
+			headerText="#{msg['lucas.application.roomScreen.roomSearchResultsTable.sectionsCountColumn.name']}"
+			sortBy="#{entity.sections.size()}"
+			visible="#{roomBean.resultsDatatableColumns[2]}">
+			<h:outputText value="#{entity.sections.size()}" />
+		</p:column>
+	</ui:define>
+</ui:composition>

@@ -42,8 +42,7 @@ public enum EnumPermission {
 	COMPANY_FIND_DYNAMIC(COMPANY, "findDynamic"),
 	COMPANY_SET_NAME(COMPANY, "setName"),
 	COMPANY_SET_DESCRIPTION(COMPANY, "setDescription"),
-	COMPANY_SET_ROOM(COMPANY, "setRoom"),
-	COMPANY_SET_SECTION(COMPANY, "setSection"),
+	COMPANY_SET_SECTION(COMPANY, "setRoomSection"),
 	COMPANY_SET_COMPANY_TYPE(COMPANY, "setCompanyType"),
 	COMPANY_SET_PARENT_COMPANY(COMPANY, "setParentCompany"),
 	COMPANY_REMOVE_PARENT_COMPANY(COMPANY, "removeParentCompany"),
@@ -56,7 +55,6 @@ public enum EnumPermission {
 	COMPANY_REMOVE_COMPANY_CARD(COMPANY, "removeCompanyCard"),
 	COMPANY_BLOCK_COMPANY_CARD(COMPANY, "blockCompanyCard"),
 	COMPANY_UNBLOCK_COMPANY_CARD(COMPANY, "unblockCompanyCard"),
-	COMPANY_EXISTS_LOCATION(COMPANY, "existsLocation"),
 	COMPANY_GET_MANAGERS(COMPANY, "getManagers"),
 	COMPANY_GET_ADVISORS(COMPANY, "getAdvisors"),
 	COMPANY_GET_EMPLOYEES(COMPANY, "getEmployees"),
@@ -177,7 +175,17 @@ public enum EnumPermission {
 	LOGIN_ROLE_FIND_DYNAMIC(LOGIN_ROLE, "findDynamic"),
 	LOGIN_ROLE_GET_PERMISSIONS(LOGIN_ROLE, "getPermissions"),
 	LOGIN_ROLE_REMOVE(LOGIN_ROLE, "remove"),
-	LOGIN_ROLE_ACCESS_VIEW(LOGIN_ROLE, "accessView");
+	LOGIN_ROLE_ACCESS_VIEW(LOGIN_ROLE, "accessView"),
+
+	ROOM_CREATE(ROOM, "create"),
+	ROOM_FIND_ALL(ROOM, "findAll"),
+	ROOM_FIND_BY_ID(ROOM, "findById"),
+	ROOM_FIND_DYNAMIC(ROOM, "findDynamic"),
+	ROOM_SET_NAME(ROOM, "setName"),
+	ROOM_ADD_SECTION(ROOM, "addSection"),
+	ROOM_REMOVE_SECTION(ROOM, "removeSection"),
+	ROOM_FIND_ROOM_SECTION_BY_ID(ROOM, "findRoomSectionById"),
+	ROOM_ACCESS_VIEW(ROOM, "accessView");
 
 	private String permissionString;
 

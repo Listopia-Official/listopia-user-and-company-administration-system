@@ -11,21 +11,20 @@ import florian_haas.lucas.model.*;
 public class CompanyDAOImpl extends DAOImpl<Company> implements CompanyDAO {
 
 	@Override
-	public List<Company> findCompanies(Long companyId, String name, String description, String room, Integer section, EnumCompanyType companyType,
+	public List<Company> findCompanies(Long companyId, String name, String description, Long roomSectionId, EnumCompanyType companyType,
 			Long parentCompanyId, Integer requiredEmployeesCount, Boolean areEmployeesRequired, Boolean useId, Boolean useName,
-			Boolean useDescription, Boolean useRoom, Boolean useSection, Boolean useCompanyType, Boolean useParentCompanyId,
-			Boolean useRequiredEmployeesCount, Boolean useAreEmployeesRequired, EnumQueryComparator idComparator, EnumQueryComparator nameComparator,
-			EnumQueryComparator descriptionComparator, EnumQueryComparator roomComparator, EnumQueryComparator sectionComparator,
-			EnumQueryComparator companyTypeComparator, EnumQueryComparator parentCompanyIdComparator,
-			EnumQueryComparator requiredEmployeesCountComparator) {
+			Boolean useDescription, Boolean useRoomSectionId, Boolean useCompanyType, Boolean useParentCompanyId, Boolean useRequiredEmployeesCount,
+			Boolean useAreEmployeesRequired, EnumQueryComparator idComparator, EnumQueryComparator nameComparator,
+			EnumQueryComparator descriptionComparator, EnumQueryComparator roomSectionIdComparator, EnumQueryComparator companyTypeComparator,
+			EnumQueryComparator parentCompanyIdComparator, EnumQueryComparator requiredEmployeesCountComparator) {
 		return this.readOnlyCriteriaQuery((query, root, builder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 
 			getSingularRestriction(Company_.id, companyId, useId, idComparator, predicates, builder, root);
 			getSingularRestriction(Company_.name, name, useName, nameComparator, predicates, builder, root);
 			getSingularRestriction(Company_.description, description, useDescription, descriptionComparator, predicates, builder, root);
-			getSingularRestriction(Company_.room, room, useRoom, roomComparator, predicates, builder, root);
-			getSingularRestriction(Company_.section, section, useSection, sectionComparator, predicates, builder, root);
+			getSingularRestriction(RoomSection_.id, roomSectionId, useRoomSectionId, roomSectionIdComparator, predicates, builder,
+					root.get(Company_.section));
 			getSingularRestriction(Company_.companyType, companyType, useCompanyType, companyTypeComparator, predicates, builder, root);
 			getSingularRestriction(Company_.id, parentCompanyId, useParentCompanyId, parentCompanyIdComparator, predicates, builder,
 					root.get(Company_.parentCompany));
@@ -45,16 +44,15 @@ public class CompanyDAOImpl extends DAOImpl<Company> implements CompanyDAO {
 	}
 
 	@Override
-	public Boolean existsLocation(String room, Integer section) {
-		return !this.readOnlyCriteriaQuery((query, root, builder) -> {
-			return Arrays.asList(builder.and(getSingularRestriction(Company_.room, room, EnumQueryComparator.EQUAL, builder, root),
-					getSingularRestriction(Company_.section, section, EnumQueryComparator.EQUAL, builder, root)));
-		}).isEmpty();
+	public Boolean isNameUnique(String name) {
+		return isUnique(name, Company_.name);
 	}
 
 	@Override
-	public Boolean isNameUnique(String name) {
-		return isUnique(name, Company_.name);
+	public Boolean isRoomSectionUnique(Long roomSectionId) {
+		return isUnique(roomSectionId, root -> {
+			return root.join(Company_.section).get(RoomSection_.id);
+		});
 	}
 
 }
