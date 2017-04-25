@@ -31,7 +31,7 @@
 						<p:panelGrid>
 							<p:row>
 								<p:column colspan="2">
-									<p:fileUpload allowTypes="/jpeg|jpg/"
+									<p:fileUpload allowTypes="/jpeg|jpg/" fileLimit="1"
 										sizeLimit="#{userBean.maxUserImageUploadSizeBytes}"
 										fileUploadListener="#{userBean.onImageUpload}" update="@form"
 										cancelLabel="#{msg['lucas.application.userScreen.imageManagerDialog.uploader.cancelLabel']}"
