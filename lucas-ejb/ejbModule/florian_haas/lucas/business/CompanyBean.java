@@ -122,11 +122,11 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions(COMPANY_SET_SECTION)
 	public Boolean setSection(Long companyId, Long sectionId) {
-		if (sectionId != null) checkIsSectionUnique(sectionId);
 		Company comp = companyDao.findById(companyId);
 		RoomSection oldSection = comp.getSection();
 		RoomSection section = sectionId != null ? roomSectionDao.findById(sectionId) : null;
 		if ((oldSection == null && section == null) || oldSection != null && oldSection.equals(section)) return Boolean.FALSE;
+		if (sectionId != null) checkIsSectionUnique(sectionId);
 		comp.setSection(section);
 		if (section != null) section.setCompany(comp);
 		if (oldSection != null) oldSection.setCompany(null);
