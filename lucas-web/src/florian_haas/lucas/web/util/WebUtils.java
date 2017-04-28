@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
 import java.util.function.*;
@@ -304,6 +305,12 @@ public class WebUtils {
 
 	public static final String SVG_MIME = "image/svg+xml";
 
+	public static final String CSV_MIME = "text/csv";
+
+	public static final String TEXT_MIME = "text";
+
+	public static final String CSV_TYPE = "CSV";
+
 	public static StreamedContent getJPEGImage(InputStream data) {
 		return getDataAsStreamedContent(data, JPEG_MIME);
 	}
@@ -423,6 +430,37 @@ public class WebUtils {
 			if (!SecurityUtils.getSubject().isPermitted(permission.getPermissionString())) return false;
 		}
 		return true;
+	}
+
+	public static List<List<String>> parseCSV(String content, String delim) throws Exception {
+		List<List<String>> ret = new ArrayList<>();
+		try (StringReader tmpReader = new StringReader(content); BufferedReader reader = new BufferedReader(tmpReader)) {
+			String read = null;
+			while ((read = reader.readLine()) != null) {
+				read = read.replace("\uFEFF", "");
+				List<String> line = new ArrayList<>();
+				StringTokenizer tokenizer = new StringTokenizer(read, delim);
+				while (tokenizer.hasMoreTokens()) {
+					line.add(tokenizer.nextToken().trim());
+				}
+				ret.add(line);
+			}
+		}
+		catch (Exception e) {
+			throw e;
+		}
+		return ret;
+	}
+
+	public static final List<String> CHARSETS = new ArrayList<>();
+
+	static {
+		CHARSETS.add(StandardCharsets.UTF_8.name());
+		CHARSETS.add(StandardCharsets.UTF_16.name());
+		CHARSETS.add(StandardCharsets.US_ASCII.name());
+		CHARSETS.add(StandardCharsets.ISO_8859_1.name());
+		CHARSETS.add(StandardCharsets.UTF_16BE.name());
+		CHARSETS.add(StandardCharsets.UTF_16LE.name());
 	}
 
 }

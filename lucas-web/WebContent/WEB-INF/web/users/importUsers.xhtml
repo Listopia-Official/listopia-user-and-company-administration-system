@@ -1,0 +1,95 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.userScreen.importUsersDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="importUsersDialog" />
+	<ui:param name="formId" value="importUsersDialogForm" />
+	<ui:define name="dialogContent">
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column colspan="6">
+						<p:messages for="importUsersDialogMessages" autoUpdate="true"
+							showDetail="true" showIcon="true" showSummary="true"
+							closable="true" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.userScreen.importUsersDialog.csvDelimeterInputText.name']}"
+							title="#{msg['lucas.application.userScreen.importUsersDialog.csvDelimeterInputText.tooltip']}"
+							for="csvDelimeterInputText" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="csvDelimeterInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputText id="csvDelimeterInputText"
+							value="#{userBean.importUsersDialogDelim}"
+							title="#{msg['lucas.application.userScreen.importUsersDialog.csvDelimeterInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.userScreen.importUsersDialog.uploader.name']}"
+							title="#{msg['lucas.application.userScreen.importUsersDialog.uploader.tooltip']}"
+							for="csvDelimeterInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:fileUpload allowTypes="/csv/" update="importUsersButton @this"
+							fileUploadListener="#{userBean.onImportUsersCSVUpload}"
+							fileLimit="1" sizeLimit="1000000"
+							cancelLabel="#{msg['lucas.application.userScreen.importUsersDialog.uploader.cancelLabel']}"
+							uploadLabel="#{msg['lucas.application.userScreen.importUsersDialog.uploader.uploadLabel']}"
+							label="#{msg['lucas.application.userScreen.importUsersDialog.uploader.chooseLabel']}"
+							invalidFileMessage="#{msg['lucas.application.userScreen.importUsersDialog.uploader.invalidFileMessage']}"
+							invalidSizeMessage="#{msg['lucas.application.userScreen.importUsersDialog.uploader.invalidFileSizeMessage']}"
+							fileLimitMessage="#{msg['lucas.application.userScreen.importUsersDialog.uploader.fileLimitMessage']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<h:outputText
+							value="#{msg['lucas.application.userScreen.importUsersDialog.info']}"
+							style="font-style:italic" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton process="@form" id="importUsersButton"
+							disabled="#{userBean.importUsersDialogCSV == null}"
+							action="#{userBean.importUsersDialogCSV}" update="@form"
+							value="#{msg['lucas.application.userScreen.importUsersDialog.saveButton.name']}"
+							title="#{msg['lucas.application.userScreen.importUsersDialog.saveButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('importUsersDialog').hide()}" />
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this"
+							value="#{msg['lucas.application.userScreen.importUsersDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.userScreen.importUsersDialog.cancelButton.tooltip']}"
+							oncomplete="PF('importUsersDialog').hide()" immediate="true">
+						</p:commandButton>
+					</p:column>
+					<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
+						<ui:param name="block" value="importUsersDialogForm" />
+						<ui:param name="trigger"
+							value="importUsersDialogForm:importUsersButton" />
+					</ui:include>
+				</p:row>
+			</p:panelGrid>
+		</div>
+
+	</ui:define>
+</ui:composition>

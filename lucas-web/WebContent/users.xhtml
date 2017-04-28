@@ -17,6 +17,7 @@
 		<ui:include src="/WEB-INF/web/users/createPupilDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/users/createTeacherDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/users/createGuestDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/users/importUsers.xhtml" />
 		<ui:include src="/WEB-INF/web/users/editUserDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/users/imageManagerDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/users/userCardManagerDialog.xhtml" />
@@ -36,7 +37,7 @@
 	<ui:define name="buttonArea">
 		<p:toolbarGroup>
 			<ui:fragment
-				rendered="#{loginBean.hasPermissionsOr([EnumPermission.USER_CREATE_PUPIL,EnumPermission.USER_CREATE_TEACHER,EnumPermission.USER_CREATE_GUEST])}">
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.USER_CREATE_PUPIL,EnumPermission.USER_CREATE_TEACHER,EnumPermission.USER_CREATE_GUEST]) || ((loginBean.hasPermission(EnumPermission.USER_CREATE_PUPIL) || loginBean.hasPermission(EnumPermission.USER_CREATE_TEACHER)) &amp;&amp; loginBean.hasPermission(EnumPermission.USER_IMPORT_FROM_CSV))}">
 				<p:splitButton icon="fa fa-user-plus"
 					value="#{msg['lucas.application.userScreen.createUserButton.name']}"
 					title="#{msg['lucas.application.userScreen.createUserButton.tooltip']}"
@@ -72,17 +73,17 @@
 						<p:resetInput target="createGuestDialogForm" clearModel="true" />
 					</p:menuitem>
 					<p:separator
-						rendered="#{(loginBean.hasPermission(EnumPermission.USER_CREATE_PUPIL) &amp;&amp; loginBean.hasPermission(EnumPermission.USER_IMPORT_PUPILS))||(loginBean.hasPermission(EnumPermission.USER_CREATE_TEACHER) &amp;&amp; loginBean.hasPermission(EnumPermission.USER_IMPORT_TEACHERS))}" />
-					<p:menuitem disabled="true"
-						rendered="#{loginBean.hasPermissionsAnd([EnumPermission.USER_IMPORT_PUPILS,EnumPermission.USER_CREATE_PUPIL])}"
-						value="#{msg['lucas.application.userScreen.importPupilsButton.name']}"
+						rendered="#{((loginBean.hasPermission(EnumPermission.USER_CREATE_PUPIL) || loginBean.hasPermission(EnumPermission.USER_CREATE_TEACHER)) &amp;&amp; loginBean.hasPermission(EnumPermission.USER_IMPORT_FROM_CSV))}" />
+					<p:menuitem disabled="false"
+						rendered="#{((loginBean.hasPermission(EnumPermission.USER_CREATE_PUPIL) || loginBean.hasPermission(EnumPermission.USER_CREATE_TEACHER)) &amp;&amp; loginBean.hasPermission(EnumPermission.USER_IMPORT_FROM_CSV))}"
+						value="#{msg['lucas.application.userScreen.importUsersButton.name']}"
 						icon="fa fa-file-excel-o"
-						title="#{msg['lucas.application.userScreen.importPupilsButton.tooltip']}" />
-					<p:menuitem disabled="true"
-						rendered="#{loginBean.hasPermissionsAnd([EnumPermission.USER_IMPORT_TEACHERS,EnumPermission.USER_CREATE_TEACHER])}"
-						value="#{msg['lucas.application.userScreen.importTeachersButton.name']}"
-						icon="fa fa-file-excel-o"
-						title="#{msg['lucas.application.userScreen.importTeachersButton.tooltip']}" />
+						action="#{userBean.initImportUsersDialogCSV}"
+						title="#{msg['lucas.application.userScreen.importUsersButton.tooltip']}"
+						update="importUsersDialogForm" process="@this"
+						oncomplete="PF('importUsersDialog').show()">
+						<p:resetInput target="importUsersDialogForm" clearModel="true" />
+					</p:menuitem>
 				</p:splitButton>
 				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 			</ui:fragment>

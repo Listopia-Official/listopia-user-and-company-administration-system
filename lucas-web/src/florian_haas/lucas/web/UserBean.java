@@ -2,6 +2,7 @@ package florian_haas.lucas.web;
 
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.util.*;
 
@@ -252,6 +253,95 @@ public class UserBean implements Serializable {
 
 	/*
 	 * -------------------- Create Guest Dialog End --------------------
+	 */
+
+	/*
+	 * -------------------- Import Pupils Dialog Start --------------------
+	 */
+
+	@NotBlank
+	private String importUsersDialogDelim = ";";
+
+	private byte[] importUsersDialogCSV;
+
+	public static final String IMPORT_PUPILS_DIALOG_MESSAGES_COMPONENT_ID = "importUsersDialogMessages";
+
+	public String getImportUsersDialogDelim() {
+		return this.importUsersDialogDelim;
+	}
+
+	public void setImportUsersDialogDelim(String importUsersDialogDelim) {
+		this.importUsersDialogDelim = importUsersDialogDelim;
+	}
+
+	public byte[] getImportUsersDialogCSV() {
+		return this.importUsersDialogCSV;
+	}
+
+	public void onImportUsersCSVUpload(FileUploadEvent event) {
+		UploadedFile file = event.getFile();
+		WebUtils.executeTask(params -> {
+			importUsersDialogCSV = event.getFile().getContents();
+			return true;
+		}, "lucas.application.userScreen.uploadUsersCSV.message", IMPORT_PUPILS_DIALOG_MESSAGES_COMPONENT_ID, Utils.asList(file.getFileName()));
+	}
+
+	public void initImportUsersDialogCSV() {
+		importUsersDialogCSV = null;
+		importUsersDialogDelim = ";";
+	}
+
+	public void importUsersDialogCSV() {
+		WebUtils.executeTask(params -> {
+			int[] results = createUsersFromCSV(new String(importUsersDialogCSV, StandardCharsets.UTF_8), importUsersDialogDelim);
+			int created = results[0];
+			int failed = results[1];
+			params.add(created);
+			if (failed > 0) {
+				WebUtils.addDefaultTranslatedErrorMessage("lucas.application.userScreen.importUsers.message.creationFailed", failed);
+			}
+			return created > 0;
+		}, "lucas.application.userScreen.importUsers.message");
+	}
+
+	private int[] createUsersFromCSV(String content, String delim) throws Exception {
+		int[] ret = new int[] {
+				0, 0 };
+		List<List<String>> parsedCSV = WebUtils.parseCSV(content, delim);
+		for (List<String> line : parsedCSV) {
+			if (line.size() >= 2) {
+				String forename = line.get(0).trim();
+				String surname = line.get(1).trim();
+				if (line.size() >= 4) {
+					String unparsedSchoolGrade = line.get(2).trim();
+					String unparsedSchoolClass = line.get(3).trim().toUpperCase();
+					EnumSchoolClass schoolClass = EnumSchoolClass.valueOf(unparsedSchoolClass.concat(unparsedSchoolGrade));
+					if (forename != null && surname != null && schoolClass != null) {
+						try {
+							userBean.createPupil(forename, surname, schoolClass, null);
+							ret[0] += 1;
+						}
+						catch (Exception e) {
+							ret[1] += 1;
+						}
+					}
+				} else {
+					try {
+						userBean.createTeacher(forename, surname, null);
+						ret[0] += 1;
+					}
+					catch (Exception e) {
+						ret[1] += 1;
+					}
+				}
+
+			}
+		}
+		return ret;
+	}
+
+	/*
+	 * -------------------- Import Pupils Dialog End --------------------
 	 */
 
 	@NotNull

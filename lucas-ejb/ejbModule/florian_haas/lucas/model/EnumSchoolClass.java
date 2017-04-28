@@ -73,6 +73,17 @@ public enum EnumSchoolClass {
 		this.schoolClass = Character.toString(this.name().charAt(0)).toLowerCase();
 	}
 
+	public static EnumSchoolClass getEnumFromValue(String value) {
+		EnumSchoolClass ret = null;
+		for (EnumSchoolClass val : ALL_VALUES) {
+			if (val.name().trim().equals(value.trim())) {
+				ret = val;
+				break;
+			}
+		}
+		return ret;
+	}
+
 	public Integer getGrade() {
 		return this.grade;
 	}
