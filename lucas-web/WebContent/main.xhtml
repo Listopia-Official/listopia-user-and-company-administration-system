@@ -10,7 +10,19 @@
 		<h:form>
 			<p:messages globalOnly="true" showDetail="true" showSummary="true"
 				showIcon="true" closable="true" autoUpdate="true" />
-			<ui:include src="/WEB-INF/web/components/mainMenu.xhtml" />
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<ui:include src="/WEB-INF/web/components/mainMenu.xhtml" />
+					</p:column>
+					<p:column style="vertical-align:top">
+						<h1 style="margin-top: 1px">
+							<h:outputText
+								value="#{msg['lucas.application.mainScreen.mainTitle']}" />
+						</h1>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
 		</h:form>
 	</ui:define>
 </ui:composition>
