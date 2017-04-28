@@ -196,23 +196,22 @@
 						</p:commandButton>
 					</p:column>
 					<p:column>
-						<p:commandButton
+						<p:commandButton id="editManagerButton"
+							disabled="#{companyBean.createCompanyDialogSelectedManagerId == null}"
 							value="#{msg['lucas.application.companyScreen.createCompanyDialog.editManagerButton.name']}"
 							title="#{msg['lucas.application.companyScreen.createCompanyDialog.editManagerButton.tooltip']}"
 							action="#{companyBean.createCompanyDialogEditSelectedRank}"
 							process="createCompanyDialogForm:managersDataList @this"
-							update="createCompanyDialogForm:managersDataList createCompanyDialogForm:managerInputNumber" />
+							update="createCompanyDialogForm:managersDataList createCompanyDialogForm:managerInputNumber @this removeManagerButton" />
 					</p:column>
 					<p:column>
-						<p:commandButton
+						<p:commandButton id="removeManagerButton"
+							disabled="#{companyBean.createCompanyDialogSelectedManagerId == null}"
 							value="#{msg['lucas.application.companyScreen.createCompanyDialog.removeManagerButton.name']}"
 							title="#{msg['lucas.application.companyScreen.createCompanyDialog.removeManagerButton.tooltip']}"
 							process="createCompanyDialogForm:managersDataList @this"
-							update="createCompanyDialogForm:managersDataList">
-							<p:collector
-								removeFrom="#{companyBean.createCompanyDialogManagerUserIds}"
-								value="#{companyBean.createCompanyDialogSelectedManagerId}" />
-						</p:commandButton>
+							update="createCompanyDialogForm:managersDataList editManagerButton @this"
+							action="#{companyBean.createCompanyDialogRemoveSelectedRank}" />
 					</p:column>
 				</p:row>
 				<p:row>
@@ -220,6 +219,8 @@
 						<p:selectOneListbox id="managersDataList" var="managerId"
 							value="#{companyBean.createCompanyDialogSelectedManagerId}"
 							style="min-height:100px">
+							<p:ajax event="change"
+								update="editManagerButton removeManagerButton" />
 							<f:selectItems
 								value="#{companyBean.createCompanyDialogManagerUserIds}" />
 							<p:column>

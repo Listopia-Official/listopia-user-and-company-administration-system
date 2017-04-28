@@ -473,6 +473,12 @@ public class CompanyBean implements Serializable {
 		}
 	}
 
+	public void createCompanyDialogRemoveSelectedRank() {
+		this.createCompanyDialogManagerUserIds.remove(createCompanyDialogSelectedManagerId);
+		this.createCompanyDialogTmpManagerId = null;
+		this.createCompanyDialogSelectedManagerId = null;
+	}
+
 	public Long getCreateCompanyDialogSelectedManagerId() {
 		return createCompanyDialogSelectedManagerId;
 	}

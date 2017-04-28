@@ -98,22 +98,22 @@
 						</p:commandButton>
 					</p:column>
 					<p:column>
-						<p:commandButton
+						<p:commandButton id="editRankButton"
+							disabled="#{userBean.createPupilDialogSelectedRank == null}"
 							value="#{msg['lucas.application.userScreen.createPupilDialog.editRankButton.name']}"
 							title="#{msg['lucas.application.userScreen.createPupilDialog.editRankButton.tooltip']}"
 							action="#{userBean.editCreatePupilDialogSelectedRank}"
 							process="createPupilDialogForm:ranksDataList @this"
-							update="createPupilDialogForm:ranksDataList createPupilDialogForm:rankInputText" />
+							update="createPupilDialogForm:ranksDataList createPupilDialogForm:rankInputText @this removeRankButton" />
 					</p:column>
 					<p:column>
-						<p:commandButton
+						<p:commandButton id="removeRankButton"
+							disabled="#{userBean.createPupilDialogSelectedRank == null}"
 							value="#{msg['lucas.application.userScreen.createPupilDialog.removeRankButton.name']}"
 							title="#{msg['lucas.application.userScreen.createPupilDialog.removeRankButton.tooltip']}"
 							process="createPupilDialogForm:ranksDataList @this"
-							update="createPupilDialogForm:ranksDataList">
-							<p:collector removeFrom="#{userBean.createPupilDialogRanks}"
-								value="#{userBean.createPupilDialogSelectedRank}" />
-						</p:commandButton>
+							action="#{userBean.removeCreatePupilDialogSelectedRank}"
+							update="createPupilDialogForm:ranksDataList @this editRankButton" />
 					</p:column>
 				</p:row>
 				<p:row>
@@ -121,6 +121,7 @@
 						<p:selectOneListbox id="ranksDataList" var="rank"
 							value="#{userBean.createPupilDialogSelectedRank}"
 							style="min-height:100px">
+							<p:ajax event="change" update="editRankButton removeRankButton" />
 							<f:selectItems value="#{userBean.createPupilDialogRanks}" />
 							<p:column>
 								<h:outputText value="#{rank}" />

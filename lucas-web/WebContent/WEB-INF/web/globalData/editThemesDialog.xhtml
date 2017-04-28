@@ -39,23 +39,23 @@
 					</p:column>
 					<p:column
 						rendered="#{loginBean.hasPermissionsAnd([EnumPermission.GLOBAL_DATA_ADD_UI_THEME,EnumPermission.GLOBAL_DATA_REMOVE_UI_THEME])}">
-						<p:commandButton
+						<p:commandButton id="editThemeButton"
+							disabled="#{globalDataBean.editThemesDialogSelectedUITheme == null}"
 							value="#{msg['lucas.application.globalDataScreen.editThemesDialog.editThemeButton.name']}"
 							title="#{msg['lucas.application.globalDataScreen.editThemesDialog.editThemeButton.tooltip']}"
 							action="#{globalDataBean.editThemesDialogEditUITheme}"
 							process="@this themesSelectOneListbox"
-							update="themesSelectOneListbox themeInputText @this" />
+							update="themesSelectOneListbox themeInputText @this removeThemeButton" />
 					</p:column>
 					<p:column
 						rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_REMOVE_UI_THEME)}">
-						<p:commandButton
+						<p:commandButton id="removeThemeButton"
+							disabled="#{globalDataBean.editThemesDialogSelectedUITheme == null}"
 							value="#{msg['lucas.application.globalDataScreen.editThemesDialog.removeThemeButton.name']}"
 							title="#{msg['lucas.application.globalDataScreen.editThemesDialog.removeThemeButton.tooltip']}"
 							process="@this themesSelectOneListbox"
-							update="themesSelectOneListbox @this">
-							<p:collector removeFrom="#{globalDataBean.uiThemes}"
-								value="#{globalDataBean.editThemesDialogSelectedUITheme}" />
-						</p:commandButton>
+							update="themesSelectOneListbox @this editThemeButton"
+							action="#{globalDataBean.editThemesDialogRemoveUITheme}" />
 					</p:column>
 				</p:row>
 				<p:row
@@ -63,6 +63,7 @@
 					<p:column colspan="3">
 						<p:selectOneListbox id="themesSelectOneListbox" var="theme"
 							value="#{globalDataBean.editThemesDialogSelectedUITheme}">
+							<p:ajax event="change" update="editThemeButton removeThemeButton" />
 							<f:selectItems value="#{globalDataBean.uiThemes}" />
 							<p:column>
 								<h:outputText value="#{theme}" />

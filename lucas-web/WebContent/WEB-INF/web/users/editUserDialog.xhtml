@@ -121,24 +121,24 @@
 						</p:commandButton>
 					</p:column>
 					<p:column>
-						<p:commandButton
+						<p:commandButton id="editRankButton"
+							disabled="#{userBean.editUserDialogSelectedRank == null}"
 							rendered="#{loginBean.hasPermissionsAnd([EnumPermission.USER_ADD_RANK,EnumPermission.USER_REMOVE_RANK])}"
 							value="#{msg['lucas.application.userScreen.editUserDialog.editRankButton.name']}"
 							title="#{msg['lucas.application.userScreen.editUserDialog.editRankButton.tooltip']}"
 							action="#{userBean.editEditUserDialogSelectedRank}"
 							process="editUserDialogForm:ranksDataList @this"
-							update="editUserDialogForm:ranksDataList editUserDialogForm:rankInputText" />
+							update="editUserDialogForm:ranksDataList editUserDialogForm:rankInputText @this removeRankButton" />
 					</p:column>
 					<p:column>
-						<p:commandButton
+						<p:commandButton id="removeRankButton"
+							disabled="#{userBean.editUserDialogSelectedRank == null}"
 							rendered="#{loginBean.hasPermission(EnumPermission.USER_REMOVE_RANK)}"
 							value="#{msg['lucas.application.userScreen.editUserDialog.removeRankButton.name']}"
 							title="#{msg['lucas.application.userScreen.editUserDialog.removeRankButton.tooltip']}"
 							process="editUserDialogForm:ranksDataList @this"
-							update="editUserDialogForm:ranksDataList">
-							<p:collector removeFrom="#{userBean.editUserDialogRanks}"
-								value="#{userBean.editUserDialogSelectedRank}" />
-						</p:commandButton>
+							update="editUserDialogForm:ranksDataList editRankButton @this"
+							action="#{userBean.removeEditUserDialogSelectedRank}" />
 					</p:column>
 				</p:row>
 				<p:row
@@ -147,6 +147,7 @@
 						<p:selectOneListbox id="ranksDataList" var="rank"
 							value="#{userBean.editUserDialogSelectedRank}"
 							style="min-height:100px">
+							<p:ajax event="change" update="editRankButton removeRankButton" />
 							<f:selectItems value="#{userBean.editUserDialogRanks}" />
 							<p:column>
 								<h:outputText value="#{rank}" />

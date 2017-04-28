@@ -274,6 +274,14 @@ public class GlobalDataBean implements Serializable {
 		}
 	}
 
+	public void editThemesDialogRemoveUITheme() {
+		if (editThemesDialogSelectedUITheme != null) {
+			this.uiThemes.remove(editThemesDialogSelectedUITheme);
+			this.editThemesDialogTmpUITheme = null;
+			this.editThemesDialogSelectedUITheme = null;
+		}
+	}
+
 	/*
 	 * -------------------- Edit Themes Dialog End --------------------
 	 */

@@ -131,6 +131,12 @@ public class UserBean implements Serializable {
 		}
 	}
 
+	public void removeCreatePupilDialogSelectedRank() {
+		this.createPupilDialogRanks.remove(createPupilDialogSelectedRank);
+		this.createPupilDialogTmpRank = null;
+		this.createPupilDialogSelectedRank = null;
+	}
+
 	/*
 	 * -------------------- Create Pupil Dialog End --------------------
 	 */
@@ -215,6 +221,12 @@ public class UserBean implements Serializable {
 			this.createTeacherDialogTmpRank = createTeacherDialogSelectedRank;
 			createTeacherDialogSelectedRank = null;
 		}
+	}
+
+	public void removeCreateTeacherDialogSelectedRank() {
+		this.createTeacherDialogRanks.remove(createTeacherDialogSelectedRank);
+		this.createTeacherDialogTmpRank = null;
+		this.createTeacherDialogSelectedRank = null;
 	}
 
 	/*
@@ -708,6 +720,12 @@ public class UserBean implements Serializable {
 			this.editUserDialogTmpRank = editUserDialogSelectedRank;
 			editUserDialogSelectedRank = null;
 		}
+	}
+
+	public void removeEditUserDialogSelectedRank() {
+		this.editUserDialogRanks.remove(editUserDialogSelectedRank);
+		this.editUserDialogTmpRank = null;
+		this.editUserDialogSelectedRank = null;
 	}
 
 	public EnumUserType computeUserType() {
