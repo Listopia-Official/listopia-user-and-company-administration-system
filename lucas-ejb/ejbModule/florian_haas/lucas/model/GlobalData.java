@@ -33,6 +33,8 @@ public class GlobalData extends EntityBase {
 	private BigDecimal minimumWage = new BigDecimal("1.0");
 
 	@NotNull(groups = NotNullWarehouseRequired.class)
+	@OneToOne(fetch = FetchType.LAZY, optional = true)
+	@JoinColumn(nullable = true)
 	private Company warehouse;
 
 	@Basic(optional = false)
