@@ -276,7 +276,7 @@ public class WebUtils {
 			}
 			if (log) {
 				Logger.getAnonymousLogger().log(Level.SEVERE, e25, e25::getMessage);
-				WebUtils.addFatalMessage(getTranslatedMessage(failMessageKey, params) + Utils.getStackTraceAsString(e25), messageComponentId);
+				WebUtils.addFatalMessage(getTranslatedMessage(failMessageKey, params) + "\n" + Utils.getStackTraceAsString(e25), messageComponentId);
 			}
 		}
 		catch (PersistenceException e3) {
@@ -286,7 +286,7 @@ public class WebUtils {
 		}
 		catch (Exception e3) {
 			Logger.getAnonymousLogger().log(Level.SEVERE, e3, e3::getMessage);
-			WebUtils.addFatalMessage(getTranslatedMessage(failMessageKey, params) + Utils.getStackTraceAsString(e3), messageComponentId);
+			WebUtils.addFatalMessage(getTranslatedMessage(failMessageKey, params) + "\n" + Utils.getStackTraceAsString(e3), messageComponentId);
 		}
 		return success;
 

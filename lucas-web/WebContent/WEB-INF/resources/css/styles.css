@@ -85,3 +85,7 @@
 .ui-confirm-dialog>.ui-dialog-content {
 	padding-bottom: 0px !important;
 }
+
+.ui-messages {
+	white-space: pre-wrap !important;
+}
