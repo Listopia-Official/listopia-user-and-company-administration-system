@@ -16,7 +16,6 @@ public class Account extends EntityBase {
 	private static final long serialVersionUID = -8880641005184863518L;
 
 	@OneToOne(mappedBy = "account", optional = false)
-	@JoinColumn(nullable = false)
 	@NotNull
 	private AccountOwner owner;
 

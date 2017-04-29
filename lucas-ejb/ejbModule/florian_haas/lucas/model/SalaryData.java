@@ -15,7 +15,6 @@ public class SalaryData extends EntityBase {
 	private static final long serialVersionUID = 3541160263919447176L;
 
 	@OneToOne(mappedBy = "salaryData", optional = false)
-	@JoinColumn(nullable = false)
 	@NotNull
 	private Employment employment;
 

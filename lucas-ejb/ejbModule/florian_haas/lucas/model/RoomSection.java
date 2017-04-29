@@ -13,7 +13,6 @@ public class RoomSection extends EntityBase {
 	@NotNull
 	private Room room;
 
-	@JoinColumn(unique = true, nullable = true)
 	@OneToOne(optional = true, mappedBy = "section")
 	private Company company;
 
