@@ -4,15 +4,8 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
-	<ui:param name="pageTitle"
-		value="#{msg['lucas.application.userScreen.title']}" />
 	<ui:param name="sitePrefix" value="user" />
-	<ui:param name="searchBean" value="#{userBean}" />
-	<ui:param name="searchFunction" value="searchUsers" />
-	<ui:param name="refreshFunction" value="refreshUsers" />
-	<ui:param name="searchResults" value="#{userBean.searchUserResults}" />
-	<ui:param name="selectedResults" value="#{userBean.selectedUsers}" />
-	<ui:param name="findDynamicPermission" value="USER_FIND_DYNAMIC" />
+	<ui:param name="siteBean" value="#{userBean}" />
 	<ui:define name="dialogs">
 		<ui:include src="/WEB-INF/web/users/createPupilDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/users/createTeacherDialog.xhtml" />
@@ -94,7 +87,7 @@
 				update="editUserDialog" process="@this"
 				action="#{userBean.initEditUserDialog}"
 				oncomplete="PF('editUserDialog').show()" icon="fa fa-edit"
-				disabled="#{userBean.selectedUsers.size() != 1}" />
+				disabled="#{userBean.selectedEntities.size() != 1}" />
 			<p:commandButton
 				rendered="#{loginBean.hasPermissionsOr([EnumPermission.USER_SET_IMAGE,EnumPermission.USER_GET_IMAGE_FROM_ID])}"
 				value="#{msg['lucas.application.userScreen.imageManagerButton.name']}"
@@ -102,7 +95,7 @@
 				update="imageManagerDialogForm" process="@this"
 				action="#{userBean.initImageManagerDialog}"
 				oncomplete="PF('imageManagerDialog').show()" icon="fa fa-image"
-				disabled="#{userBean.selectedUsers.size() != 1}" />
+				disabled="#{userBean.selectedEntities.size() != 1}" />
 			<p:commandButton
 				rendered="#{loginBean.hasPermissionsOr([EnumPermission.USER_ADD_USER_CARD,EnumPermission.USER_REMOVE_USER_CARD,EnumPermission.USER_BLOCK_USER_CARD,EnumPermission.USER_UNBLOCK_USER_CARD,EnumPermission.USER_SET_VALID_DATE_USER_CARD]) &amp;&amp; loginBean.hasPermissionsAnd([EnumPermission.USER_FIND_USER_CARD_BY_ID,EnumPermission.USER_GET_USER_CARDS])}"
 				value="#{msg['lucas.application.userScreen.userCardManagerButton.name']}"
@@ -111,18 +104,18 @@
 				action="#{userBean.initUserCardManagerDialog}"
 				oncomplete="PF('userCardManagerDialog').show()"
 				icon="fa fa-credit-card"
-				disabled="#{userBean.selectedUsers.size() != 1}" />
+				disabled="#{userBean.selectedEntities.size() != 1}" />
 			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 			<p:commandButton
 				value="#{msg['lucas.application.userScreen.profileButton.name']}"
 				title="#{msg['lucas.application.userScreen.profileButton.tooltip']}"
 				icon="fa fa-info-circle"
-				disabled="#{userBean.selectedUsers.size() != 1 || true}" />
+				disabled="#{userBean.selectedEntities.size() != 1 || true}" />
 			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 			<p:commandButton icon="fa fa-user-times"
 				value="#{msg['lucas.application.userScreen.removeUserButton.name']}"
 				title="#{msg['lucas.application.userScreen.removeUserButton.tooltip']}"
-				disabled="#{userBean.selectedUsers.size() &lt;= 0 || true}" />
+				disabled="#{userBean.selectedEntities.size() &lt;= 0 || true}" />
 		</p:toolbarGroup>
 	</ui:define>
 	<ui:define name="searchCriteria">
@@ -336,41 +329,41 @@
 		</p:row>
 	</ui:define>
 	<ui:define name="searchResults">
-		<p:column
+		<p:column exportable="#{userBean.resultsDatatableColumns[0]}"
 			headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.idColumn.name']}"
 			sortBy="#{entity.id}"
 			visible="#{userBean.resultsDatatableColumns[0]}">
 			<h:outputText value="#{entity.id}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{userBean.resultsDatatableColumns[1]}"
 			headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.forenameColumn.name']}"
 			sortBy="#{entity.forename}"
 			visible="#{userBean.resultsDatatableColumns[1]}">
 			<h:outputText value="#{entity.forename}"
 				converter="#{converterBean.getConverter(NullConverter.CONVERTER_ID)}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{userBean.resultsDatatableColumns[2]}"
 			headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.surnameColumn.name']}"
 			sortBy="#{entity.surname}"
 			visible="#{userBean.resultsDatatableColumns[2]}">
 			<h:outputText value="#{entity.surname}"
 				converter="#{converterBean.getConverter(NullConverter.CONVERTER_ID)}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{userBean.resultsDatatableColumns[3]}"
 			headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.userTypeColumn.name']}"
 			sortBy="#{entity.userType}"
 			visible="#{userBean.resultsDatatableColumns[3]}">
 			<h:outputText value="#{entity.userType}"
 				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{userBean.resultsDatatableColumns[4]}"
 			headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.schoolClassColumn.name']}"
 			sortBy="#{entity.schoolClass}"
 			visible="#{userBean.resultsDatatableColumns[4]}">
 			<h:outputText value="#{entity.schoolClass}"
 				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{userBean.resultsDatatableColumns[5]}"
 			headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.ranksColumn.name']}"
 			visible="#{userBean.resultsDatatableColumns[5]}">
 			<h:outputText value="#{entity.ranks}"

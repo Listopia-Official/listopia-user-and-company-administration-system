@@ -26,7 +26,8 @@
 								outcome="/main.xhtml" />
 						</p:column>
 						<p:column styleClass="userBarCell center">
-							<h:outputText value="#{pageTitle}" />
+							<h:outputText
+								value="#{(pageTitle != null ? pageTitle : msg['lucas.application.'+=siteBean.screenName+='.title'])}" />
 						</p:column>
 						<p:column styleClass="userBarCell right">
 							<p:graphicImage value="#{loginBean.image}" width="42px"

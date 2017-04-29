@@ -1,6 +1,5 @@
 package florian_haas.lucas.web;
 
-import java.io.Serializable;
 import java.time.*;
 import java.util.*;
 
@@ -10,8 +9,6 @@ import javax.inject.Named;
 import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.primefaces.event.ToggleEvent;
-import org.primefaces.model.Visibility;
 
 import florian_haas.lucas.business.*;
 import florian_haas.lucas.database.*;
@@ -26,13 +23,13 @@ import florian_haas.lucas.web.util.WebUtils;
 
 @Named
 @ViewScoped
-public class CompanyBean implements Serializable {
+public class CompanyBean extends BaseBean<Company> {
+
+	public CompanyBean() {
+		super("company", 8);
+	}
 
 	private static final long serialVersionUID = 5394240973288053983L;
-
-	private List<Company> searchCompanyResults = new ArrayList<>();
-
-	private List<Company> selectedCompanies = new ArrayList<>();
 
 	@EJB
 	private CompanyBeanLocal companyBean;
@@ -45,32 +42,6 @@ public class CompanyBean implements Serializable {
 
 	@EJB
 	private RoomBeanLocal roomBean;
-
-	public List<Company> getSearchCompanyResults() {
-		return searchCompanyResults;
-	}
-
-	public void setSearchCompanyResults(List<Company> searchCompanyResults) {
-		this.searchCompanyResults = searchCompanyResults;
-	}
-
-	public List<Company> getSelectedCompanies() {
-		return selectedCompanies;
-	}
-
-	public void setSelectedCompanies(List<Company> selectedCompanies) {
-		this.selectedCompanies = selectedCompanies;
-	}
-
-	private List<Boolean> resultsDatatableColumns = Arrays.asList(true, true, true, true, true, true, true, true);
-
-	public void onToggle(ToggleEvent e) {
-		resultsDatatableColumns.set((Integer) e.getData() - 1, e.getVisibility() == Visibility.VISIBLE);
-	}
-
-	public List<Boolean> getResultsDatatableColumns() {
-		return this.resultsDatatableColumns;
-	}
 
 	@NotNull
 	@Min(0)
@@ -328,28 +299,34 @@ public class CompanyBean implements Serializable {
 		this.useSearchCompanyAreEmployeesRequired = useSearchCompanyAreEmployeesRequired;
 	}
 
-	public void searchCompanies() {
-		WebUtils.executeTask((params) -> {
-			List<Company> results = companyBean.findCompanies(searchCompanyId, searchCompanyName, searchCompanyDescription, searchCompanySectionId,
-					searchCompanyCompanyType, searchCompanyParentCompanyId, searchCompanyRequiredEmployeesCount, searchCompanyAreEmployeesRequired,
-					useSearchCompanyId, useSearchCompanyName, useSearchCompanyDescription, useSearchCompanySectionId, useSearchCompanyCompanyType,
-					useSearchCompanyParentCompanyId, useSearchCompanyRequiredEmployeesCount, useSearchCompanyAreEmployeesRequired,
-					searchCompanyIdComparator, searchCompanyNameComparator, searchCompanyDescriptionComparator, searchCompanySectionIdComparator,
-					searchCompanyCompanyTypeComparator, searchCompanyParentCompanyIdComparator, searchCompanyRequiredEmployeesCountComparator);
-			searchCompanyResults.clear();
-			selectedCompanies.clear();
-			searchCompanyResults.addAll(results);
-			params.add(results.size());
-			return true;
-		}, "lucas.application.companyScreen.searchCompany.message");
+	@Override
+	public EnumPermission getFindDynamicPermission() {
+		return EnumPermission.COMPANY_FIND_DYNAMIC;
 	}
 
-	public void refreshCompanies() {
-		WebUtils.executeTask((params) -> {
-			WebUtils.refreshEntities(Company.class, searchCompanyResults, selectedCompanies, companyBean::findById, false);
-			params.add(searchCompanyResults.size());
-			return true;
-		}, "lucas.application.companyScreen.refreshCompanies.message");
+	@Override
+	public EnumPermission getPrintPermission() {
+		return EnumPermission.COMPANY_PRINT;
+	}
+
+	@Override
+	public EnumPermission getExportPermission() {
+		return EnumPermission.COMPANY_EXPORT;
+	}
+
+	@Override
+	protected List<Company> searchEntities() {
+		return companyBean.findCompanies(searchCompanyId, searchCompanyName, searchCompanyDescription, searchCompanySectionId,
+				searchCompanyCompanyType, searchCompanyParentCompanyId, searchCompanyRequiredEmployeesCount, searchCompanyAreEmployeesRequired,
+				useSearchCompanyId, useSearchCompanyName, useSearchCompanyDescription, useSearchCompanySectionId, useSearchCompanyCompanyType,
+				useSearchCompanyParentCompanyId, useSearchCompanyRequiredEmployeesCount, useSearchCompanyAreEmployeesRequired,
+				searchCompanyIdComparator, searchCompanyNameComparator, searchCompanyDescriptionComparator, searchCompanySectionIdComparator,
+				searchCompanyCompanyTypeComparator, searchCompanyParentCompanyIdComparator, searchCompanyRequiredEmployeesCountComparator);
+	}
+
+	@Override
+	protected Company entityGetter(Long entityId) {
+		return companyBean.findById(entityId);
 	}
 
 	/*
@@ -603,8 +580,8 @@ public class CompanyBean implements Serializable {
 	}
 
 	public void initEditCompanyDialog() {
-		if (!selectedCompanies.isEmpty()) {
-			editCompanyDialogSelectedCompany = selectedCompanies.get(0);
+		if (!selectedEntities.isEmpty()) {
+			editCompanyDialogSelectedCompany = selectedEntities.get(0);
 			editCompanyDialogName = editCompanyDialogSelectedCompany.getName();
 			editCompanyDialogDescription = editCompanyDialogSelectedCompany.getDescription();
 			editCompanyDialogSectionId = (editCompanyDialogSelectedCompany.getSection() != null
@@ -639,7 +616,7 @@ public class CompanyBean implements Serializable {
 			}
 			Company tmp2 = companyBean.findById(id);
 			params.add(WebUtils.getAsString(tmp2, CompanyConverter.CONVERTER_ID));
-			WebUtils.refreshEntities(Company.class, searchCompanyResults, selectedCompanies, tmp2, companyBean::findById, true);
+			WebUtils.refreshEntities(Company.class, searchResults, selectedEntities, tmp2, companyBean::findById, true);
 			return true;
 		}, "lucas.application.companyScreen.editCompany.message", (exception, params) -> {
 			if (exception.getMark().equals(florian_haas.lucas.business.CompanyBean.NAME_NOT_UNIQUE_EXCEPTION_MARKER)) {
@@ -692,8 +669,8 @@ public class CompanyBean implements Serializable {
 	}
 
 	public void initViewEmployeesDialog() {
-		if (!selectedCompanies.isEmpty()) {
-			Company tmp = selectedCompanies.get(0);
+		if (!selectedEntities.isEmpty()) {
+			Company tmp = selectedEntities.get(0);
 			viewEmployeesDialogSelectedCompanyString = WebUtils.getAsString(tmp, CompanyConverter.CONVERTER_ID);
 			viewEmployeesDialogManagers.clear();
 			viewEmployeesDialogEmployees.clear();
@@ -747,8 +724,8 @@ public class CompanyBean implements Serializable {
 	}
 
 	public void initCompanyCardManagerDialog() {
-		if (!selectedCompanies.isEmpty()) {
-			companyCardManagerDialogSelectedCompany = selectedCompanies.get(0);
+		if (!selectedEntities.isEmpty()) {
+			companyCardManagerDialogSelectedCompany = selectedEntities.get(0);
 			companyCardManagerDialogSelectedCompanyCards.clear();
 			companyCardManagerDialogCompanyCards.clear();
 			companyCardManagerDialogValidDate = Date.from(Instant.now());

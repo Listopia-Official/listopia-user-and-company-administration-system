@@ -10,6 +10,7 @@
 			type="florian_haas.lucas.database.EnumQueryComparator" />
 	</ui:define>
 	<ui:define name="content">
+		<ui:include src="/WEB-INF/web/components/exportDataDialog.xhtml" />
 		<div class="dataArea">
 			<h:form>
 				<p:toolbar
@@ -19,7 +20,7 @@
 				</p:toolbar>
 			</h:form>
 			<p:accordionPanel multiple="true" id="dataAccorditionPanel"
-				rendered="#{loginBean.hasPermission(findDynamicPermission)}"
+				rendered="#{loginBean.hasPermission(siteBean.getFindDynamicPermission())}"
 				activeIndex="0,1">
 				<p:tab>
 					<f:facet name="title">
@@ -38,7 +39,7 @@
 											value="#{msg['lucas.application.dataTemplate.searchCriteria.searchButton.name']}"
 											title="#{msg['lucas.application.'+=sitePrefix+='Screen.searchButton.tooltip']}"
 											styleClass="blockAllTrigger" icon="fa fa-search"
-											action="#{searchBean[searchFunction]}" process="@form"
+											action="#{siteBean.search()}" process="@form"
 											update="@(.dataToolbar) dataAccorditionPanel" />
 									</p:column>
 								</p:row>
@@ -51,34 +52,57 @@
 						<h:outputText styleClass="fa fa-database" />
 						<p:spacer width="5px" />
 						<h:outputText
-							value="#{msg['lucas.application.dataTemplate.searchResults.name1']}#{searchResults.size()}#{msg['lucas.application.dataTemplate.searchResults.name2']}" />
+							value="#{msg['lucas.application.dataTemplate.searchResults.name1']}#{siteBean.searchResults.size()}#{msg['lucas.application.dataTemplate.searchResults.name2']}" />
 					</f:facet>
 					<h:form id="#{sitePrefix}SearchResultsForm">
+						<p:commandButton id="print" style="display: none"
+							rendered="#{loginBean.hasPermission(siteBean.getPrintPermission())}">
+							<p:ajax event="click" listener="#{siteBean.activatePaginator()}"
+								update="#{sitePrefix}SearchResultsTable"
+								oncomplete="PF('blockUIAll').hide();" />
+							<p:printer target="#{sitePrefix}SearchResultsTable" />
+						</p:commandButton>
 						<p:dataTable id="#{sitePrefix}SearchResultsTable"
 							tableStyle="table-layout: auto;" styleClass="searchResults"
 							resizableColumns="true" liveResize="true"
-							value="#{searchResults}" var="entity" rowKey="#{entity.id}"
-							selection="#{selectedResults}" rows="10" draggableColumns="true"
-							paginator="true"
+							value="#{siteBean.searchResults}" var="entity"
+							rowKey="#{entity.id}" selection="#{siteBean.selectedEntities}"
+							rows="#{siteBean.paginatorActive ? 10 : 0}"
+							draggableColumns="true" paginator="#{siteBean.paginatorActive}"
 							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {AdditionalComponents}"
 							currentPageReportTemplate="#{msg['lucas.application.dataTemplate.searchResults.currentPageReport1']} {currentPage} #{msg['lucas.application.dataTemplate.searchResults.currentPageReport2']} {totalPages}"
 							rowsPerPageTemplate="10,20,50,75,100,200,500,750,1000"
 							rowSelectMode="add" paginatorPosition="top"
 							emptyMessage="#{msg['lucas.application.dataTemplate.searchResults.noResults']}">
 							<f:facet name="{AdditionalComponents}">
+								<p:commandButton icon="fa fa-file-excel-o" resetValues="true"
+									rendered="#{loginBean.hasPermission(siteBean.getExportPermission())}"
+									update="exportDataDialogForm" style="float:left"
+									oncomplete="PF('exportDataDialog').show()"
+									disabled="#{siteBean.searchResults.size() &lt;= 0}"
+									title="#{msg['lucas.application.dataTemplate.searchResults.exportDataButton.tooltip']}"
+									action="#{siteBean.initExportDataDialog}" />
+								<p:commandButton icon="fa fa-print" style="float:left"
+									rendered="#{loginBean.hasPermission(siteBean.getPrintPermission())}"
+									disabled="#{siteBean.searchResults.size() &lt;= 0}"
+									title="#{msg['lucas.application.dataTemplate.searchResults.printDataButton.tooltip']}"
+									actionListener="#{siteBean.deactivatePaginator()}"
+									oncomplete="PF('blockUIAll').show();$(document.getElementById(&quot;#{'dataAccorditionPanel:'+=sitePrefix+='SearchResultsForm:print'}&quot;)).click();"
+									update="#{sitePrefix}SearchResultsTable" />
 								<p:commandButton icon="fa fa-refresh"
 									styleClass="blockAllTrigger" update="@(.searchResults)"
-									disabled="#{searchResults.size() &lt;= 0}"
+									disabled="#{siteBean.searchResults.size() &lt;= 0}"
 									title="#{msg['lucas.application.dataTemplate.searchResults.refreshDataButton.tooltip']}"
-									action="#{searchBean[refreshFunction]}" />
+									action="#{siteBean.refresh()}" />
 								<p:commandButton id="resultsTableColumnToggler" type="button"
-									style="float:right" disabled="#{searchResults.size() &lt;= 0}"
+									style="float:right"
+									disabled="#{siteBean.searchResults.size() &lt;= 0}"
 									value="#{msg['lucas.application.dataTemplate.searchResults.resultsTableColumnToggler.name']}"
 									icon="fa fa-calculator"
 									title="#{msg['lucas.application.dataTemplate.searchResults.resultsTableColumnToggler.tooltip']}" />
 								<p:columnToggler datasource="#{sitePrefix}SearchResultsTable"
 									trigger="resultsTableColumnToggler">
-									<p:ajax event="toggle" listener="#{searchBean.onToggle}" />
+									<p:ajax event="toggle" listener="#{siteBean.onToggle}" />
 								</p:columnToggler>
 							</f:facet>
 							<p:ajax event="toggleSelect" update="@(.dataToolbar)" />
@@ -87,6 +111,7 @@
 							<p:ajax event="rowUnselect" update="@(.dataToolbar)" />
 							<p:ajax event="rowSelect" update="@(.dataToolbar)" />
 							<p:column selectionMode="multiple" toggleable="false"
+								visible="#{siteBean.paginatorActive}"
 								style="width:16px;text-align:center" exportable="false" />
 							<ui:insert name="searchResults" />
 						</p:dataTable>
@@ -96,6 +121,11 @@
 			<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
 				<ui:param name="block" value="@(.dataArea)" />
 				<ui:param name="trigger" value="@(.blockAllTrigger)" />
+			</ui:include>
+			<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
+				<ui:param name="block" value="@(body)" />
+				<ui:param name="trigger" value="@(.blockReallyAllTrigger)" />
+				<ui:param name="id" value="All" />
 			</ui:include>
 		</div>
 	</ui:define>

@@ -1,6 +1,5 @@
 package florian_haas.lucas.web;
 
-import java.io.Serializable;
 import java.util.*;
 
 import javax.ejb.EJB;
@@ -9,53 +8,30 @@ import javax.inject.Named;
 import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.primefaces.event.ToggleEvent;
-import org.primefaces.model.Visibility;
 
 import florian_haas.lucas.business.*;
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
+import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.web.converter.*;
 import florian_haas.lucas.web.util.WebUtils;
 
 @Named
 @ViewScoped
-public class RoomBean implements Serializable {
+public class RoomBean extends BaseBean<Room> {
+
+	public RoomBean() {
+		super("room", 3);
+	}
 
 	private static final long serialVersionUID = 9056222365379147492L;
-
-	private List<Room> searchRoomResults = new ArrayList<>();
-
-	private List<Room> selectedRooms = new ArrayList<>();
 
 	@EJB
 	private RoomBeanLocal roomBean;
 
 	@EJB
 	private EntityBeanLocal entityBean;
-
-	public List<Room> getSearchRoomResults() {
-		return searchRoomResults;
-	}
-
-	public List<Room> getSelectedRooms() {
-		return selectedRooms;
-	}
-
-	public void setSelectedRooms(List<Room> selectedRooms) {
-		this.selectedRooms = selectedRooms;
-	}
-
-	private List<Boolean> resultsDatatableColumns = Arrays.asList(true, true, true);
-
-	public void onToggle(ToggleEvent e) {
-		resultsDatatableColumns.set((Integer) e.getData() - 1, e.getVisibility() == Visibility.VISIBLE);
-	}
-
-	public List<Boolean> getResultsDatatableColumns() {
-		return this.resultsDatatableColumns;
-	}
 
 	@NotNull
 	@Min(0)
@@ -158,24 +134,30 @@ public class RoomBean implements Serializable {
 		this.searchRoomSectionIdComparator = searchRoomSectionIdComparator;
 	}
 
-	public void searchRooms() {
-		WebUtils.executeTask((params) -> {
-			List<Room> results = roomBean.findRooms(searchRoomId, searchRoomName, searchRoomSectionId, useSearchRoomId, useSearchRoomName,
-					useSearchRoomSectionId, searchRoomIdComparator, searchRoomNameComparator, searchRoomSectionIdComparator);
-			searchRoomResults.clear();
-			selectedRooms.clear();
-			searchRoomResults.addAll(results);
-			params.add(results.size());
-			return true;
-		}, "lucas.application.roomScreen.searchRoom.message");
+	@Override
+	public EnumPermission getFindDynamicPermission() {
+		return EnumPermission.ROOM_FIND_DYNAMIC;
 	}
 
-	public void refreshRooms() {
-		WebUtils.executeTask((params) -> {
-			WebUtils.refreshEntities(Room.class, searchRoomResults, selectedRooms, roomBean::findById, false);
-			params.add(searchRoomResults.size());
-			return true;
-		}, "lucas.application.roomScreen.refreshRooms.message");
+	@Override
+	public EnumPermission getPrintPermission() {
+		return EnumPermission.ROOM_PRINT;
+	}
+
+	@Override
+	public EnumPermission getExportPermission() {
+		return EnumPermission.ROOM_EXPORT;
+	}
+
+	@Override
+	protected List<Room> searchEntities() {
+		return roomBean.findRooms(searchRoomId, searchRoomName, searchRoomSectionId, useSearchRoomId, useSearchRoomName, useSearchRoomSectionId,
+				searchRoomIdComparator, searchRoomNameComparator, searchRoomSectionIdComparator);
+	}
+
+	@Override
+	protected Room entityGetter(Long entityId) {
+		return roomBean.findById(entityId);
 	}
 
 	/*
@@ -243,8 +225,8 @@ public class RoomBean implements Serializable {
 	}
 
 	public void initEditRoomDialog() {
-		if (!selectedRooms.isEmpty()) {
-			editRoomDialogSelectedRoom = selectedRooms.get(0);
+		if (!selectedEntities.isEmpty()) {
+			editRoomDialogSelectedRoom = selectedEntities.get(0);
 			editRoomDialogName = editRoomDialogSelectedRoom.getName();
 		}
 	}
@@ -256,7 +238,7 @@ public class RoomBean implements Serializable {
 			Room tmp = roomBean.findById(id);
 			params.add(WebUtils.getAsString(tmp, RoomConverter.CONVERTER_ID));
 			params.add(editRoomDialogName);
-			WebUtils.refreshEntities(Room.class, searchRoomResults, selectedRooms, tmp, roomBean::findById, true);
+			WebUtils.refreshEntities(Room.class, searchResults, selectedEntities, tmp, roomBean::findById, true);
 			return true;
 		}, "lucas.application.roomScreen.editRoom.message", (exception, params) -> {
 			return WebUtils.getTranslatedMessage("lucas.application.roomScreen.editRoom.message.notUniqueName", editRoomDialogName);
@@ -290,8 +272,8 @@ public class RoomBean implements Serializable {
 	}
 
 	public void initSectionManagerDialog() {
-		if (!selectedRooms.isEmpty()) {
-			sectionManagerDialogSelectedRoom = selectedRooms.get(0);
+		if (!selectedEntities.isEmpty()) {
+			sectionManagerDialogSelectedRoom = selectedEntities.get(0);
 		}
 	}
 
@@ -301,7 +283,7 @@ public class RoomBean implements Serializable {
 					RoomSectionConverter.CONVERTER_ID));
 			Room tmp = roomBean.findById(sectionManagerDialogSelectedRoom.getId());
 			sectionManagerDialogSelectedRoom = tmp;
-			WebUtils.refreshEntities(Room.class, searchRoomResults, selectedRooms, tmp, roomBean::findById, true);
+			WebUtils.refreshEntities(Room.class, searchResults, selectedEntities, tmp, roomBean::findById, true);
 			return true;
 		}, "lucas.application.roomScreen.createRoomSection", SECTION_MANAGER_DIALOG_MESSAGES_COMPONENT_ID);
 	}
@@ -314,7 +296,7 @@ public class RoomBean implements Serializable {
 				if (success) {
 					Room tmp = roomBean.findById(sectionManagerDialogSelectedRoom.getId());
 					sectionManagerDialogSelectedRoom = tmp;
-					WebUtils.refreshEntities(Room.class, searchRoomResults, selectedRooms, tmp, roomBean::findById, true);
+					WebUtils.refreshEntities(Room.class, searchResults, selectedEntities, tmp, roomBean::findById, true);
 				}
 				return success;
 			}, "lucas.application.roomScreen.removeRoomSection", SECTION_MANAGER_DIALOG_MESSAGES_COMPONENT_ID);

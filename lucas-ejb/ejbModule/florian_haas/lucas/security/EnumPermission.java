@@ -26,6 +26,8 @@ public enum EnumPermission {
 	ACCOUNT_FIND_ACCOUNT_OWNER(ACCOUNT, "findAccountOwner"),
 	ACCOUNT_ACCESS_VIEW(ACCOUNT, "accessView"),
 	ACCOUNT_VIEW_TRANSACTION_LOGS(ACCOUNT, "viewTransactionLogs"),
+	ACCOUNT_PRINT(ACCOUNT, "print"),
+	ACCOUNT_EXPORT(ACCOUNT, "export"),
 
 	ATTENDANCE_ALL(ATTENDANCE, "*"),
 	ATTENDANCE_SCAN(ATTENDANCE, "scan"),
@@ -62,6 +64,8 @@ public enum EnumPermission {
 	COMPANY_GET_COMPANY_CARDS(COMPANY, "getCompanyCards"),
 	COMPANY_SET_VALID_DATE_COMPANY_CARD(COMPANY, "setValidDateCompanyCard"),
 	COMPANY_ACCESS_VIEW(COMPANY, "accessView"),
+	COMPANY_PRINT(COMPANY, "print"),
+	COMPANY_EXPORT(COMPANY, "export"),
 
 	EMPLOYMENT_ALL(EMPLOYMENT, "*"),
 	EMPLOYMENT_CREATE_DEFAULT(EMPLOYMENT, "createDefault"),
@@ -76,6 +80,8 @@ public enum EnumPermission {
 	EMPLOYMENT_SET_ATTENDANCEDATA_WAS_PRESENT(EMPLOYMENT, "setAttendancedataWasPresent"),
 	EMPLOYMENT_REMOVE_ATTENDANCEDATA(EMPLOYMENT, "remvoeAttendancedata"),
 	EMPLOYMENT_PAY_SALARY(EMPLOYMENT, "paySalary"),
+	EMPLOYMENT_PRINT(EMPLOYMENT, "print"),
+	EMPLOYMENT_EXPORT(EMPLOYMENT, "export"),
 
 	ENTITY_ALL(ENTITY, "*"),
 	ENTITY_EXISTS(ENTITY, "exists"),
@@ -120,6 +126,8 @@ public enum EnumPermission {
 	ITEM_ADD_ITEMS_AVAIBLE(ITEM, "addItemsAvaible"),
 	ITEM_SUB_ITEMS_AVAIBLE(ITEM, "subItemsAvaible"),
 	ITEM_CREATE(ITEM, "create"),
+	ITEM_PRINT(ITEM, "print"),
+	ITEM_EXPORT(ITEM, "export"),
 
 	USER_ALL(USER, "*"),
 	USER_CREATE_PUPIL(USER, "createPupil"),
@@ -144,6 +152,8 @@ public enum EnumPermission {
 	USER_GET_IMAGE_FROM_ID(USER, "getImageFromId"),
 	USER_GET_USER_CARDS(USER, "getUserCards"),
 	USER_ACCESS_VIEW(USER, "accessView"),
+	USER_PRINT(USER, "print"),
+	USER_EXPORT(USER, "export"),
 
 	LOGIN_ALL(LOGIN, "*"),
 	LOGIN_CHANGE_PASSWORD(LOGIN, "changePassword"),
@@ -163,6 +173,8 @@ public enum EnumPermission {
 	LOGIN_USER_REMOVE_ROLE(LOGIN_USER, "removeRole"),
 	LOGIN_USER_CHANGE_USERNAME(LOGIN_USER, "changeUsername"),
 	LOGIN_USER_ACCESS_VIEW(LOGIN_USER, "accessView"),
+	LOGIN_USER_PRINT(LOGIN_USER, "print"),
+	LOGIN_USER_EXPORT(LOGIN_USER, "export"),
 
 	LOGIN_ROLE_ALL(LOGIN_ROLE, "*"),
 	LOGIN_ROLE_CREATE(LOGIN_ROLE, "create"),
@@ -175,6 +187,8 @@ public enum EnumPermission {
 	LOGIN_ROLE_GET_PERMISSIONS(LOGIN_ROLE, "getPermissions"),
 	LOGIN_ROLE_REMOVE(LOGIN_ROLE, "remove"),
 	LOGIN_ROLE_ACCESS_VIEW(LOGIN_ROLE, "accessView"),
+	LOGIN_ROLE_PRINT(LOGIN_ROLE, "print"),
+	LOGIN_ROLE_EXPORT(LOGIN_ROLE, "export"),
 
 	ROOM_CREATE(ROOM, "create"),
 	ROOM_FIND_ALL(ROOM, "findAll"),
@@ -184,7 +198,9 @@ public enum EnumPermission {
 	ROOM_ADD_SECTION(ROOM, "addSection"),
 	ROOM_REMOVE_SECTION(ROOM, "removeSection"),
 	ROOM_FIND_ROOM_SECTION_BY_ID(ROOM, "findRoomSectionById"),
-	ROOM_ACCESS_VIEW(ROOM, "accessView");
+	ROOM_ACCESS_VIEW(ROOM, "accessView"),
+	ROOM_PRINT(ROOM, "print"),
+	ROOM_EXPORT(ROOM, "export");
 
 	private String permissionString;
 

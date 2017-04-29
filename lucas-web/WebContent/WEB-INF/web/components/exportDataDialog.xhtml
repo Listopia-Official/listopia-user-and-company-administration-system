@@ -1,0 +1,110 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.dataTemplate.exportDataDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="exportDataDialog" />
+	<ui:param name="formId" value="exportDataDialogForm" />
+	<ui:define name="dialogContent">
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.dataTemplate.exportDataDialog.exportDelimInputText.name']}"
+							title="#{msg['lucas.application.dataTemplate.exportDataDialog.exportDelimInputText.tooltip']}"
+							for="exportDelimInputText" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="exportDelimInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputText id="exportDelimInputText"
+							value="#{siteBean.exportDataDialogDelim}"
+							title="#{msg['lucas.application.dataTemplate.exportDataDialog.exportDelimInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.dataTemplate.exportDataDialog.exportFilenameInputText.name']}"
+							title="#{msg['lucas.application.dataTemplate.exportDataDialog.exportFilenameInputText.tooltip']}"
+							for="exportFilenameInputText" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="exportFilenameInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:inputText id="exportFilenameInputText"
+							value="#{siteBean.exportDataDialogFilename}"
+							title="#{msg['lucas.application.dataTemplate.exportDataDialog.exportFilenameInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:selectBooleanCheckbox id="exportSelectedBooleanCheckbox"
+							value="#{siteBean.exportDataDialogExportSelectionOnly}"
+							title="#{msg['lucas.application.dataTemplate.exportDataDialog.exportFilenameInputText.tooltip']}" />
+						<p:outputLabel
+							value=" #{msg['lucas.application.dataTemplate.exportDataDialog.exportSelectedBooleanCheckbox.name']}"
+							title="#{msg['lucas.application.dataTemplate.exportDataDialog.exportSelectedBooleanCheckbox.tooltip']}"
+							for="exportSelectedBooleanCheckbox" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="exportSelectedBooleanCheckbox" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:selectBooleanCheckbox id="exportGenerateHeaderBooleanCheckbox"
+							value="#{siteBean.exportDataDialogGenerateHeader}"
+							title="#{msg['lucas.application.dataTemplate.exportDataDialog.exportGenerateHeaderBooleanCheckbox.tooltip']}" />
+						<p:outputLabel
+							value=" #{msg['lucas.application.dataTemplate.exportDataDialog.exportGenerateHeaderBooleanCheckbox.name']}"
+							title="#{msg['lucas.application.dataTemplate.exportDataDialog.exportGenerateHeaderBooleanCheckbox.tooltip']}"
+							for="exportGenerateHeaderBooleanCheckbox" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="exportGenerateHeaderBooleanCheckbox" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<h:outputText
+							value="#{msg['lucas.application.dataTemplate.exportDataDialog.info']}"
+							style="font-style:italic" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton process="@form" update="@form"
+							value="#{msg['lucas.application.dataTemplate.exportDataDialog.exportButton.name']}"
+							title="#{msg['lucas.application.dataTemplate.exportDataDialog.exportButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){$(&quot;#exportDataDialogForm\\:download&quot;).click();}" />
+						<p:commandButton ajax="false" id="download" style="display:none"
+							onclick="PF('exportDataDialog').hide();">
+							<p:fileDownload value="#{siteBean.exportDataDialogDownload}" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this"
+							value="#{msg['lucas.application.dataTemplate.exportDataDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.dataTemplate.exportDataDialog.cancelButton.tooltip']}"
+							oncomplete="PF('exportDataDialog').hide()" immediate="true">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+
+	</ui:define>
+</ui:composition>

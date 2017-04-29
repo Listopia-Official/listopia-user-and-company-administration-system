@@ -4,17 +4,8 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
-	<ui:param name="pageTitle"
-		value="#{msg['lucas.application.loginRoleScreen.title']}" />
 	<ui:param name="sitePrefix" value="loginRole" />
-	<ui:param name="searchBean" value="#{loginRoleBean}" />
-	<ui:param name="searchResults"
-		value="#{loginRoleBean.searchLoginRoleResults}" />
-	<ui:param name="selectedResults"
-		value="#{loginRoleBean.selectedLoginRoles}" />
-	<ui:param name="searchFunction" value="searchLoginRoles" />
-	<ui:param name="refreshFunction" value="refreshLoginRoles" />
-	<ui:param name="findDynamicPermission" value="LOGIN_ROLE_FIND_DYNAMIC" />
+	<ui:param name="siteBean" value="#{loginRoleBean}" />
 	<ui:define name="dialogs">
 		<ui:include
 			src="/WEB-INF/web/loginUserRole/createLoginUserRoleDialog.xhtml" />
@@ -43,7 +34,7 @@
 				icon="fa fa-edit" oncomplete="PF('editLoginUserRoleDialog').show()"
 				action="#{loginRoleBean.initEditLoginUserRoleDialog}"
 				process="@this" update="editLoginUserRoleDialogForm"
-				disabled="#{loginRoleBean.selectedLoginRoles.size() != 1}" />
+				disabled="#{loginRoleBean.selectedEntities.size() != 1}" />
 			<p:commandButton
 				rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_ROLE_GET_PERMISSIONS)}"
 				value="#{msg['lucas.application.loginRoleScreen.showLoginUserRolePermissionsButton.name']}"
@@ -51,7 +42,7 @@
 				icon="fa fa-search" oncomplete="PF('viewPermissionsDialog').show()"
 				action="#{loginRoleBean.initPermissionsDialog}" process="@this"
 				update="viewPermissionsDialogForm"
-				disabled="#{loginRoleBean.selectedLoginRoles.size() != 1}" />
+				disabled="#{loginRoleBean.selectedEntities.size() != 1}" />
 			<ui:fragment
 				rendered="#{loginBean.hasPermission(EnumPermission.LOGIN_ROLE_REMOVE)}">
 				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
@@ -62,7 +53,7 @@
 					icon="fa fa-remove" process="@this"
 					update="dataAccorditionPanel:loginRoleSearchResultsForm:loginRoleSearchResultsTable"
 					action="#{loginRoleBean.removeLoginUserRole}"
-					disabled="#{loginRoleBean.selectedLoginRoles.size() &lt;= 0}">
+					disabled="#{loginRoleBean.selectedEntities.size() &lt;= 0}">
 					<p:confirm
 						header="#{msg['lucas.application.loginRoleScreen.removeLoginUserRoleConfirmDialog.header']}"
 						message="#{msg['lucas.application.loginRoleScreen.removeLoginUserRoleConfirmDialog.message']}" />
@@ -168,13 +159,13 @@
 		</p:row>
 	</ui:define>
 	<ui:define name="searchResults">
-		<p:column
+		<p:column exportable="#{loginRoleBean.resultsDatatableColumns[0]}"
 			headerText="#{msg['lucas.application.loginRoleScreen.loginRoleSearchResultsTable.idColumn.name']}"
 			sortBy="#{entity.id}"
 			visible="#{loginRoleBean.resultsDatatableColumns[0]}">
 			<h:outputText value="#{entity.id}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{loginRoleBean.resultsDatatableColumns[1]}"
 			headerText="#{msg['lucas.application.loginRoleScreen.loginRoleSearchResultsTable.nameColumn.name']}"
 			sortBy="#{entity.name}"
 			visible="#{loginRoleBean.resultsDatatableColumns[1]}">

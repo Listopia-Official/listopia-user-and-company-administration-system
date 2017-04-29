@@ -1,6 +1,5 @@
 package florian_haas.lucas.web;
 
-import java.io.Serializable;
 import java.util.*;
 
 import javax.ejb.EJB;
@@ -9,8 +8,7 @@ import javax.inject.Named;
 import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.primefaces.event.ToggleEvent;
-import org.primefaces.model.*;
+import org.primefaces.model.DualListModel;
 
 import florian_haas.lucas.business.*;
 import florian_haas.lucas.database.*;
@@ -25,7 +23,11 @@ import florian_haas.lucas.web.util.WebUtils;
 
 @Named
 @ViewScoped
-public class LoginUserBean implements Serializable {
+public class LoginUserBean extends BaseBean<LoginUser> {
+
+	public LoginUserBean() {
+		super("loginUser", 4);
+	}
 
 	private static final long serialVersionUID = -3674051794597830546L;
 
@@ -77,55 +79,31 @@ public class LoginUserBean implements Serializable {
 	@QueryComparator(category = EnumQueryComparatorCategory.LOGIC)
 	private EnumQueryComparator searchLoginUserRolesComparator = EnumQueryComparator.EQUAL;
 
-	private List<LoginUser> searchLoginUserResults = new ArrayList<>();
-
-	private List<LoginUser> selectedLoginUsers = new ArrayList<>();
-
-	private List<Boolean> resultsDatatableColumns = Arrays.asList(true, true, true, true);
-
-	public List<LoginUser> getSearchLoginUserResults() {
-		return searchLoginUserResults;
+	@Override
+	public EnumPermission getFindDynamicPermission() {
+		return EnumPermission.LOGIN_USER_FIND_DYNAMIC;
 	}
 
-	public void setSearchLoginUserResults(List<LoginUser> searchLoginUserResults) {
-		this.searchLoginUserResults = searchLoginUserResults;
+	@Override
+	public EnumPermission getPrintPermission() {
+		return EnumPermission.LOGIN_USER_PRINT;
 	}
 
-	public List<LoginUser> getSelectedLoginUsers() {
-		return selectedLoginUsers;
+	@Override
+	public EnumPermission getExportPermission() {
+		return EnumPermission.LOGIN_USER_EXPORT;
 	}
 
-	public void setSelectedLoginUsers(List<LoginUser> selectedLoginUsers) {
-		this.selectedLoginUsers = selectedLoginUsers;
+	@Override
+	protected List<LoginUser> searchEntities() {
+		return loginBean.findLoginUsers(searchLoginUserId, searchLoginUserUsername, searchLoginUserUserId, searchLoginUserRoles, useSearchLoginUserId,
+				useSearchLoginUserUsername, useSearchLoginUserUserId, useSearchLoginUserRoles, searchLoginUserIdComparator,
+				searchLoginUserUsernameComparator, searchLoginUserUserIdComparator, searchLoginUserRolesComparator);
 	}
 
-	public List<Boolean> getResultsDatatableColumns() {
-		return this.resultsDatatableColumns;
-	}
-
-	public void onToggle(ToggleEvent e) {
-		resultsDatatableColumns.set((Integer) e.getData() - 1, e.getVisibility() == Visibility.VISIBLE);
-	}
-
-	public void searchLoginUsers() {
-		WebUtils.executeTask((params) -> {
-			List<LoginUser> results = loginBean.findLoginUsers(searchLoginUserId, searchLoginUserUsername, searchLoginUserUserId,
-					searchLoginUserRoles, useSearchLoginUserId, useSearchLoginUserUsername, useSearchLoginUserUserId, useSearchLoginUserRoles,
-					searchLoginUserIdComparator, searchLoginUserUsernameComparator, searchLoginUserUserIdComparator, searchLoginUserRolesComparator);
-			searchLoginUserResults.clear();
-			selectedLoginUsers.clear();
-			searchLoginUserResults.addAll(results);
-			params.add(results.size());
-			return true;
-		}, "lucas.application.loginUserScreen.searchLoginUser.message");
-	}
-
-	public void refreshLoginUsers() {
-		WebUtils.executeTask((params) -> {
-			WebUtils.refreshEntities(LoginUser.class, searchLoginUserResults, selectedLoginUsers, loginBean::findLoginUserById, false);
-			params.add(searchLoginUserResults.size());
-			return true;
-		}, "lucas.application.loginUserScreen.refreshLoginUsers.message");
+	@Override
+	protected LoginUser entityGetter(Long entityId) {
+		return loginBean.findLoginUserById(entityId);
 	}
 
 	public Long getSearchLoginUserId() {
@@ -391,8 +369,8 @@ public class LoginUserBean implements Serializable {
 	}
 
 	public void initEditLoginUserDialog() {
-		if (!selectedLoginUsers.isEmpty()) {
-			editLoginUserSelectedUser = selectedLoginUsers.get(0);
+		if (!selectedEntities.isEmpty()) {
+			editLoginUserSelectedUser = selectedEntities.get(0);
 			editLoginUserUsername = editLoginUserSelectedUser.getUsername();
 			if (WebUtils.isPermitted(EnumPermission.LOGIN_USER_GET_ROLES, EnumPermission.LOGIN_USER_ADD_ROLE,
 					EnumPermission.LOGIN_USER_REMOVE_ROLE)) {
@@ -433,7 +411,7 @@ public class LoginUserBean implements Serializable {
 			}
 			LoginUser newUser = loginBean.findLoginUserById(id);
 			params.add(WebUtils.getAsString(newUser, LoginUserConverter.CONVERTER_ID));
-			WebUtils.refreshEntities(LoginUser.class, searchLoginUserResults, selectedLoginUsers, newUser, loginBean::findLoginUserById, true);
+			WebUtils.refreshEntities(LoginUser.class, searchResults, selectedEntities, newUser, loginBean::findLoginUserById, true);
 			return true;
 		}, "lucas.application.loginUserScreen.editLoginUser", (exception, params) -> {
 			return WebUtils.getTranslatedMessage("lucas.application.loginUserScreen.createBoundLoginUser.notUniqueUsername",
@@ -463,8 +441,8 @@ public class LoginUserBean implements Serializable {
 	}
 
 	public void initChangePasswordDialog() {
-		if (!selectedLoginUsers.isEmpty()) {
-			changePasswordDialogSelectedUser = selectedLoginUsers.get(0);
+		if (!selectedEntities.isEmpty()) {
+			changePasswordDialogSelectedUser = selectedEntities.get(0);
 		}
 	}
 

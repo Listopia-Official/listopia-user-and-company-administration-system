@@ -1,7 +1,6 @@
 package florian_haas.lucas.web;
 
 import java.awt.image.BufferedImage;
-import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.util.*;
@@ -12,8 +11,8 @@ import javax.inject.Named;
 import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.primefaces.event.*;
-import org.primefaces.model.*;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 
 import florian_haas.lucas.business.*;
 import florian_haas.lucas.database.*;
@@ -25,9 +24,13 @@ import florian_haas.lucas.util.validation.*;
 import florian_haas.lucas.web.converter.*;
 import florian_haas.lucas.web.util.WebUtils;
 
-@Named("userBean")
+@Named
 @ViewScoped
-public class UserBean implements Serializable {
+public class UserBean extends BaseBean<User> {
+
+	public UserBean() {
+		super("user", 6);
+	}
 
 	private static final long serialVersionUID = -2324504686340886417L;
 
@@ -418,10 +421,6 @@ public class UserBean implements Serializable {
 	@QueryComparator(category = EnumQueryComparatorCategory.ARRAY)
 	private EnumQueryComparator searchUserRanksComparator = EnumQueryComparator.MEMBER_OF;
 
-	private List<User> searchUserResults = new ArrayList<>();
-
-	private List<User> selectedUsers = new ArrayList<>();
-
 	public Long getSearchUserId() {
 		return searchUserId;
 	}
@@ -590,55 +589,34 @@ public class UserBean implements Serializable {
 		this.searchUserRanksComparator = searchUserRanksComparator;
 	}
 
-	public void searchUsers() {
-		WebUtils.executeTask((params) -> {
-			List<User> results = userBean.findUsers(searchUserId, searchUserForename, searchUserSurname,
-					EnumSchoolClass.getMatchingClasses(useSearchUserSchoolGrade ? searchUserSchoolGrade : null,
-							useSearchUserSchoolClass ? searchUserSchoolClass : null, searchUserSchoolGradeComparator,
-							searchUserSchoolClassComparator),
-					searchUserType, searchUserRanks, useSearchUserId, useSearchUserForename, useSearchUserSurname,
-					useSearchUserSchoolGrade || useSearchUserSchoolClass, useSearchUserType, useSearchUserRanks, searchUserIdComparator,
-					searchUserForenameComparator, searchUserSurnameComparator, searchUserTypeComparator, searchUserRanksComparator);
-			searchUserResults.clear();
-			selectedUsers.clear();
-			searchUserResults.addAll(results);
-			params.add(results.size());
-			return true;
-		}, "lucas.application.userScreen.searchUser.message");
+	@Override
+	public EnumPermission getFindDynamicPermission() {
+		return EnumPermission.USER_FIND_DYNAMIC;
 	}
 
-	public void refreshUsers() {
-		WebUtils.executeTask((params) -> {
-			WebUtils.refreshEntities(User.class, searchUserResults, selectedUsers, userBean::findById, false);
-			params.add(searchUserResults.size());
-			return true;
-		}, "lucas.application.userScreen.refreshUsers");
+	@Override
+	public EnumPermission getPrintPermission() {
+		return EnumPermission.USER_PRINT;
 	}
 
-	public List<User> getSearchUserResults() {
-		return searchUserResults;
+	@Override
+	public EnumPermission getExportPermission() {
+		return EnumPermission.USER_EXPORT;
 	}
 
-	public void setSearchUserResults(List<User> searchUserResults) {
-		this.searchUserResults = searchUserResults;
+	@Override
+	protected List<User> searchEntities() {
+		return userBean.findUsers(searchUserId, searchUserForename, searchUserSurname,
+				EnumSchoolClass.getMatchingClasses(useSearchUserSchoolGrade ? searchUserSchoolGrade : null,
+						useSearchUserSchoolClass ? searchUserSchoolClass : null, searchUserSchoolGradeComparator, searchUserSchoolClassComparator),
+				searchUserType, searchUserRanks, useSearchUserId, useSearchUserForename, useSearchUserSurname,
+				useSearchUserSchoolGrade || useSearchUserSchoolClass, useSearchUserType, useSearchUserRanks, searchUserIdComparator,
+				searchUserForenameComparator, searchUserSurnameComparator, searchUserTypeComparator, searchUserRanksComparator);
 	}
 
-	private List<Boolean> resultsDatatableColumns = Arrays.asList(true, true, true, true, true, true);
-
-	public void onToggle(ToggleEvent e) {
-		resultsDatatableColumns.set((Integer) e.getData() - 1, e.getVisibility() == Visibility.VISIBLE);
-	}
-
-	public List<Boolean> getResultsDatatableColumns() {
-		return this.resultsDatatableColumns;
-	}
-
-	public List<User> getSelectedUsers() {
-		return selectedUsers;
-	}
-
-	public void setSelectedUsers(List<User> selectedUsers) {
-		this.selectedUsers = selectedUsers;
+	@Override
+	protected User entityGetter(Long entityId) {
+		return userBean.findById(entityId);
 	}
 
 	/*
@@ -734,8 +712,8 @@ public class UserBean implements Serializable {
 	}
 
 	public void initEditUserDialog() {
-		if (!this.selectedUsers.isEmpty()) {
-			editUserDialogSelectedUser = this.selectedUsers.get(0);
+		if (!this.selectedEntities.isEmpty()) {
+			editUserDialogSelectedUser = this.selectedEntities.get(0);
 			this.editUserDialogForename = editUserDialogSelectedUser.getForename();
 			this.editUserDialogSurname = editUserDialogSelectedUser.getSurname();
 			this.editUserDialogSchoolClass = editUserDialogSelectedUser.getSchoolClass();
@@ -776,7 +754,7 @@ public class UserBean implements Serializable {
 				}
 				User tmp2 = userBean.findById(id);
 				params.add(WebUtils.getAsString(tmp, UserConverter.CONVERTER_ID));
-				WebUtils.refreshEntities(User.class, searchUserResults, selectedUsers, tmp2, userBean::findById, true);
+				WebUtils.refreshEntities(User.class, searchResults, selectedEntities, tmp2, userBean::findById, true);
 				return true;
 			}, "lucas.application.userScreen.editUser.message");
 		}
@@ -823,8 +801,8 @@ public class UserBean implements Serializable {
 	}
 
 	public void initImageManagerDialog() {
-		if (!this.selectedUsers.isEmpty()) {
-			imageManagerDialogSelectedUser = this.selectedUsers.get(0);
+		if (!this.selectedEntities.isEmpty()) {
+			imageManagerDialogSelectedUser = this.selectedEntities.get(0);
 			imageManagerDialogUploadedImage = null;
 			byte[] currentImage = userBean.getImage(imageManagerDialogSelectedUser.getId());
 			imageManagerDialogDisplayImageAsBase64 = currentImage != null ? Base64.getEncoder().encodeToString(currentImage) : null;
@@ -907,8 +885,8 @@ public class UserBean implements Serializable {
 	}
 
 	public void initUserCardManagerDialog() {
-		if (!selectedUsers.isEmpty()) {
-			userCardManagerDialogSelectedUser = selectedUsers.get(0);
+		if (!selectedEntities.isEmpty()) {
+			userCardManagerDialogSelectedUser = selectedEntities.get(0);
 			userCardManagerDialogSelectedUserCards.clear();
 			userCardManagerDialogUserCards.clear();
 			userCardManagerDialogValidDate = Date.from(Instant.now());

@@ -1,6 +1,5 @@
 package florian_haas.lucas.web;
 
-import java.io.Serializable;
 import java.util.*;
 
 import javax.ejb.EJB;
@@ -9,8 +8,7 @@ import javax.inject.Named;
 import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.primefaces.event.ToggleEvent;
-import org.primefaces.model.*;
+import org.primefaces.model.DualListModel;
 
 import florian_haas.lucas.business.LoginUserRoleBeanLocal;
 import florian_haas.lucas.database.*;
@@ -24,7 +22,11 @@ import florian_haas.lucas.web.util.WebUtils;
 
 @Named
 @ViewScoped
-public class LoginRoleBean implements Serializable {
+public class LoginRoleBean extends BaseBean<LoginUserRole> {
+
+	public LoginRoleBean() {
+		super("loginRole", 3);
+	}
 
 	private static final long serialVersionUID = 5788543415266420741L;
 
@@ -58,56 +60,32 @@ public class LoginRoleBean implements Serializable {
 	@QueryComparator(category = EnumQueryComparatorCategory.ARRAY)
 	private EnumQueryComparator searchLoginUserRolePermissionsComparator = EnumQueryComparator.MEMBER_OF;
 
-	private List<LoginUserRole> searchLoginRoleResults = new ArrayList<>();
-
-	private List<LoginUserRole> selectedLoginRoles = new ArrayList<>();
-
-	private List<Boolean> resultsDatatableColumns = Arrays.asList(true, true, true);
-
-	public List<LoginUserRole> getSearchLoginRoleResults() {
-		return searchLoginRoleResults;
+	@Override
+	public EnumPermission getFindDynamicPermission() {
+		return EnumPermission.LOGIN_ROLE_FIND_DYNAMIC;
 	}
 
-	public void setSearchLoginRoleResults(List<LoginUserRole> searchLoginRoleResults) {
-		this.searchLoginRoleResults = searchLoginRoleResults;
+	@Override
+	public EnumPermission getPrintPermission() {
+		return EnumPermission.LOGIN_ROLE_PRINT;
 	}
 
-	public List<LoginUserRole> getSelectedLoginRoles() {
-		return selectedLoginRoles;
+	@Override
+	public EnumPermission getExportPermission() {
+		return EnumPermission.LOGIN_ROLE_EXPORT;
 	}
 
-	public void setSelectedLoginRoles(List<LoginUserRole> selectedLoginRoles) {
-		this.selectedLoginRoles = selectedLoginRoles;
+	@Override
+	protected List<LoginUserRole> searchEntities() {
+		return loginUserRoleBean.findLoginUserRoles(searchLoginUserRoleId, searchLoginUserRoleName,
+				searchLoginUserRolePermissions != null ? new HashSet<>(searchLoginUserRolePermissions) : null, useSearchLoginUserRoleId,
+				useSearchLoginUserRoleName, useSearchLoginUserRolePermissions, searchLoginUserRoleIdComparator, searchLoginUserRoleNameComparator,
+				searchLoginUserRolePermissionsComparator);
 	}
 
-	public List<Boolean> getResultsDatatableColumns() {
-		return this.resultsDatatableColumns;
-	}
-
-	public void onToggle(ToggleEvent e) {
-		resultsDatatableColumns.set((Integer) e.getData() - 1, e.getVisibility() == Visibility.VISIBLE);
-	}
-
-	public void searchLoginRoles() {
-		WebUtils.executeTask((params) -> {
-			List<LoginUserRole> results = loginUserRoleBean.findLoginUserRoles(searchLoginUserRoleId, searchLoginUserRoleName,
-					searchLoginUserRolePermissions != null ? new HashSet<>(searchLoginUserRolePermissions) : null, useSearchLoginUserRoleId,
-					useSearchLoginUserRoleName, useSearchLoginUserRolePermissions, searchLoginUserRoleIdComparator, searchLoginUserRoleNameComparator,
-					searchLoginUserRolePermissionsComparator);
-			searchLoginRoleResults.clear();
-			selectedLoginRoles.clear();
-			searchLoginRoleResults.addAll(results);
-			params.add(results.size());
-			return true;
-		}, "lucas.application.loginRoleScreen.searchLoginUserRoles.message");
-	}
-
-	public void refreshLoginRoles() {
-		WebUtils.executeTask((params) -> {
-			WebUtils.refreshEntities(LoginUserRole.class, searchLoginRoleResults, selectedLoginRoles, loginUserRoleBean::findById, false);
-			params.add(searchLoginRoleResults.size());
-			return true;
-		}, "lucas.application.loginRoleScreen.refreshLoginUserRoles.message");
+	@Override
+	protected LoginUserRole entityGetter(Long entityId) {
+		return loginUserRoleBean.findById(entityId);
 	}
 
 	public Long getSearchLoginUserRoleId() {
@@ -248,8 +226,8 @@ public class LoginRoleBean implements Serializable {
 	}
 
 	public void initPermissionsDialog() {
-		if (!selectedLoginRoles.isEmpty()) {
-			LoginUserRole tmp = selectedLoginRoles.get(0);
+		if (!selectedEntities.isEmpty()) {
+			LoginUserRole tmp = selectedEntities.get(0);
 			permissionsDialogSelectedRoleString = WebUtils.getAsString(tmp, LoginUserRoleConverter.CONVERTER_ID);
 			permissionsDialogPermissions.clear();
 			permissionsDialogPermissions.addAll(loginUserRoleBean.getPermissions(tmp.getId()));
@@ -261,14 +239,14 @@ public class LoginRoleBean implements Serializable {
 	 */
 
 	public void removeLoginUserRole() {
-		Iterator<LoginUserRole> it = selectedLoginRoles.iterator();
+		Iterator<LoginUserRole> it = selectedEntities.iterator();
 		while (it.hasNext()) {
 			LoginUserRole role = it.next();
 			WebUtils.executeTask(params -> {
 				params.add(WebUtils.getAsString(role, LoginUserRoleConverter.CONVERTER_ID));
 				Boolean ret = loginUserRoleBean.removeLoginUserRole(role.getId());
 				if (ret) {
-					searchLoginRoleResults.remove(role);
+					searchResults.remove(role);
 					it.remove();
 				}
 				return ret;
@@ -304,8 +282,8 @@ public class LoginRoleBean implements Serializable {
 	}
 
 	public void initEditLoginUserRoleDialog() {
-		if (!selectedLoginRoles.isEmpty()) {
-			editLoginUserRole = selectedLoginRoles.get(0);
+		if (!selectedEntities.isEmpty()) {
+			editLoginUserRole = selectedEntities.get(0);
 			this.editLoginUserRoleDialogName = editLoginUserRole.getName();
 			List<String> actualPermissions = new ArrayList<>();
 			if (WebUtils.isPermitted(EnumPermission.LOGIN_ROLE_GET_PERMISSIONS)) {
@@ -342,7 +320,7 @@ public class LoginRoleBean implements Serializable {
 				});
 			}
 			LoginUserRole newRole = loginUserRoleBean.findById(id);
-			WebUtils.refreshEntities(LoginUserRole.class, searchLoginRoleResults, selectedLoginRoles, newRole, loginUserRoleBean::findById, true);
+			WebUtils.refreshEntities(LoginUserRole.class, searchResults, selectedEntities, newRole, loginUserRoleBean::findById, true);
 			return true;
 		}, "lucas.application.loginRoleScreen.editLoginUserRole", (exception, params) -> {
 			return WebUtils.getTranslatedMessage("lucas.application.loginRoleScreen.editLoginUserRole.notUnique",

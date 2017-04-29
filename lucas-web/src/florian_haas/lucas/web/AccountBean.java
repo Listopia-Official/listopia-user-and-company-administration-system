@@ -1,6 +1,5 @@
 package florian_haas.lucas.web;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -23,9 +22,13 @@ import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.web.converter.AccountOwnerConverter;
 import florian_haas.lucas.web.util.WebUtils;
 
-@Named("accountBean")
+@Named
 @ViewScoped
-public class AccountBean implements Serializable {
+public class AccountBean extends BaseBean<Account> {
+
+	public AccountBean() {
+		super("account", 6);
+	}
 
 	private static final long serialVersionUID = 7962757114064858876L;
 
@@ -88,56 +91,36 @@ public class AccountBean implements Serializable {
 	@NotNull
 	private Boolean searchAccountIsProtected = Boolean.FALSE;
 
-	private List<Account> searchAccountResults = new ArrayList<>();
+	/*
+	 * -------------------- Transaction Log Dialog End --------------------
+	 */
 
-	private List<Account> selectedAccounts = new ArrayList<>();
-
-	public List<Account> getSearchAccountResults() {
-		return searchAccountResults;
+	@Override
+	public EnumPermission getFindDynamicPermission() {
+		return EnumPermission.ACCOUNT_FIND_DYNAMIC;
 	}
 
-	public void setSearchAccountResults(List<Account> searchAccountResults) {
-		this.searchAccountResults = searchAccountResults;
+	@Override
+	public EnumPermission getPrintPermission() {
+		return EnumPermission.ACCOUNT_PRINT;
 	}
 
-	public List<Account> getSelectedAccounts() {
-		return selectedAccounts;
+	@Override
+	public EnumPermission getExportPermission() {
+		return EnumPermission.ACCOUNT_EXPORT;
 	}
 
-	public void setSelectedAccounts(List<Account> selectedAccounts) {
-		this.selectedAccounts = selectedAccounts;
+	@Override
+	protected List<Account> searchEntities() {
+		return accountBean.findAccounts(searchAccountId, searchAccountOwnerId, searchAccountOwnerType, searchAccountBankBalance, searchAccountBlocked,
+				searchAccountIsProtected, useSearchAccountId, useSearchAccountOwnerId, useSearchAccountOwnerType, useSearchAccountBankBalance,
+				useSearchAccountBlocked, useSearchAccountIsProtected, searchAccountIdComparator, searchAccountOwnerIdComparator,
+				searchAccountOwnerTypeComparator, searchAccountBankBalanceComparator);
 	}
 
-	public void searchAccounts() {
-		WebUtils.executeTask((params) -> {
-			List<Account> results = accountBean.findAccounts(searchAccountId, searchAccountOwnerId, searchAccountOwnerType, searchAccountBankBalance,
-					searchAccountBlocked, searchAccountIsProtected, useSearchAccountId, useSearchAccountOwnerId, useSearchAccountOwnerType,
-					useSearchAccountBankBalance, useSearchAccountBlocked, useSearchAccountIsProtected, searchAccountIdComparator,
-					searchAccountOwnerIdComparator, searchAccountOwnerTypeComparator, searchAccountBankBalanceComparator);
-			searchAccountResults.clear();
-			selectedAccounts.clear();
-			searchAccountResults.addAll(results);
-			params.add(results.size());
-			return true;
-		}, "lucas.application.accountScreen.searchAccount.message");
-	}
-
-	public void refreshAccounts() {
-		WebUtils.executeTask((params) -> {
-			WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, accountBean::findById, false);
-			params.add(searchAccountResults.size());
-			return true;
-		}, "lucas.application.accountScreen.refreshAccounts");
-	}
-
-	private List<Boolean> resultsDatatableColumns = Arrays.asList(true, true, true, true, true, true);
-
-	public void onToggle(ToggleEvent e) {
-		resultsDatatableColumns.set((Integer) e.getData() - 1, e.getVisibility() == Visibility.VISIBLE);
-	}
-
-	public List<Boolean> getResultsDatatableColumns() {
-		return this.resultsDatatableColumns;
+	@Override
+	protected Account entityGetter(Long entityId) {
+		return accountBean.findById(entityId);
 	}
 
 	public Boolean getUseSearchAccountId() {
@@ -309,7 +292,7 @@ public class AccountBean implements Serializable {
 	}
 
 	public void payIn() {
-		for (Account account : selectedAccounts) {
+		for (Account account : selectedEntities) {
 			WebUtils.executeTask(params -> {
 				accountBean.payIn(account.getId(), payInDialogTransactionAmount, payInDialogComment);
 				params.add(WebUtils.getCurrencyAsString(payInDialogTransactionAmount));
@@ -318,7 +301,7 @@ public class AccountBean implements Serializable {
 			}, "lucas.application.accountScreen.payIn.message",
 					Utils.asList(WebUtils.getAsString(account.getOwner(), AccountOwnerConverter.CONVERTER_ID)));
 		}
-		WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, accountBean::findById, true);
+		WebUtils.refreshEntities(Account.class, searchResults, selectedEntities, accountBean::findById, true);
 	}
 
 	/*
@@ -357,7 +340,7 @@ public class AccountBean implements Serializable {
 	}
 
 	public void payOut() {
-		for (Account account : selectedAccounts) {
+		for (Account account : selectedEntities) {
 			WebUtils.executeTask(params -> {
 				accountBean.payOut(account.getId(), payOutDialogTransactionAmount, payOutDialogComment);
 				params.add(WebUtils.getCurrencyAsString(payOutDialogTransactionAmount));
@@ -366,7 +349,7 @@ public class AccountBean implements Serializable {
 			}, "lucas.application.accountScreen.payOut.message",
 					Utils.asList(WebUtils.getAsString(account.getOwner(), AccountOwnerConverter.CONVERTER_ID)));
 		}
-		WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, accountBean::findById, true);
+		WebUtils.refreshEntities(Account.class, searchResults, selectedEntities, accountBean::findById, true);
 	}
 
 	/*
@@ -425,7 +408,7 @@ public class AccountBean implements Serializable {
 
 	public void transaction() {
 		AccountOwner owner = accountBean.findAccountOwnerById(transactionDialogToId);
-		for (Account account : selectedAccounts) {
+		for (Account account : selectedEntities) {
 			WebUtils.executeTask(params -> {
 				accountBean.transaction(account.getId(), owner.getAccount().getId(), transactionDialogTransactionAmount, transactionDialogComment);
 				params.add(WebUtils.getCurrencyAsString(transactionDialogTransactionAmount));
@@ -435,8 +418,7 @@ public class AccountBean implements Serializable {
 					Utils.asList(WebUtils.getAsString(account.getOwner(), AccountOwnerConverter.CONVERTER_ID),
 							WebUtils.getAsString(owner, AccountOwnerConverter.CONVERTER_ID)));
 		}
-		WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, Arrays.asList(owner.getAccount()), accountBean::findById,
-				true);
+		WebUtils.refreshEntities(Account.class, searchResults, selectedEntities, Arrays.asList(owner.getAccount()), accountBean::findById, true);
 	}
 
 	/*
@@ -444,43 +426,43 @@ public class AccountBean implements Serializable {
 	 */
 
 	public void block() {
-		for (Account account : selectedAccounts) {
+		for (Account account : selectedEntities) {
 			WebUtils.executeTask(params -> {
 				return accountBean.blockAccount(account.getId());
 			}, "lucas.application.accountScreen.block.message",
 					Utils.asList(WebUtils.getAsString(account.getOwner(), AccountOwnerConverter.CONVERTER_ID)));
 		}
-		WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, accountBean::findById, true);
+		WebUtils.refreshEntities(Account.class, searchResults, selectedEntities, accountBean::findById, true);
 	}
 
 	public void unblock() {
-		for (Account account : selectedAccounts) {
+		for (Account account : selectedEntities) {
 			WebUtils.executeTask(params -> {
 				return accountBean.unblockAccount(account.getId());
 			}, "lucas.application.accountScreen.unblock.message",
 					Utils.asList(WebUtils.getAsString(account.getOwner(), AccountOwnerConverter.CONVERTER_ID)));
 		}
-		WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, accountBean::findById, true);
+		WebUtils.refreshEntities(Account.class, searchResults, selectedEntities, accountBean::findById, true);
 	}
 
 	public void protect() {
-		for (Account account : selectedAccounts) {
+		for (Account account : selectedEntities) {
 			WebUtils.executeTask(params -> {
 				return accountBean.protect(account.getId());
 			}, "lucas.application.accountScreen.protect.message",
 					Utils.asList(WebUtils.getAsString(account.getOwner(), AccountOwnerConverter.CONVERTER_ID)));
 		}
-		WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, accountBean::findById, true);
+		WebUtils.refreshEntities(Account.class, searchResults, selectedEntities, accountBean::findById, true);
 	}
 
 	public void unprotect() {
-		for (Account account : selectedAccounts) {
+		for (Account account : selectedEntities) {
 			WebUtils.executeTask(params -> {
 				return accountBean.unprotect(account.getId());
 			}, "lucas.application.accountScreen.unprotect.message",
 					Utils.asList(WebUtils.getAsString(account.getOwner(), AccountOwnerConverter.CONVERTER_ID)));
 		}
-		WebUtils.refreshEntities(Account.class, searchAccountResults, selectedAccounts, accountBean::findById, true);
+		WebUtils.refreshEntities(Account.class, searchResults, selectedEntities, accountBean::findById, true);
 	}
 
 	/*
@@ -510,8 +492,8 @@ public class AccountBean implements Serializable {
 	}
 
 	public void initTransactionLogDialog() {
-		if (!selectedAccounts.isEmpty()) {
-			transactionLogDialogSelectedAccount = selectedAccounts.get(0);
+		if (!selectedEntities.isEmpty()) {
+			transactionLogDialogSelectedAccount = selectedEntities.get(0);
 			transactionLogsDialogTransactionLogs.clear();
 			transactionLogsDialogTransactionLogs.addAll(transactionLogDialogSelectedAccount.getTransactionLogs());
 			Collections.fill(transactionLogsDialogDatatableColumns, true);
@@ -521,7 +503,4 @@ public class AccountBean implements Serializable {
 	public void transactionLogDialogOnToggle(ToggleEvent e) {
 		transactionLogsDialogDatatableColumns.set((Integer) e.getData(), e.getVisibility() == Visibility.VISIBLE);
 	}
-	/*
-	 * -------------------- Transaction Log Dialog End --------------------
-	 */
 }

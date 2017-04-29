@@ -4,17 +4,8 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
-	<ui:param name="pageTitle"
-		value="#{msg['lucas.application.companyScreen.title']}" />
 	<ui:param name="sitePrefix" value="company" />
-	<ui:param name="searchBean" value="#{companyBean}" />
-	<ui:param name="searchResults"
-		value="#{companyBean.searchCompanyResults}" />
-	<ui:param name="selectedResults"
-		value="#{companyBean.selectedCompanies}" />
-	<ui:param name="searchFunction" value="searchCompanies" />
-	<ui:param name="refreshFunction" value="refreshCompanies" />
-	<ui:param name="findDynamicPermission" value="COMPANY_FIND_DYNAMIC" />
+	<ui:param name="siteBean" value="#{companyBean}" />
 	<ui:define name="dialogs">
 		<ui:include src="/WEB-INF/web/companies/createCompanyDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/companies/editCompanyDialog.xhtml" />
@@ -56,7 +47,7 @@
 				icon="fa fa-edit" oncomplete="PF('editCompanyDialog').show()"
 				action="#{companyBean.initEditCompanyDialog}" process="@this"
 				update="editCompanyDialogForm"
-				disabled="#{companyBean.selectedCompanies.size() !=1}" />
+				disabled="#{companyBean.selectedEntities.size() !=1}" />
 			<p:commandButton resetValues="true"
 				rendered="#{loginBean.hasPermissionsOr([EnumPermission.COMPANY_ADD_COMPANY_CARD,EnumPermission.COMPANY_REMOVE_COMPANY_CARD,EnumPermission.COMPANY_BLOCK_COMPANY_CARD,EnumPermission.COMPANY_UNBLOCK_COMPANY_CARD,EnumPermission.COMPANY_SET_VALID_DATE_COMPANY_CARD]) &amp;&amp; loginBean.hasPermissionsAnd([EnumPermission.COMPANY_FIND_COMPANY_CARD_BY_ID,EnumPermission.COMPANY_GET_COMPANY_CARDS])}"
 				value="#{msg['lucas.application.companyScreen.companyCardManagerButton.name']}"
@@ -65,7 +56,7 @@
 				oncomplete="PF('companyCardManagerDialog').show()"
 				action="#{companyBean.initCompanyCardManagerDialog}" process="@this"
 				update="companyCardManagerDialogForm"
-				disabled="#{companyBean.selectedCompanies.size() !=1}" />
+				disabled="#{companyBean.selectedEntities.size() !=1}" />
 			<p:commandButton resetValues="true"
 				value="#{msg['lucas.application.companyScreen.taxdataManagerButton.name']}"
 				title="#{msg['lucas.application.companyScreen.taxdataManagerButton.tooltip']}"
@@ -81,7 +72,7 @@
 				icon="fa fa-group" oncomplete="PF('viewEmployeesDialog').show()"
 				action="#{companyBean.initViewEmployeesDialog}" process="@this"
 				update="viewEmployeesDialogForm"
-				disabled="#{companyBean.selectedCompanies.size() !=1}" />
+				disabled="#{companyBean.selectedEntities.size() !=1}" />
 			<p:commandButton resetValues="true"
 				value="#{msg['lucas.application.companyScreen.showPurchaseLogsButton.name']}"
 				title="#{msg['lucas.application.companyScreen.showPurchaseLogsButton.tooltip']}"
@@ -89,7 +80,7 @@
 			<ui:remove>oncomplete="PF('createLoginUserRoleDialog').show()"
 			action="#{loginRoleBean.initCreateLoginUserRoleDialog}"
 			process="@this" update="createLoginUserRoleDialogForm"
-			disabled="#{companyBean.selectedCompanies.size() !=1}"</ui:remove>
+			disabled="#{companyBean.selectedEntities.size() !=1}"</ui:remove>
 			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 			<p:commandButton resetValues="true"
 				value="#{msg['lucas.application.companyScreen.removeCompanyButton.name']}"
@@ -98,7 +89,7 @@
 			<ui:remove>oncomplete="PF('createLoginUserRoleDialog').show()"
 			action="#{loginRoleBean.initCreateLoginUserRoleDialog}"
 			process="@this" update="createLoginUserRoleDialogForm"
-			disabled="#{companyBean.selectedCompanies.size() &lt;=0}"</ui:remove>
+			disabled="#{companyBean.selectedEntities.size() &lt;=0}"</ui:remove>
 		</p:toolbarGroup>
 	</ui:define>
 	<ui:define name="searchCriteria">
@@ -344,53 +335,53 @@
 		</p:row>
 	</ui:define>
 	<ui:define name="searchResults">
-		<p:column
+		<p:column exportable="#{companyBean.resultsDatatableColumns[0]}"
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.idColumn.name']}"
 			sortBy="#{entity.id}"
 			visible="#{companyBean.resultsDatatableColumns[0]}">
 			<h:outputText value="#{entity.id}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{companyBean.resultsDatatableColumns[1]}"
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.nameColumn.name']}"
 			sortBy="#{entity.name}"
 			visible="#{companyBean.resultsDatatableColumns[1]}">
 			<h:outputText value="#{entity.name}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{companyBean.resultsDatatableColumns[2]}"
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.descriptionColumn.name']}"
 			sortBy="#{entity.description}"
 			visible="#{companyBean.resultsDatatableColumns[2]}">
 			<h:outputText value="#{entity.description}"
 				converter="#{converterBean.getConverter(NullConverter.CONVERTER_ID)}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{companyBean.resultsDatatableColumns[3]}"
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.sectionColumn.name']}"
 			sortBy="#{entity.section}"
 			visible="#{companyBean.resultsDatatableColumns[3]}">
 			<h:outputText value="#{entity.section}"
 				converter="#{converterBean.getConverter(ShortRoomSectionConverter.CONVERTER_ID)}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{companyBean.resultsDatatableColumns[4]}"
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.companyTypeColumn.name']}"
 			sortBy="#{entity.companyType}"
 			visible="#{companyBean.resultsDatatableColumns[4]}">
 			<h:outputText value="#{entity.companyType}"
 				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{companyBean.resultsDatatableColumns[5]}"
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.parentCompanyColumn.name']}"
 			sortBy="#{entity.parentCompany}"
 			visible="#{companyBean.resultsDatatableColumns[5]}">
 			<h:outputText value="#{entity.parentCompany}"
 				converter="#{converterBean.getConverter(CompanyConverter.CONVERTER_ID)}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{companyBean.resultsDatatableColumns[6]}"
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.childCompaniesColumn.name']}"
 			sortable="false" visible="#{companyBean.resultsDatatableColumns[6]}">
 			<h:outputText value="#{entity.childCompanies}" escape="false"
 				converter="#{converterBean.getConverter(CompaniesConverter.CONVERTER_ID)}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{companyBean.resultsDatatableColumns[7]}"
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.requiredEmployeesCount.name']}"
 			sortBy="#{entity.requiredEmployeesCount}"
 			visible="#{companyBean.resultsDatatableColumns[7]}">

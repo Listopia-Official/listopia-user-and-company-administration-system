@@ -4,17 +4,8 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
-	<ui:param name="pageTitle"
-		value="#{msg['lucas.application.loginUserScreen.title']}" />
 	<ui:param name="sitePrefix" value="loginUser" />
-	<ui:param name="searchBean" value="#{loginUserBean}" />
-	<ui:param name="searchResults"
-		value="#{loginUserBean.searchLoginUserResults}" />
-	<ui:param name="selectedResults"
-		value="#{loginUserBean.selectedLoginUsers}" />
-	<ui:param name="searchFunction" value="searchLoginUsers" />
-	<ui:param name="refreshFunction" value="refreshLoginUsers" />
-	<ui:param name="findDynamicPermission" value="LOGIN_USER_FIND_DYNAMIC" />
+	<ui:param name="siteBean" value="#{loginUserBean}" />
 	<ui:define name="dialogs">
 		<ui:include
 			src="/WEB-INF/web/loginUser/createDefaultLoginUserDialog.xhtml" />
@@ -62,7 +53,7 @@
 				value="#{msg['lucas.application.loginUserScreen.editLoginUserButton.name']}"
 				title="#{msg['lucas.application.loginUserScreen.editLoginUserButton.tooltip']}"
 				icon="fa fa-edit" process="@this" update="editLoginUserDialogForm"
-				disabled="#{loginUserBean.selectedLoginUsers.size() != 1}"
+				disabled="#{loginUserBean.selectedEntities.size() != 1}"
 				oncomplete="PF('editLoginUserDialog').show()"
 				actionListener="#{loginUserBean.initEditLoginUserDialog}" />
 			<p:commandButton resetValues="true"
@@ -70,7 +61,7 @@
 				value="#{msg['lucas.application.loginUserScreen.setPasswordButton.name']}"
 				title="#{msg['lucas.application.loginUserScreen.setPasswordButton.tooltip']}"
 				icon="fa fa-key" process="@this" update="changePasswordDialogForm"
-				disabled="#{loginUserBean.selectedLoginUsers.size() != 1}"
+				disabled="#{loginUserBean.selectedEntities.size() != 1}"
 				oncomplete="PF('changePasswordDialog').show()"
 				actionListener="#{loginUserBean.initChangePasswordDialog}">
 				<p:confirm
@@ -174,26 +165,26 @@
 		</p:row>
 	</ui:define>
 	<ui:define name="searchResults">
-		<p:column
+		<p:column exportable="#{loginUserBean.resultsDatatableColumns[0]}"
 			headerText="#{msg['lucas.application.loginUserScreen.loginUserSearchResultsTable.id.name']}"
 			sortBy="#{entity.id}"
 			visible="#{loginUserBean.resultsDatatableColumns[0]}">
 			<h:outputText value="#{entity.id}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{loginUserBean.resultsDatatableColumns[1]}"
 			headerText="#{msg['lucas.application.loginUserScreen.loginUserSearchResultsTable.username.name']}"
 			sortBy="#{entity.username}"
 			visible="#{loginUserBean.resultsDatatableColumns[1]}">
 			<h:outputText value="#{entity.username}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{loginUserBean.resultsDatatableColumns[2]}"
 			headerText="#{msg['lucas.application.loginUserScreen.loginUserSearchResultsTable.user.name']}"
 			sortBy="#{entity.user}"
 			visible="#{loginUserBean.resultsDatatableColumns[2]}">
 			<h:outputText value="#{entity.user}"
 				converter="#{converterBean.getConverter(UserConverter.CONVERTER_ID)}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{loginUserBean.resultsDatatableColumns[3]}"
 			headerText="#{msg['lucas.application.loginUserScreen.loginUserSearchResultsTable.roles.name']}"
 			sortable="false"
 			visible="#{loginUserBean.resultsDatatableColumns[3]}">

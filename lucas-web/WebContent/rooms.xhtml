@@ -4,15 +4,8 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
-	<ui:param name="pageTitle"
-		value="#{msg['lucas.application.roomScreen.title']}" />
 	<ui:param name="sitePrefix" value="room" />
-	<ui:param name="searchBean" value="#{roomBean}" />
-	<ui:param name="searchResults" value="#{roomBean.searchRoomResults}" />
-	<ui:param name="selectedResults" value="#{roomBean.selectedRooms}" />
-	<ui:param name="searchFunction" value="searchRooms" />
-	<ui:param name="refreshFunction" value="refreshRooms" />
-	<ui:param name="findDynamicPermission" value="ROOM_FIND_DYNAMIC" />
+	<ui:param name="siteBean" value="#{roomBean}" />
 	<ui:define name="dialogs">
 		<ui:include src="/WEB-INF/web/rooms/createRoomDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/rooms/editRoomDialog.xhtml" />
@@ -43,12 +36,12 @@
 					icon="fa fa-edit" oncomplete="PF('editRoomDialog').show()"
 					action="#{roomBean.initEditRoomDialog}" process="@this"
 					update="editRoomDialogForm"
-					disabled="#{roomBean.selectedRooms.size() !=1}" />
+					disabled="#{roomBean.selectedEntities.size() !=1}" />
 				<p:commandButton resetValues="true"
 					rendered="#{loginBean.hasPermission(EnumPermission.ROOM_FIND_ROOM_SECTION_BY_ID) &amp;&amp; loginBean.hasPermissionsOr([EnumPermission.ROOM_ADD_SECTION,EnumPermission.ROOM_REMOVE_SECTION])}"
 					value="#{msg['lucas.application.roomScreen.sectionManagerButton.name']}"
 					title="#{msg['lucas.application.roomScreen.sectionManagerButton.tooltip']}"
-					icon="fa fa-table" disabled="#{roomBean.selectedRooms.size() !=1}"
+					icon="fa fa-table" disabled="#{roomBean.selectedEntities.size() !=1}"
 					oncomplete="PF('sectionManagerDialog').show()"
 					action="#{roomBean.initSectionManagerDialog}" process="@this"
 					update="sectionManagerDialogForm" />
@@ -154,19 +147,19 @@
 		</p:row>
 	</ui:define>
 	<ui:define name="searchResults">
-		<p:column
+		<p:column exportable="#{roomBean.resultsDatatableColumns[0]}"
 			headerText="#{msg['lucas.application.roomScreen.roomSearchResultsTable.idColumn.name']}"
 			sortBy="#{entity.id}"
 			visible="#{roomBean.resultsDatatableColumns[0]}">
 			<h:outputText value="#{entity.id}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{roomBean.resultsDatatableColumns[1]}"
 			headerText="#{msg['lucas.application.roomScreen.roomSearchResultsTable.nameColumn.name']}"
 			sortBy="#{entity.name}"
 			visible="#{roomBean.resultsDatatableColumns[1]}">
 			<h:outputText value="#{entity.name}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{roomBean.resultsDatatableColumns[2]}"
 			headerText="#{msg['lucas.application.roomScreen.roomSearchResultsTable.sectionsCountColumn.name']}"
 			sortBy="#{entity.sections.size()}"
 			visible="#{roomBean.resultsDatatableColumns[2]}">

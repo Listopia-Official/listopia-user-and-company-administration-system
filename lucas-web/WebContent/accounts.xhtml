@@ -4,17 +4,8 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
-	<ui:param name="pageTitle"
-		value="#{msg['lucas.application.accountScreen.title']}" />
 	<ui:param name="sitePrefix" value="account" />
-	<ui:param name="searchBean" value="#{accountBean}" />
-	<ui:param name="searchResults"
-		value="#{accountBean.searchAccountResults}" />
-	<ui:param name="selectedResults"
-		value="#{accountBean.selectedAccounts}" />
-	<ui:param name="searchFunction" value="searchAccounts" />
-	<ui:param name="refreshFunction" value="refreshAccounts" />
-	<ui:param name="findDynamicPermission" value="ACCOUNT_FIND_DYNAMIC" />
+	<ui:param name="siteBean" value="#{accountBean}" />
 	<ui:define name="dialogs">
 		<ui:include src="/WEB-INF/web/accounts/payInDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/accounts/payOutDialog.xhtml" />
@@ -40,7 +31,7 @@
 				action="#{accountBean.resetPayInDialog}"
 				title="#{msg['lucas.application.accountScreen.payInButton.tooltip']}"
 				icon="fa fa-arrow-up" process="@this" update="payInDialogForm"
-				disabled="#{accountBean.selectedAccounts.size() &lt;=0}"
+				disabled="#{accountBean.selectedEntities.size() &lt;=0}"
 				oncomplete="PF('payInDialog').show()" />
 			<p:commandButton resetValues="true"
 				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_PAY_OUT)}"
@@ -48,7 +39,7 @@
 				action="#{accountBean.resetPayOutDialog}"
 				title="#{msg['lucas.application.accountScreen.payOutButton.tooltip']}"
 				icon="fa fa-arrow-down" process="@this" update="payOutDialogForm"
-				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}"
+				disabled="#{accountBean.selectedEntities.size() &lt;= 0}"
 				oncomplete="PF('payOutDialog').show()" />
 			<p:commandButton resetValues="true"
 				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_TRANSACTION)}"
@@ -56,7 +47,7 @@
 				action="#{accountBean.resetTransactionDialog}"
 				title="#{msg['lucas.application.accountScreen.transactionButton.tooltip']}"
 				icon="fa fa-retweet" process="@this" update="transactionDialogForm"
-				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}"
+				disabled="#{accountBean.selectedEntities.size() &lt;= 0}"
 				oncomplete="PF('transactionDialog').show()" />
 			<ui:fragment
 				rendered="#{loginBean.hasPermissionsOr([EnumPermission.ACCOUNT_BLOCK,EnumPermission.ACCOUNT_UNBLOCK,EnumPermission.ACCOUNT_PROTECT,EnumPermission.ACCOUNT_UNPROTECT])}">
@@ -68,28 +59,28 @@
 				title="#{msg['lucas.application.accountScreen.blockButton.tooltip']}"
 				icon="fa fa-lock" process="@this" update="@(.searchResults)"
 				action="#{accountBean.block}"
-				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}" />
+				disabled="#{accountBean.selectedEntities.size() &lt;= 0}" />
 			<p:commandButton
 				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_UNBLOCK)}"
 				value="#{msg['lucas.application.accountScreen.unblockButton.name']}"
 				title="#{msg['lucas.application.accountScreen.unblockButton.tooltip']}"
 				icon="fa fa-unlock" process="@this" update="@(.searchResults)"
 				action="#{accountBean.unblock}"
-				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}" />
+				disabled="#{accountBean.selectedEntities.size() &lt;= 0}" />
 			<p:commandButton
 				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_PROTECT)}"
 				value="#{msg['lucas.application.accountScreen.protectButton.name']}"
 				title="#{msg['lucas.application.accountScreen.protectButton.tooltip']}"
 				icon="fa fa-link" process="@this" update="@(.searchResults)"
 				action="#{accountBean.protect}"
-				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}" />
+				disabled="#{accountBean.selectedEntities.size() &lt;= 0}" />
 			<p:commandButton
 				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_UNPROTECT)}"
 				value="#{msg['lucas.application.accountScreen.unprotectButton.name']}"
 				title="#{msg['lucas.application.accountScreen.unprotectButton.tooltip']}"
 				icon="fa fa-unlink" process="@this" update="@(.searchResults)"
 				action="#{accountBean.unprotect}"
-				disabled="#{accountBean.selectedAccounts.size() &lt;= 0}" />
+				disabled="#{accountBean.selectedEntities.size() &lt;= 0}" />
 			<ui:fragment
 				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_VIEW_TRANSACTION_LOGS)}">
 				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
@@ -101,7 +92,7 @@
 				update="transactionLogDialogForm"
 				title="#{msg['lucas.application.accountScreen.showLogsButton.tooltip']}"
 				icon="fa fa-list-ul" oncomplete="PF('transactionLogDialog').show()"
-				disabled="#{accountBean.selectedAccounts.size() != 1}" />
+				disabled="#{accountBean.selectedEntities.size() != 1}" />
 		</p:toolbarGroup>
 	</ui:define>
 	<ui:define name="searchCriteria">
@@ -279,40 +270,40 @@
 		</p:row>
 	</ui:define>
 	<ui:define name="searchResults">
-		<p:column
+		<p:column exportable="#{accountBean.resultsDatatableColumns[0]}"
 			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.idColumn.name']}"
 			sortBy="#{entity.id}"
 			visible="#{accountBean.resultsDatatableColumns[0]}">
 			<h:outputText value="#{entity.id}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{accountBean.resultsDatatableColumns[1]}"
 			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.ownerColumn.name']}"
 			sortable="false" visible="#{accountBean.resultsDatatableColumns[1]}">
 			<h:outputText value="#{entity.owner}"
 				converter="#{converterBean.getConverter(AccountOwnerConverter.CONVERTER_ID)}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{accountBean.resultsDatatableColumns[2]}"
 			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.ownerTypeColumn.name']}"
 			sortBy="#{entity.owner.ownerType}"
 			visible="#{accountBean.resultsDatatableColumns[2]}">
 			<h:outputText value="#{entity.owner.ownerType}"
 				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{accountBean.resultsDatatableColumns[3]}"
 			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.bankBalanceColumn.name']}"
 			sortBy="#{entity.bankBalance}"
 			visible="#{accountBean.resultsDatatableColumns[3]}">
 			<h:outputText value="#{entity.bankBalance}"
 				converter="#{converterBean.getManagedConverter(CurrencyConverter.CONVERTER_ID)}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{accountBean.resultsDatatableColumns[4]}"
 			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.blockedColumn.name']}"
 			sortBy="#{entity.blocked}"
 			visible="#{accountBean.resultsDatatableColumns[4]}">
 			<h:outputText value="#{entity.blocked}"
 				converter="#{converterBean.getConverter(BooleanConverter.CONVERTER_ID)}" />
 		</p:column>
-		<p:column
+		<p:column exportable="#{accountBean.resultsDatatableColumns[5]}"
 			headerText="#{msg['lucas.application.accountScreen.accountSearchResultsTable.protectedColumn.name']}"
 			sortBy="#{entity.isProtected}"
 			visible="#{accountBean.resultsDatatableColumns[5]}">

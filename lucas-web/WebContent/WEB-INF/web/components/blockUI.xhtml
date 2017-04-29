@@ -3,7 +3,7 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
-	<p:blockUI block="#{block}" trigger="#{trigger}">
+	<p:blockUI block="#{block}" trigger="#{trigger}" widgetVar="blockUI#{id == null ? '' : id}">
 		<p:graphicImage name="images/ajaxloadingbar.gif"
 			style="margin-right:12px; vertical-align:center;margin-top:auto;" />
 		<h:outputText value="#{msg['lucas.application.blockUI.waitMessage']}"
