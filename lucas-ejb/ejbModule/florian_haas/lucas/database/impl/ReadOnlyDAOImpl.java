@@ -52,7 +52,8 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 
 	@Override
 	public Boolean exists(Long id) {
-		return manager.createQuery("SELECT COUNT(e.id) FROM " + entityClass.getSimpleName() + " e WHERE e.id=:id", Long.class).getSingleResult() > 0;
+		return manager.createQuery("SELECT COUNT(e.id) FROM " + entityClass.getSimpleName() + " e WHERE e.id=" + id, Long.class)
+				.getSingleResult() > 0;
 	}
 
 	@Override
