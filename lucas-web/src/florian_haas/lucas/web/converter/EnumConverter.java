@@ -60,7 +60,7 @@ public class EnumConverter implements Converter {
 	private String getEnumClassName(Enum<?> enumInstance) {
 		String clazzName = enumInstance.getClass().getSimpleName();
 		char firstChar = clazzName.charAt(0);
-		return clazzName.replace(firstChar, Character.toLowerCase(firstChar));
+		return clazzName.replaceFirst(Character.toString(firstChar), Character.toString(Character.toLowerCase(firstChar)));
 	}
 
 	@SuppressWarnings("rawtypes")
