@@ -4,9 +4,10 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 	<p:dialog id="#{widgetVar}" header="#{msg[dialogTitleKey]}"
-		closable="#{closeable}" draggable="true" dynamic="#{dynamic}"
-		widgetVar="#{widgetVar}" resizable="false" responsive="true"
-		modal="true" styleClass="#{styleClass}">
+		style="position:absolute" maximizable="false" closable="#{closeable}"
+		draggable="true" dynamic="#{dynamic}" widgetVar="#{widgetVar}"
+		resizable="false" responsive="true" modal="true"
+		styleClass="#{styleClass}">
 		<h:form id="#{formId}">
 			<ui:insert name="dialogContent" />
 		</h:form>
