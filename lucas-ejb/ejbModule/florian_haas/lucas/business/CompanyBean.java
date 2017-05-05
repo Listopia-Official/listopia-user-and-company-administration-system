@@ -48,28 +48,67 @@ public class CompanyBean implements CompanyBeanLocal {
 	@EJB
 	private EmploymentBeanLocal employmentBean;
 
+	@EJB
+	private JobBeanLocal jobBean;
+
+	@EJB
+	private UserBeanLocal userBean;
+
+	@EJB
+	private GlobalDataBeanLocal globalData;
+
 	@Override
 	@RequiresPermissions(COMPANY_CREATE)
 	public Long createCompany(String name, String description, Long roomSectionId, EnumCompanyType companyType, Long parentCompanyId,
-			List<Long> managerUserIds, Integer requiredEmployeesCount) {
+			Boolean generateJobs, List<Long> managerUserIds, Integer requiredEmployeesCount, Boolean isAdvisorRequired,
+			Integer optimalEmployeesSchoolGrade, String advisorJobName, String advisorJobDescription, String managerJobName,
+			String managerJobDescription, String employeeJobName, String employeeJobDescription) {
 		checkIsNameUnique(name);
 		if (roomSectionId != null) checkIsSectionUnique(roomSectionId);
 		RoomSection section = roomSectionId != null ? roomSectionDao.findById(roomSectionId) : null;
-		Company company = new Company(name, description, section, companyType, requiredEmployeesCount);
+		Company company = new Company(name, description, section, companyType);
 		if (companyType == EnumCompanyType.STATE) {
 			company.getAccount().setIsProtected(Boolean.TRUE);
 		}
+
 		companyDao.persist(company);
 		companyDao.flush();
-		managerUserIds.forEach(userId -> {
-			employmentBean.addDefaultEmployment(userId, company.getId(), EnumEmployeePosition.MANAGER);
-		});
+
 		if (parentCompanyId != null) {
 			setParentCompany(company.getId(), parentCompanyId);
 		}
 		if (section != null) {
 			section.setCompany(company);
 		}
+
+		if (generateJobs) {
+			Integer optimalCivilManagerCount = globalData.getOptimalCivilManagerCount();
+
+			// Create Job for advisor if one is definitely needed
+			if (companyType == EnumCompanyType.CIVIL) {
+				Integer minSchoolGrade = globalData.getMinCivilManagerSchoolGrade();
+				int optimalUsersCounter = 0;
+				for (Long id : managerUserIds) {
+					User user = userBean.findById(id);
+					if ((user.getSchoolClass() != null ? user.getSchoolClass().getGrade() : Integer.MAX_VALUE) >= minSchoolGrade)
+						optimalUsersCounter++;
+				}
+				if ((optimalUsersCounter < 1) || isAdvisorRequired) {
+					jobBean.createJob(advisorJobName, advisorJobDescription, company.getId(), EnumEmployeePosition.ADVISOR, null, 1, null);
+				}
+			}
+			// Create Job for managers
+			Long managerJobId = jobBean.createJob(managerJobName, managerJobDescription, company.getId(), EnumEmployeePosition.MANAGER, null,
+					optimalCivilManagerCount, null);
+			managerUserIds.forEach(userId -> {
+				employmentBean.createEmployment(userId, managerJobId, null);
+			});
+
+			// Create Job for employees
+			jobBean.createJob(employeeJobName, employeeJobDescription, company.getId(), EnumEmployeePosition.EMPLOYEE, optimalEmployeesSchoolGrade,
+					requiredEmployeesCount, null);
+		}
+
 		return company.getId();
 	}
 
@@ -88,15 +127,14 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions(COMPANY_FIND_DYNAMIC)
 	public List<Company> findCompanies(Long companyId, String name, String description, Long roomSectionId, EnumCompanyType companyType,
-			Long parentCompanyId, Integer requiredEmployeesCount, Boolean areEmployeesRequired, Boolean useId, Boolean useName,
-			Boolean useDescription, Boolean useRoomSectionId, Boolean useCompanyType, Boolean useParentCompanyId, Boolean useRequiredEmployeesCount,
-			Boolean useAreEmployeesRequired, EnumQueryComparator idComparator, EnumQueryComparator nameComparator,
-			EnumQueryComparator descriptionComparator, EnumQueryComparator roomSectionIdComparator, EnumQueryComparator companyTypeComparator,
-			EnumQueryComparator parentCompanyIdComparator, EnumQueryComparator requiredEmployeesCountComparator) {
-		return companyDao.findCompanies(companyId, name, description, roomSectionId, companyType, parentCompanyId, requiredEmployeesCount,
-				areEmployeesRequired, useId, useName, useDescription, useRoomSectionId, useCompanyType, useParentCompanyId, useRequiredEmployeesCount,
-				useAreEmployeesRequired, idComparator, nameComparator, descriptionComparator, roomSectionIdComparator, companyTypeComparator,
-				parentCompanyIdComparator, requiredEmployeesCountComparator);
+			Long parentCompanyId, Long jobId, Boolean areEmployeesRequired, Boolean useId, Boolean useName, Boolean useDescription,
+			Boolean useRoomSectionId, Boolean useCompanyType, Boolean useParentCompanyId, Boolean useJobId, Boolean useAreEmployeesRequired,
+			EnumQueryComparator idComparator, EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator,
+			EnumQueryComparator roomSectionIdComparator, EnumQueryComparator companyTypeComparator, EnumQueryComparator parentCompanyIdComparator,
+			EnumQueryComparator jobIdComparator) {
+		return companyDao.findCompanies(companyId, name, description, roomSectionId, companyType, parentCompanyId, jobId, areEmployeesRequired, useId,
+				useName, useDescription, useRoomSectionId, useCompanyType, useParentCompanyId, useJobId, useAreEmployeesRequired, idComparator,
+				nameComparator, descriptionComparator, roomSectionIdComparator, companyTypeComparator, parentCompanyIdComparator, jobIdComparator);
 	}
 
 	@Override
@@ -165,15 +203,6 @@ public class CompanyBean implements CompanyBeanLocal {
 		}
 		comp.setParentCompany(parent);
 		if (parent != null) parent.addChildCompany(comp);
-		return Boolean.TRUE;
-	}
-
-	@Override
-	@RequiresPermissions(COMPANY_SET_REQUIRED_EMPLOYEES_COUNT)
-	public Boolean setRequiredEmployeesCount(Long companyId, Integer requiredEmployeesCount) {
-		Company comp = companyDao.findById(companyId);
-		if (comp.getRequiredEmployeesCount().equals(requiredEmployeesCount)) return Boolean.FALSE;
-		comp.setRequiredEmployeesCount(requiredEmployeesCount);
 		return Boolean.TRUE;
 	}
 

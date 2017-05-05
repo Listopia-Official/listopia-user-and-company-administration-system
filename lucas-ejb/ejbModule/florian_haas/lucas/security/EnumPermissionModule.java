@@ -9,6 +9,7 @@ public enum EnumPermissionModule {
 	ENTITY("entity"),
 	GLOBAL_DATA("globalData"),
 	ITEM("item"),
+	JOB("job"),
 	LOGIN("login"),
 	LOGIN_ROLE("loginRole"),
 	LOGIN_USER("loginUser"),

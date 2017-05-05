@@ -44,6 +44,18 @@ public class User extends AccountOwner {
 	@NotNull
 	private Set<@TypeNotNull Employment> employments = new HashSet<>();
 
+	@OneToOne(optional = true)
+	@JoinColumn(nullable = true)
+	private Job firstJobRequest;
+
+	@OneToOne(optional = true)
+	@JoinColumn(nullable = true)
+	private Job secondJobRequest;
+
+	@OneToOne(optional = true)
+	@JoinColumn(nullable = true)
+	private Job thirdJobRequest;
+
 	User() {}
 
 	public User(String forename, String surname, EnumSchoolClass schoolClass, List<String> ranks) {
@@ -135,5 +147,29 @@ public class User extends AccountOwner {
 
 	public void setImage(byte[] image) {
 		this.image = image;
+	}
+
+	public Job getFirstJobRequest() {
+		return firstJobRequest;
+	}
+
+	public void setFirstJobRequest(Job firstJobRequest) {
+		this.firstJobRequest = firstJobRequest;
+	}
+
+	public Job getSecondJobRequest() {
+		return secondJobRequest;
+	}
+
+	public void setSecondJobRequest(Job secondJobRequest) {
+		this.secondJobRequest = secondJobRequest;
+	}
+
+	public Job getThirdJobRequest() {
+		return thirdJobRequest;
+	}
+
+	public void setThirdJobRequest(Job thirdJobRequest) {
+		this.thirdJobRequest = thirdJobRequest;
 	}
 }

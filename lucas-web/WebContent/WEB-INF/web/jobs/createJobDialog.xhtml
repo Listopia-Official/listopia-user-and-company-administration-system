@@ -1,0 +1,211 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.jobScreen.createJobDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="createJobDialog" />
+	<ui:param name="formId" value="createJobDialogForm" />
+	<ui:define name="dialogContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.NullConverterNoText" />
+		<p:importEnum type="florian_haas.lucas.model.EnumEmployeePosition" />
+		<p:importEnum type="florian_haas.lucas.model.EnumSalaryClass" />
+		<p:importEnum type="florian_haas.lucas.model.EnumWorkShift" />
+		<p:importConstants type="florian_haas.lucas.model.EnumSchoolClass" />
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.jobScreen.createJobDialog.nameInputText.name']}"
+							title="#{msg['lucas.application.jobScreen.createJobDialog.nameInputText.tooltip']}"
+							for="nameInputText" />
+					</p:column>
+					<p:column>
+						<p:message for="nameInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:inputText id="nameInputText"
+							value="#{jobBean.createJobDialogName}"
+							title="#{msg['lucas.application.jobScreen.createJobDialog.nameInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.jobScreen.createJobDialog.descriptionInputTextarea.name']}"
+							title="#{msg['lucas.application.jobScreen.createJobDialog.descriptionInputTextarea.tooltip']}"
+							for="descriptionInputTextarea" />
+					</p:column>
+					<p:column>
+						<p:message for="descriptionInputTextarea" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2" style="padding-bottom:0px">
+						<p:inputTextarea id="descriptionInputTextarea" scrollHeight="200"
+							style="resize: none;" autoResize="false" maxlength="255"
+							counter="descriptionInputTextareaOutputText"
+							value="#{jobBean.createJobDialogDescription}"
+							converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}"
+							counterTemplate="{0}#{msg['lucas.application.jobScreen.createJobDialog.descriptionInputTextarea.remainingCharacters']}"
+							title="#{msg['lucas.application.jobScreen.createJobDialog.descriptionInputTextarea.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2" style="padding-bottom:0px;padding-top:0px">
+						<h:outputText id="descriptionInputTextareaOutputText"
+							style="float:right;font-style:italic" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.jobScreen.createJobDialog.companyIdInputNumber.name']}"
+							title="#{msg['lucas.application.jobScreen.createJobDialog.companyIdInputNumber.tooltip']}"
+							for="companyIdInputNumber" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="companyIdInputNumber"
+							id="companyIdInputNumberMessage" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:inputNumber id="companyIdInputNumber"
+							value="#{jobBean.createJobDialogCompanyId}"
+							title="#{msg['lucas.application.jobScreen.createJobDialog.companyIdInputNumber.tooltip']}"
+							minValue="0" emptyValue="empty" decimalPlaces="0">
+							<p:ajax event="keyup" delay="250" process="@this"
+								update="createJobDialogForm:companyIdOutputInputText companyIdInputNumberMessage @this" />
+						</p:inputNumber>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:inputText title="#{jobBean.createJobDialogCompanyFromId}"
+							placeholder="#{jobBean.createJobDialogCompanyFromId}"
+							id="companyIdOutputInputText" readonly="true" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.jobScreen.createJobDialog.positionSelectOneMenu.name']}"
+							title="#{msg['lucas.application.jobScreen.createJobDialog.positionSelectOneMenu.tooltip']}"
+							for="positionSelectOneMenu" />
+					</p:column>
+					<p:column>
+						<p:message for="positionSelectOneMenu" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:selectOneMenu id="positionSelectOneMenu"
+							value="#{jobBean.createJobDialogPosition}"
+							title="#{msg['lucas.application.jobScreen.createJobDialog.positionSelectOneMenu.tooltip']}">
+							<f:selectItems value="#{EnumEmployeePosition.ALL_VALUES}"
+								var="position" itemValue="#{position}"
+								itemLabel="#{converterBean.convertEnum(position)}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.jobScreen.createJobDialog.optimalSchoolGradeInputNumber.name']}"
+							title="#{msg['lucas.application.jobScreen.createJobDialog.optimalSchoolGradeInputNumber.tooltip']}"
+							for="optimalSchoolGradeInputNumber" />
+					</p:column>
+					<p:column>
+						<p:message for="optimalSchoolGradeInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:selectOneMenu id="optimalSchoolGradeInputNumber"
+							title="#{msg['lucas.application.jobScreen.createJobDialog.optimalSchoolGradeInputNumber.tooltip']}"
+							value="#{jobBean.createJobDialogOptimalSchoolGrade}">
+							<f:selectItems value="#{EnumSchoolClass.GRADES}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.jobScreen.createJobDialog.requiredEmploymentsCountInputNumber.name']}"
+							title="#{msg['lucas.application.jobScreen.createJobDialog.requiredEmploymentsCountInputNumber.tooltip']}"
+							for="requiredEmploymentsCountInputNumber" />
+					</p:column>
+					<p:column>
+						<p:message for="requiredEmploymentsCountInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:inputNumber
+							value="#{jobBean.createJobDialogRequiredEmploymentsCount}"
+							minValue="0" id="requiredEmploymentsCountInputNumber"
+							decimalPlaces="0"
+							title="#{msg['lucas.application.jobScreen.createJobDialog.requiredEmploymentsCountInputNumber.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.jobScreen.createJobDialog.salaryClassSelectOneMenu.name']}"
+							title="#{msg['lucas.application.jobScreen.createJobDialog.salaryClassSelectOneMenu.tooltip']}"
+							for="salaryClassSelectOneMenu" />
+					</p:column>
+					<p:column>
+						<p:message for="salaryClassSelectOneMenu" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:selectOneMenu id="salaryClassSelectOneMenu"
+							value="#{jobBean.createJobDialogSalaryClass}"
+							title="#{msg['lucas.application.jobScreen.createJobDialog.salaryClassSelectOneMenu.tooltip']}">
+							<f:selectItem value="#{null}"
+								itemLabel="#{msg['lucas.application.jobScreen.createJobDialog.salaryClassSelectOneMenu.none']}" />
+							<f:selectItems value="#{EnumSalaryClass.ALL_VALUES}"
+								var="salaryClass" itemValue="#{salaryClass}"
+								itemLabel="#{converterBean.convertEnum(salaryClass)}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<h:outputText
+							value="#{msg['lucas.application.jobScreen.createJobDialog.info']}"
+							style="font-style:italic" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this nameInputText descriptionInputTextarea companyIdInputNumber positionSelectOneMenu requiredEmploymentsCountInputNumber optimalSchoolGradeInputNumber salaryClassSelectOneMenu"
+							update="@form" action="#{jobBean.createJob}"
+							value="#{msg['lucas.application.jobScreen.createJobDialog.createJobButton.name']}"
+							title="#{msg['lucas.application.jobScreen.createJobDialog.createJobButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('createJobDialog').hide()}" />
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this" immediate="true"
+							value="#{msg['lucas.application.jobScreen.createJobDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.jobScreen.createJobDialog.cancelButton.tooltip']}"
+							oncomplete="PF('createJobDialog').hide()">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

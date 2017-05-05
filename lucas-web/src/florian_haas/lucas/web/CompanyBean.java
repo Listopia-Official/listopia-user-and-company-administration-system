@@ -14,7 +14,7 @@ import florian_haas.lucas.business.*;
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.ValidEntityId;
+import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.util.validation.NotBlankString;
@@ -26,7 +26,7 @@ import florian_haas.lucas.web.util.WebUtils;
 public class CompanyBean extends BaseBean<Company> {
 
 	public CompanyBean() {
-		super("company", 8);
+		super("company", 7);
 	}
 
 	private static final long serialVersionUID = 5394240973288053983L;
@@ -101,13 +101,13 @@ public class CompanyBean extends BaseBean<Company> {
 
 	@NotNull
 	@Min(0)
-	private Integer searchCompanyRequiredEmployeesCount = 0;
+	private Long searchCompanyJobId = 0l;
 
 	@NotNull
-	private Boolean useSearchCompanyRequiredEmployeesCount = Boolean.FALSE;
+	private Boolean useSearchCompanyJobId = Boolean.FALSE;
 
 	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
-	private EnumQueryComparator searchCompanyRequiredEmployeesCountComparator = EnumQueryComparator.EQUAL;
+	private EnumQueryComparator searchCompanyJobIdComparator = EnumQueryComparator.EQUAL;
 
 	@NotNull
 	private Boolean searchCompanyAreEmployeesRequired = Boolean.FALSE;
@@ -259,28 +259,28 @@ public class CompanyBean extends BaseBean<Company> {
 		this.searchCompanyParentCompanyIdComparator = searchCompanyParentCompanyIdComparator;
 	}
 
-	public Integer getSearchCompanyRequiredEmployeesCount() {
-		return this.searchCompanyRequiredEmployeesCount;
+	public Long getSearchCompanyJobId() {
+		return searchCompanyJobId;
 	}
 
-	public void setSearchCompanyRequiredEmployeesCount(Integer searchCompanyRequiredEmployeesCount) {
-		this.searchCompanyRequiredEmployeesCount = searchCompanyRequiredEmployeesCount;
+	public void setSearchCompanyJobId(Long searchCompanyJobId) {
+		this.searchCompanyJobId = searchCompanyJobId;
 	}
 
-	public Boolean getUseSearchCompanyRequiredEmployeesCount() {
-		return this.useSearchCompanyRequiredEmployeesCount;
+	public Boolean getUseSearchCompanyJobId() {
+		return useSearchCompanyJobId;
 	}
 
-	public void setUseSearchCompanyRequiredEmployeesCount(Boolean useSearchCompanyRequiredEmployeesCount) {
-		this.useSearchCompanyRequiredEmployeesCount = useSearchCompanyRequiredEmployeesCount;
+	public void setUseSearchCompanyJobId(Boolean useSearchCompanyJobId) {
+		this.useSearchCompanyJobId = useSearchCompanyJobId;
 	}
 
-	public EnumQueryComparator getSearchCompanyRequiredEmployeesCountComparator() {
-		return this.searchCompanyRequiredEmployeesCountComparator;
+	public EnumQueryComparator getSearchCompanyJobIdComparator() {
+		return searchCompanyJobIdComparator;
 	}
 
-	public void setSearchCompanyRequiredEmployeesCountComparator(EnumQueryComparator searchCompanyRequiredEmployeesCountComparator) {
-		this.searchCompanyRequiredEmployeesCountComparator = searchCompanyRequiredEmployeesCountComparator;
+	public void setSearchCompanyJobIdComparator(EnumQueryComparator searchCompanyJobIdComparator) {
+		this.searchCompanyJobIdComparator = searchCompanyJobIdComparator;
 	}
 
 	public Boolean getSearchCompanyAreEmployeesRequired() {
@@ -317,11 +317,11 @@ public class CompanyBean extends BaseBean<Company> {
 	@Override
 	protected List<Company> searchEntities() {
 		return companyBean.findCompanies(searchCompanyId, searchCompanyName, searchCompanyDescription, searchCompanySectionId,
-				searchCompanyCompanyType, searchCompanyParentCompanyId, searchCompanyRequiredEmployeesCount, searchCompanyAreEmployeesRequired,
-				useSearchCompanyId, useSearchCompanyName, useSearchCompanyDescription, useSearchCompanySectionId, useSearchCompanyCompanyType,
-				useSearchCompanyParentCompanyId, useSearchCompanyRequiredEmployeesCount, useSearchCompanyAreEmployeesRequired,
-				searchCompanyIdComparator, searchCompanyNameComparator, searchCompanyDescriptionComparator, searchCompanySectionIdComparator,
-				searchCompanyCompanyTypeComparator, searchCompanyParentCompanyIdComparator, searchCompanyRequiredEmployeesCountComparator);
+				searchCompanyCompanyType, searchCompanyParentCompanyId, searchCompanyJobId, searchCompanyAreEmployeesRequired, useSearchCompanyId,
+				useSearchCompanyName, useSearchCompanyDescription, useSearchCompanySectionId, useSearchCompanyCompanyType,
+				useSearchCompanyParentCompanyId, useSearchCompanyJobId, useSearchCompanyAreEmployeesRequired, searchCompanyIdComparator,
+				searchCompanyNameComparator, searchCompanyDescriptionComparator, searchCompanySectionIdComparator, searchCompanyCompanyTypeComparator,
+				searchCompanyParentCompanyIdComparator, searchCompanyJobIdComparator);
 	}
 
 	@Override
@@ -359,6 +359,15 @@ public class CompanyBean extends BaseBean<Company> {
 	private Long createCompanyDialogTmpManagerId = null;
 
 	private Long createCompanyDialogSelectedManagerId = null;
+
+	@NotNull
+	private Boolean createCompanyDialogIsAdvisorRequired = Boolean.FALSE;
+
+	@NotNull
+	private Boolean createCompanyDialogGenerateJobs = Boolean.FALSE;
+
+	@ValidSchoolGrade
+	private Integer createCompanyDialogOptimalSchoolGrade = null;
 
 	public String getCreateCompanyDialogName() {
 		return createCompanyDialogName;
@@ -464,6 +473,30 @@ public class CompanyBean extends BaseBean<Company> {
 		this.createCompanyDialogSelectedManagerId = createCompanyDialogSelectedManagerId;
 	}
 
+	public Boolean getCreateCompanyDialogIsAdvisorRequired() {
+		return this.createCompanyDialogIsAdvisorRequired;
+	}
+
+	public void setCreateCompanyDialogIsAdvisorRequired(Boolean createCompanyDialogIsAdvisorRequired) {
+		this.createCompanyDialogIsAdvisorRequired = createCompanyDialogIsAdvisorRequired;
+	}
+
+	public Integer getCreateCompanyDialogOptimalSchoolGrade() {
+		return this.createCompanyDialogOptimalSchoolGrade;
+	}
+
+	public void setCreateCompanyDialogOptimalSchoolGrade(Integer createCompanyDialogOptimalSchoolGrade) {
+		this.createCompanyDialogOptimalSchoolGrade = createCompanyDialogOptimalSchoolGrade;
+	}
+
+	public Boolean getCreateCompanyDialogGenerateJobs() {
+		return createCompanyDialogGenerateJobs;
+	}
+
+	public void setCreateCompanyDialogGenerateJobs(Boolean createCompanyDialogGenerateJobs) {
+		this.createCompanyDialogGenerateJobs = createCompanyDialogGenerateJobs;
+	}
+
 	public void initCreateCompanyDialog() {
 		createCompanyDialogName = "";
 		createCompanyDialogDescription = null;
@@ -474,15 +507,27 @@ public class CompanyBean extends BaseBean<Company> {
 		createCompanyDialogManagerUserIds.clear();
 		createCompanyDialogTmpManagerId = null;
 		createCompanyDialogSelectedManagerId = null;
+		createCompanyDialogIsAdvisorRequired = Boolean.FALSE;
+		createCompanyDialogOptimalSchoolGrade = null;
+		createCompanyDialogGenerateJobs = Boolean.FALSE;
 	}
 
 	public void createCompany() {
 		WebUtils.executeTask((params) -> {
-			params.add(WebUtils.getAsString(
-					companyBean.findById(companyBean.createCompany(createCompanyDialogName, createCompanyDialogDescription,
-							createCompanyDialogSectionId, createCompanyDialogCompanyType, createCompanyDialogParentCompanyId,
-							createCompanyDialogManagerUserIds, createCompanyDialogRequiredEmployeesCount)),
-					CompanyConverter.CONVERTER_ID));
+			params.add(WebUtils
+					.getAsString(
+							companyBean.findById(companyBean.createCompany(createCompanyDialogName, createCompanyDialogDescription,
+									createCompanyDialogSectionId, createCompanyDialogCompanyType, createCompanyDialogParentCompanyId,
+									createCompanyDialogGenerateJobs, createCompanyDialogManagerUserIds, createCompanyDialogRequiredEmployeesCount,
+									createCompanyDialogIsAdvisorRequired, createCompanyDialogOptimalSchoolGrade,
+									WebUtils.getTranslatedMessage("lucas.application.companyScreen.createCompanyDialog.defaultAdvisorJobName"),
+									WebUtils.getTranslatedMessage("lucas.application.companyScreen.createCompanyDialog.defaultAdvisorJobDescription"),
+									WebUtils.getTranslatedMessage("lucas.application.companyScreen.createCompanyDialog.defaultManagerJobName"),
+									WebUtils.getTranslatedMessage("lucas.application.companyScreen.createCompanyDialog.defaultManagerJobDescription"),
+									WebUtils.getTranslatedMessage("lucas.application.companyScreen.createCompanyDialog.defaultEmployeeJobName"),
+									WebUtils.getTranslatedMessage(
+											"lucas.application.companyScreen.createCompanyDialog.defaultEmployeeJobDescription"))),
+							CompanyConverter.CONVERTER_ID));
 			return true;
 		}, "lucas.application.companyScreen.createCompany.message", (exception, params) -> {
 			if (exception.getMark().equals(florian_haas.lucas.business.CompanyBean.NAME_NOT_UNIQUE_EXCEPTION_MARKER)) {
@@ -519,10 +564,6 @@ public class CompanyBean extends BaseBean<Company> {
 
 	@ValidEntityId(entityClass = Company.class, nullable = true)
 	private Long editCompanyDialogParentCompanyId = null;
-
-	@NotNull
-	@Min(0)
-	private Integer editCompanyDialogRequiredEmployeesCount = 0;
 
 	public String getEditCompanyDialogName() {
 		return editCompanyDialogName;
@@ -571,14 +612,6 @@ public class CompanyBean extends BaseBean<Company> {
 		return WebUtils.getAsString(company, CompanyConverter.CONVERTER_ID);
 	}
 
-	public Integer getEditCompanyDialogRequiredEmployeesCount() {
-		return editCompanyDialogRequiredEmployeesCount;
-	}
-
-	public void setEditCompanyDialogRequiredEmployeesCount(Integer editCompanyDialogRequiredEmployeesCount) {
-		this.editCompanyDialogRequiredEmployeesCount = editCompanyDialogRequiredEmployeesCount;
-	}
-
 	public void initEditCompanyDialog() {
 		if (!selectedEntities.isEmpty()) {
 			editCompanyDialogSelectedCompany = selectedEntities.get(0);
@@ -589,7 +622,6 @@ public class CompanyBean extends BaseBean<Company> {
 			editCompanyDialogCompanyType = editCompanyDialogSelectedCompany.getCompanyType();
 			Company parent = editCompanyDialogSelectedCompany.getParentCompany();
 			editCompanyDialogParentCompanyId = parent == null ? null : parent.getId();
-			editCompanyDialogRequiredEmployeesCount = editCompanyDialogSelectedCompany.getRequiredEmployeesCount();
 		}
 	}
 
@@ -610,9 +642,6 @@ public class CompanyBean extends BaseBean<Company> {
 			}
 			if (WebUtils.isPermitted(EnumPermission.COMPANY_SET_PARENT_COMPANY)) {
 				companyBean.setParentCompany(id, editCompanyDialogParentCompanyId);
-			}
-			if (WebUtils.isPermitted(EnumPermission.COMPANY_SET_REQUIRED_EMPLOYEES_COUNT)) {
-				companyBean.setRequiredEmployeesCount(id, editCompanyDialogRequiredEmployeesCount);
 			}
 			Company tmp2 = companyBean.findById(id);
 			params.add(WebUtils.getAsString(tmp2, CompanyConverter.CONVERTER_ID));

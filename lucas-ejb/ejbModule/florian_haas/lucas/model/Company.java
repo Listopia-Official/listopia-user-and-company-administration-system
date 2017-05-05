@@ -50,13 +50,7 @@ public class Company extends AccountOwner {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "company")
 	@NotNull
 	@Valid
-	private List<@TypeNotNull Employment> employees = new ArrayList<>();
-
-	@Basic(optional = false)
-	@Column(nullable = false)
-	@NotNull
-	@Min(value = 0)
-	private Integer requiredEmployeesCount = 0;
+	private List<@TypeNotNull Job> jobs = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "company")
 	@NotNull
@@ -76,24 +70,15 @@ public class Company extends AccountOwner {
 
 	Company() {}
 
-	public Company(String name, String description, RoomSection section, EnumCompanyType companyType, Integer requiredEmployeesCount) {
+	public Company(String name, String description, RoomSection section, EnumCompanyType companyType) {
 		this.name = name;
 		this.description = description;
 		this.section = section;
 		this.companyType = companyType;
-		this.requiredEmployeesCount = requiredEmployeesCount;
 	}
 
 	public List<Employment> getAllEmployees() {
-		return Collections.unmodifiableList(employees);
-	}
-
-	public Boolean addEmployee(Employment employment) {
-		return employees.add(employment);
-	}
-
-	public Boolean removeEmployee(Employment employment) {
-		return employees.remove(employment);
+		return getEmployeesFromPosition(null);
 	}
 
 	public List<Employment> getEmployees() {
@@ -110,9 +95,9 @@ public class Company extends AccountOwner {
 
 	private List<Employment> getEmployeesFromPosition(EnumEmployeePosition position) {
 		List<Employment> ret = new ArrayList<>();
-		employees.forEach(employment -> {
-			if (employment.getPosition() == position) {
-				ret.add(employment);
+		jobs.forEach(job -> {
+			if (job.getEmployeePosition() == position || position == null) {
+				ret.addAll(job.getEmployments());
 			}
 		});
 		return Collections.unmodifiableList(ret);
@@ -175,16 +160,11 @@ public class Company extends AccountOwner {
 		return this.childCompanies.remove(childCompany);
 	}
 
-	public Integer getRequiredEmployeesCount() {
-		return requiredEmployeesCount;
-	}
-
-	public void setRequiredEmployeesCount(Integer requiredEmployeesCount) {
-		this.requiredEmployeesCount = requiredEmployeesCount;
-	}
-
 	public Boolean areEmployeesRequired() {
-		return requiredEmployeesCount > 0;
+		for (Job job : jobs) {
+			if (job.areEmployeesRequiredForJob()) return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
 	}
 
 	public List<Taxdata> getTaxdata() {
@@ -217,5 +197,17 @@ public class Company extends AccountOwner {
 
 	public Boolean removeCompanyCard(CompanyCard companyCard) {
 		return this.companyCards.remove(companyCard);
+	}
+
+	public List<Job> getJobs() {
+		return Collections.unmodifiableList(this.jobs);
+	}
+
+	public Boolean addJob(Job job) {
+		return this.jobs.add(job);
+	}
+
+	public Boolean removeJob(Job job) {
+		return this.jobs.remove(job);
 	}
 }

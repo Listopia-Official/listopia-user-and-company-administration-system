@@ -1,0 +1,130 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.employmentScreen.createEmploymentDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="createEmploymentDialog" />
+	<ui:param name="formId" value="createEmploymentDialogForm" />
+	<ui:define name="dialogContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.NullConverterNoText" />
+		<p:importEnum type="florian_haas.lucas.model.EnumWorkShift" />
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.employmentScreen.createEmploymentDialog.userIdInputNumber.name']}"
+							title="#{msg['lucas.application.employmentScreen.createEmploymentDialog.userIdInputNumber.tooltip']}"
+							for="userIdInputNumber" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="userIdInputNumber" id="userIdInputNumberMessage" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:inputNumber id="userIdInputNumber"
+							value="#{employmentBean.createEmploymentDialogUserId}"
+							title="#{msg['lucas.application.employmentScreen.createEmploymentDialog.userIdInputNumber.tooltip']}"
+							minValue="0" emptyValue="empty" decimalPlaces="0">
+							<p:ajax event="keyup" delay="250" process="@this"
+								update="createEmploymentDialogForm:userIdOutputInputText userIdInputNumberMessage @this" />
+						</p:inputNumber>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:inputText
+							title="#{employmentBean.createEmploymentDialogUserFromId}"
+							placeholder="#{employmentBean.createEmploymentDialogUserFromId}"
+							id="userIdOutputInputText" readonly="true" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.employmentScreen.createEmploymentDialog.jobIdInputNumber.name']}"
+							title="#{msg['lucas.application.employmentScreen.createEmploymentDialog.jobIdInputNumber.tooltip']}"
+							for="jobIdInputNumber" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="jobIdInputNumber" id="jobIdInputNumberMessage" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:inputNumber id="jobIdInputNumber"
+							value="#{employmentBean.createEmploymentDialogJobId}"
+							title="#{msg['lucas.application.employmentScreen.createEmploymentDialog.jobIdInputNumber.tooltip']}"
+							minValue="0" emptyValue="empty" decimalPlaces="0">
+							<p:ajax event="keyup" delay="250" process="@this"
+								update="createEmploymentDialogForm:jobIdOutputInputText jobIdInputNumberMessage @this" />
+						</p:inputNumber>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:inputText
+							title="#{employmentBean.createEmploymentDialogJobFromId}"
+							placeholder="#{employmentBean.createEmploymentDialogJobFromId}"
+							id="jobIdOutputInputText" readonly="true" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.employmentScreen.createEmploymentDialog.workShiftsSelectCheckboxMenu.name']}"
+							title="#{msg['lucas.application.employmentScreen.createEmploymentDialog.workShiftsSelectCheckboxMenu.tooltip']}"
+							for="workShiftsSelectCheckboxMenu" />
+					</p:column>
+					<p:column>
+						<p:message for="workShiftsSelectCheckboxMenu" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:selectCheckboxMenu id="workShiftsSelectCheckboxMenu"
+							value="#{employmentBean.createEmploymentDialogWorkShifts}"
+							multiple="true"
+							title="#{msg['lucas.application.employmentScreen.createEmploymentDialog.workShiftsSelectCheckboxMenu.tooltip']}"
+							converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}">
+							<f:selectItems value="#{EnumWorkShift.ALL_VALUES}"
+								var="workShift" itemValue="#{workShift}"
+								itemLabel=" #{converterBean.convertEnum(workShift)}" />
+						</p:selectCheckboxMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<h:outputText
+							value="#{msg['lucas.application.employmentScreen.createEmploymentDialog.info']}"
+							style="font-style:italic" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this userIdInputNumber jobIdInputNumber workShiftsSelectCheckboxMenu" update="@form"
+							action="#{employmentBean.createEmployment}"
+							value="#{msg['lucas.application.employmentScreen.createEmploymentDialog.createEmploymentButton.name']}"
+							title="#{msg['lucas.application.employmentScreen.createEmploymentDialog.createEmploymentButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('createEmploymentDialog').hide()}" />
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this" immediate="true"
+							value="#{msg['lucas.application.employmentScreen.createEmploymentDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.employmentScreen.createEmploymentDialog.cancelButton.tooltip']}"
+							oncomplete="PF('createEmploymentDialog').hide()">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

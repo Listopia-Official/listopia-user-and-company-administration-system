@@ -9,9 +9,12 @@
 	<ui:define name="dialogs">
 		<ui:include src="/WEB-INF/web/globalData/editThemesDialog.xhtml" />
 	</ui:define>
-	<ui:define name="content">
+	<ui:define name="otherContent">
 		<p:importConstants
 			type="florian_haas.lucas.web.converter.ThemeConverter" />
+		<p:importConstants type="florian_haas.lucas.model.EnumSchoolClass" />
+	</ui:define>
+	<ui:define name="content">
 		<div class="ui-fluid">
 			<h:form>
 				<p:panelGrid>
@@ -177,7 +180,40 @@
 					</p:row>
 					<p:row>
 						<p:column
-							rendered="#{loginBean.hasPermissionsOr([EnumPermission.GLOBAL_DATA_SET_MAX_IDLE_TIME,EnumPermission.GLOBAL_DATA_SET_CURRENCY_SYMBOL,EnumPermission.GLOBAL_DATA_SET_TRANSACTION_LIMIT,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_WIDTH,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_HEIGHT,EnumPermission.GLOBAL_DATA_SET_MINIMUM_WAGE,EnumPermission.GLOBAL_DATA_ADD_UI_THEME,EnumPermission.GLOBAL_DATA_REMOVE_UI_THEME,EnumPermission.GLOBAL_DATA_SET_DEFAULT_UI_THEME])}">
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_OPTIMAL_CIVIL_MANAGER_COUNT)}">
+							<h:outputLabel for="optimalManagerCountInputNumber"
+								value="#{msg['lucas.application.globalDataScreen.optimalManagerCountInputNumber.name']}"
+								title="#{msg['lucas.application.globalDataScreen.optimalManagerCountInputNumber.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_MIN_CIVIL_MANAGER_SCHOOL_GRADE)}">
+							<h:outputLabel for="minCivilManagerSchoolGradeSelectOne"
+								value="#{msg['lucas.application.globalDataScreen.minCivilManagerSchoolGradeSelectOne.name']}"
+								title="#{msg['lucas.application.globalDataScreen.minCivilManagerSchoolGradeSelectOne.tooltip']}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_OPTIMAL_CIVIL_MANAGER_COUNT)}">
+							<p:inputNumber id="optimalManagerCountInputNumber"
+								readonly="#{not loginBean.hasPermission(EnumPermission.GLOBAL_DATA_SET_OPTIMAL_CIVIL_MANAGER_COUNT)}"
+								title="#{msg['lucas.application.globalDataScreen.optimalManagerCountInputNumber.tooltip']}"
+								value="#{globalDataBean.optimalManagerCount}" minValue="1"
+								decimalPlaces="0" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_MIN_CIVIL_MANAGER_SCHOOL_GRADE)}">
+							<p:selectOneMenu id="minCivilManagerSchoolGradeSelectOne"
+								disabled="#{not loginBean.hasPermission(EnumPermission.GLOBAL_DATA_SET_MIN_CIVIL_MANAGER_SCHOOL_GRADE)}"
+								title="#{msg['lucas.application.globalDataScreen.minCivilManagerSchoolGradeSelectOne.tooltip']}"
+								value="#{globalDataBean.minCivilManagerSchoolGrade}">
+								<f:selectItems value="#{EnumSchoolClass.GRADES}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column
+							rendered="#{loginBean.hasPermissionsOr([EnumPermission.GLOBAL_DATA_SET_MAX_IDLE_TIME,EnumPermission.GLOBAL_DATA_SET_CURRENCY_SYMBOL,EnumPermission.GLOBAL_DATA_SET_TRANSACTION_LIMIT,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_WIDTH,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_HEIGHT,EnumPermission.GLOBAL_DATA_SET_MINIMUM_WAGE,EnumPermission.GLOBAL_DATA_ADD_UI_THEME,EnumPermission.GLOBAL_DATA_REMOVE_UI_THEME,EnumPermission.GLOBAL_DATA_SET_DEFAULT_UI_THEME,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_UPLOAD_SIZE_BYTES,EnumPermission.GLOBAL_DATA_SET_OPTIMAL_CIVIL_MANAGER_COUNT,	EnumPermission.GLOBAL_DATA_SET_MIN_CIVIL_MANAGER_SCHOOL_GRADE])}">
 							<p:commandButton
 								value="#{msg['lucas.application.globalDataScreen.saveButton.name']}"
 								title="#{msg['lucas.application.globalDataScreen.saveButton.tooltip']}"

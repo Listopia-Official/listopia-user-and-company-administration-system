@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.NotBlank;
 
 import florian_haas.lucas.business.GlobalDataBeanLocal;
-import florian_haas.lucas.model.validation.ValidUITheme;
+import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.validation.*;
 import florian_haas.lucas.web.util.WebUtils;
@@ -62,6 +62,14 @@ public class GlobalDataBean implements Serializable {
 	private String defaultUiTheme = "omega";
 
 	private List<String> defaultUiThemeThemesList = new ArrayList<>();
+
+	@NotNull
+	@Min(1)
+	private Integer optimalManagerCount = 2;
+
+	@NotNull
+	@ValidSchoolGrade
+	private Integer minCivilManagerSchoolGrade = 8;
 
 	@Min(1)
 	@NotNull
@@ -151,6 +159,22 @@ public class GlobalDataBean implements Serializable {
 		this.maxUserImageUploadSizeBytes = maxUserImageUploadSizeBytes;
 	}
 
+	public Integer getOptimalManagerCount() {
+		return optimalManagerCount;
+	}
+
+	public void setOptimalManagerCount(Integer optimalManagerCount) {
+		this.optimalManagerCount = optimalManagerCount;
+	}
+
+	public Integer getMinCivilManagerSchoolGrade() {
+		return minCivilManagerSchoolGrade;
+	}
+
+	public void setMinCivilManagerSchoolGrade(Integer minCivilManagerSchoolGrade) {
+		this.minCivilManagerSchoolGrade = minCivilManagerSchoolGrade;
+	}
+
 	@PostConstruct
 	public void refresh() {
 		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_MAX_IDLE_TIME)) {
@@ -184,6 +208,12 @@ public class GlobalDataBean implements Serializable {
 		}
 		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_MAX_USER_IMAGE_UPLOAD_SIZE_BYTES)) {
 			maxUserImageUploadSizeBytes = globalDataBean.getMaxUserImageUploadSizeBytes();
+		}
+		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_OPTIMAL_CIVIL_MANAGER_COUNT)) {
+			optimalManagerCount = globalDataBean.getOptimalCivilManagerCount();
+		}
+		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_MIN_CIVIL_MANAGER_SCHOOL_GRADE)) {
+			minCivilManagerSchoolGrade = globalDataBean.getMinCivilManagerSchoolGrade();
 		}
 	}
 
@@ -221,6 +251,10 @@ public class GlobalDataBean implements Serializable {
 				"lucas.application.globalDataScreen.setDefaultUITheme");
 		changeValue(maxUserImageUploadSizeBytes, globalDataBean::setMaxUserImageUploadSizeBytes,
 				EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_UPLOAD_SIZE_BYTES, "lucas.application.globalDataScreen.setMaxUserImageUploadSizeBytes");
+		changeValue(optimalManagerCount, globalDataBean::setOptimalCivilManagerCount, EnumPermission.GLOBAL_DATA_SET_OPTIMAL_CIVIL_MANAGER_COUNT,
+				"lucas.application.globalDataScreen.setOptimalManagerCount");
+		changeValue(minCivilManagerSchoolGrade, globalDataBean::setMinCivilManagerSchoolGrade,
+				EnumPermission.GLOBAL_DATA_SET_MIN_CIVIL_MANAGER_SCHOOL_GRADE, "lucas.application.globalDataScreen.setMinCivilManagerSchoolGrade");
 	}
 
 	private <T> void changeValue(T value, Predicate<T> setter, EnumPermission permission, String messagePrefix) {

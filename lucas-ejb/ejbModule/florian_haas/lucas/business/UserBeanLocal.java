@@ -64,4 +64,13 @@ public interface UserBeanLocal {
 
 	public byte[] getImage(@ValidEntityId(entityClass = User.class) Long userId);
 
+	public Boolean setFirstJobRequest(@ValidEntityId(entityClass = User.class) Long userId,
+			@ValidEntityId(entityClass = Job.class, nullable = true) Long jobId);
+
+	public Boolean setSecondJobRequest(@ValidEntityId(entityClass = User.class) Long userId,
+			@ValidEntityId(entityClass = Job.class, nullable = true) Long jobId);
+
+	public Boolean setThirdJobRequest(@ValidEntityId(entityClass = User.class) Long userId,
+			@ValidEntityId(entityClass = Job.class, nullable = true) Long jobId);
+
 }

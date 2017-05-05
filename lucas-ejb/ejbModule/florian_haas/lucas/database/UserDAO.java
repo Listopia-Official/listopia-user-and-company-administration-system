@@ -13,4 +13,6 @@ public interface UserDAO extends DAO<User> {
 			Boolean useRanks, EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator, EnumQueryComparator surnameComparator,
 			EnumQueryComparator searchUserTypeComparator, EnumQueryComparator ranksComparator);
 
+	public List<User> getAllUsersWithJobRequests();
+
 }

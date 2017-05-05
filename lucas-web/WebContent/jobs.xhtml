@@ -1,0 +1,396 @@
+<ui:composition template="/WEB-INF/web/template/dataTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="sitePrefix" value="job" />
+	<ui:param name="siteBean" value="#{jobBean}" />
+	<ui:define name="dialogs">
+		<ui:include src="/WEB-INF/web/jobs/createJobDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/jobs/editJobDialog.xhtml" />
+	</ui:define>
+	<ui:define name="otherContent">
+		<p:importEnum type="florian_haas.lucas.model.EnumEmployeePosition" />
+		<p:importEnum type="florian_haas.lucas.model.EnumSalaryClass" />
+		<p:importConstants
+			type="florian_haas.lucas.database.EnumQueryComparator" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.EnumConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.NullConverterNoText" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.NullConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.CompanyConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.IntegerNullConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.EnumCollectionConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.BooleanConverter" />
+	</ui:define>
+	<ui:define name="buttonArea">
+		<p:toolbarGroup>
+			<p:commandButton resetValues="true"
+				rendered="#{loginBean.hasPermission(EnumPermission.JOB_CREATE)}"
+				value="#{msg['lucas.application.jobScreen.createJobButton.name']}"
+				title="#{msg['lucas.application.jobScreen.createJobButton.tooltip']}"
+				icon="fa fa-plus" oncomplete="PF('createJobDialog').show()"
+				action="#{jobBean.initCreateJobDialog}" process="@this"
+				update="createJobDialogForm" />
+			<ui:fragment
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.JOB_SET_NAME,EnumPermission.JOB_SET_DESCRIPTION,EnumPermission.JOB_SET_SALARY_CLASS,EnumPermission.JOB_SET_OPTIMAL_SCHOOL_GRADE,EnumPermission.JOB_SET_REQUIRED_EMPLOYMENT_COUNT,EnumPermission.JOB_SET_EMPLOYEE_POSITION])}">
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+				<p:commandButton
+					value="#{msg['lucas.application.jobScreen.editJobButton.name']}"
+					title="#{msg['lucas.application.jobScreen.editJobButton.tooltip']}"
+					icon="fa fa-edit" update="editJobDialogForm" process="@this"
+					action="#{jobBean.initEditJobDialog}"
+					oncomplete="PF('editJobDialog').show()"
+					disabled="#{jobBean.selectedEntities.size() != 1}" />
+			</ui:fragment>
+			<ui:fragment
+				rendered="#{loginBean.hasPermission(EnumPermission.JOB_DELETE)}">
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+				<p:commandButton icon="fa fa-remove" process="@this"
+					value="#{msg['lucas.application.jobScreen.removeJobButton.name']}"
+					title="#{msg['lucas.application.jobScreen.removeJobButton.tooltip']}"
+					update="dataAccorditionPanel:jobSearchResultsForm:jobSearchResultsTable"
+					disabled="#{jobBean.selectedEntities.size() &lt;= 0}"
+					action="#{jobBean.removeJobs}">
+					<p:confirm
+						header="#{msg['lucas.application.jobScreen.removeJobsConfirmDialog.header']}"
+						message="#{msg['lucas.application.jobScreen.removeJobsConfirmDialog.message']}" />
+				</p:commandButton>
+			</ui:fragment>
+		</p:toolbarGroup>
+	</ui:define>
+	<ui:define name="searchCriteria">
+		<p:row>
+			<p:column>
+				<p:selectBooleanCheckbox id="searchJobIdSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{jobBean.useSearchJobId}"
+					title="#{msg['lucas.application.jobScreen.searchJobIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="jobSearchCriteriaForm:searchJobIdInputNumber jobSearchCriteriaForm:searchJobIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchJobIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.jobScreen.searchJobIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.jobScreen.searchJobIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox id="searchJobNameSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{jobBean.useSearchJobName}"
+					title="#{msg['lucas.application.jobScreen.searchJobNameSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="jobSearchCriteriaForm:searchJobNameInputText jobSearchCriteriaForm:searchJobNameComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchJobNameSelectBooleanCheckbox"
+					value="#{msg['lucas.application.jobScreen.searchJobNameSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.jobScreen.searchJobNameSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchJobDescriptionSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{jobBean.useSearchJobDescription}"
+					title="#{msg['lucas.application.jobScreen.searchJobDescriptionSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="jobSearchCriteriaForm:searchJobDescriptionInputText jobSearchCriteriaForm:searchJobDescriptionComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchJobDescriptionSelectBooleanCheckbox"
+					value="#{msg['lucas.application.jobScreen.searchJobDescriptionSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.jobScreen.searchJobDescriptionSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchJobCompanyIdSelectBooleanCheckbox" styleClass="checkbox"
+					value="#{jobBean.useSearchJobCompanyId}"
+					title="#{msg['lucas.application.jobScreen.searchJobCompanyIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="jobSearchCriteriaForm:searchJobCompanyIdInputNumber jobSearchCriteriaForm:searchJobCompanyIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchJobCompanyIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.jobScreen.searchJobCompanyIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.jobScreen.searchJobCompanyIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchJobOptimalSchoolGradeSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{jobBean.useSearchJobOptimalSchoolGrade}"
+					title="#{msg['lucas.application.jobScreen.searchJobOptimalSchoolGradeSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="jobSearchCriteriaForm:searchJobOptimalSchoolGradeInputNumber jobSearchCriteriaForm:searchJobOptimalSchoolGradeComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchJobOptimalSchoolGradeSelectBooleanCheckbox"
+					value="#{msg['lucas.application.jobScreen.searchJobOptimalSchoolGradeSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.jobScreen.searchJobOptimalSchoolGradeSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchJobRequiredEmploymentsCountSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{jobBean.useSearchJobRequiredEmploymentsCount}"
+					title="#{msg['lucas.application.jobScreen.searchJobRequiredEmploymentsCountSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="jobSearchCriteriaForm:searchJobRequiredEmploymentsCountInputNumber jobSearchCriteriaForm:searchJobRequiredEmploymentsCountComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchJobRequiredEmploymentsCountSelectBooleanCheckbox"
+					value="#{msg['lucas.application.jobScreen.searchJobRequiredEmploymentsCountSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.jobScreen.searchJobRequiredEmploymentsCountSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchJobEmploymentIdSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{jobBean.useSearchJobEmploymentId}"
+					title="#{msg['lucas.application.jobScreen.searchJobEmploymentIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="jobSearchCriteriaForm:searchJobEmploymentIdInputNumber jobSearchCriteriaForm:searchJobEmploymentIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchJobEmploymentIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.jobScreen.searchJobEmploymentIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.jobScreen.searchJobEmploymentIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchJobEmployeePositionSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{jobBean.useSearchJobPosition}"
+					title="#{msg['lucas.application.jobScreen.searchJobEmployeePositionSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="jobSearchCriteriaForm:searchEmployeePositionSelectOneMenu jobSearchCriteriaForm:searchJobEmployeePositionComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchJobEmployeePositionSelectBooleanCheckbox"
+					value="#{msg['lucas.application.jobScreen.searchJobEmployeePositionSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.jobScreen.searchJobEmployeePositionSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchJobSalaryClassSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{jobBean.useSearchJobSalaryClass}"
+					title="#{msg['lucas.application.jobScreen.searchJobSalaryClassSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="jobSearchCriteriaForm:searchSalaryClassSelectOneMenu jobSearchCriteriaForm:searchJobSalaryClassComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchJobSalaryClassSelectBooleanCheckbox"
+					value="#{msg['lucas.application.jobScreen.searchJobSalaryClassSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.jobScreen.searchJobSalaryClassSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:selectOneMenu id="searchJobIdComparator"
+					disabled="#{not jobBean.useSearchJobId}"
+					value="#{jobBean.searchJobIdComparator}"
+					title="#{msg['lucas.application.jobScreen.searchJobIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchJobNameComparator"
+					disabled="#{not jobBean.useSearchJobName}"
+					value="#{jobBean.searchJobNameComparator}"
+					title="#{msg['lucas.application.jobScreen.searchJobNameComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchJobDescriptionComparator"
+					disabled="#{not jobBean.useSearchJobDescription}"
+					value="#{jobBean.searchJobDescriptionComparator}"
+					title="#{msg['lucas.application.jobScreen.searchJobDescriptionComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchJobCompanyIdComparator"
+					disabled="#{not jobBean.useSearchJobCompanyId}"
+					value="#{jobBean.searchJobCompanyIdComparator}"
+					title="#{msg['lucas.application.jobScreen.searchJobCompanyIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchJobOptimalSchoolGradeComparator"
+					disabled="#{not jobBean.useSearchJobOptimalSchoolGrade}"
+					value="#{jobBean.searchJobOptimalSchoolGradeComparator}"
+					title="#{msg['lucas.application.jobScreen.searchJobOptimalSchoolGradeComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchJobRequiredEmploymentsCountComparator"
+					disabled="#{not jobBean.useSearchJobRequiredEmploymentsCount}"
+					value="#{jobBean.searchJobRequiredEmploymentsCountComparator}"
+					title="#{msg['lucas.application.jobScreen.searchJobRequiredEmploymentsCountComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchJobEmployeePositionComparator"
+					disabled="#{not jobBean.useSearchJobPosition}"
+					value="#{jobBean.searchJobPositionComparator}"
+					title="#{msg['lucas.application.jobScreen.searchJobEmployeePositionComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchJobEmploymentIdComparator"
+					disabled="#{not jobBean.useSearchJobEmploymentId}"
+					value="#{jobBean.searchJobEmploymentIdComparator}"
+					title="#{msg['lucas.application.jobScreen.searchJobEmploymentIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchJobSalaryClassComparator"
+					disabled="#{not jobBean.useSearchJobSalaryClass}"
+					value="#{jobBean.searchJobSalaryClassComparator}"
+					title="#{msg['lucas.application.jobScreen.searchJobSalaryClassComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:inputNumber value="#{jobBean.searchJobId}" minValue="0"
+					decimalPlaces="0" id="searchJobIdInputNumber"
+					disabled="#{not jobBean.useSearchJobId}" />
+			</p:column>
+			<p:column>
+				<p:inputText value="#{jobBean.searchJobName}"
+					id="searchJobNameInputText"
+					disabled="#{not jobBean.useSearchJobName}" />
+			</p:column>
+			<p:column>
+				<p:inputText value="#{jobBean.searchJobDescription}"
+					id="searchJobDescriptionInputText"
+					converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}"
+					disabled="#{not jobBean.useSearchJobDescription}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{jobBean.searchJobCompanyId}" minValue="0"
+					decimalPlaces="0" id="searchJobCompanyIdInputNumber"
+					disabled="#{not jobBean.useSearchJobCompanyId}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{jobBean.searchJobOptimalSchoolGrade}"
+					minValue="0" decimalPlaces="0"
+					id="searchJobOptimalSchoolGradeInputNumber"
+					disabled="#{not jobBean.useSearchJobOptimalSchoolGrade}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{jobBean.searchJobRequiredEmploymentsCount}"
+					minValue="0" decimalPlaces="0"
+					id="searchJobRequiredEmploymentsCountInputNumber"
+					disabled="#{not jobBean.useSearchJobRequiredEmploymentsCount}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{jobBean.searchJobEmploymentId}" minValue="0"
+					decimalPlaces="0" id="searchJobEmploymentIdInputNumber"
+					disabled="#{not jobBean.useSearchJobEmploymentId}" />
+			</p:column>
+			<p:column>
+				<p:selectOneMenu value="#{jobBean.searchJobPosition}"
+					id="searchEmployeePositionSelectOneMenu"
+					disabled="#{not jobBean.useSearchJobPosition}">
+					<f:selectItems value="#{EnumEmployeePosition.ALL_VALUES}"
+						var="employeePosition" itemValue="#{employeePosition}"
+						itemLabel="#{converterBean.convertEnum(employeePosition)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu value="#{jobBean.searchJobSalaryClass}"
+					id="searchSalaryClassSelectOneMenu"
+					disabled="#{not jobBean.useSearchJobSalaryClass}">
+					<f:selectItems value="#{EnumSalaryClass.ALL_VALUES}"
+						var="salaryClass" itemValue="#{salaryClass}"
+						itemLabel="#{converterBean.convertEnum(salaryClass)}" />
+				</p:selectOneMenu>
+			</p:column>
+		</p:row>
+	</ui:define>
+	<ui:define name="searchResults">
+		<p:column exportable="#{jobBean.resultsDatatableColumns[0]}"
+			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.idColumn.name']}"
+			sortBy="#{entity.id}" visible="#{jobBean.resultsDatatableColumns[0]}">
+			<h:outputText value="#{entity.id}" />
+		</p:column>
+		<p:column exportable="#{jobBean.resultsDatatableColumns[1]}"
+			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.nameColumn.name']}"
+			sortBy="#{entity.name}"
+			visible="#{jobBean.resultsDatatableColumns[1]}">
+			<h:outputText value="#{entity.name}" />
+		</p:column>
+		<p:column exportable="#{jobBean.resultsDatatableColumns[2]}"
+			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.descriptionColumn.name']}"
+			sortBy="#{entity.description}"
+			visible="#{jobBean.resultsDatatableColumns[2]}">
+			<h:outputText value="#{entity.description}"
+				converter="#{converterBean.getConverter(NullConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column exportable="#{jobBean.resultsDatatableColumns[3]}"
+			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.companyColumn.name']}"
+			sortBy="#{entity.company}"
+			visible="#{jobBean.resultsDatatableColumns[3]}">
+			<h:outputText value="#{entity.company}"
+				converter="#{converterBean.getConverter(CompanyConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column exportable="#{jobBean.resultsDatatableColumns[4]}"
+			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.optimalSchoolGradeColumn.name']}"
+			sortBy="#{entity.optimalSchoolGrade}"
+			visible="#{jobBean.resultsDatatableColumns[4]}">
+			<h:outputText value="#{entity.optimalSchoolGrade}"
+				converter="#{converterBean.getConverter(IntegerNullConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column exportable="#{jobBean.resultsDatatableColumns[5]}"
+			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.requiredEmploymentsCountColumn.name']}"
+			sortBy="#{entity.requiredEmploymentsCount}"
+			visible="#{jobBean.resultsDatatableColumns[5]}">
+			<h:outputText value="#{entity.requiredEmploymentsCount}" />
+		</p:column>
+		<p:column exportable="#{jobBean.resultsDatatableColumns[6]}"
+			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.employeePositionColumn.name']}"
+			sortBy="#{entity.employeePosition}"
+			visible="#{jobBean.resultsDatatableColumns[6]}">
+			<h:outputText value="#{entity.employeePosition}"
+				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column exportable="#{jobBean.resultsDatatableColumns[7]}"
+			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.salaryClassColumn.name']}"
+			sortBy="#{entity.salaryClass}"
+			visible="#{jobBean.resultsDatatableColumns[7]}">
+			<h:outputText value="#{entity.salaryClass}"
+				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
+		</p:column>
+	</ui:define>
+</ui:composition>

@@ -15,13 +15,13 @@
 		<class>florian_haas.lucas.model.AttendanceActivityLog</class>
 		<class>florian_haas.lucas.model.AttendanceLog</class>
 		<class>florian_haas.lucas.model.Employment</class>
-		<class>florian_haas.lucas.model.SalaryData</class>
 		<class>florian_haas.lucas.model.Item</class>
 		<class>florian_haas.lucas.model.PurchaseLog</class>
 		<class>florian_haas.lucas.model.Taxdata</class>
 		<class>florian_haas.lucas.model.SalaryAttendancedata</class>
 		<class>florian_haas.lucas.model.Room</class>
 		<class>florian_haas.lucas.model.RoomSection</class>
+		<class>florian_haas.lucas.model.Job</class>
 		<properties>
 			<property name="javax.persistence.schema-generation.database.action" value="create"/>
 			<property name="javax.persistence.schema-generation.scripts.action" value="create"/>

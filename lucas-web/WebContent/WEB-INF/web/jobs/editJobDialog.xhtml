@@ -1,0 +1,188 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.jobScreen.editJobDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="editJobDialog" />
+	<ui:param name="formId" value="editJobDialogForm" />
+	<ui:define name="dialogContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.NullConverterNoText" />
+		<p:importEnum type="florian_haas.lucas.model.EnumEmployeePosition" />
+		<p:importEnum type="florian_haas.lucas.model.EnumSalaryClass" />
+		<p:importEnum type="florian_haas.lucas.model.EnumWorkShift" />
+		<p:importConstants type="florian_haas.lucas.model.EnumSchoolClass" />
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.JOB_SET_NAME)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.jobScreen.editJobDialog.nameInputText.name']}"
+							title="#{msg['lucas.application.jobScreen.editJobDialog.nameInputText.tooltip']}"
+							for="nameInputText" />
+					</p:column>
+					<p:column>
+						<p:message for="nameInputText" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.JOB_SET_NAME)}">
+					<p:column colspan="2">
+						<p:inputText id="nameInputText"
+							value="#{jobBean.editJobDialogName}"
+							title="#{msg['lucas.application.jobScreen.editJobDialog.nameInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.JOB_SET_DESCRIPTION)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.jobScreen.editJobDialog.descriptionInputTextarea.name']}"
+							title="#{msg['lucas.application.jobScreen.editJobDialog.descriptionInputTextarea.tooltip']}"
+							for="descriptionInputTextarea" />
+					</p:column>
+					<p:column>
+						<p:message for="descriptionInputTextarea" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.JOB_SET_DESCRIPTION)}">
+					<p:column colspan="2" style="padding-bottom:0px">
+						<p:inputTextarea id="descriptionInputTextarea" scrollHeight="200"
+							style="resize: none;" autoResize="false" maxlength="255"
+							counter="descriptionInputTextareaOutputText"
+							value="#{jobBean.editJobDialogDescription}"
+							converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}"
+							counterTemplate="{0}#{msg['lucas.application.jobScreen.editJobDialog.descriptionInputTextarea.remainingCharacters']}"
+							title="#{msg['lucas.application.jobScreen.editJobDialog.descriptionInputTextarea.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.JOB_SET_DESCRIPTION)}">
+					<p:column colspan="2" style="padding-bottom:0px;padding-top:0px">
+						<h:outputText id="descriptionInputTextareaOutputText"
+							style="float:right;font-style:italic" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.JOB_SET_EMPLOYEE_POSITION)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.jobScreen.editJobDialog.positionSelectOneMenu.name']}"
+							title="#{msg['lucas.application.jobScreen.editJobDialog.positionSelectOneMenu.tooltip']}"
+							for="positionSelectOneMenu" />
+					</p:column>
+					<p:column>
+						<p:message for="positionSelectOneMenu" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.JOB_SET_EMPLOYEE_POSITION)}">
+					<p:column colspan="2">
+						<p:selectOneMenu id="positionSelectOneMenu"
+							value="#{jobBean.editJobDialogPosition}"
+							title="#{msg['lucas.application.jobScreen.editJobDialog.positionSelectOneMenu.tooltip']}">
+							<f:selectItems value="#{EnumEmployeePosition.ALL_VALUES}"
+								var="position" itemValue="#{position}"
+								itemLabel="#{converterBean.convertEnum(position)}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.JOB_SET_OPTIMAL_SCHOOL_GRADE)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.jobScreen.editJobDialog.optimalSchoolGradeInputNumber.name']}"
+							title="#{msg['lucas.application.jobScreen.editJobDialog.optimalSchoolGradeInputNumber.tooltip']}"
+							for="optimalSchoolGradeInputNumber" />
+					</p:column>
+					<p:column>
+						<p:message for="optimalSchoolGradeInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.JOB_SET_OPTIMAL_SCHOOL_GRADE)}">
+					<p:column colspan="2">
+						<p:selectOneMenu id="optimalSchoolGradeInputNumber"
+							title="#{msg['lucas.application.jobScreen.editJobDialog.optimalSchoolGradeInputNumber.tooltip']}"
+							value="#{jobBean.editJobDialogOptimalSchoolGrade}">
+							<f:selectItems value="#{EnumSchoolClass.GRADES}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.JOB_SET_REQUIRED_EMPLOYMENT_COUNT)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.jobScreen.editJobDialog.requiredEmploymentsCountInputNumber.name']}"
+							title="#{msg['lucas.application.jobScreen.editJobDialog.requiredEmploymentsCountInputNumber.tooltip']}"
+							for="requiredEmploymentsCountInputNumber" />
+					</p:column>
+					<p:column>
+						<p:message for="requiredEmploymentsCountInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.JOB_SET_REQUIRED_EMPLOYMENT_COUNT)}">
+					<p:column colspan="2">
+						<p:inputNumber
+							value="#{jobBean.editJobDialogRequiredEmploymentsCount}"
+							minValue="0" id="requiredEmploymentsCountInputNumber"
+							decimalPlaces="0"
+							title="#{msg['lucas.application.jobScreen.editJobDialog.requiredEmploymentsCountInputNumber.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.JOB_SET_SALARY_CLASS)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.jobScreen.editJobDialog.salaryClassSelectOneMenu.name']}"
+							title="#{msg['lucas.application.jobScreen.editJobDialog.salaryClassSelectOneMenu.tooltip']}"
+							for="salaryClassSelectOneMenu" />
+					</p:column>
+					<p:column>
+						<p:message for="salaryClassSelectOneMenu" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermission(EnumPermission.JOB_SET_SALARY_CLASS)}">
+					<p:column colspan="2">
+						<p:selectOneMenu id="salaryClassSelectOneMenu"
+							value="#{jobBean.editJobDialogSalaryClass}"
+							title="#{msg['lucas.application.jobScreen.editJobDialog.salaryClassSelectOneMenu.tooltip']}">
+							<f:selectItem value="#{null}"
+								itemLabel="#{msg['lucas.application.jobScreen.editJobDialog.salaryClassSelectOneMenu.none']}" />
+							<f:selectItems value="#{EnumSalaryClass.ALL_VALUES}"
+								var="salaryClass" itemValue="#{salaryClass}"
+								itemLabel="#{converterBean.convertEnum(salaryClass)}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this nameInputText descriptionInputTextarea positionSelectOneMenu requiredEmploymentsCountInputNumber optimalSchoolGradeInputNumber salaryClassSelectOneMenu"
+							update="@form dataAccorditionPanel:jobSearchResultsForm:jobSearchResultsTable"
+							action="#{jobBean.editJob}"
+							value="#{msg['lucas.application.jobScreen.editJobDialog.createJobButton.name']}"
+							title="#{msg['lucas.application.jobScreen.editJobDialog.createJobButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('editJobDialog').hide()}" />
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this" immediate="true"
+							value="#{msg['lucas.application.jobScreen.editJobDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.jobScreen.editJobDialog.cancelButton.tooltip']}"
+							oncomplete="PF('editJobDialog').hide()">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

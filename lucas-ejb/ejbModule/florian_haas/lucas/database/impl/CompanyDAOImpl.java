@@ -12,11 +12,11 @@ public class CompanyDAOImpl extends DAOImpl<Company> implements CompanyDAO {
 
 	@Override
 	public List<Company> findCompanies(Long companyId, String name, String description, Long roomSectionId, EnumCompanyType companyType,
-			Long parentCompanyId, Integer requiredEmployeesCount, Boolean areEmployeesRequired, Boolean useId, Boolean useName,
-			Boolean useDescription, Boolean useRoomSectionId, Boolean useCompanyType, Boolean useParentCompanyId, Boolean useRequiredEmployeesCount,
-			Boolean useAreEmployeesRequired, EnumQueryComparator idComparator, EnumQueryComparator nameComparator,
-			EnumQueryComparator descriptionComparator, EnumQueryComparator roomSectionIdComparator, EnumQueryComparator companyTypeComparator,
-			EnumQueryComparator parentCompanyIdComparator, EnumQueryComparator requiredEmployeesCountComparator) {
+			Long parentCompanyId, Long jobId, Boolean areEmployeesRequired, Boolean useId, Boolean useName, Boolean useDescription,
+			Boolean useRoomSectionId, Boolean useCompanyType, Boolean useParentCompanyId, Boolean useJobId, Boolean useAreEmployeesRequired,
+			EnumQueryComparator idComparator, EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator,
+			EnumQueryComparator roomSectionIdComparator, EnumQueryComparator companyTypeComparator, EnumQueryComparator parentCompanyIdComparator,
+			EnumQueryComparator jobIdComparator) {
 		return this.readOnlyCriteriaQuery((query, root, builder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 
@@ -28,15 +28,14 @@ public class CompanyDAOImpl extends DAOImpl<Company> implements CompanyDAO {
 			getSingularRestriction(Company_.companyType, companyType, useCompanyType, companyTypeComparator, predicates, builder, root);
 			getSingularRestriction(Company_.id, parentCompanyId, useParentCompanyId, parentCompanyIdComparator, predicates, builder,
 					root.get(Company_.parentCompany));
-			getSingularRestriction(Company_.requiredEmployeesCount, requiredEmployeesCount, useRequiredEmployeesCount,
-					requiredEmployeesCountComparator, predicates, builder, root);
+			getSingularRestriction(Job_.id, jobId, useJobId, jobIdComparator, predicates, builder, root.join(Company_.jobs, JoinType.LEFT));
 			if (useAreEmployeesRequired) {
 				Subquery<Long> subquery = query.subquery(Long.class);
-				Root<Employment> employmentRoot = subquery.from(Employment.class);
-				subquery.select(builder.count(employmentRoot));
-				subquery.where(builder.equal(employmentRoot.get(Employment_.position), EnumEmployeePosition.EMPLOYEE));
-				Predicate pred = builder.lessThan(subquery, builder.toLong(root.get(Company_.requiredEmployeesCount)));
-				if (!areEmployeesRequired) pred = pred.not();
+				Root<Job> jobRoot = subquery.from(Job.class);
+				subquery.select(builder.count(jobRoot));
+				subquery.where(builder.greaterThanOrEqualTo(builder.size(jobRoot.get(Job_.employments)), jobRoot.get(Job_.requiredEmploymentsCount)));
+				Predicate pred = builder.equal(subquery, builder.size(root.get(Company_.jobs)));
+				if (areEmployeesRequired) pred = pred.not();
 				predicates.add(pred);
 			}
 			return predicates;
@@ -54,5 +53,4 @@ public class CompanyDAOImpl extends DAOImpl<Company> implements CompanyDAO {
 			return root.join(Company_.section).get(RoomSection_.id);
 		});
 	}
-
 }

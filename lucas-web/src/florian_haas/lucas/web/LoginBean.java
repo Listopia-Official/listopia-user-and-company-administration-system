@@ -19,8 +19,8 @@ import florian_haas.lucas.model.LoginUser;
 import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
-import florian_haas.lucas.web.converter.ThemeConverter;
 import florian_haas.lucas.web.converter.LoginUserConverter.ShortLoginUserConverter;
+import florian_haas.lucas.web.converter.ThemeConverter;
 import florian_haas.lucas.web.util.WebUtils;
 
 @Named

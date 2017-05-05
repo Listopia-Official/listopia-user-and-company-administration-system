@@ -145,32 +145,10 @@
 					</p:column>
 					<p:column colspan="2" />
 				</p:row>
-				<p:row
-					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_REQUIRED_EMPLOYEES_COUNT)}">
-					<p:column>
-						<p:outputLabel
-							value="#{msg['lucas.application.companyScreen.editCompanyDialog.requiredEmployeesCountInputNumber.name']}"
-							title="#{msg['lucas.application.companyScreen.editCompanyDialog.requiredEmployeesCountInputNumber.tooltip']}"
-							for="requiredEmployeesCountInputNumber" />
-					</p:column>
-					<p:column colspan="2">
-						<p:message for="requiredEmployeesCountInputNumber" />
-					</p:column>
-				</p:row>
-				<p:row
-					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_REQUIRED_EMPLOYEES_COUNT)}">
-					<p:column colspan="3">
-						<p:inputNumber
-							value="#{companyBean.editCompanyDialogRequiredEmployeesCount}"
-							minValue="0" id="requiredEmployeesCountInputNumber"
-							decimalPlaces="0"
-							title="#{msg['lucas.application.companyScreen.editCompanyDialog.requiredEmployeesCountInputNumber.tooltip']}" />
-					</p:column>
-				</p:row>
 				<p:row>
 					<p:column>
 						<p:commandButton
-							process="@this nameInputText descriptionInputTextarea sectionIdInputNumber companyTypeSelectOneMenu parentCompanyInputNumber requiredEmployeesCountInputNumber"
+							process="@this nameInputText descriptionInputTextarea sectionIdInputNumber companyTypeSelectOneMenu parentCompanyInputNumber"
 							update="@form dataAccorditionPanel:companySearchResultsForm:companySearchResultsTable"
 							action="#{companyBean.editCompany}"
 							value="#{msg['lucas.application.companyScreen.editCompanyDialog.saveChangesButton.name']}"

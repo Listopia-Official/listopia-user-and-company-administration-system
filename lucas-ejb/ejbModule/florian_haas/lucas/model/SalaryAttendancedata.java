@@ -16,7 +16,7 @@ public class SalaryAttendancedata extends EntityBase {
 	@ManyToOne(optional = false)
 	@JoinColumn(nullable = false)
 	@NotNull
-	private SalaryData salaryData;
+	private Employment employment;
 
 	@Basic(optional = false)
 	@Column(nullable = false)
@@ -30,16 +30,16 @@ public class SalaryAttendancedata extends EntityBase {
 
 	SalaryAttendancedata() {}
 
-	public SalaryAttendancedata(SalaryData salaryData, LocalDate date) {
-		this.salaryData = salaryData;
+	public SalaryAttendancedata(Employment employment, LocalDate date) {
+		this.employment = employment;
 		this.date = date;
-		salaryData.getWorkShifts().forEach(shift -> {
+		employment.getWorkShifts().forEach(shift -> {
 			workShifts.put(shift, Boolean.FALSE);
 		});
 	}
 
-	public SalaryData getSalaryData() {
-		return this.salaryData;
+	public Employment getEmployment() {
+		return this.employment;
 	}
 
 	public LocalDate getDate() {

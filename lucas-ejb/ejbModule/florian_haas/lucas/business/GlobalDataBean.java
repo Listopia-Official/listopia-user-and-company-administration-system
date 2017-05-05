@@ -233,4 +233,38 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 		}
 		return Boolean.FALSE;
 	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_GET_OPTIMAL_CIVIL_MANAGER_COUNT)
+	public Integer getOptimalCivilManagerCount() {
+		return newInstance().getCivilCompanyOptimalManagerCount();
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_GET_MIN_CIVIL_MANAGER_SCHOOL_GRADE)
+	public Integer getMinCivilManagerSchoolGrade() {
+		return newInstance().getMinCivilManagerSchoolGrade();
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_SET_OPTIMAL_CIVIL_MANAGER_COUNT)
+	public Boolean setOptimalCivilManagerCount(Integer optimalCivilManagerCount) {
+		GlobalData newInstance = newInstance();
+		if (!newInstance.getCivilCompanyOptimalManagerCount().equals(optimalCivilManagerCount)) {
+			newInstance.setCivilCompanyOptimalManagerCount(optimalCivilManagerCount);
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_SET_MIN_CIVIL_MANAGER_SCHOOL_GRADE)
+	public Boolean setMinCivilManagerSchoolGrade(Integer minCivilManagerSchoolGrade) {
+		GlobalData newInstance = newInstance();
+		if (!newInstance.getMinCivilManagerSchoolGrade().equals(minCivilManagerSchoolGrade)) {
+			newInstance.setMinCivilManagerSchoolGrade(minCivilManagerSchoolGrade);
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
 }

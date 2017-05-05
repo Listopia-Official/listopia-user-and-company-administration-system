@@ -3,6 +3,7 @@ package florian_haas.lucas.business;
 import static florian_haas.lucas.security.EnumPermission.*;
 
 import java.time.LocalDate;
+import java.util.*;
 
 import javax.annotation.Resource;
 import javax.ejb.*;
@@ -14,6 +15,7 @@ import org.apache.shiro.authz.annotation.Logical;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
+import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.security.*;
 
 @Stateless
@@ -21,11 +23,19 @@ import florian_haas.lucas.security.*;
 @Secured
 public class EmploymentBean implements EmploymentBeanLocal {
 
+	@Inject
+	@JPADAO
+	private JobDAO jobDao;
+
 	@EJB
 	private CompanyBeanLocal companyBean;
 
 	@EJB
 	private UserBeanLocal userBean;
+
+	@Inject
+	@JPADAO
+	private UserDAO userDao;
 
 	@Inject
 	@JPADAO
@@ -46,85 +56,29 @@ public class EmploymentBean implements EmploymentBeanLocal {
 
 	@Override
 	@RequiresPermissions(value = {
-			EMPLOYMENT_CREATE_DEFAULT, COMPANY_CREATE }, logical = Logical.OR)
-	public Long addDefaultEmployment(Long userId, Long companyId, EnumEmployeePosition position) {
+			EMPLOYMENT_CREATE, COMPANY_CREATE }, logical = Logical.OR)
+	public Long createEmployment(Long userId, Long jobId, Set<EnumWorkShift> workShifts) {
 		User user = userBean.findById(userId);
-		Company company = companyBean.findById(companyId);
-		Employment employment = new Employment(user, company, position);
+		Job job = jobDao.findById(jobId);
+		Employment employment = new Employment(user, job, workShifts);
 		user.addEmployment(employment);
-		company.addEmployee(employment);
-		return employment.getId();
-	}
-
-	@Override
-	@RequiresPermissions(EMPLOYMENT_CREATE_ADVANCED)
-	public Long addAdvancedEmployment(Long userId, Long companyId, EnumEmployeePosition position, EnumSalaryClass salaryClass,
-			EnumWorkShift... workShifts) {
-		User user = userBean.findById(userId);
-		Company company = companyBean.findById(companyId);
-		Employment employment = new Employment(user, company, position, salaryClass, workShifts);
-		user.addEmployment(employment);
-		company.addEmployee(employment);
+		job.addEmployment(employment);
+		jobDao.flush();
 		return employment.getId();
 	}
 
 	@Override
 	@RequiresPermissions(EMPLOYMENT_REMOVE)
-	public void removeEmployment(Long employmentId) {
+	public Boolean removeEmployment(Long employmentId) {
 		Employment employment = employmentDao.findById(employmentId);
-		Company company = employment.getCompany();
-		User user = employment.getUser();
-		company.removeEmployee(employment);
-		user.removeEmployment(employment);
-	}
-
-	@Override
-	@RequiresPermissions(EMPLOYMENT_SET_EMPLOYEE_POSITION)
-	public Boolean setEmployeePosition(Long employmentId, EnumEmployeePosition position) {
-		Employment employment = employmentDao.findById(employmentId);
-		if (employment.getPosition() == position) return Boolean.FALSE;
-		employment.setPosition(position);
-		return Boolean.TRUE;
-	}
-
-	@Override
-	@RequiresPermissions(EMPLOYMENT_SET_SALARY_CLASS)
-	public Boolean setSalaryClass(Long employmentId, EnumSalaryClass salaryClass) {
-		Employment employment = employmentDao.findById(employmentId);
-		if (employment.getSalaryData() != null) {
-			if (employment.getSalaryData().getSalaryClass() == salaryClass) return Boolean.FALSE;
-			employment.getSalaryData().setSalaryClass(salaryClass);
-			return Boolean.TRUE;
-		}
-		return Boolean.FALSE;
-	}
-
-	@Override
-	@RequiresPermissions(EMPLOYMENT_ADD_WORK_SHIFT)
-	public Boolean addWorkShift(Long employmentId, EnumWorkShift workShift) {
-		Employment employment = employmentDao.findById(employmentId);
-		if (employment.getSalaryData() != null) { return employment.getSalaryData().addWorkShift(workShift); }
-		return Boolean.FALSE;
-	}
-
-	@Override
-	@RequiresPermissions(EMPLOYMENT_REMOVE_WORK_SHIFT)
-	public Boolean removeWorkShift(Long employmentId, EnumWorkShift workShift) {
-		Employment employment = employmentDao.findById(employmentId);
-		if (employment.getSalaryData() != null) { return employment.getSalaryData().removeWorkShift(workShift); }
-		return Boolean.FALSE;
+		return employment.getJob().removeEmployment(employment) && employment.getUser().removeEmployment(employment);
 	}
 
 	@Override
 	@RequiresPermissions(EMPLOYMENT_ADD_ATTENDANCEDATA)
 	public Boolean addAttendancedata(Long employmentId, LocalDate date) {
 		Employment employment = employmentDao.findById(employmentId);
-		if (employment.getSalaryData() != null) {
-			SalaryData salaryData = employment.getSalaryData();
-			SalaryAttendancedata attendancedata = new SalaryAttendancedata(salaryData, date);
-			return salaryData.addAttendancedata(attendancedata);
-		}
-		return Boolean.FALSE;
+		return employment.addAttendancedata(new SalaryAttendancedata(employment, date));
 	}
 
 	@Override
@@ -155,9 +109,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@RequiresPermissions(EMPLOYMENT_REMOVE_ATTENDANCEDATA)
 	public Boolean removeAttendancedata(Long employmentId, Long attendancedataKey) {
 		Employment employment = employmentDao.findById(employmentId);
-		SalaryAttendancedata attendancedata = salaryAttendancedataDAO.findById(attendancedataKey);
-		if (employment.getSalaryData() != null) return employment.getSalaryData().removeAttendancedata(attendancedata);
-		return Boolean.FALSE;
+		return employment.removeAttendancedata(salaryAttendancedataDAO.findById(attendancedataKey));
 	}
 
 	@Override
@@ -165,18 +117,59 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	public void paySalary(Long companyId, LocalDate date, EnumWorkShift shift) {
 		Company company = companyBean.findById(companyId);
 		company.getEmployees().forEach(employee -> {
-			if (employee.getSalaryData() != null) {
-				SalaryData salaryData = employee.getSalaryData();
-				for (SalaryAttendancedata attendancedata : salaryData.getAttendancedata()) {
+			Job job = employee.getJob();
+			if (!employee.getWorkShifts().isEmpty() && job.getSalaryClass() != null) {
+				for (SalaryAttendancedata attendancedata : employee.getAttendancedata()) {
 					if (attendancedata.getDate().equals(date) && attendancedata.getWorkShifts().containsKey(shift)
 							&& attendancedata.getWorkShifts().get(shift) == Boolean.TRUE) {
 						accountBean.transaction(company.getAccount().getId(), employee.getUser().getAccount().getId(),
-								globalDataBean.getSalaries().get(salaryData.getSalaryClass()),
+								globalDataBean.getSalaries().get(employee.getJob().getSalaryClass()),
 								"Salary from " + company.getName() + " at " + date.toString() + " for shift " + shift.name());
 						break;
 					}
 				}
 			}
 		});
+	}
+
+	@Override
+	@RequiresPermissions(EMPLOYMENT_FIND_BY_ID)
+	public Employment findById(@ValidEntityId(entityClass = Employment.class) Long employmentId) {
+		return employmentDao.findById(employmentId);
+	}
+
+	@Override
+	@RequiresPermissions(EMPLOYMENT_FIND_ALL)
+	public List<Employment> findAll() {
+		return employmentDao.findAll();
+	}
+
+	@Override
+	@RequiresPermissions(EMPLOYMENT_FIND_DYNAMIC)
+	public List<Employment> findEmployments(Long employmentId, Long userId, Long jobId, Set<EnumWorkShift> workShifts, Boolean useEmploymentId,
+			Boolean useUserId, Boolean useJobId, Boolean useWorkShifts, EnumQueryComparator employmentIdComparator,
+			EnumQueryComparator userIdComparator, EnumQueryComparator jobIdComparator, EnumQueryComparator workShiftsComparator) {
+		return employmentDao.findEmployments(employmentId, userId, jobId, workShifts, useEmploymentId, useUserId, useJobId, useWorkShifts,
+				employmentIdComparator, userIdComparator, jobIdComparator, workShiftsComparator);
+	}
+
+	@Override
+	@RequiresPermissions(EMPLOYMENT_ADD_WORK_SHIFT)
+	public Boolean addWorkShift(Long employmentId, EnumWorkShift shift) {
+		Employment employment = employmentDao.findById(employmentId);
+		return employment.addWorkShift(shift);
+	}
+
+	@Override
+	@RequiresPermissions(EMPLOYMENT_REMOVE_WORK_SHIFT)
+	public Boolean removeWorkShift(Long employmentId, EnumWorkShift shift) {
+		Employment employment = employmentDao.findById(employmentId);
+		return employment.removeWorkShift(shift);
+	}
+
+	@Override
+	@RequiresPermissions(EMPLOYMENT_FIND_BY_ID)
+	public Set<EnumWorkShift> getWorkShifts(Long employmentId) {
+		return employmentDao.findById(employmentId).getWorkShifts();
 	}
 }

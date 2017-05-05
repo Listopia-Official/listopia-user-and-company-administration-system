@@ -18,6 +18,7 @@ import florian_haas.lucas.business.*;
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
+import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.util.validation.*;
@@ -36,6 +37,12 @@ public class UserBean extends BaseBean<User> {
 
 	@EJB
 	private UserBeanLocal userBean;
+
+	@EJB
+	private EntityBeanLocal entityBean;
+
+	@EJB
+	private JobBeanLocal jobBean;
 
 	@EJB
 	private GlobalDataBeanLocal globalDataBean;
@@ -1004,7 +1011,96 @@ public class UserBean extends BaseBean<User> {
 	}
 
 	/*
-	 * -------------------- User Cardö Manager Dialog End --------------------
+	 * -------------------- User Card Manager Dialog End --------------------
+	 */
+
+	/*
+	 * -------------------- Job Requests Manager Dialog Start --------------------
+	 */
+
+	private User jobRequestsManagerDialogSelectedUser;
+
+	@ValidEntityId(entityClass = Job.class, nullable = true)
+	private Long jobRequestsManagerDialogFirstJobRequestId;
+
+	@ValidEntityId(entityClass = Job.class, nullable = true)
+	private Long jobRequestsManagerDialogSecondJobRequestId;
+
+	@ValidEntityId(entityClass = Job.class, nullable = true)
+	private Long jobRequestsManagerDialogThirdJobRequestId;
+
+	public Long getJobRequestsManagerDialogFirstJobRequestId() {
+		return this.jobRequestsManagerDialogFirstJobRequestId;
+	}
+
+	public void setJobRequestsManagerDialogFirstJobRequestId(Long jobRequestsManagerDialogFirstJobRequestId) {
+		this.jobRequestsManagerDialogFirstJobRequestId = jobRequestsManagerDialogFirstJobRequestId;
+	}
+
+	public Long getJobRequestsManagerDialogSecondJobRequestId() {
+		return this.jobRequestsManagerDialogSecondJobRequestId;
+	}
+
+	public void setJobRequestsManagerDialogSecondJobRequestId(Long jobRequestsManagerDialogSecondJobRequestId) {
+		this.jobRequestsManagerDialogSecondJobRequestId = jobRequestsManagerDialogSecondJobRequestId;
+	}
+
+	public Long getJobRequestsManagerDialogThirdJobRequestId() {
+		return this.jobRequestsManagerDialogThirdJobRequestId;
+	}
+
+	public void setJobRequestsManagerDialogThirdJobRequestId(Long jobRequestsManagerDialogThirdJobRequestId) {
+		this.jobRequestsManagerDialogThirdJobRequestId = jobRequestsManagerDialogThirdJobRequestId;
+	}
+
+	public String getJobRequestsManagerDialogJobFromIdFirst() {
+		return getJobRequestsManagerDialogJobFromIdHelper(jobRequestsManagerDialogFirstJobRequestId);
+	}
+
+	public String getJobRequestsManagerDialogJobFromIdSecond() {
+		return getJobRequestsManagerDialogJobFromIdHelper(jobRequestsManagerDialogSecondJobRequestId);
+	}
+
+	public String getJobRequestsManagerDialogJobFromIdThird() {
+		return getJobRequestsManagerDialogJobFromIdHelper(jobRequestsManagerDialogThirdJobRequestId);
+	}
+
+	private String getJobRequestsManagerDialogJobFromIdHelper(Long jobId) {
+		Job job = jobId != null ? entityBean.exists(jobId, Job.class) ? jobBean.findById(jobId) : null : null;
+		return WebUtils.getAsString(job, JobConverter.CONVERTER_ID);
+	}
+
+	public void initJobRequestsManagerDialog() {
+		if (!selectedEntities.isEmpty()) {
+			jobRequestsManagerDialogSelectedUser = selectedEntities.get(0);
+			jobRequestsManagerDialogFirstJobRequestId = jobRequestsManagerDialogSelectedUser.getFirstJobRequest() != null
+					? jobRequestsManagerDialogSelectedUser.getFirstJobRequest().getId() : null;
+			jobRequestsManagerDialogSecondJobRequestId = jobRequestsManagerDialogSelectedUser.getSecondJobRequest() != null
+					? jobRequestsManagerDialogSelectedUser.getSecondJobRequest().getId() : null;
+			jobRequestsManagerDialogThirdJobRequestId = jobRequestsManagerDialogSelectedUser.getThirdJobRequest() != null
+					? jobRequestsManagerDialogSelectedUser.getThirdJobRequest().getId() : null;
+		}
+	}
+
+	public void editJobRequests() {
+		if (jobRequestsManagerDialogSelectedUser != null) {
+			WebUtils.executeTask(params -> {
+				Long id = jobRequestsManagerDialogSelectedUser.getId();
+				if (WebUtils.isPermitted(EnumPermission.USER_SET_JOB_REQUESTS)) {
+					userBean.setFirstJobRequest(id, jobRequestsManagerDialogFirstJobRequestId);
+					userBean.setSecondJobRequest(id, jobRequestsManagerDialogSecondJobRequestId);
+					userBean.setThirdJobRequest(id, jobRequestsManagerDialogThirdJobRequestId);
+				}
+				User tmp2 = userBean.findById(id);
+				WebUtils.refreshEntities(User.class, searchResults, selectedEntities, tmp2, userBean::findById, true);
+				return true;
+			}, "lucas.application.userScreen.editJobRequests.message",
+					Utils.asList(WebUtils.getAsString(jobRequestsManagerDialogSelectedUser, UserConverter.CONVERTER_ID)));
+		}
+	}
+
+	/*
+	 * -------------------- Job Requests Manager Dialog End --------------------
 	 */
 
 }

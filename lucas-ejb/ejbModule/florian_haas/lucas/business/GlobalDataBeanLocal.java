@@ -40,6 +40,10 @@ public interface GlobalDataBeanLocal {
 
 	public Long getMaxUserImageUploadSizeBytes();
 
+	public Integer getOptimalCivilManagerCount();
+
+	public Integer getMinCivilManagerSchoolGrade();
+
 	public Boolean setSalary(@NotNull EnumSalaryClass salaryClass, @MinimumWage BigDecimal salary);
 
 	public Boolean setMinTimePresent(@NotNull @Min(1) Long minTimePresent);
@@ -65,5 +69,9 @@ public interface GlobalDataBeanLocal {
 	public Boolean removeUITheme(@ValidUITheme @NotNull String uiTheme);
 
 	public Boolean setMaxUserImageUploadSizeBytes(@NotNull @Min(1) Long maxUserImageUploadSizeBytes);
+
+	public Boolean setOptimalCivilManagerCount(@NotNull @Min(1) Integer optimalCivilManagerCount);
+
+	public Boolean setMinCivilManagerSchoolGrade(@NotNull @ValidSchoolGrade Integer minCivilManagerSchoolGrade);
 
 }

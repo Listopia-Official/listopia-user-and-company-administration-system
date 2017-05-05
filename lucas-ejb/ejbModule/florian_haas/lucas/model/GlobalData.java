@@ -78,6 +78,15 @@ public class GlobalData extends EntityBase {
 	@NotNull
 	private Long maxUserImageUploadSizeByte = 1000000l;
 
+	@Basic(optional = false)
+	@NotNull
+	@Min(1)
+	private Integer civilCompanyOptimalManagerCount = 2;
+
+	@ValidSchoolGrade
+	@NotNull
+	private Integer minCivilManagerSchoolGrade = 8;
+
 	public Map<EnumSalaryClass, BigDecimal> getSalaries() {
 		return Collections.unmodifiableMap(salaries);
 	}
@@ -176,6 +185,22 @@ public class GlobalData extends EntityBase {
 
 	public void setMaxUserImageUploadSizeByte(Long maxUserImageUploadSizeByte) {
 		this.maxUserImageUploadSizeByte = maxUserImageUploadSizeByte;
+	}
+
+	public Integer getCivilCompanyOptimalManagerCount() {
+		return civilCompanyOptimalManagerCount;
+	}
+
+	public void setCivilCompanyOptimalManagerCount(Integer civilCompanyOptimalManagerCount) {
+		this.civilCompanyOptimalManagerCount = civilCompanyOptimalManagerCount;
+	}
+
+	public Integer getMinCivilManagerSchoolGrade() {
+		return minCivilManagerSchoolGrade;
+	}
+
+	public void setMinCivilManagerSchoolGrade(Integer minCivilManagerSchoolGrade) {
+		this.minCivilManagerSchoolGrade = minCivilManagerSchoolGrade;
 	}
 
 }

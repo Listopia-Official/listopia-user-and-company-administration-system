@@ -13,6 +13,7 @@
 				value="#{msg['lucas.application.mainScreen.navigationMenu.communicationSubmenu.notificationsMenuItem.name']}" />
 		</p:submenu>
 		<p:submenu
+			rendered="#{loginBean.hasPermissionsOr([EnumPermission.USER_ACCESS_VIEW,EnumPermission.COMPANY_ACCESS_VIEW,EnumPermission.ROOM_ACCESS_VIEW])}"
 			label="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.name']}">
 			<p:menuitem outcome="/users.xhtml"
 				rendered="#{loginBean.hasPermission(EnumPermission.USER_ACCESS_VIEW)}"
@@ -20,11 +21,19 @@
 			<p:menuitem outcome="/companies.xhtml"
 				rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_ACCESS_VIEW)}"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.companiesMenuItem.name']}" />
-			<p:menuitem disabled="true"
-				value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.employmentsMenuItem.name']}" />
 			<p:menuitem outcome="/rooms.xhtml"
 				rendered="#{loginBean.hasPermission(EnumPermission.ROOM_ACCESS_VIEW)}"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.roomsMenuItem.name']}" />
+		</p:submenu>
+		<p:submenu
+			rendered="#{loginBean.hasPermissionsOr([EnumPermission.JOB_ACCESS_VIEW,EnumPermission.EMPLOYMENT_ACCESS_VIEW])}"
+			label="#{msg['lucas.application.mainScreen.navigationMenu.workSubmenu.name']}">
+			<p:menuitem outcome="/jobs.xhtml"
+				rendered="#{loginBean.hasPermission(EnumPermission.JOB_ACCESS_VIEW)}"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.jobsMenuItem.name']}" />
+			<p:menuitem outcome="/employments.xhtml"
+				rendered="#{loginBean.hasPermission(EnumPermission.EMPLOYMENT_ACCESS_VIEW)}"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.employmentsMenuItem.name']}" />
 		</p:submenu>
 		<p:submenu
 			label="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.name']}">

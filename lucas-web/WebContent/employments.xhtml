@@ -1,0 +1,221 @@
+<ui:composition template="/WEB-INF/web/template/dataTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="sitePrefix" value="employment" />
+	<ui:param name="siteBean" value="#{employmentBean}" />
+	<ui:define name="dialogs">
+		<ui:include
+			src="/WEB-INF/web/employments/createEmploymentDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/employments/editEmploymentDialog.xhtml" />
+	</ui:define>
+	<ui:define name="otherContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.EnumConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.UserConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.EnumCollectionConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.JobConverter" />
+		<p:importEnum type="florian_haas.lucas.model.EnumWorkShift" />
+	</ui:define>
+	<ui:define name="buttonArea">
+		<p:toolbarGroup>
+			<p:commandButton resetValues="true"
+				rendered="#{loginBean.hasPermission(EnumPermission.EMPLOYMENT_CREATE)}"
+				value="#{msg['lucas.application.employmentScreen.createEmploymentButton.name']}"
+				title="#{msg['lucas.application.employmentScreen.createEmploymentButton.tooltip']}"
+				icon="fa fa-plus" oncomplete="PF('createEmploymentDialog').show()"
+				action="#{employmentBean.initCreateEmploymentDialog}"
+				process="@this" update="createEmploymentDialogForm" />
+			<ui:fragment
+				rendered="#{loginBean.hasPermissionsAnd([EnumPermission.EMPLOYMENT_ADD_WORK_SHIFT,EnumPermission.EMPLOYMENT_REMOVE_WORK_SHIFT])}">
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+				<p:commandButton
+					value="#{msg['lucas.application.employmentScreen.editEmploymentButton.name']}"
+					title="#{msg['lucas.application.employmentScreen.editEmploymentButton.tooltip']}"
+					icon="fa fa-edit" update="editEmploymentDialogForm" process="@this"
+					action="#{employmentBean.initEditEmploymentDialog}"
+					oncomplete="PF('editEmploymentDialog').show()"
+					disabled="#{employmentBean.selectedEntities.size() != 1}" />
+			</ui:fragment>
+			<ui:fragment
+				rendered="#{loginBean.hasPermission(EnumPermission.EMPLOYMENT_REMOVE)}">
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+				<p:commandButton icon="fa fa-remove" process="@this"
+					update="dataAccorditionPanel:employmentSearchResultsForm:employmentSearchResultsTable"
+					value="#{msg['lucas.application.employmentScreen.removeEmploymentButton.name']}"
+					title="#{msg['lucas.application.employmentScreen.removeEmploymentButton.tooltip']}"
+					disabled="#{employmentBean.selectedEntities.size() &lt;= 0}"
+					action="#{employmentBean.removeEmployments}">
+					<p:confirm
+						header="#{msg['lucas.application.employmentScreen.removeEmploymentsConfirmDialog.header']}"
+						message="#{msg['lucas.application.employmentScreen.removeEmploymentsConfirmDialog.message']}" />
+				</p:commandButton>
+			</ui:fragment>
+		</p:toolbarGroup>
+	</ui:define>
+	<ui:define name="searchCriteria">
+		<p:row>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchEmploymentIdSelectBooleanCheckbox" styleClass="checkbox"
+					value="#{employmentBean.useSearchEmploymentId}"
+					title="#{msg['lucas.application.employmentScreen.searchEmploymentIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="employmentSearchCriteriaForm:searchEmploymentIdInputNumber employmentSearchCriteriaForm:searchEmploymentIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchEmploymentIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.employmentScreen.searchEmploymentIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.employmentScreen.searchEmploymentIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchEmploymentUserIdSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{employmentBean.useSearchEmploymentUserId}"
+					title="#{msg['lucas.application.employmentScreen.searchEmploymentUserIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="employmentSearchCriteriaForm:searchEmploymentUserIdInputNumber employmentSearchCriteriaForm:searchEmploymentUserIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchEmploymentUserIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.employmentScreen.searchEmploymentUserIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.employmentScreen.searchEmploymentUserIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchEmploymentJobIdSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{employmentBean.useSearchEmploymentJobId}"
+					title="#{msg['lucas.application.employmentScreen.searchEmploymentJobIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="employmentSearchCriteriaForm:searchEmploymentJobIdInputNumber employmentSearchCriteriaForm:searchEmploymentJobIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchEmploymentJobIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.employmentScreen.searchEmploymentJobIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.employmentScreen.searchEmploymentJobIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchEmploymentWorkShiftsSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{employmentBean.useSearchEmploymentWorkShifts}"
+					title="#{msg['lucas.application.employmentScreen.searchEmploymentWorkShiftsSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="employmentSearchCriteriaForm:searchWorkShiftsSelectCheckboxMenu employmentSearchCriteriaForm:searchEmploymentWorkShiftsComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchEmploymentWorkShiftsSelectBooleanCheckbox"
+					value="#{msg['lucas.application.employmentScreen.searchEmploymentWorkShiftsSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.employmentScreen.searchEmploymentWorkShiftsSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:selectOneMenu id="searchEmploymentIdComparator"
+					disabled="#{not employmentBean.useSearchEmploymentId}"
+					value="#{employmentBean.searchEmploymentIdComparator}"
+					title="#{msg['lucas.application.employmentScreen.searchEmploymentIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchEmploymentUserIdComparator"
+					disabled="#{not employmentBean.useSearchEmploymentUserId}"
+					value="#{employmentBean.searchEmploymentUserIdComparator}"
+					title="#{msg['lucas.application.employmentScreen.searchEmploymentUserIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchEmploymentJobIdComparator"
+					disabled="#{not employmentBean.useSearchEmploymentJobId}"
+					value="#{employmentBean.searchEmploymentJobIdComparator}"
+					title="#{msg['lucas.application.employmentScreen.searchEmploymentJobIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchEmploymentWorkShiftsComparator"
+					disabled="#{not employmentBean.useSearchEmploymentWorkShifts}"
+					value="#{employmentBean.searchEmploymentWorkShiftsComparator}"
+					title="#{msg['lucas.application.employmentScreen.searchEmploymentWorkShiftsComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.ARRAY_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:inputNumber value="#{employmentBean.searchEmploymentId}"
+					minValue="0" decimalPlaces="0" id="searchEmploymentIdInputNumber"
+					disabled="#{not employmentBean.useSearchEmploymentId}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{employmentBean.searchEmploymentUserId}"
+					minValue="0" decimalPlaces="0"
+					id="searchEmploymentUserIdInputNumber"
+					disabled="#{not employmentBean.useSearchEmploymentUserId}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{employmentBean.searchEmploymentJobId}"
+					minValue="0" decimalPlaces="0"
+					id="searchEmploymentJobIdInputNumber"
+					disabled="#{not employmentBean.useSearchEmploymentJobId}" />
+			</p:column>
+			<p:column>
+				<p:selectCheckboxMenu
+					value="#{employmentBean.searchEmploymentWorkShifts}"
+					multiple="true" id="searchWorkShiftsSelectCheckboxMenu"
+					disabled="#{not employmentBean.useSearchEmploymentWorkShifts}"
+					converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}">
+					<f:selectItems value="#{EnumWorkShift.ALL_VALUES}" var="workShift"
+						itemValue="#{workShift}"
+						itemLabel="#{converterBean.convertEnum(workShift)}" />
+				</p:selectCheckboxMenu>
+			</p:column>
+		</p:row>
+	</ui:define>
+	<ui:define name="searchResults">
+		<p:column exportable="#{employmentBean.resultsDatatableColumns[0]}"
+			headerText="#{msg['lucas.application.employmentScreen.employmentSearchResultsTable.idColumn.name']}"
+			sortBy="#{entity.id}"
+			visible="#{employmentBean.resultsDatatableColumns[0]}">
+			<h:outputText value="#{entity.id}" />
+		</p:column>
+		<p:column exportable="#{employmentBean.resultsDatatableColumns[1]}"
+			headerText="#{msg['lucas.application.employmentScreen.employmentSearchResultsTable.userColumn.name']}"
+			sortBy="#{entity.user}"
+			visible="#{employmentBean.resultsDatatableColumns[1]}">
+			<h:outputText value="#{entity.user}"
+				converter="#{converterBean.getConverter(UserConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column exportable="#{employmentBean.resultsDatatableColumns[2]}"
+			headerText="#{msg['lucas.application.employmentScreen.employmentSearchResultsTable.jobColumn.name']}"
+			sortBy="#{entity.company}"
+			visible="#{employmentBean.resultsDatatableColumns[2]}">
+			<h:outputText value="#{entity.job}"
+				converter="#{converterBean.getConverter(JobConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column exportable="#{employmentBean.resultsDatatableColumns[3]}"
+			headerText="#{msg['lucas.application.employmentScreen.employmentSearchResultsTable.workShiftsColumn.name']}"
+			sortable="false"
+			visible="#{employmentBean.resultsDatatableColumns[3]}">
+			<h:outputText value="#{entity.workShifts}" escape="false"
+				converter="#{converterBean.getConverter(EnumCollectionConverter.CONVERTER_ID)}" />
+		</p:column>
+	</ui:define>
+</ui:composition>

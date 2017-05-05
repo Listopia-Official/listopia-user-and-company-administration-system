@@ -1,0 +1,66 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.employmentScreen.editEmploymentDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="editEmploymentDialog" />
+	<ui:param name="formId" value="editEmploymentDialogForm" />
+	<ui:define name="dialogContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.NullConverterNoText" />
+		<p:importEnum type="florian_haas.lucas.model.EnumWorkShift" />
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row
+					rendered="#{loginBean.hasPermissionsAnd([EnumPermission.EMPLOYMENT_ADD_WORK_SHIFT,EnumPermission.EMPLOYMENT_REMOVE_WORK_SHIFT])}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.employmentScreen.editEmploymentDialog.workShiftsSelectCheckboxMenu.name']}"
+							title="#{msg['lucas.application.employmentScreen.editEmploymentDialog.workShiftsSelectCheckboxMenu.tooltip']}"
+							for="workShiftsSelectCheckboxMenu" />
+					</p:column>
+					<p:column>
+						<p:message for="workShiftsSelectCheckboxMenu" />
+					</p:column>
+				</p:row>
+				<p:row
+					rendered="#{loginBean.hasPermissionsAnd([EnumPermission.EMPLOYMENT_ADD_WORK_SHIFT,EnumPermission.EMPLOYMENT_REMOVE_WORK_SHIFT])}">
+					<p:column colspan="2">
+						<p:selectCheckboxMenu id="workShiftsSelectCheckboxMenu"
+							value="#{employmentBean.editEmploymentDialogWorkShifts}"
+							multiple="true"
+							title="#{msg['lucas.application.employmentScreen.editEmploymentDialog.workShiftsSelectCheckboxMenu.tooltip']}"
+							converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}">
+							<f:selectItems value="#{EnumWorkShift.ALL_VALUES}"
+								var="workShift" itemValue="#{workShift}"
+								itemLabel=" #{converterBean.convertEnum(workShift)}" />
+						</p:selectCheckboxMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this workShiftsSelectCheckboxMenu"
+							update="@form dataAccorditionPanel:employmentSearchResultsForm:employmentSearchResultsTable"
+							action="#{employmentBean.editEmployment}"
+							value="#{msg['lucas.application.employmentScreen.editEmploymentDialog.editEmploymentButton.name']}"
+							title="#{msg['lucas.application.employmentScreen.editEmploymentDialog.editEmploymentButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('editEmploymentDialog').hide()}" />
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this" immediate="true"
+							value="#{msg['lucas.application.employmentScreen.editEmploymentDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.employmentScreen.editEmploymentDialog.cancelButton.tooltip']}"
+							oncomplete="PF('editEmploymentDialog').hide()">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -14,6 +14,7 @@
 		<ui:include src="/WEB-INF/web/users/editUserDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/users/imageManagerDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/users/userCardManagerDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/users/jobRequestsManagerDialog.xhtml" />
 	</ui:define>
 	<ui:define name="otherContent">
 		<p:importConstants type="florian_haas.lucas.model.EnumSchoolClass" />
@@ -104,6 +105,15 @@
 				action="#{userBean.initUserCardManagerDialog}"
 				oncomplete="PF('userCardManagerDialog').show()"
 				icon="fa fa-credit-card"
+				disabled="#{userBean.selectedEntities.size() != 1}" />
+			<p:commandButton
+				rendered="#{not (loginBean.hasPermission(EnumPermission.USER_SET_JOB_REQUESTS) || true)}"
+				value="#{msg['lucas.application.userScreen.jobRequestsManagerButton.name']}"
+				title="#{msg['lucas.application.userScreen.jobRequestsManagerButton.tooltip']}"
+				update="jobRequestsManagerDialogForm" process="@this"
+				action="#{userBean.initJobRequestsManagerDialog}"
+				oncomplete="PF('jobRequestsManagerDialog').show()"
+				icon="fa fa-list-alt"
 				disabled="#{userBean.selectedEntities.size() != 1}" />
 			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 			<p:commandButton

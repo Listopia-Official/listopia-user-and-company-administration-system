@@ -1,8 +1,13 @@
 package florian_haas.lucas.model;
 
+import java.util.*;
+
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import florian_haas.lucas.model.validation.UniqueValue;
+import florian_haas.lucas.util.validation.TypeNotNull;
 
 @Entity
 public class Employment extends EntityBase {
@@ -17,50 +22,56 @@ public class Employment extends EntityBase {
 	@ManyToOne(optional = false)
 	@JoinColumn(nullable = false)
 	@NotNull
-	private Company company;
+	private Job job;
 
-	@Basic(optional = false)
-	@Column(nullable = false)
+	@ElementCollection(fetch = FetchType.EAGER)
 	@NotNull
-	private EnumEmployeePosition position;
+	private Set<@TypeNotNull EnumWorkShift> workShifts = new HashSet<>();
 
-	@OneToOne(cascade = CascadeType.ALL, optional = true, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "employment")
+	@NotNull
+	@UniqueValue(fieldName = "date")
 	@Valid
-	private SalaryData salaryData;
+	private List<@TypeNotNull SalaryAttendancedata> attendancedata = new ArrayList<>();
 
 	Employment() {}
 
-	public Employment(User user, Company company, EnumEmployeePosition position) {
-		this(user, company, position, null, (EnumWorkShift[]) null);
-	}
-
-	public Employment(User user, Company company, EnumEmployeePosition position, EnumSalaryClass salaryClass, EnumWorkShift... workShifts) {
+	public Employment(User user, Job job, Set<EnumWorkShift> workShifts) {
 		this.user = user;
-		this.company = company;
-		this.position = position;
-		if (salaryClass != null && workShifts != null) {
-			this.salaryData = new SalaryData(this, salaryClass, workShifts);
-		}
+		this.job = job;
+		if (workShifts != null) this.workShifts.addAll(workShifts);
 	}
 
 	public User getUser() {
 		return this.user;
 	}
 
-	public Company getCompany() {
-		return this.company;
+	public Job getJob() {
+		return this.job;
 	}
 
-	public EnumEmployeePosition getPosition() {
-		return this.position;
+	public List<SalaryAttendancedata> getAttendancedata() {
+		return Collections.unmodifiableList(attendancedata);
 	}
 
-	public void setPosition(EnumEmployeePosition position) {
-		this.position = position;
+	public Boolean addAttendancedata(SalaryAttendancedata attendancedata) {
+		return this.attendancedata.add(attendancedata);
 	}
 
-	public SalaryData getSalaryData() {
-		return salaryData;
+	public Boolean removeAttendancedata(SalaryAttendancedata attendancedata) {
+		return this.attendancedata.remove(attendancedata);
+	}
+
+	public Set<EnumWorkShift> getWorkShifts() {
+		return Collections.unmodifiableSet(this.workShifts);
+	}
+
+	public Boolean addWorkShift(EnumWorkShift workShift) {
+		return this.workShifts.add(workShift);
+	}
+
+	public Boolean removeWorkShift(EnumWorkShift workShift) {
+		return this.workShifts.remove(workShift);
 	}
 
 }

@@ -1,0 +1,123 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.userScreen.jobRequestsManagerDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="jobRequestsManagerDialog" />
+	<ui:param name="formId" value="jobRequestsManagerDialogForm" />
+	<ui:define name="dialogContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.NullConverterNoText" />
+		<p:importEnum type="florian_haas.lucas.model.EnumWorkShift" />
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.firstJobRequestIdInputNumber.name']}"
+							title="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.firstJobRequestIdInputNumber.tooltip']}"
+							for="firstJobRequestIdInputNumber" />
+					</p:column>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.secondJobRequestIdInputNumber.name']}"
+							title="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.secondJobRequestIdInputNumber.tooltip']}"
+							for="secondJobRequestIdInputNumber" />
+					</p:column>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.thirdJobRequestIdInputNumber.name']}"
+							title="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.thirdJobRequestIdInputNumber.tooltip']}"
+							for="thirdJobRequestIdInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:message for="firstJobRequestIdInputNumber"
+							id="firstJobRequestIdInputNumberMessage" />
+					</p:column>
+					<p:column>
+						<p:message for="secondJobRequestIdInputNumber"
+							id="secondJobRequestIdInputNumberMessage" />
+					</p:column>
+					<p:column>
+						<p:message for="thirdJobRequestIdInputNumber"
+							id="thirdJobRequestIdInputNumberMessage" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:inputNumber id="firstJobRequestIdInputNumber"
+							value="#{userBean.jobRequestsManagerDialogFirstJobRequestId}"
+							title="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.firstJobRequestIdInputNumber.tooltip']}"
+							minValue="0" emptyValue="empty" decimalPlaces="0">
+							<p:ajax event="keyup" delay="250" process="@this"
+								update="jobRequestsManagerDialogForm:firstJobRequestIdOutputInputText firstJobRequestIdInputNumberMessage @this" />
+						</p:inputNumber>
+					</p:column>
+					<p:column>
+						<p:inputNumber id="secondJobRequestIdInputNumber"
+							value="#{userBean.jobRequestsManagerDialogSecondJobRequestId}"
+							title="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.secondJobRequestIdInputNumber.tooltip']}"
+							minValue="0" emptyValue="empty" decimalPlaces="0">
+							<p:ajax event="keyup" delay="250" process="@this"
+								update="jobRequestsManagerDialogForm:secondJobRequestIdOutputInputText secondJobRequestIdInputNumberMessage @this" />
+						</p:inputNumber>
+					</p:column>
+					<p:column>
+						<p:inputNumber id="thirdJobRequestIdInputNumber"
+							value="#{userBean.jobRequestsManagerDialogThirdJobRequestId}"
+							title="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.thirdJobRequestIdInputNumber.tooltip']}"
+							minValue="0" emptyValue="empty" decimalPlaces="0">
+							<p:ajax event="keyup" delay="250" process="@this"
+								update="jobRequestsManagerDialogForm:thirdJobRequestIdOutputInputText thirdJobRequestIdInputNumberMessage @this" />
+						</p:inputNumber>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:inputText
+							title="#{userBean.jobRequestsManagerDialogJobFromIdFirst}"
+							placeholder="#{userBean.jobRequestsManagerDialogJobFromIdFirst}"
+							id="firstJobRequestIdOutputInputText" readonly="true" />
+					</p:column>
+					<p:column>
+						<p:inputText
+							title="#{userBean.jobRequestsManagerDialogJobFromIdSecond}"
+							placeholder="#{userBean.jobRequestsManagerDialogJobFromIdSecond}"
+							id="secondJobRequestIdOutputInputText" readonly="true" />
+					</p:column>
+					<p:column>
+						<p:inputText
+							title="#{userBean.jobRequestsManagerDialogJobFromIdThird}"
+							placeholder="#{userBean.jobRequestsManagerDialogJobFromIdThird}"
+							id="thirdJobRequestIdOutputInputText" readonly="true" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this firstJobRequestIdInputNumber secondJobRequestIdInputNumber thirdJobRequestIdInputNumber"
+							update="@form" action="#{userBean.editJobRequests}"
+							value="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.saveButton.name']}"
+							title="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.saveButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('jobRequestsManagerDialog').hide()}" />
+					</p:column>
+					<p:column />
+					<p:column>
+						<p:commandButton process="@this" immediate="true"
+							value="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.cancelButton.tooltip']}"
+							oncomplete="PF('jobRequestsManagerDialog').hide()">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

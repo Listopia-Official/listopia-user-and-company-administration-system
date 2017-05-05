@@ -4,6 +4,7 @@ import static florian_haas.lucas.security.EnumPermission.*;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.*;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -26,6 +27,10 @@ public class UserBean implements UserBeanLocal {
 	@JPADAO
 	@Inject
 	private UserCardDAO userCardDao;
+
+	@JPADAO
+	@Inject
+	private JobDAO jobDao;
 
 	@Override
 	@RequiresPermissions(USER_CREATE_PUPIL)
@@ -189,6 +194,38 @@ public class UserBean implements UserBeanLocal {
 	public Set<UserCard> getUserCards(@ValidEntityId(entityClass = User.class) Long userId) {
 		User user = userDao.findById(userId);
 		return user.getUserCards();
+	}
+
+	@Override
+	@RequiresPermissions(USER_SET_JOB_REQUESTS)
+	public Boolean setFirstJobRequest(@ValidEntityId(entityClass = User.class) Long userId,
+			@ValidEntityId(entityClass = Job.class, nullable = true) Long jobId) {
+		User user = userDao.findById(userId);
+		return setJobRequestHelper(user::getFirstJobRequest, user::setFirstJobRequest, jobId);
+	}
+
+	@Override
+	@RequiresPermissions(USER_SET_JOB_REQUESTS)
+	public Boolean setSecondJobRequest(@ValidEntityId(entityClass = User.class) Long userId,
+			@ValidEntityId(entityClass = Job.class, nullable = true) Long jobId) {
+		User user = userDao.findById(userId);
+		return setJobRequestHelper(user::getSecondJobRequest, user::setSecondJobRequest, jobId);
+	}
+
+	@Override
+	@RequiresPermissions(USER_SET_JOB_REQUESTS)
+	public Boolean setThirdJobRequest(@ValidEntityId(entityClass = User.class) Long userId,
+			@ValidEntityId(entityClass = Job.class, nullable = true) Long jobId) {
+		User user = userDao.findById(userId);
+		return setJobRequestHelper(user::getThirdJobRequest, user::setThirdJobRequest, jobId);
+	}
+
+	private Boolean setJobRequestHelper(Supplier<Job> requestGetter, Consumer<Job> requestSetter, Long jobId) {
+		Job value = jobId != null ? jobDao.findById(jobId) : null;
+		Job currentValue = requestGetter.get();
+		if ((value == null && currentValue == null) || (currentValue != null && currentValue.equals(value))) return Boolean.FALSE;
+		requestSetter.accept(value);
+		return Boolean.TRUE;
 	}
 
 }

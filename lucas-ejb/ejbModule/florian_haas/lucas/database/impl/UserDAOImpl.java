@@ -2,7 +2,7 @@ package florian_haas.lucas.database.impl;
 
 import java.util.*;
 
-import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.*;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
@@ -54,6 +54,16 @@ public class UserDAOImpl extends DAOImpl<User> implements UserDAO {
 	public byte[] getImageFromId(Long userId) {
 		List<byte[]> results = readOnlyJPQLQuery("SELECT u.image from User u where u.id=?1", byte[].class, userId);
 		return results.isEmpty() || results == null ? null : results.get(0);
+	}
+
+	@Override
+	public List<User> getAllUsersWithJobRequests() {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<User> query = builder.createQuery(User.class);
+		Root<User> user = query.from(User.class);
+		query.select(user).where(builder.or(builder.isNotNull(user.get(User_.firstJobRequest)), builder.isNotNull(user.get(User_.secondJobRequest)),
+				builder.isNotNull(user.get(User_.thirdJobRequest))));
+		return manager.createQuery(query).getResultList();
 	}
 
 }

@@ -7,10 +7,12 @@ import java.util.*;
 import javax.ejb.Local;
 import javax.validation.constraints.*;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.ValidEntityId;
+import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.util.validation.NotBlankString;
 
 @Local
@@ -18,25 +20,27 @@ public interface CompanyBeanLocal {
 
 	public Long createCompany(@NotNull @NotBlankString String name, @Size(max = 255) @NotBlankString String description,
 			@ValidEntityId(entityClass = RoomSection.class, nullable = true) Long roomSectionId, @NotNull EnumCompanyType companyType,
-			@ValidEntityId(entityClass = Company.class, nullable = true) Long parentCompanyId,
-			List<@ValidEntityId(entityClass = User.class) Long> managerUserIds, @NotNull @Min(value = 0) Integer requiredEmployeesCount);
+			@ValidEntityId(entityClass = Company.class, nullable = true) Long parentCompanyId, @NotNull Boolean generateJobs,
+			List<@ValidEntityId(entityClass = User.class) Long> managerUserIds, @NotNull @Min(value = 0) Integer requiredEmployeesCount,
+			@NotNull Boolean isAdvisorRequired, @ValidSchoolGrade Integer optimalEmployeesSchoolGrade, @NotBlank String advisorJobName,
+			@NotBlank String advisorJobDescription, @NotBlank String managerJobName, @NotBlank String managerJobDescription,
+			@NotBlank String employeeJobName, @NotBlank String employeeJobDescription);
 
 	public List<Company> findAll();
 
 	public Company findById(@ValidEntityId(entityClass = Company.class) Long companyId);
 
 	public List<Company> findCompanies(@NotNull Long companyId, @NotNull String name, String description, Long roomSectionId,
-			@NotNull EnumCompanyType companyType, Long parentCompanyId, @NotNull Integer requiredEmployeesCount,
-			@NotNull Boolean areEmployeesRequired, @NotNull Boolean useId, @NotNull Boolean useName, @NotNull Boolean useDescription,
-			@NotNull Boolean useRoomSectionId, @NotNull Boolean useCompanyType, @NotNull Boolean useParentCompanyId,
-			@NotNull Boolean useRequiredEmployeesCount, @NotNull Boolean useAreEmployeesRequired,
+			@NotNull EnumCompanyType companyType, Long parentCompanyId, @NotNull Long jobId, @NotNull Boolean areEmployeesRequired,
+			@NotNull Boolean useId, @NotNull Boolean useName, @NotNull Boolean useDescription, @NotNull Boolean useRoomSectionId,
+			@NotNull Boolean useCompanyType, @NotNull Boolean useParentCompanyId, @NotNull Boolean useJobId, @NotNull Boolean useAreEmployeesRequired,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator nameComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator descriptionComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator roomSectionIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator companyTypeComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator parentCompanyIdComparator,
-			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator requiredEmployeesCountComparator);
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator jobIdComparator);
 
 	public Boolean setName(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull @NotBlankString String name);
 
@@ -51,9 +55,6 @@ public interface CompanyBeanLocal {
 			@ValidEntityId(entityClass = Company.class, nullable = true) Long parentCompanyId);
 
 	public Boolean removeParentCompany(@ValidEntityId(entityClass = Company.class) Long companyId);
-
-	public Boolean setRequiredEmployeesCount(@ValidEntityId(entityClass = Company.class) Long companyId,
-			@NotNull @Min(value = 0) Integer requiredEmployeesCount);
 
 	public Boolean addTaxdata(@ValidEntityId(entityClass = Company.class) Long companyId, @NotNull LocalDate date,
 			@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal incomings,
