@@ -30,14 +30,14 @@
 							value="#{msg['lucas.application.dataTemplate.searchCriteria.name']}" />
 					</f:facet>
 					<div class="ui-fluid">
-						<h:form id="#{sitePrefix}SearchCriteriaForm">
+						<h:form id="#{siteBean.baseName}SearchCriteriaForm">
 							<p:panelGrid>
 								<ui:insert name="searchCriteria" />
 								<p:row>
 									<p:column>
 										<p:commandButton
 											value="#{msg['lucas.application.dataTemplate.searchCriteria.searchButton.name']}"
-											title="#{msg['lucas.application.'+=sitePrefix+='Screen.searchButton.tooltip']}"
+											title="#{msg['lucas.application.'+=siteBean.baseName+='Screen.searchButton.tooltip']}"
 											styleClass="blockAllTrigger" icon="fa fa-search"
 											action="#{siteBean.search()}" process="@form"
 											update="@(.dataToolbar) dataAccorditionPanel" />
@@ -54,15 +54,15 @@
 						<h:outputText
 							value="#{msg['lucas.application.dataTemplate.searchResults.name1']}#{siteBean.searchResults.size()}#{msg['lucas.application.dataTemplate.searchResults.name2']}" />
 					</f:facet>
-					<h:form id="#{sitePrefix}SearchResultsForm">
+					<h:form id="#{siteBean.baseName}SearchResultsForm">
 						<p:commandButton id="print" style="display: none"
 							rendered="#{loginBean.hasPermission(siteBean.getPrintPermission())}">
 							<p:ajax event="click" listener="#{siteBean.activatePaginator()}"
-								update="#{sitePrefix}SearchResultsTable"
+								update="#{siteBean.baseName}SearchResultsTable"
 								oncomplete="PF('blockUIAll').hide();" />
-							<p:printer target="#{sitePrefix}SearchResultsTable" />
+							<p:printer target="#{siteBean.baseName}SearchResultsTable" />
 						</p:commandButton>
-						<p:dataTable id="#{sitePrefix}SearchResultsTable"
+						<p:dataTable id="#{siteBean.baseName}SearchResultsTable"
 							tableStyle="table-layout: auto;" styleClass="searchResults"
 							resizableColumns="true" liveResize="true"
 							value="#{siteBean.searchResults}" var="entity"
@@ -87,8 +87,8 @@
 									disabled="#{siteBean.searchResults.size() &lt;= 0}"
 									title="#{msg['lucas.application.dataTemplate.searchResults.printDataButton.tooltip']}"
 									actionListener="#{siteBean.deactivatePaginator()}"
-									oncomplete="PF('blockUIAll').show();$(document.getElementById(&quot;#{'dataAccorditionPanel:'+=sitePrefix+='SearchResultsForm:print'}&quot;)).click();"
-									update="#{sitePrefix}SearchResultsTable" />
+									oncomplete="PF('blockUIAll').show();$(document.getElementById(&quot;#{'dataAccorditionPanel:'+=siteBean.baseName+='SearchResultsForm:print'}&quot;)).click();"
+									update="#{siteBean.baseName}SearchResultsTable" />
 								<p:commandButton icon="fa fa-refresh"
 									styleClass="blockAllTrigger" update="@(.searchResults)"
 									disabled="#{siteBean.searchResults.size() &lt;= 0}"
@@ -100,7 +100,7 @@
 									value="#{msg['lucas.application.dataTemplate.searchResults.resultsTableColumnToggler.name']}"
 									icon="fa fa-calculator"
 									title="#{msg['lucas.application.dataTemplate.searchResults.resultsTableColumnToggler.tooltip']}" />
-								<p:columnToggler datasource="#{sitePrefix}SearchResultsTable"
+								<p:columnToggler datasource="#{siteBean.baseName}SearchResultsTable"
 									trigger="resultsTableColumnToggler">
 									<p:ajax event="toggle" listener="#{siteBean.onToggle}" />
 								</p:columnToggler>
