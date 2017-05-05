@@ -30,7 +30,7 @@ public class GlobalDataBean implements Serializable {
 
 	@NotNull
 	@Min(1)
-	private Long maxIdleTime = 300000l;
+	private Long maxIdleTime = 30000l;
 
 	@NotBlank
 	private String currencySymbol = "L";

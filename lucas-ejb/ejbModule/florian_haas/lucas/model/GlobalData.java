@@ -50,7 +50,7 @@ public class GlobalData extends EntityBase {
 	@Basic(optional = false)
 	@Min(1)
 	@NotNull
-	private Long maxIdleTime = 300000l;
+	private Long maxIdleTime = 30000l;
 
 	@Basic(optional = false)
 	@NotNull
