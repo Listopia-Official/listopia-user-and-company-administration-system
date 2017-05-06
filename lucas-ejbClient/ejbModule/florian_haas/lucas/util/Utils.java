@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 import java.time.*;
 import java.util.*;
 
+import javax.validation.*;
+
 public class Utils {
 
 	@SuppressWarnings("unchecked")
@@ -128,5 +130,11 @@ public class Utils {
 			list.add(value);
 		}
 		return list;
+	}
+
+	public static Set<ConstraintViolation<?>> extractConstraintViolations(Throwable throwable) {
+		if (throwable == null) return null;
+		if (throwable instanceof ConstraintViolationException) return ((ConstraintViolationException) throwable).getConstraintViolations();
+		return extractConstraintViolations(throwable.getCause());
 	}
 }
