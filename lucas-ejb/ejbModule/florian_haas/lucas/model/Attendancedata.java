@@ -6,8 +6,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import florian_haas.lucas.model.validation.ValidTimeMillis;
-import florian_haas.lucas.validation.TypeNotNull;
+import florian_haas.lucas.validation.*;
 
 @Entity
 public class Attendancedata extends EntityBase implements ReadOnlyAttendancedata {

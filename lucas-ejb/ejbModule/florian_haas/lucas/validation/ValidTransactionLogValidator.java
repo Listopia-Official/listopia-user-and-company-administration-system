@@ -1,4 +1,4 @@
-package florian_haas.lucas.model.validation;
+package florian_haas.lucas.validation;
 
 import javax.validation.*;
 

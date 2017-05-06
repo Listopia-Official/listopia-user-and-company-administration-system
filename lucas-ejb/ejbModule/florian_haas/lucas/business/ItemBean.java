@@ -13,10 +13,10 @@ import javax.validation.*;
 import javax.validation.executable.*;
 
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.NotNullWarehouseRequired;
 import florian_haas.lucas.persistence.*;
 import florian_haas.lucas.security.*;
 import florian_haas.lucas.util.Utils;
+import florian_haas.lucas.validation.NotNullWarehouseRequired;
 
 @Stateless
 @ValidateOnExecution(type = ExecutableType.IMPLICIT)

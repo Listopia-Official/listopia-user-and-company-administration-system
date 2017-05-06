@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import florian_haas.lucas.model.validation.ValidTimeMillis;
+import florian_haas.lucas.validation.ValidTimeMillis;
 
 @Entity
 public class AttendanceLog extends EntityBase implements ReadOnlyAttendanceLog {

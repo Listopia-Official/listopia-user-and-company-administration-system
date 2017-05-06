@@ -7,7 +7,6 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
-import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.validation.*;
 
 @Entity

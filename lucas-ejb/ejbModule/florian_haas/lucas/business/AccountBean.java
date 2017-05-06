@@ -15,10 +15,10 @@ import javax.validation.executable.*;
 import org.apache.shiro.authz.AuthorizationException;
 
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.UnblockedAccountRequiredValidationGroup;
 import florian_haas.lucas.persistence.*;
 import florian_haas.lucas.security.*;
 import florian_haas.lucas.util.Utils;
+import florian_haas.lucas.validation.UnblockedAccountRequiredValidationGroup;
 
 @Stateless
 @ValidateOnExecution(type = ExecutableType.IMPLICIT)

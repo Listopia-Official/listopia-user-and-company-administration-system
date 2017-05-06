@@ -1,4 +1,4 @@
-package florian_haas.lucas.model.validation;
+package florian_haas.lucas.validation;
 
 import java.lang.reflect.Field;
 import java.util.*;

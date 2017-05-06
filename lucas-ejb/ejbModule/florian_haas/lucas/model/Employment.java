@@ -6,8 +6,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import florian_haas.lucas.model.validation.UniqueValue;
-import florian_haas.lucas.validation.TypeNotNull;
+import florian_haas.lucas.validation.*;
 
 @Entity
 public class Employment extends EntityBase implements ReadOnlyEmployment {

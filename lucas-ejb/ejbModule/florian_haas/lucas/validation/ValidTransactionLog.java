@@ -1,4 +1,4 @@
-package florian_haas.lucas.model.validation;
+package florian_haas.lucas.validation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -10,10 +10,10 @@ import javax.validation.*;
 @Target({
 		TYPE, ANNOTATION_TYPE })
 @Retention(RUNTIME)
-@Constraint(validatedBy = ValidCompanyHierarchyValidator.class)
+@Constraint(validatedBy = ValidTransactionLogValidator.class)
 @Documented
-public @interface ValidCompanyHierarchy {
-	String message() default "Company Hierarchy isn't valid";
+public @interface ValidTransactionLog {
+	String message() default "Invalid transaction log";
 
 	Class<?>[] groups() default {};
 

@@ -1,4 +1,4 @@
-package florian_haas.lucas.model.validation;
+package florian_haas.lucas.validation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -6,18 +6,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.*;
 
 import javax.validation.*;
-import javax.validation.constraints.*;
 
 @Target({
-		FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, CONSTRUCTOR })
+		TYPE, ANNOTATION_TYPE })
 @Retention(RUNTIME)
-@Constraint(validatedBy = {})
+@Constraint(validatedBy = ValidCompanyHierarchyValidator.class)
 @Documented
-@NotNull
-@Min(value = 0)
-public @interface ValidTimeMillis {
-
-	String message() default "Invalid time";
+public @interface ValidCompanyHierarchy {
+	String message() default "Company Hierarchy isn't valid";
 
 	Class<?>[] groups() default {};
 

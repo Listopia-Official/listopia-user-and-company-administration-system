@@ -7,8 +7,7 @@ import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import florian_haas.lucas.model.validation.DefaultLoginUserRequired;
-import florian_haas.lucas.validation.TypeNotNull;
+import florian_haas.lucas.validation.*;
 
 @Entity
 @Table(name = "loginuser")

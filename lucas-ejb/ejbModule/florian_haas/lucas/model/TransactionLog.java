@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.validation.*;
 
 @Entity
