@@ -8,6 +8,7 @@
 	<ui:define name="dialogs">
 		<ui:include src="/WEB-INF/web/jobs/createJobDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/jobs/editJobDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/components/longTextDisplayDialog.xhtml" />
 	</ui:define>
 	<ui:define name="otherContent">
 		<p:importEnum type="florian_haas.lucas.model.EnumEmployeePosition" />
@@ -354,8 +355,9 @@
 			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.descriptionColumn.name']}"
 			sortBy="#{entity.description}"
 			visible="#{jobBean.resultsDatatableColumns[2]}">
-			<h:outputText value="#{entity.description}"
-				converter="#{converterBean.getConverter(NullConverter.CONVERTER_ID)}" />
+			<ui:include src="/WEB-INF/web/components/longTextDisplay.xhtml">
+				<ui:param name="text" value="#{entity.description}" />
+			</ui:include>
 		</p:column>
 		<p:column exportable="#{jobBean.resultsDatatableColumns[3]}"
 			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.companyColumn.name']}"

@@ -1,0 +1,35 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.longTextDisplay.dialog.header" />
+	<ui:param name="closeable" value="true" />
+	<ui:param name="dynamic" value="false" />
+	<ui:param name="widgetVar" value="displayLongTextDialog" />
+	<ui:param name="formId" value="displayLongTextDialogForm" />
+	<ui:define name="dialogContent">
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column colspan="2">
+						<p:inputTextarea autoResize="true" maxlength="255"
+							value="#{longTextDisplayBean.getText()}" readonly="true"
+							converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column style="width:50%" />
+					<p:column>
+						<p:commandButton process="@this" immediate="true"
+							value="#{msg['lucas.application.longTextDisplay.dialog.closeButton.name']}"
+							title="#{msg['lucas.application.longTextDisplay.dialog.closeButton.tooltip']}"
+							oncomplete="PF('displayLongTextDialog').hide()" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -16,6 +16,7 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.export.*;
 import org.primefaces.model.*;
 
+import florian_haas.lucas.web.converter.LongTextConverter;
 import florian_haas.lucas.web.util.WebUtils;
 
 public class CustomCSVExporter extends CSVExporter {
@@ -119,15 +120,13 @@ public class CustomCSVExporter extends CSVExporter {
 
 			}
 
-			return converter == null ? "" : converter.getAsString(context, component, value);
+			return converter == null ? ""
+					: (value != null && converter instanceof LongTextConverter) ? value.toString() : converter.getAsString(context, component, value);
 		}
 
 		if ((component instanceof CellEditor)) { return exportValue(context, ((CellEditor) component).getFacet("output")); }
 		if ((component instanceof HtmlGraphicImage)) { return (String) component.getAttributes().get("alt"); }
 
-		String value = component.toString();
-
-		if (value != null) { return value.trim(); }
 		return "";
 	}
 }

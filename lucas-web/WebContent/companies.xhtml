@@ -11,6 +11,7 @@
 		<ui:include src="/WEB-INF/web/companies/viewEmployeesDialog.xhtml" />
 		<ui:include
 			src="/WEB-INF/web/companies/companyCardManagerDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/components/longTextDisplayDialog.xhtml" />
 	</ui:define>
 	<ui:define name="otherContent">
 		<p:importEnum type="florian_haas.lucas.model.EnumCompanyType" />
@@ -346,8 +347,9 @@
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.descriptionColumn.name']}"
 			sortBy="#{entity.description}"
 			visible="#{companyBean.resultsDatatableColumns[2]}">
-			<h:outputText value="#{entity.description}"
-				converter="#{converterBean.getConverter(NullConverter.CONVERTER_ID)}" />
+			<ui:include src="/WEB-INF/web/components/longTextDisplay.xhtml">
+				<ui:param name="text" value="#{entity.description}" />
+			</ui:include>
 		</p:column>
 		<p:column exportable="#{companyBean.resultsDatatableColumns[3]}"
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.sectionColumn.name']}"
