@@ -1,6 +1,6 @@
 package florian_haas.lucas.model;
 
-import java.util.*;
+import java.util.List;
 
 public interface ReadOnlyJob extends ReadOnlyEntity {
 	public String getName();
@@ -21,5 +21,4 @@ public interface ReadOnlyJob extends ReadOnlyEntity {
 
 	public Boolean areEmployeesRequiredForJob();
 
-	public Set<? extends ReadOnlyUser> getEmployeeSuggestions();
 }

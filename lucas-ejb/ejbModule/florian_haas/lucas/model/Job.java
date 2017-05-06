@@ -59,10 +59,6 @@ public class Job extends EntityBase implements ReadOnlyJob {
 	@Valid
 	private List<@TypeNotNull Employment> employments = new ArrayList<>();
 
-	@NotNull
-	@OneToMany(fetch = FetchType.LAZY)
-	private Set<@TypeNotNull User> employeeSuggestions = new HashSet<>();
-
 	Job() {}
 
 	public Job(String name, String description, Company company, EnumEmployeePosition position, Integer optimalSchoolGrade,
@@ -143,17 +139,4 @@ public class Job extends EntityBase implements ReadOnlyJob {
 	public Boolean areEmployeesRequiredForJob() {
 		return employments.size() < requiredEmploymentsCount;
 	}
-
-	public Set<User> getEmployeeSuggestions() {
-		return Collections.unmodifiableSet(this.employeeSuggestions);
-	}
-
-	public Boolean addEmployeeSuggestion(User employeeSuggestion) {
-		return employeeSuggestions.add(employeeSuggestion);
-	}
-
-	public Boolean removeEmployeeSuggestion(User employeeSuggestion) {
-		return employeeSuggestions.remove(employeeSuggestion);
-	}
-
 }
