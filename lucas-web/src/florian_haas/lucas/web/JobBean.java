@@ -11,19 +11,17 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import florian_haas.lucas.business.*;
 import florian_haas.lucas.database.*;
-import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
-import florian_haas.lucas.util.validation.NotBlankString;
+import florian_haas.lucas.validation.*;
 import florian_haas.lucas.web.converter.*;
 import florian_haas.lucas.web.converter.JobConverter.ShortJobConverter;
 import florian_haas.lucas.web.util.WebUtils;
 
 @Named
 @ViewScoped
-public class JobBean extends BaseBean<Job> {
+public class JobBean extends BaseBean<ReadOnlyJob> {
 
 	private static final long serialVersionUID = 1555704972109670099L;
 
@@ -357,7 +355,7 @@ public class JobBean extends BaseBean<Job> {
 	}
 
 	@Override
-	protected List<Job> searchEntities() {
+	protected List<? extends ReadOnlyJob> searchEntities() {
 		return jobBean.findJobs(searchJobId, searchJobName, searchJobDescription, searchJobCompanyId, searchJobSalaryClass,
 				searchJobOptimalSchoolGrade, searchJobRequiredEmploymentsCount, searchJobPosition, searchJobEmploymentId, useSearchJobId,
 				useSearchJobName, useSearchJobDescription, useSearchJobCompanyId, useSearchJobSalaryClass, useSearchJobOptimalSchoolGrade,
@@ -367,7 +365,7 @@ public class JobBean extends BaseBean<Job> {
 	}
 
 	@Override
-	protected Job entityGetter(Long entityId) {
+	protected ReadOnlyJob entityGetter(Long entityId) {
 		return jobBean.findById(entityId);
 	}
 
@@ -382,7 +380,7 @@ public class JobBean extends BaseBean<Job> {
 	@Size(max = 255)
 	private String createJobDialogDescription;
 
-	@ValidEntityId(entityClass = Company.class)
+	@ValidEntityId(entityClass = ReadOnlyCompany.class)
 	private Long createJobDialogCompanyId;
 
 	@NotNull
@@ -446,8 +444,8 @@ public class JobBean extends BaseBean<Job> {
 	}
 
 	public String getCreateJobDialogCompanyFromId() {
-		Company company = createJobDialogCompanyId != null
-				? entityBean.exists(createJobDialogCompanyId, Company.class) ? companyBean.findById(createJobDialogCompanyId) : null : null;
+		ReadOnlyCompany company = createJobDialogCompanyId != null
+				? entityBean.exists(createJobDialogCompanyId, ReadOnlyCompany.class) ? companyBean.findById(createJobDialogCompanyId) : null : null;
 		return WebUtils.getAsString(company, CompanyConverter.CONVERTER_ID);
 	}
 
@@ -490,7 +488,7 @@ public class JobBean extends BaseBean<Job> {
 	 * -------------------- Edit Job Dialog Start --------------------
 	 */
 
-	private Job editJobDialogSelectedJob;
+	private ReadOnlyJob editJobDialogSelectedJob;
 
 	@NotBlank
 	private String editJobDialogName;
@@ -592,9 +590,9 @@ public class JobBean extends BaseBean<Job> {
 			if (WebUtils.isPermitted(EnumPermission.JOB_SET_SALARY_CLASS)) {
 				jobBean.setSalaryClass(id, editJobDialogSalaryClass);
 			}
-			Job tmp2 = jobBean.findById(id);
+			ReadOnlyJob tmp2 = jobBean.findById(id);
 			params.add(WebUtils.getAsString(tmp2, ShortJobConverter.CONVERTER_ID));
-			WebUtils.refreshEntities(Job.class, searchResults, selectedEntities, tmp2, jobBean::findById, true);
+			WebUtils.refreshEntities(ReadOnlyJob.class, searchResults, selectedEntities, tmp2, jobBean::findById, true);
 			return true;
 		}, "lucas.application.jobScreen.editJob.message", (exception, params) -> {
 			return WebUtils.getTranslatedMessage("lucas.application.jobScreen.editJob.message.notUniqueName", editJobDialogName, params.get(0));
@@ -606,9 +604,9 @@ public class JobBean extends BaseBean<Job> {
 	 */
 
 	public void removeJobs() {
-		Iterator<Job> it = selectedEntities.iterator();
+		Iterator<ReadOnlyJob> it = selectedEntities.iterator();
 		while (it.hasNext()) {
-			Job job = it.next();
+			ReadOnlyJob job = it.next();
 			WebUtils.executeTask(params -> {
 				params.add(WebUtils.getAsString(job, JobConverter.CONVERTER_ID));
 				Boolean ret = jobBean.deleteJob(job.getId());

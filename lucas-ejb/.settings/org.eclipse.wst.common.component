@@ -2,7 +2,6 @@
     <wb-module deploy-name="lucas-ejb">
         <wb-resource deploy-path="/" source-path="/ejbModule" tag="defaultRootSource"/>
         <wb-resource deploy-path="/" source-path="/metamodel"/>
-        <wb-resource deploy-path="/" source-path="/test"/>
         <dependent-module archiveName="commons-logging-1.2.jar" deploy-path="/" handle="module:/classpath/lib/lucas-ejb/lib/commons-logging-1.2.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>

@@ -6,7 +6,7 @@ import javax.ejb.Stateless;
 import javax.persistence.*;
 import javax.validation.executable.*;
 
-import florian_haas.lucas.model.EntityBase;
+import florian_haas.lucas.model.ReadOnlyEntity;
 import florian_haas.lucas.security.*;
 
 @Stateless
@@ -19,8 +19,9 @@ public class EntityBean implements EntityBeanLocal {
 
 	@Override
 	@RequiresPermissions(ENTITY_EXISTS)
-	public Boolean exists(Long id, Class<? extends EntityBase> entityClass) {
-		return manager.createQuery("SELECT COUNT(e.id) FROM " + entityClass.getSimpleName() + " e WHERE e.id=" + id, Long.class)
+	public Boolean exists(Long id, Class<? extends ReadOnlyEntity> entityClass) {
+		return manager
+				.createQuery("SELECT COUNT(e.id) FROM " + entityClass.getSimpleName().replaceAll("ReadOnly", "") + " e WHERE e.id=" + id, Long.class)
 				.getSingleResult() > 0;
 	}
 }

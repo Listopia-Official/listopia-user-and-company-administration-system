@@ -8,10 +8,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 import florian_haas.lucas.model.validation.*;
-import florian_haas.lucas.util.validation.TypeNotNull;
+import florian_haas.lucas.validation.*;
 
 @Entity
-public class Account extends EntityBase {
+public class Account extends EntityBase implements ReadOnlyAccount {
 
 	private static final long serialVersionUID = -8880641005184863518L;
 
@@ -46,36 +46,41 @@ public class Account extends EntityBase {
 		this.owner = owner;
 	}
 
+	@Override
 	public AccountOwner getOwner() {
-		return owner;
+		return this.owner;
 	}
 
+	@Override
 	public BigDecimal getBankBalance() {
-		return bankBalance;
+		return this.bankBalance;
 	}
 
 	public void setBankBalance(BigDecimal bankBalance) {
 		this.bankBalance = bankBalance;
 	}
 
+	@Override
 	public Boolean getBlocked() {
-		return blocked;
+		return this.blocked;
 	}
 
 	public void setBlocked(Boolean blocked) {
 		this.blocked = blocked;
 	}
 
+	@Override
 	public List<TransactionLog> getTransactionLogs() {
-		return Collections.unmodifiableList(transactionLogs);
+		return Collections.unmodifiableList(this.transactionLogs);
 	}
 
 	public Boolean addTransactionLog(TransactionLog log) {
-		return transactionLogs.add(log);
+		return this.transactionLogs.add(log);
 	}
 
+	@Override
 	public Boolean getIsProtected() {
-		return isProtected;
+		return this.isProtected;
 	}
 
 	public void setIsProtected(Boolean isProtected) {

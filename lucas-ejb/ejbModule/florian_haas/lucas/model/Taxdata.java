@@ -7,7 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 @Entity
-public class Taxdata extends EntityBase {
+public class Taxdata extends EntityBase implements ReadOnlyTaxdata {
 
 	private static final long serialVersionUID = -4156175587632314959L;
 

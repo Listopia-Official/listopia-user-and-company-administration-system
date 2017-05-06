@@ -48,19 +48,20 @@ public class JobBean implements JobBeanLocal {
 
 	@Override
 	@RequiresPermissions(JOB_FIND_ALL)
-	public List<Job> findAll() {
+	public List<? extends ReadOnlyJob> findAll() {
 		return jobDao.findAll();
 	}
 
 	@Override
 	@RequiresPermissions(JOB_FIND_DYNAMIC)
-	public List<Job> findJobs(Long jobId, String name, String description, Long companyId, EnumSalaryClass salaryClass, Integer optimalSchoolGrade,
-			Integer requiredEmployeesCount, EnumEmployeePosition position, Long employmentId, Boolean useJobId, Boolean useName,
-			Boolean useDescription, Boolean useCompanyId, Boolean useSalaryClass, Boolean useOptimalSchoolGrade, Boolean useRequiredEmployeesCount,
-			Boolean useEmployeePosition, Boolean useEmploymentId, EnumQueryComparator jobIdComparator, EnumQueryComparator nameComparator,
-			EnumQueryComparator descriptionComparator, EnumQueryComparator companyIdComparator, EnumQueryComparator salaryClassComparator,
-			EnumQueryComparator optimalSchoolGradeComparator, EnumQueryComparator requiredEmployeesCountComparator,
-			EnumQueryComparator positionComparator, EnumQueryComparator employmentIdComparator) {
+	public List<? extends ReadOnlyJob> findJobs(Long jobId, String name, String description, Long companyId, EnumSalaryClass salaryClass,
+			Integer optimalSchoolGrade, Integer requiredEmployeesCount, EnumEmployeePosition position, Long employmentId, Boolean useJobId,
+			Boolean useName, Boolean useDescription, Boolean useCompanyId, Boolean useSalaryClass, Boolean useOptimalSchoolGrade,
+			Boolean useRequiredEmployeesCount, Boolean useEmployeePosition, Boolean useEmploymentId, EnumQueryComparator jobIdComparator,
+			EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator, EnumQueryComparator companyIdComparator,
+			EnumQueryComparator salaryClassComparator, EnumQueryComparator optimalSchoolGradeComparator,
+			EnumQueryComparator requiredEmployeesCountComparator, EnumQueryComparator positionComparator,
+			EnumQueryComparator employmentIdComparator) {
 		return jobDao.findJobs(jobId, name, description, companyId, salaryClass, optimalSchoolGrade, requiredEmployeesCount, position, employmentId,
 				useJobId, useName, useDescription, useCompanyId, useSalaryClass, useOptimalSchoolGrade, useRequiredEmployeesCount,
 				useEmployeePosition, useEmploymentId, jobIdComparator, nameComparator, descriptionComparator, companyIdComparator,

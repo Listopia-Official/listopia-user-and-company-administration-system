@@ -12,7 +12,6 @@ import javax.validation.executable.*;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.security.*;
 
 @Stateless
@@ -58,7 +57,7 @@ public class UserBean implements UserBeanLocal {
 
 	@Override
 	@RequiresPermissions(USER_FIND_ALL)
-	public List<User> findAll() {
+	public List<? extends ReadOnlyUser> findAll() {
 		return userDao.findAll();
 	}
 
@@ -70,10 +69,10 @@ public class UserBean implements UserBeanLocal {
 
 	@Override
 	@RequiresPermissions(USER_FIND_DYNAMIC)
-	public List<User> findUsers(Long userId, String forename, String surname, List<EnumSchoolClass> schoolClasses, EnumUserType userType,
-			List<String> ranks, Boolean useUserId, Boolean useForename, Boolean useSurname, Boolean useSchoolClass, Boolean useUserType,
-			Boolean useRanks, EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator, EnumQueryComparator surnameComparator,
-			EnumQueryComparator searchUserTypeComparator, EnumQueryComparator ranksComparator) {
+	public List<? extends ReadOnlyUser> findUsers(Long userId, String forename, String surname, List<EnumSchoolClass> schoolClasses,
+			EnumUserType userType, List<String> ranks, Boolean useUserId, Boolean useForename, Boolean useSurname, Boolean useSchoolClass,
+			Boolean useUserType, Boolean useRanks, EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator,
+			EnumQueryComparator surnameComparator, EnumQueryComparator searchUserTypeComparator, EnumQueryComparator ranksComparator) {
 		return userDao.findUsers(userId, forename, surname, schoolClasses, userType, ranks, useUserId, useForename, useSurname, useSchoolClass,
 				useUserType, useRanks, userIdComparator, forenameComparator, surnameComparator, searchUserTypeComparator, ranksComparator);
 	}
@@ -131,7 +130,7 @@ public class UserBean implements UserBeanLocal {
 
 	@Override
 	@RequiresPermissions(USER_REMOVE_USER_CARD)
-	public Boolean removeUserCard(@ValidEntityId(entityClass = UserCard.class) Long userCardId) {
+	public Boolean removeUserCard(Long userCardId) {
 		UserCard card = userCardDao.findById(userCardId);
 		Boolean removed = card.getUser().removeUserCard(card);
 		if (removed) {
@@ -191,31 +190,28 @@ public class UserBean implements UserBeanLocal {
 
 	@Override
 	@RequiresPermissions(USER_GET_USER_CARDS)
-	public Set<UserCard> getUserCards(@ValidEntityId(entityClass = User.class) Long userId) {
+	public Set<? extends ReadOnlyUserCard> getUserCards(Long userId) {
 		User user = userDao.findById(userId);
 		return user.getUserCards();
 	}
 
 	@Override
 	@RequiresPermissions(USER_SET_JOB_REQUESTS)
-	public Boolean setFirstJobRequest(@ValidEntityId(entityClass = User.class) Long userId,
-			@ValidEntityId(entityClass = Job.class, nullable = true) Long jobId) {
+	public Boolean setFirstJobRequest(Long userId, Long jobId) {
 		User user = userDao.findById(userId);
 		return setJobRequestHelper(user::getFirstJobRequest, user::setFirstJobRequest, jobId);
 	}
 
 	@Override
 	@RequiresPermissions(USER_SET_JOB_REQUESTS)
-	public Boolean setSecondJobRequest(@ValidEntityId(entityClass = User.class) Long userId,
-			@ValidEntityId(entityClass = Job.class, nullable = true) Long jobId) {
+	public Boolean setSecondJobRequest(Long userId, Long jobId) {
 		User user = userDao.findById(userId);
 		return setJobRequestHelper(user::getSecondJobRequest, user::setSecondJobRequest, jobId);
 	}
 
 	@Override
 	@RequiresPermissions(USER_SET_JOB_REQUESTS)
-	public Boolean setThirdJobRequest(@ValidEntityId(entityClass = User.class) Long userId,
-			@ValidEntityId(entityClass = Job.class, nullable = true) Long jobId) {
+	public Boolean setThirdJobRequest(Long userId, Long jobId) {
 		User user = userDao.findById(userId);
 		return setJobRequestHelper(user::getThirdJobRequest, user::setThirdJobRequest, jobId);
 	}
@@ -227,5 +223,4 @@ public class UserBean implements UserBeanLocal {
 		requestSetter.accept(value);
 		return Boolean.TRUE;
 	}
-
 }

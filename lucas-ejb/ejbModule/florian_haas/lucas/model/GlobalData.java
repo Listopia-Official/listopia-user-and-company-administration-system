@@ -8,11 +8,11 @@ import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import florian_haas.lucas.model.validation.*;
-import florian_haas.lucas.util.validation.*;
+import florian_haas.lucas.model.validation.NotNullWarehouseRequired;
+import florian_haas.lucas.validation.*;
 
 @Entity
-public class GlobalData extends EntityBase {
+public class GlobalData extends EntityBase implements ReadOnlyGlobalData {
 
 	private static final long serialVersionUID = -7426702269184558930L;
 

@@ -11,15 +11,15 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import florian_haas.lucas.business.*;
 import florian_haas.lucas.database.*;
-import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.security.EnumPermission;
+import florian_haas.lucas.validation.QueryComparator;
 import florian_haas.lucas.web.converter.*;
 import florian_haas.lucas.web.util.WebUtils;
 
 @Named
 @ViewScoped
-public class RoomBean extends BaseBean<Room> {
+public class RoomBean extends BaseBean<ReadOnlyRoom> {
 
 	public RoomBean() {
 		super("room", 3);
@@ -150,13 +150,13 @@ public class RoomBean extends BaseBean<Room> {
 	}
 
 	@Override
-	protected List<Room> searchEntities() {
+	protected List<? extends ReadOnlyRoom> searchEntities() {
 		return roomBean.findRooms(searchRoomId, searchRoomName, searchRoomSectionId, useSearchRoomId, useSearchRoomName, useSearchRoomSectionId,
 				searchRoomIdComparator, searchRoomNameComparator, searchRoomSectionIdComparator);
 	}
 
 	@Override
-	protected Room entityGetter(Long entityId) {
+	protected ReadOnlyRoom entityGetter(Long entityId) {
 		return roomBean.findById(entityId);
 	}
 
@@ -214,7 +214,7 @@ public class RoomBean extends BaseBean<Room> {
 	@NotBlank
 	private String editRoomDialogName;
 
-	private Room editRoomDialogSelectedRoom;
+	private ReadOnlyRoom editRoomDialogSelectedRoom;
 
 	public String getEditRoomDialogName() {
 		return editRoomDialogName;
@@ -235,10 +235,10 @@ public class RoomBean extends BaseBean<Room> {
 		WebUtils.executeTask((params) -> {
 			Long id = editRoomDialogSelectedRoom.getId();
 			roomBean.setName(id, editRoomDialogName);
-			Room tmp = roomBean.findById(id);
+			ReadOnlyRoom tmp = roomBean.findById(id);
 			params.add(WebUtils.getAsString(tmp, RoomConverter.CONVERTER_ID));
 			params.add(editRoomDialogName);
-			WebUtils.refreshEntities(Room.class, searchResults, selectedEntities, tmp, roomBean::findById, true);
+			WebUtils.refreshEntities(ReadOnlyRoom.class, searchResults, selectedEntities, tmp, roomBean::findById, true);
 			return true;
 		}, "lucas.application.roomScreen.editRoom.message", (exception, params) -> {
 			return WebUtils.getTranslatedMessage("lucas.application.roomScreen.editRoom.message.notUniqueName", editRoomDialogName);
@@ -253,21 +253,21 @@ public class RoomBean extends BaseBean<Room> {
 	 * -------------------- Section Manager Dialog Start --------------------
 	 */
 
-	private Room sectionManagerDialogSelectedRoom;
+	private ReadOnlyRoom sectionManagerDialogSelectedRoom;
 
-	private List<RoomSection> sectionManagerDialogSelectedSections = new ArrayList<>();
+	private List<ReadOnlyRoomSection> sectionManagerDialogSelectedSections = new ArrayList<>();
 
 	public static final String SECTION_MANAGER_DIALOG_MESSAGES_COMPONENT_ID = "sectionManagerDialogMessages";
 
-	public Room getSectionManagerDialogSelectedRoom() {
+	public ReadOnlyRoom getSectionManagerDialogSelectedRoom() {
 		return this.sectionManagerDialogSelectedRoom;
 	}
 
-	public List<RoomSection> getSectionManagerDialogSelectedSections() {
+	public List<ReadOnlyRoomSection> getSectionManagerDialogSelectedSections() {
 		return this.sectionManagerDialogSelectedSections;
 	}
 
-	public void setSectionManagerDialogSelectedSections(List<RoomSection> sectionManagerDialogSelectedSections) {
+	public void setSectionManagerDialogSelectedSections(List<ReadOnlyRoomSection> sectionManagerDialogSelectedSections) {
 		this.sectionManagerDialogSelectedSections = sectionManagerDialogSelectedSections;
 	}
 
@@ -281,9 +281,9 @@ public class RoomBean extends BaseBean<Room> {
 		WebUtils.executeTask((params) -> {
 			params.add(WebUtils.getAsString(roomBean.findRoomSectionById(roomBean.addSection(sectionManagerDialogSelectedRoom.getId())),
 					RoomSectionConverter.CONVERTER_ID));
-			Room tmp = roomBean.findById(sectionManagerDialogSelectedRoom.getId());
+			ReadOnlyRoom tmp = roomBean.findById(sectionManagerDialogSelectedRoom.getId());
 			sectionManagerDialogSelectedRoom = tmp;
-			WebUtils.refreshEntities(Room.class, searchResults, selectedEntities, tmp, roomBean::findById, true);
+			WebUtils.refreshEntities(ReadOnlyRoom.class, searchResults, selectedEntities, tmp, roomBean::findById, true);
 			return true;
 		}, "lucas.application.roomScreen.createRoomSection", SECTION_MANAGER_DIALOG_MESSAGES_COMPONENT_ID);
 	}
@@ -294,9 +294,9 @@ public class RoomBean extends BaseBean<Room> {
 				params.add(WebUtils.getAsString(section, RoomSectionConverter.CONVERTER_ID));
 				Boolean success = roomBean.removeSection(sectionManagerDialogSelectedRoom.getId(), section.getId());
 				if (success) {
-					Room tmp = roomBean.findById(sectionManagerDialogSelectedRoom.getId());
+					ReadOnlyRoom tmp = roomBean.findById(sectionManagerDialogSelectedRoom.getId());
 					sectionManagerDialogSelectedRoom = tmp;
-					WebUtils.refreshEntities(Room.class, searchResults, selectedEntities, tmp, roomBean::findById, true);
+					WebUtils.refreshEntities(ReadOnlyRoom.class, searchResults, selectedEntities, tmp, roomBean::findById, true);
 				}
 				return success;
 			}, "lucas.application.roomScreen.removeRoomSection", SECTION_MANAGER_DIALOG_MESSAGES_COMPONENT_ID);

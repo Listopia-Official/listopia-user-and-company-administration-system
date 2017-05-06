@@ -7,11 +7,11 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import florian_haas.lucas.util.validation.TypeNotNull;
+import florian_haas.lucas.validation.TypeNotNull;
 
 @Entity
 @Table(name = "loginroles")
-public class LoginUserRole extends EntityBase {
+public class LoginUserRole extends EntityBase implements ReadOnlyLoginUserRole {
 
 	private static final long serialVersionUID = -539981772258580862L;
 
@@ -30,23 +30,25 @@ public class LoginUserRole extends EntityBase {
 		this.name = name;
 	}
 
+	@Override
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	@Override
 	public Set<String> getPermissions() {
-		return Collections.unmodifiableSet(permissions);
+		return Collections.unmodifiableSet(this.permissions);
 	}
 
 	public Boolean addPermission(String permission) {
-		return permissions.add(permission);
+		return this.permissions.add(permission);
 	}
 
 	public Boolean removePermission(String permission) {
-		return permissions.remove(permission);
+		return this.permissions.remove(permission);
 	}
 }

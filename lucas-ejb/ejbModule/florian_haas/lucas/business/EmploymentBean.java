@@ -15,7 +15,6 @@ import org.apache.shiro.authz.annotation.Logical;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.security.*;
 
 @Stateless
@@ -27,11 +26,9 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@JPADAO
 	private JobDAO jobDao;
 
-	@EJB
-	private CompanyBeanLocal companyBean;
-
-	@EJB
-	private UserBeanLocal userBean;
+	@Inject
+	@JPADAO
+	private CompanyDAO companyDao;
 
 	@Inject
 	@JPADAO
@@ -58,7 +55,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@RequiresPermissions(value = {
 			EMPLOYMENT_CREATE, COMPANY_CREATE }, logical = Logical.OR)
 	public Long createEmployment(Long userId, Long jobId, Set<EnumWorkShift> workShifts) {
-		User user = userBean.findById(userId);
+		User user = userDao.findById(userId);
 		Job job = jobDao.findById(jobId);
 		Employment employment = new Employment(user, job, workShifts);
 		user.addEmployment(employment);
@@ -115,7 +112,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	@Override
 	@RequiresPermissions(EMPLOYMENT_PAY_SALARY)
 	public void paySalary(Long companyId, LocalDate date, EnumWorkShift shift) {
-		Company company = companyBean.findById(companyId);
+		Company company = companyDao.findById(companyId);
 		company.getEmployees().forEach(employee -> {
 			Job job = employee.getJob();
 			if (!employee.getWorkShifts().isEmpty() && job.getSalaryClass() != null) {
@@ -134,20 +131,20 @@ public class EmploymentBean implements EmploymentBeanLocal {
 
 	@Override
 	@RequiresPermissions(EMPLOYMENT_FIND_BY_ID)
-	public Employment findById(@ValidEntityId(entityClass = Employment.class) Long employmentId) {
+	public ReadOnlyEmployment findById(Long employmentId) {
 		return employmentDao.findById(employmentId);
 	}
 
 	@Override
 	@RequiresPermissions(EMPLOYMENT_FIND_ALL)
-	public List<Employment> findAll() {
+	public List<? extends ReadOnlyEmployment> findAll() {
 		return employmentDao.findAll();
 	}
 
 	@Override
 	@RequiresPermissions(EMPLOYMENT_FIND_DYNAMIC)
-	public List<Employment> findEmployments(Long employmentId, Long userId, Long jobId, Set<EnumWorkShift> workShifts, Boolean useEmploymentId,
-			Boolean useUserId, Boolean useJobId, Boolean useWorkShifts, EnumQueryComparator employmentIdComparator,
+	public List<? extends ReadOnlyEmployment> findEmployments(Long employmentId, Long userId, Long jobId, Set<EnumWorkShift> workShifts,
+			Boolean useEmploymentId, Boolean useUserId, Boolean useJobId, Boolean useWorkShifts, EnumQueryComparator employmentIdComparator,
 			EnumQueryComparator userIdComparator, EnumQueryComparator jobIdComparator, EnumQueryComparator workShiftsComparator) {
 		return employmentDao.findEmployments(employmentId, userId, jobId, workShifts, useEmploymentId, useUserId, useJobId, useWorkShifts,
 				employmentIdComparator, userIdComparator, jobIdComparator, workShiftsComparator);

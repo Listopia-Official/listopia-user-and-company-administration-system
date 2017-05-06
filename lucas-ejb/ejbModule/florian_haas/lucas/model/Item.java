@@ -9,11 +9,10 @@ import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import florian_haas.lucas.model.validation.ValidItemPrice;
-import florian_haas.lucas.util.validation.*;
+import florian_haas.lucas.validation.*;
 
 @Entity
-public class Item extends EntityBase {
+public class Item extends EntityBase implements ReadOnlyItem {
 
 	private static final long serialVersionUID = -3598214275967142864L;
 
@@ -89,7 +88,7 @@ public class Item extends EntityBase {
 	}
 
 	public List<PurchaseLog> getPurchaseLogs() {
-		return purchaseLogs;
+		return Collections.unmodifiableList(purchaseLogs);
 	}
 
 	public Boolean addPurchaseLog(PurchaseLog purchaseLog) {

@@ -36,16 +36,16 @@ public class AttendanceBean implements AttendanceBeanLocal {
 	@Override
 	@RequiresPermissions(ATTENDANCE_SCAN)
 	public Boolean scan(Long userCardId) {
-		UserCard userCard = userBean.findUserCardById(userCardId);
+		ReadOnlyUserCard userCard = userBean.findUserCardById(userCardId);
 		if (userCard.getBlocked() || (userCard.getValidDay() != null && !userCard.getValidDay().equals(LocalDate.now()))) {
-			User user = userCard.getUser();
+			ReadOnlyUser user = userCard.getUser();
 			if (user.getUserType() != EnumUserType.TEACHER) {
-				Attendancedata attendancedata = user.getAttendancedata();
+				ReadOnlyAttendancedata attendancedata = user.getAttendancedata();
 				if (attendancedata != null) {
 					if (attendancedata.getIsUserInState() == Boolean.TRUE) {
-						enter(attendancedata);
+						enter((Attendancedata) attendancedata);
 					} else if (attendancedata.getIsUserInState() == Boolean.FALSE) {
-						leave(attendancedata);
+						leave((Attendancedata) attendancedata);
 					}
 					return Boolean.TRUE;
 				}
@@ -106,7 +106,7 @@ public class AttendanceBean implements AttendanceBeanLocal {
 
 	@Override
 	@RequiresPermissions(ATTENDANCE_FIND_ALL)
-	public List<Attendancedata> findAll() {
+	public List<? extends ReadOnlyAttendancedata> findAll() {
 		return attendanceDao.findAll();
 	}
 
@@ -117,20 +117,20 @@ public class AttendanceBean implements AttendanceBeanLocal {
 	}
 
 	@Override
-	public Attendancedata findByUserId(Long userId) {
+	public ReadOnlyAttendancedata findByUserId(Long userId) {
 		return userBean.findById(userId).getAttendancedata();
 	}
 
 	@Override
 	@RequiresPermissions(ATTENDANCE_FIND_BY_USER_CARD_ID)
-	public Attendancedata findByUserCardId(Long userCardId) {
+	public ReadOnlyAttendancedata findByUserCardId(Long userCardId) {
 		return userBean.findUserCardById(userCardId).getUser().getAttendancedata();
 	}
 
 	@Override
 	@RequiresPermissions(ATTENDANCE_FIND_DYNAMIC)
-	public List<Attendancedata> findAttendancedata(Long id, Boolean isUserInState, Long timePresentDay, Long validTimeMissing, Boolean useId,
-			Boolean useIsUserInState, Boolean useTimePresentDay, Boolean useVaidTimeMissing, EnumQueryComparator idComparator,
+	public List<? extends ReadOnlyAttendancedata> findAttendancedata(Long id, Boolean isUserInState, Long timePresentDay, Long validTimeMissing,
+			Boolean useId, Boolean useIsUserInState, Boolean useTimePresentDay, Boolean useVaidTimeMissing, EnumQueryComparator idComparator,
 			EnumQueryComparator timePresentDayComparator, EnumQueryComparator validTimeMissingComparator) {
 		return attendanceDao.findAttendancedata(id, isUserInState, timePresentDay, validTimeMissing, useId, useIsUserInState, useTimePresentDay,
 				useVaidTimeMissing, idComparator, timePresentDayComparator, validTimeMissingComparator);

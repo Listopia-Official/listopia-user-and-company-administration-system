@@ -3,7 +3,7 @@
 	<name>lucas-web</name>
 	<comment></comment>
 	<projects>
-		<project>lucas-ejb</project>
+		<project>lucas-ejbClient</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

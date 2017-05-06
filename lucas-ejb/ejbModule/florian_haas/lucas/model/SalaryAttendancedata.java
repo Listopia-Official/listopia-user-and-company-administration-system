@@ -6,10 +6,10 @@ import java.util.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import florian_haas.lucas.util.validation.TypeNotNull;
+import florian_haas.lucas.validation.TypeNotNull;
 
 @Entity
-public class SalaryAttendancedata extends EntityBase {
+public class SalaryAttendancedata extends EntityBase implements ReadOnlySalaryAttendancedata {
 
 	private static final long serialVersionUID = 6663270725797916280L;
 

@@ -2,12 +2,12 @@ package florian_haas.lucas.web.converter;
 
 import javax.faces.convert.FacesConverter;
 
-import florian_haas.lucas.model.LoginUser;
+import florian_haas.lucas.model.ReadOnlyLoginUser;
 import florian_haas.lucas.web.converter.UserConverter.ShortUserConverter;
 import florian_haas.lucas.web.util.WebUtils;
 
 @FacesConverter(LoginUserConverter.CONVERTER_ID)
-public class LoginUserConverter extends DefaultConverter<LoginUser> {
+public class LoginUserConverter extends DefaultConverter<ReadOnlyLoginUser> {
 
 	public static final String CONVERTER_ID = "lucas:loginUserConverter";
 
@@ -20,7 +20,7 @@ public class LoginUserConverter extends DefaultConverter<LoginUser> {
 	}
 
 	@Override
-	protected Object[] getParamsFromValue(LoginUser value) {
+	protected Object[] getParamsFromValue(ReadOnlyLoginUser value) {
 		return new Object[] {
 				value.getId(), (value.getUser() == null ? value.getUsername()
 						: WebUtils.getAsString(value.getUser(),
@@ -28,7 +28,7 @@ public class LoginUserConverter extends DefaultConverter<LoginUser> {
 	}
 
 	@Override
-	protected String getModifiedDefaultKey(LoginUser value, String defaultKey) {
+	protected String getModifiedDefaultKey(ReadOnlyLoginUser value, String defaultKey) {
 		return defaultKey.concat(value.getUser() == null ? ".default" : ".bound");
 	}
 

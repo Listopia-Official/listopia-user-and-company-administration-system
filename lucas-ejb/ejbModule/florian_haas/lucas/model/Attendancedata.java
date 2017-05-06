@@ -7,10 +7,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import florian_haas.lucas.model.validation.ValidTimeMillis;
-import florian_haas.lucas.util.validation.TypeNotNull;
+import florian_haas.lucas.validation.TypeNotNull;
 
 @Entity
-public class Attendancedata extends EntityBase {
+public class Attendancedata extends EntityBase implements ReadOnlyAttendancedata {
 
 	private static final long serialVersionUID = -2732516380228841229L;
 

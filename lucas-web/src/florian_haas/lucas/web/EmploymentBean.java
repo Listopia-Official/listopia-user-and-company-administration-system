@@ -9,18 +9,16 @@ import javax.validation.constraints.*;
 
 import florian_haas.lucas.business.*;
 import florian_haas.lucas.database.*;
-import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
-import florian_haas.lucas.util.validation.TypeNotNull;
+import florian_haas.lucas.validation.*;
 import florian_haas.lucas.web.converter.*;
 import florian_haas.lucas.web.util.WebUtils;
 
 @Named
 @ViewScoped
-public class EmploymentBean extends BaseBean<Employment> {
+public class EmploymentBean extends BaseBean<ReadOnlyEmployment> {
 
 	private static final long serialVersionUID = 6550522987925022505L;
 
@@ -191,7 +189,7 @@ public class EmploymentBean extends BaseBean<Employment> {
 	}
 
 	@Override
-	protected List<Employment> searchEntities() {
+	protected List<? extends ReadOnlyEmployment> searchEntities() {
 		return employmentBean.findEmployments(searchEmploymentId, searchEmploymentUserId, searchEmploymentJobId,
 				!searchEmploymentWorkShifts.isEmpty() ? new HashSet<>(searchEmploymentWorkShifts) : null, useSearchEmploymentId,
 				useSearchEmploymentUserId, useSearchEmploymentJobId, useSearchEmploymentWorkShifts, searchEmploymentIdComparator,
@@ -199,7 +197,7 @@ public class EmploymentBean extends BaseBean<Employment> {
 	}
 
 	@Override
-	protected Employment entityGetter(Long entityId) {
+	protected ReadOnlyEmployment entityGetter(Long entityId) {
 		return employmentBean.findById(entityId);
 	}
 
@@ -207,10 +205,10 @@ public class EmploymentBean extends BaseBean<Employment> {
 	 * -------------------- Create Employment Dialog Start --------------------
 	 */
 
-	@ValidEntityId(entityClass = User.class)
+	@ValidEntityId(entityClass = ReadOnlyUser.class)
 	private Long createEmploymentDialogUserId;
 
-	@ValidEntityId(entityClass = Job.class)
+	@ValidEntityId(entityClass = ReadOnlyJob.class)
 	private Long createEmploymentDialogJobId;
 
 	@NotNull
@@ -241,14 +239,14 @@ public class EmploymentBean extends BaseBean<Employment> {
 	}
 
 	public String getCreateEmploymentDialogUserFromId() {
-		User user = createEmploymentDialogUserId != null
-				? entityBean.exists(createEmploymentDialogUserId, User.class) ? userBean.findById(createEmploymentDialogUserId) : null : null;
+		ReadOnlyUser user = createEmploymentDialogUserId != null
+				? entityBean.exists(createEmploymentDialogUserId, ReadOnlyUser.class) ? userBean.findById(createEmploymentDialogUserId) : null : null;
 		return WebUtils.getAsString(user, UserConverter.CONVERTER_ID);
 	}
 
 	public String getCreateEmploymentDialogJobFromId() {
-		Job job = createEmploymentDialogJobId != null
-				? entityBean.exists(createEmploymentDialogJobId, Job.class) ? jobBean.findById(createEmploymentDialogJobId) : null : null;
+		ReadOnlyJob job = createEmploymentDialogJobId != null
+				? entityBean.exists(createEmploymentDialogJobId, ReadOnlyJob.class) ? jobBean.findById(createEmploymentDialogJobId) : null : null;
 		return WebUtils.getAsString(job, JobConverter.CONVERTER_ID);
 	}
 
@@ -276,7 +274,7 @@ public class EmploymentBean extends BaseBean<Employment> {
 	 * -------------------- Edit Employment Dialog Start --------------------
 	 */
 
-	private Employment editEmploymentDialogSelectedEmployment;
+	private ReadOnlyEmployment editEmploymentDialogSelectedEmployment;
 
 	@NotNull
 	private List<@TypeNotNull EnumWorkShift> editEmploymentDialogWorkShifts = new ArrayList<>();
@@ -313,9 +311,9 @@ public class EmploymentBean extends BaseBean<Employment> {
 					}
 				});
 			}
-			Employment tmp2 = employmentBean.findById(id);
+			ReadOnlyEmployment tmp2 = employmentBean.findById(id);
 			params.add(WebUtils.getAsString(tmp2, EmploymentConverter.CONVERTER_ID));
-			WebUtils.refreshEntities(Employment.class, searchResults, selectedEntities, tmp2, employmentBean::findById, true);
+			WebUtils.refreshEntities(ReadOnlyEmployment.class, searchResults, selectedEntities, tmp2, employmentBean::findById, true);
 			return true;
 		}, "lucas.application.employmentScreen.editEmployment.message");
 	}
@@ -325,9 +323,9 @@ public class EmploymentBean extends BaseBean<Employment> {
 	 */
 
 	public void removeEmployments() {
-		Iterator<Employment> it = selectedEntities.iterator();
+		Iterator<ReadOnlyEmployment> it = selectedEntities.iterator();
 		while (it.hasNext()) {
-			Employment employment = it.next();
+			ReadOnlyEmployment employment = it.next();
 			WebUtils.executeTask(params -> {
 				params.add(WebUtils.getAsString(employment, EmploymentConverter.CONVERTER_ID));
 				Boolean ret = employmentBean.removeEmployment(employment.getId());

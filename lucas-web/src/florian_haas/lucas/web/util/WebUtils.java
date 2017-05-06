@@ -24,7 +24,7 @@ import org.apache.shiro.*;
 import org.primefaces.model.*;
 
 import florian_haas.lucas.business.LucasException;
-import florian_haas.lucas.model.EntityBase;
+import florian_haas.lucas.model.ReadOnlyEntity;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.web.converter.CurrencyConverter;
@@ -372,28 +372,28 @@ public class WebUtils {
 		return FacesContext.getCurrentInstance().getApplication().createConverter(converterId);
 	}
 
-	public static <E extends EntityBase> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,
+	public static <E extends ReadOnlyEntity> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,
 			List<E> additionalEntitiesToRefresh, Function<Long, E> entityDao, Boolean onlySelected) {
 		refreshEntities(entityClass, entityList, selectedEntities, additionalEntitiesToRefresh, (Map<Long, E>) null, entityDao, onlySelected);
 	}
 
-	public static <E extends EntityBase> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,
+	public static <E extends ReadOnlyEntity> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,
 			Function<Long, E> entityDao, Boolean onlySelected) {
 		refreshEntities(entityClass, entityList, selectedEntities, null, (Map<Long, E>) null, entityDao, onlySelected);
 	}
 
-	public static <E extends EntityBase> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities, E replacement,
+	public static <E extends ReadOnlyEntity> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities, E replacement,
 			Function<Long, E> entityDao, Boolean onlySelected) {
 		refreshEntities(entityClass, entityList, selectedEntities, null, Utils.asMap(replacement.getId(), replacement), entityDao, onlySelected);
 	}
 
-	public static <E extends EntityBase> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,
+	public static <E extends ReadOnlyEntity> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,
 			List<E> additionalEntitiesToRefresh, E replacement, Function<Long, E> entityDao, Boolean onlySelected) {
 		refreshEntities(entityClass, entityList, selectedEntities, additionalEntitiesToRefresh, Utils.asMap(replacement.getId(), replacement),
 				entityDao, onlySelected);
 	}
 
-	public static <E extends EntityBase> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,
+	public static <E extends ReadOnlyEntity> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,
 			List<E> additionalEntitiesToRefresh, Map<Long, E> replacements, Function<Long, E> entityDao, Boolean onlySelected) {
 		List<E> allEntities = new ArrayList<>();
 		allEntities.addAll(entityList);

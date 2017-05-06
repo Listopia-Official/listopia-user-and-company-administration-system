@@ -12,18 +12,16 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import florian_haas.lucas.business.*;
 import florian_haas.lucas.database.*;
-import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
-import florian_haas.lucas.util.validation.NotBlankString;
+import florian_haas.lucas.validation.*;
 import florian_haas.lucas.web.converter.*;
 import florian_haas.lucas.web.util.WebUtils;
 
 @Named
 @ViewScoped
-public class CompanyBean extends BaseBean<Company> {
+public class CompanyBean extends BaseBean<ReadOnlyCompany> {
 
 	public CompanyBean() {
 		super("company", 7);
@@ -72,7 +70,7 @@ public class CompanyBean extends BaseBean<Company> {
 	@QueryComparator(category = EnumQueryComparatorCategory.TEXT)
 	private EnumQueryComparator searchCompanyDescriptionComparator = EnumQueryComparator.EQUAL;
 
-	@ValidEntityId(entityClass = RoomSection.class, nullable = true)
+	@ValidEntityId(entityClass = ReadOnlyRoomSection.class, nullable = true)
 	private Long searchCompanySectionId = null;
 
 	@NotNull
@@ -90,7 +88,7 @@ public class CompanyBean extends BaseBean<Company> {
 	@QueryComparator(category = EnumQueryComparatorCategory.LOGIC)
 	private EnumQueryComparator searchCompanyCompanyTypeComparator = EnumQueryComparator.EQUAL;
 
-	@ValidEntityId(entityClass = Company.class, nullable = true)
+	@ValidEntityId(entityClass = ReadOnlyCompany.class, nullable = true)
 	private Long searchCompanyParentCompanyId;
 
 	@NotNull
@@ -315,7 +313,7 @@ public class CompanyBean extends BaseBean<Company> {
 	}
 
 	@Override
-	protected List<Company> searchEntities() {
+	protected List<? extends ReadOnlyCompany> searchEntities() {
 		return companyBean.findCompanies(searchCompanyId, searchCompanyName, searchCompanyDescription, searchCompanySectionId,
 				searchCompanyCompanyType, searchCompanyParentCompanyId, searchCompanyJobId, searchCompanyAreEmployeesRequired, useSearchCompanyId,
 				useSearchCompanyName, useSearchCompanyDescription, useSearchCompanySectionId, useSearchCompanyCompanyType,
@@ -325,7 +323,7 @@ public class CompanyBean extends BaseBean<Company> {
 	}
 
 	@Override
-	protected Company entityGetter(Long entityId) {
+	protected ReadOnlyCompany entityGetter(Long entityId) {
 		return companyBean.findById(entityId);
 	}
 
@@ -340,22 +338,22 @@ public class CompanyBean extends BaseBean<Company> {
 	@Size(max = 255)
 	private String createCompanyDialogDescription = null;
 
-	@ValidEntityId(entityClass = RoomSection.class, nullable = true)
+	@ValidEntityId(entityClass = ReadOnlyRoomSection.class, nullable = true)
 	private Long createCompanyDialogSectionId = null;
 
 	@NotNull
 	private EnumCompanyType createCompanyDialogCompanyType = EnumCompanyType.CIVIL;
 
-	@ValidEntityId(entityClass = Company.class, nullable = true)
+	@ValidEntityId(entityClass = ReadOnlyCompany.class, nullable = true)
 	private Long createCompanyDialogParentCompanyId = null;
 
 	@NotNull
 	@Min(0)
 	private Integer createCompanyDialogRequiredEmployeesCount = 0;
 
-	private List<@ValidEntityId(entityClass = User.class) Long> createCompanyDialogManagerUserIds = new ArrayList<>();
+	private List<@ValidEntityId(entityClass = ReadOnlyUser.class) Long> createCompanyDialogManagerUserIds = new ArrayList<>();
 
-	@ValidEntityId(entityClass = User.class, nullable = false)
+	@ValidEntityId(entityClass = ReadOnlyUser.class, nullable = false)
 	private Long createCompanyDialogTmpManagerId = null;
 
 	private Long createCompanyDialogSelectedManagerId = null;
@@ -410,8 +408,10 @@ public class CompanyBean extends BaseBean<Company> {
 	}
 
 	public String getCreateCompanyDialogParentCompanyFromId() {
-		Company company = createCompanyDialogParentCompanyId != null ? entityBean.exists(createCompanyDialogParentCompanyId, Company.class)
-				? companyBean.findById(createCompanyDialogParentCompanyId) : null : null;
+		ReadOnlyCompany company = createCompanyDialogParentCompanyId != null
+				? entityBean.exists(createCompanyDialogParentCompanyId, ReadOnlyCompany.class)
+						? companyBean.findById(createCompanyDialogParentCompanyId) : null
+				: null;
 		return WebUtils.getAsString(company, CompanyConverter.CONVERTER_ID);
 	}
 
@@ -427,7 +427,7 @@ public class CompanyBean extends BaseBean<Company> {
 		return createCompanyDialogManagerUserIds;
 	}
 
-	public void setCreateCompanyDialogManagerUserIds(List<@ValidEntityId(entityClass = User.class) Long> createCompanyDialogManagerUserIds) {
+	public void setCreateCompanyDialogManagerUserIds(List<@ValidEntityId(entityClass = ReadOnlyUser.class) Long> createCompanyDialogManagerUserIds) {
 		this.createCompanyDialogManagerUserIds = createCompanyDialogManagerUserIds;
 	}
 
@@ -530,7 +530,7 @@ public class CompanyBean extends BaseBean<Company> {
 							CompanyConverter.CONVERTER_ID));
 			return true;
 		}, "lucas.application.companyScreen.createCompany.message", (exception, params) -> {
-			if (exception.getMark().equals(florian_haas.lucas.business.CompanyBean.NAME_NOT_UNIQUE_EXCEPTION_MARKER)) {
+			if (exception.getMark().equals(florian_haas.lucas.business.CompanyBeanLocal.NAME_NOT_UNIQUE_EXCEPTION_MARKER)) {
 				return WebUtils.getTranslatedMessage("lucas.application.companyScreen.createCompany.message.notUniqueName", createCompanyDialogName);
 			} else {
 				return WebUtils.getTranslatedMessage("lucas.application.companyScreen.createCompany.message.notUniqueLocation",
@@ -547,7 +547,7 @@ public class CompanyBean extends BaseBean<Company> {
 	 * -------------------- Edit Company Dialog Start --------------------
 	 */
 
-	private Company editCompanyDialogSelectedCompany = null;
+	private ReadOnlyCompany editCompanyDialogSelectedCompany = null;
 
 	@NotBlank
 	private String editCompanyDialogName = "";
@@ -556,13 +556,13 @@ public class CompanyBean extends BaseBean<Company> {
 	@Size(max = 255)
 	private String editCompanyDialogDescription = null;
 
-	@ValidEntityId(entityClass = RoomSection.class, nullable = true)
+	@ValidEntityId(entityClass = ReadOnlyRoomSection.class, nullable = true)
 	private Long editCompanyDialogSectionId = null;
 
 	@NotNull
 	private EnumCompanyType editCompanyDialogCompanyType = EnumCompanyType.CIVIL;
 
-	@ValidEntityId(entityClass = Company.class, nullable = true)
+	@ValidEntityId(entityClass = ReadOnlyCompany.class, nullable = true)
 	private Long editCompanyDialogParentCompanyId = null;
 
 	public String getEditCompanyDialogName() {
@@ -606,8 +606,9 @@ public class CompanyBean extends BaseBean<Company> {
 	}
 
 	public String getEditCompanyDialogParentCompanyFromId() {
-		Company company = editCompanyDialogParentCompanyId != null
-				? entityBean.exists(editCompanyDialogParentCompanyId, Company.class) ? companyBean.findById(editCompanyDialogParentCompanyId) : null
+		ReadOnlyCompany company = editCompanyDialogParentCompanyId != null
+				? entityBean.exists(editCompanyDialogParentCompanyId, ReadOnlyCompany.class) ? companyBean.findById(editCompanyDialogParentCompanyId)
+						: null
 				: null;
 		return WebUtils.getAsString(company, CompanyConverter.CONVERTER_ID);
 	}
@@ -620,7 +621,7 @@ public class CompanyBean extends BaseBean<Company> {
 			editCompanyDialogSectionId = (editCompanyDialogSelectedCompany.getSection() != null
 					? editCompanyDialogSelectedCompany.getSection().getId() : null);
 			editCompanyDialogCompanyType = editCompanyDialogSelectedCompany.getCompanyType();
-			Company parent = editCompanyDialogSelectedCompany.getParentCompany();
+			ReadOnlyCompany parent = editCompanyDialogSelectedCompany.getParentCompany();
 			editCompanyDialogParentCompanyId = parent == null ? null : parent.getId();
 		}
 	}
@@ -643,12 +644,12 @@ public class CompanyBean extends BaseBean<Company> {
 			if (WebUtils.isPermitted(EnumPermission.COMPANY_SET_PARENT_COMPANY)) {
 				companyBean.setParentCompany(id, editCompanyDialogParentCompanyId);
 			}
-			Company tmp2 = companyBean.findById(id);
+			ReadOnlyCompany tmp2 = companyBean.findById(id);
 			params.add(WebUtils.getAsString(tmp2, CompanyConverter.CONVERTER_ID));
-			WebUtils.refreshEntities(Company.class, searchResults, selectedEntities, tmp2, companyBean::findById, true);
+			WebUtils.refreshEntities(ReadOnlyCompany.class, searchResults, selectedEntities, tmp2, companyBean::findById, true);
 			return true;
 		}, "lucas.application.companyScreen.editCompany.message", (exception, params) -> {
-			if (exception.getMark().equals(florian_haas.lucas.business.CompanyBean.NAME_NOT_UNIQUE_EXCEPTION_MARKER)) {
+			if (exception.getMark().equals(florian_haas.lucas.business.CompanyBeanLocal.NAME_NOT_UNIQUE_EXCEPTION_MARKER)) {
 				return WebUtils.getTranslatedMessage("lucas.application.companyScreen.editCompany.message.notUniqueName", editCompanyDialogName);
 			} else {
 				return WebUtils.getTranslatedMessage("lucas.application.companyScreen.editCompany.message.notUniqueLocation",
@@ -689,7 +690,7 @@ public class CompanyBean extends BaseBean<Company> {
 		return this.viewEmployeesDialogEmployees;
 	}
 
-	private List<String> getStringFromEmployment(List<Employment> employments) {
+	private List<String> getStringFromEmployment(List<? extends ReadOnlyEmployment> employments) {
 		List<String> ret = new ArrayList<>();
 		employments.forEach(employment -> {
 			ret.add(WebUtils.getAsString(employment.getUser(), UserConverter.CONVERTER_ID));
@@ -699,7 +700,7 @@ public class CompanyBean extends BaseBean<Company> {
 
 	public void initViewEmployeesDialog() {
 		if (!selectedEntities.isEmpty()) {
-			Company tmp = selectedEntities.get(0);
+			ReadOnlyCompany tmp = selectedEntities.get(0);
 			viewEmployeesDialogSelectedCompanyString = WebUtils.getAsString(tmp, CompanyConverter.CONVERTER_ID);
 			viewEmployeesDialogManagers.clear();
 			viewEmployeesDialogEmployees.clear();
@@ -718,29 +719,29 @@ public class CompanyBean extends BaseBean<Company> {
 	 * -------------------- Company Card Manager Dialog Start --------------------
 	 */
 
-	private Company companyCardManagerDialogSelectedCompany;
+	private ReadOnlyCompany companyCardManagerDialogSelectedCompany;
 
-	private List<CompanyCard> companyCardManagerDialogSelectedCompanyCards = new ArrayList<>();
+	private List<ReadOnlyCompanyCard> companyCardManagerDialogSelectedCompanyCards = new ArrayList<>();
 
-	private List<CompanyCard> companyCardManagerDialogCompanyCards = new ArrayList<>();
+	private List<ReadOnlyCompanyCard> companyCardManagerDialogCompanyCards = new ArrayList<>();
 
 	private Date companyCardManagerDialogValidDate = Date.from(Instant.now());
 
 	public static final String COMPANY_CARD_MANAGER_DIALOG_MESSAGES_ID = "companyCardManagerDialogMessages";
 
-	public List<CompanyCard> getCompanyCardManagerDialogCompanyCards() {
+	public List<ReadOnlyCompanyCard> getCompanyCardManagerDialogCompanyCards() {
 		return this.companyCardManagerDialogCompanyCards;
 	}
 
-	public List<CompanyCard> getCompanyCardManagerDialogSelectedCompanyCards() {
+	public List<ReadOnlyCompanyCard> getCompanyCardManagerDialogSelectedCompanyCards() {
 		return this.companyCardManagerDialogSelectedCompanyCards;
 	}
 
-	public void setCompanyCardManagerDialogSelectedCompanyCards(List<CompanyCard> companyCardManagerDialogSelectedCompanyCards) {
+	public void setCompanyCardManagerDialogSelectedCompanyCards(List<ReadOnlyCompanyCard> companyCardManagerDialogSelectedCompanyCards) {
 		this.companyCardManagerDialogSelectedCompanyCards = companyCardManagerDialogSelectedCompanyCards;
 	}
 
-	public Company getCompanyCardManagerDialogSelectedCompany() {
+	public ReadOnlyCompany getCompanyCardManagerDialogSelectedCompany() {
 		return this.companyCardManagerDialogSelectedCompany;
 	}
 
@@ -775,31 +776,31 @@ public class CompanyBean extends BaseBean<Company> {
 	}
 
 	public void companyCardManagerDialogBlockCompanyCards() {
-		for (CompanyCard card : companyCardManagerDialogSelectedCompanyCards) {
+		for (ReadOnlyCompanyCard card : companyCardManagerDialogSelectedCompanyCards) {
 			Long id = card.getId();
 			if (WebUtils.executeTask(params -> {
 				params.add(id);
 				return companyBean.blockCompanyCard(id);
 			}, "lucas.application.companyScreen.blockCompanyCard", COMPANY_CARD_MANAGER_DIALOG_MESSAGES_ID,
 					Utils.asList(WebUtils.getAsString(companyCardManagerDialogSelectedCompany, CompanyConverter.CONVERTER_ID)))) {
-				CompanyCard newCard = companyBean.findCompanyCardById(id);
-				WebUtils.refreshEntities(CompanyCard.class, companyCardManagerDialogCompanyCards, companyCardManagerDialogSelectedCompanyCards,
-						newCard, companyBean::findCompanyCardById, true);
+				ReadOnlyCompanyCard newCard = companyBean.findCompanyCardById(id);
+				WebUtils.refreshEntities(ReadOnlyCompanyCard.class, companyCardManagerDialogCompanyCards,
+						companyCardManagerDialogSelectedCompanyCards, newCard, companyBean::findCompanyCardById, true);
 			}
 		}
 	}
 
 	public void companyCardManagerDialogUnblockCompanyCards() {
-		for (CompanyCard card : companyCardManagerDialogSelectedCompanyCards) {
+		for (ReadOnlyCompanyCard card : companyCardManagerDialogSelectedCompanyCards) {
 			Long id = card.getId();
 			if (WebUtils.executeTask(params -> {
 				params.add(id);
 				return companyBean.unblockCompanyCard(id);
 			}, "lucas.application.companyScreen.unblockCompanyCard", COMPANY_CARD_MANAGER_DIALOG_MESSAGES_ID,
 					Utils.asList(WebUtils.getAsString(companyCardManagerDialogSelectedCompany, CompanyConverter.CONVERTER_ID)))) {
-				CompanyCard newCard = companyBean.findCompanyCardById(id);
-				WebUtils.refreshEntities(CompanyCard.class, companyCardManagerDialogCompanyCards, companyCardManagerDialogSelectedCompanyCards,
-						newCard, companyBean::findCompanyCardById, true);
+				ReadOnlyCompanyCard newCard = companyBean.findCompanyCardById(id);
+				WebUtils.refreshEntities(ReadOnlyCompanyCard.class, companyCardManagerDialogCompanyCards,
+						companyCardManagerDialogSelectedCompanyCards, newCard, companyBean::findCompanyCardById, true);
 			}
 		}
 	}
@@ -812,7 +813,7 @@ public class CompanyBean extends BaseBean<Company> {
 	}
 
 	public void companyCardManagerDialogSetValidDay() {
-		for (CompanyCard card : companyCardManagerDialogSelectedCompanyCards) {
+		for (ReadOnlyCompanyCard card : companyCardManagerDialogSelectedCompanyCards) {
 			Long id = card.getId();
 			if (WebUtils.executeTask(params -> {
 				params.add(card.getId());
@@ -820,33 +821,33 @@ public class CompanyBean extends BaseBean<Company> {
 				params.add(WebUtils.getAsString(card.getValidDay(), LocalDateConverter.CONVERTER_ID));
 				return companyBean.setValidDate(id, Utils.asLocalDate(companyCardManagerDialogValidDate));
 			}, "lucas.application.companyScreen.setValidDay", COMPANY_CARD_MANAGER_DIALOG_MESSAGES_ID)) {
-				CompanyCard newCard = companyBean.findCompanyCardById(id);
-				WebUtils.refreshEntities(CompanyCard.class, companyCardManagerDialogCompanyCards, companyCardManagerDialogSelectedCompanyCards,
-						newCard, companyBean::findCompanyCardById, true);
+				ReadOnlyCompanyCard newCard = companyBean.findCompanyCardById(id);
+				WebUtils.refreshEntities(ReadOnlyCompanyCard.class, companyCardManagerDialogCompanyCards,
+						companyCardManagerDialogSelectedCompanyCards, newCard, companyBean::findCompanyCardById, true);
 			}
 		}
 	}
 
 	public void companyCardManagerDialogRemoveValidDay() {
-		for (CompanyCard card : companyCardManagerDialogSelectedCompanyCards) {
+		for (ReadOnlyCompanyCard card : companyCardManagerDialogSelectedCompanyCards) {
 			Long id = card.getId();
 			if (WebUtils.executeTask(params -> {
 				params.add(card.getId());
 				return companyBean.setValidDate(id, null);
 			}, "lucas.application.companyScreen.removeValidDay", COMPANY_CARD_MANAGER_DIALOG_MESSAGES_ID)) {
-				CompanyCard newCard = companyBean.findCompanyCardById(id);
-				WebUtils.refreshEntities(CompanyCard.class, companyCardManagerDialogCompanyCards, companyCardManagerDialogSelectedCompanyCards,
-						newCard, companyBean::findCompanyCardById, true);
+				ReadOnlyCompanyCard newCard = companyBean.findCompanyCardById(id);
+				WebUtils.refreshEntities(ReadOnlyCompanyCard.class, companyCardManagerDialogCompanyCards,
+						companyCardManagerDialogSelectedCompanyCards, newCard, companyBean::findCompanyCardById, true);
 			}
 		}
 	}
 
 	public void companyCardManagerDialogRemoveCompanyCards() {
 		if (!companyCardManagerDialogSelectedCompanyCards.isEmpty()) {
-			ListIterator<CompanyCard> it = companyCardManagerDialogSelectedCompanyCards.listIterator();
+			ListIterator<ReadOnlyCompanyCard> it = companyCardManagerDialogSelectedCompanyCards.listIterator();
 			while (it.hasNext()) {
 				WebUtils.executeTask(params -> {
-					CompanyCard companyCard = it.next();
+					ReadOnlyCompanyCard companyCard = it.next();
 					Long id = companyCard.getId();
 					Boolean removed = companyBean.removeCompanyCard(id);
 					if (removed) {
@@ -864,7 +865,7 @@ public class CompanyBean extends BaseBean<Company> {
 
 	public void companyCardManagerDialogRefreshCompanyCards() {
 		WebUtils.executeTask((params) -> {
-			WebUtils.refreshEntities(CompanyCard.class, companyCardManagerDialogCompanyCards, companyCardManagerDialogSelectedCompanyCards,
+			WebUtils.refreshEntities(ReadOnlyCompanyCard.class, companyCardManagerDialogCompanyCards, companyCardManagerDialogSelectedCompanyCards,
 					companyBean::findCompanyCardById, true);
 			params.add(companyCardManagerDialogCompanyCards.size());
 			return true;

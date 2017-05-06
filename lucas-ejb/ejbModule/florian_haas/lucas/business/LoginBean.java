@@ -5,7 +5,7 @@ import static florian_haas.lucas.security.EnumPermission.*;
 import java.util.*;
 
 import javax.annotation.Resource;
-import javax.ejb.*;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.*;
 import javax.validation.executable.*;
@@ -17,7 +17,7 @@ import org.apache.shiro.subject.Subject;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.*;
+import florian_haas.lucas.model.validation.DefaultLoginUserRequired;
 import florian_haas.lucas.security.*;
 
 @Stateless
@@ -33,8 +33,9 @@ public class LoginBean implements LoginBeanLocal {
 	@JPADAO
 	private LoginUserRoleDAO loginUserRoleDao;
 
-	@EJB
-	private UserBeanLocal userBean;
+	@Inject
+	@JPADAO
+	private UserDAO userDao;
 
 	@Resource
 	private Validator validator;
@@ -64,7 +65,7 @@ public class LoginBean implements LoginBeanLocal {
 	@Override
 	@RequiresPermissions(LOGIN_USER_CREATE_REGISTERED)
 	public Long newLoginUser(Long user, char[] password, List<Long> userRoleIds) {
-		return newLoginUserHelper(Long.toString(user), password, userBean.findById(user), userRoleIds);
+		return newLoginUserHelper(Long.toString(user), password, userDao.findById(user), userRoleIds);
 	}
 
 	private Long newLoginUserHelper(String username, char[] password, User usr, List<Long> userRoleIds) {
@@ -125,9 +126,6 @@ public class LoginBean implements LoginBeanLocal {
 			throw new LucasException("The username is used by another login user", USERNAME_NOT_UNIQUE_EXCEPTION_MARKER);
 	}
 
-	public static final String USERNAME_NOT_UNIQUE_EXCEPTION_MARKER = "notUniqueUsername";
-	public static final String USER_NOT_UNIQUE_EXCEPTION_MARKER = "notUniqueUser";
-
 	private void checkUserIsUnique(User user) {
 		if (user != null && !loginUserDao.isReferencedUserUnique(user.getId()))
 			throw new LucasException("The user is bound to another login user", USER_NOT_UNIQUE_EXCEPTION_MARKER);
@@ -147,21 +145,21 @@ public class LoginBean implements LoginBeanLocal {
 
 	@Override
 	@RequiresPermissions(LOGIN_USER_FIND_ALL)
-	public List<LoginUser> findAllLoginUsers() {
+	public List<? extends ReadOnlyLoginUser> findAllLoginUsers() {
 		return loginUserDao.findAll();
 	}
 
 	@Override
 	@RequiresPermissions(LOGIN_USER_GET_ROLES)
-	public List<LoginUserRole> getLoginUserRoles(@ValidEntityId(entityClass = LoginUser.class) Long userId) {
+	public List<? extends ReadOnlyLoginUserRole> getLoginUserRoles(Long userId) {
 		LoginUser user = loginUserDao.findById(userId);
 		return new ArrayList<>(user.getRoles());
 	}
 
 	@Override
 	@RequiresPermissions(LOGIN_USER_FIND_DYNAMIC)
-	public List<LoginUser> findLoginUsers(Long id, String username, Long userId, List<Long> roleIds, Boolean useId, Boolean useUsername,
-			Boolean useUserId, Boolean useRoleIds, EnumQueryComparator idComparator, EnumQueryComparator usernameComparator,
+	public List<? extends ReadOnlyLoginUser> findLoginUsers(Long id, String username, Long userId, List<Long> roleIds, Boolean useId,
+			Boolean useUsername, Boolean useUserId, Boolean useRoleIds, EnumQueryComparator idComparator, EnumQueryComparator usernameComparator,
 			EnumQueryComparator userIdComparator, EnumQueryComparator roleIdsComparator) {
 		return loginUserDao.findLoginUsers(id, username, userId, roleIds, useId, useUsername, useUserId, useRoleIds, idComparator, usernameComparator,
 				userIdComparator, roleIdsComparator);

@@ -2,10 +2,10 @@ package florian_haas.lucas.web.converter;
 
 import javax.faces.convert.FacesConverter;
 
-import florian_haas.lucas.model.RoomSection;
+import florian_haas.lucas.model.ReadOnlyRoomSection;
 
 @FacesConverter(RoomSectionConverter.CONVERTER_ID)
-public class RoomSectionConverter extends DefaultConverter<RoomSection> {
+public class RoomSectionConverter extends DefaultConverter<ReadOnlyRoomSection> {
 
 	public static final String CONVERTER_ID = "lucas:roomSectionConverter";
 
@@ -18,7 +18,7 @@ public class RoomSectionConverter extends DefaultConverter<RoomSection> {
 	}
 
 	@Override
-	protected Object[] getParamsFromValue(RoomSection value) {
+	protected Object[] getParamsFromValue(ReadOnlyRoomSection value) {
 		return new Object[] {
 				value.getRoom().getName(), value.getSectionIndex(), value.getId() };
 	}

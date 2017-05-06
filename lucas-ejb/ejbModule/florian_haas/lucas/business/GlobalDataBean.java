@@ -5,7 +5,7 @@ import static florian_haas.lucas.security.EnumPermission.*;
 import java.math.BigDecimal;
 import java.util.*;
 
-import javax.ejb.*;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.executable.*;
 
@@ -23,8 +23,9 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	@Inject
 	private GlobalDataDAO globalDataDao;
 
-	@EJB
-	private CompanyBeanLocal companyBean;
+	@Inject
+	@JPADAO
+	private CompanyDAO companyDao;
 
 	@Override
 	@RequiresPermissions(GLOBAL_DATA_GET_SALARIES)
@@ -85,7 +86,7 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 
 	@Override
 	@RequiresPermissions(GLOBAL_DATA_GET_WAREHOUSE)
-	public Company getWarehouse() {
+	public ReadOnlyCompany getWarehouse() {
 		return newInstance().getWarehouse();
 	}
 
@@ -93,7 +94,7 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	@RequiresPermissions(GLOBAL_DATA_SET_WAREHOUSE)
 	public Boolean setWarehouse(Long companyId) {
 		Company existingCompany = newInstance().getWarehouse();
-		Company company = companyBean.findById(companyId);
+		Company company = companyDao.findById(companyId);
 		if (company.equals(existingCompany)) {
 			return Boolean.FALSE;
 		} else {
@@ -104,7 +105,7 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 
 	@Override
 	@RequiresPermissions(GLOBAL_DATA_GET_INSTANCE)
-	public GlobalData getInstance() {
+	public ReadOnlyGlobalData getInstance() {
 		return newInstance();
 	}
 

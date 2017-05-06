@@ -16,18 +16,16 @@ import org.primefaces.model.UploadedFile;
 
 import florian_haas.lucas.business.*;
 import florian_haas.lucas.database.*;
-import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
-import florian_haas.lucas.util.validation.*;
+import florian_haas.lucas.validation.*;
 import florian_haas.lucas.web.converter.*;
 import florian_haas.lucas.web.util.WebUtils;
 
 @Named
 @ViewScoped
-public class UserBean extends BaseBean<User> {
+public class UserBean extends BaseBean<ReadOnlyUser> {
 
 	public UserBean() {
 		super("user", 6);
@@ -612,7 +610,7 @@ public class UserBean extends BaseBean<User> {
 	}
 
 	@Override
-	protected List<User> searchEntities() {
+	protected List<? extends ReadOnlyUser> searchEntities() {
 		return userBean.findUsers(searchUserId, searchUserForename, searchUserSurname,
 				EnumSchoolClass.getMatchingClasses(useSearchUserSchoolGrade ? searchUserSchoolGrade : null,
 						useSearchUserSchoolClass ? searchUserSchoolClass : null, searchUserSchoolGradeComparator, searchUserSchoolClassComparator),
@@ -622,7 +620,7 @@ public class UserBean extends BaseBean<User> {
 	}
 
 	@Override
-	protected User entityGetter(Long entityId) {
+	protected ReadOnlyUser entityGetter(Long entityId) {
 		return userBean.findById(entityId);
 	}
 
@@ -645,7 +643,7 @@ public class UserBean extends BaseBean<User> {
 
 	private List<@TypeNotNull @NotBlankString String> editUserDialogRanks = new ArrayList<>();
 
-	private User editUserDialogSelectedUser;
+	private ReadOnlyUser editUserDialogSelectedUser;
 
 	public String getEditUserDialogForename() {
 		return editUserDialogForename;
@@ -744,7 +742,7 @@ public class UserBean extends BaseBean<User> {
 				if (WebUtils.isPermitted(EnumPermission.USER_SET_SCHOOL_CLASS)) {
 					userBean.setSchoolClass(id, editUserDialogSchoolClass);
 				}
-				User tmp = userBean.findById(id);
+				ReadOnlyUser tmp = userBean.findById(id);
 				if (WebUtils.isPermitted(EnumPermission.USER_ADD_RANK)) {
 					editUserDialogRanks.forEach(rank -> {
 						if (!tmp.getRanks().contains(rank)) {
@@ -759,9 +757,9 @@ public class UserBean extends BaseBean<User> {
 						}
 					});
 				}
-				User tmp2 = userBean.findById(id);
+				ReadOnlyUser tmp2 = userBean.findById(id);
 				params.add(WebUtils.getAsString(tmp, UserConverter.CONVERTER_ID));
-				WebUtils.refreshEntities(User.class, searchResults, selectedEntities, tmp2, userBean::findById, true);
+				WebUtils.refreshEntities(ReadOnlyUser.class, searchResults, selectedEntities, tmp2, userBean::findById, true);
 				return true;
 			}, "lucas.application.userScreen.editUser.message");
 		}
@@ -779,7 +777,7 @@ public class UserBean extends BaseBean<User> {
 
 	private byte[] imageManagerDialogUploadedImage = null;
 
-	private User imageManagerDialogSelectedUser;
+	private ReadOnlyUser imageManagerDialogSelectedUser;
 
 	public static final String IMAGE_DIALOG_MESSAGES_ID = "imageManagerDialogMessages";
 
@@ -791,7 +789,7 @@ public class UserBean extends BaseBean<User> {
 		return this.imageManagerDialogDisplayImageAsBase64;
 	}
 
-	public User getImageManagerDialogSelectedUser() {
+	public ReadOnlyUser getImageManagerDialogSelectedUser() {
 		return this.imageManagerDialogSelectedUser;
 	}
 
@@ -857,29 +855,29 @@ public class UserBean extends BaseBean<User> {
 	 * -------------------- User Card Manager Dialog Start --------------------
 	 */
 
-	private User userCardManagerDialogSelectedUser;
+	private ReadOnlyUser userCardManagerDialogSelectedUser;
 
-	private List<UserCard> userCardManagerDialogSelectedUserCards = new ArrayList<>();
+	private List<ReadOnlyUserCard> userCardManagerDialogSelectedUserCards = new ArrayList<>();
 
-	private List<UserCard> userCardManagerDialogUserCards = new ArrayList<>();
+	private List<ReadOnlyUserCard> userCardManagerDialogUserCards = new ArrayList<>();
 
 	private Date userCardManagerDialogValidDate = Date.from(Instant.now());
 
 	public static final String USER_CARD_MANAGER_DIALOG_MESSAGES_ID = "userCardManagerDialogMessages";
 
-	public List<UserCard> getUserCardManagerDialogUserCards() {
+	public List<ReadOnlyUserCard> getUserCardManagerDialogUserCards() {
 		return this.userCardManagerDialogUserCards;
 	}
 
-	public List<UserCard> getUserCardManagerDialogSelectedUserCards() {
+	public List<ReadOnlyUserCard> getUserCardManagerDialogSelectedUserCards() {
 		return this.userCardManagerDialogSelectedUserCards;
 	}
 
-	public void setUserCardManagerDialogSelectedUserCards(List<UserCard> userCardManagerDialogSelectedUserCards) {
+	public void setUserCardManagerDialogSelectedUserCards(List<ReadOnlyUserCard> userCardManagerDialogSelectedUserCards) {
 		this.userCardManagerDialogSelectedUserCards = userCardManagerDialogSelectedUserCards;
 	}
 
-	public User getUserCardManagerDialogSelectedUser() {
+	public ReadOnlyUser getUserCardManagerDialogSelectedUser() {
 		return this.userCardManagerDialogSelectedUser;
 	}
 
@@ -914,30 +912,30 @@ public class UserBean extends BaseBean<User> {
 	}
 
 	public void userCardManagerDialogBlockUserCards() {
-		for (UserCard card : userCardManagerDialogSelectedUserCards) {
+		for (ReadOnlyUserCard card : userCardManagerDialogSelectedUserCards) {
 			Long id = card.getId();
 			if (WebUtils.executeTask(params -> {
 				params.add(id);
 				return userBean.blockUserCard(id);
 			}, "lucas.application.userScreen.blockUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
 					Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, UserConverter.CONVERTER_ID)))) {
-				UserCard newCard = userBean.findUserCardById(id);
-				WebUtils.refreshEntities(UserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
+				ReadOnlyUserCard newCard = userBean.findUserCardById(id);
+				WebUtils.refreshEntities(ReadOnlyUserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
 						userBean::findUserCardById, true);
 			}
 		}
 	}
 
 	public void userCardManagerDialogUnblockUserCards() {
-		for (UserCard card : userCardManagerDialogSelectedUserCards) {
+		for (ReadOnlyUserCard card : userCardManagerDialogSelectedUserCards) {
 			Long id = card.getId();
 			if (WebUtils.executeTask(params -> {
 				params.add(id);
 				return userBean.unblockUserCard(id);
 			}, "lucas.application.userScreen.unblockUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
 					Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, UserConverter.CONVERTER_ID)))) {
-				UserCard newCard = userBean.findUserCardById(id);
-				WebUtils.refreshEntities(UserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
+				ReadOnlyUserCard newCard = userBean.findUserCardById(id);
+				WebUtils.refreshEntities(ReadOnlyUserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
 						userBean::findUserCardById, true);
 			}
 		}
@@ -951,7 +949,7 @@ public class UserBean extends BaseBean<User> {
 	}
 
 	public void userCardManagerDialogSetValidDay() {
-		for (UserCard card : userCardManagerDialogSelectedUserCards) {
+		for (ReadOnlyUserCard card : userCardManagerDialogSelectedUserCards) {
 			Long id = card.getId();
 			if (WebUtils.executeTask(params -> {
 				params.add(card.getId());
@@ -959,22 +957,22 @@ public class UserBean extends BaseBean<User> {
 				params.add(WebUtils.getAsString(card.getValidDay(), LocalDateConverter.CONVERTER_ID));
 				return userBean.setValidDate(id, Utils.asLocalDate(userCardManagerDialogValidDate));
 			}, "lucas.application.userScreen.setValidDay", USER_CARD_MANAGER_DIALOG_MESSAGES_ID)) {
-				UserCard newCard = userBean.findUserCardById(id);
-				WebUtils.refreshEntities(UserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
+				ReadOnlyUserCard newCard = userBean.findUserCardById(id);
+				WebUtils.refreshEntities(ReadOnlyUserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
 						userBean::findUserCardById, true);
 			}
 		}
 	}
 
 	public void userCardManagerDialogRemoveValidDay() {
-		for (UserCard card : userCardManagerDialogSelectedUserCards) {
+		for (ReadOnlyUserCard card : userCardManagerDialogSelectedUserCards) {
 			Long id = card.getId();
 			if (WebUtils.executeTask(params -> {
 				params.add(card.getId());
 				return userBean.setValidDate(id, null);
 			}, "lucas.application.userScreen.removeValidDay", USER_CARD_MANAGER_DIALOG_MESSAGES_ID)) {
-				UserCard newCard = userBean.findUserCardById(id);
-				WebUtils.refreshEntities(UserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
+				ReadOnlyUserCard newCard = userBean.findUserCardById(id);
+				WebUtils.refreshEntities(ReadOnlyUserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
 						userBean::findUserCardById, true);
 			}
 		}
@@ -982,10 +980,10 @@ public class UserBean extends BaseBean<User> {
 
 	public void userCardManagerDialogRemoveUserCards() {
 		if (!userCardManagerDialogSelectedUserCards.isEmpty()) {
-			ListIterator<UserCard> it = userCardManagerDialogSelectedUserCards.listIterator();
+			ListIterator<ReadOnlyUserCard> it = userCardManagerDialogSelectedUserCards.listIterator();
 			while (it.hasNext()) {
 				WebUtils.executeTask(params -> {
-					UserCard userCard = it.next();
+					ReadOnlyUserCard userCard = it.next();
 					Long id = userCard.getId();
 					Boolean removed = userBean.removeUserCard(id);
 					if (removed) {
@@ -1003,7 +1001,7 @@ public class UserBean extends BaseBean<User> {
 
 	public void userCardManagerDialogRefreshUserCards() {
 		WebUtils.executeTask((params) -> {
-			WebUtils.refreshEntities(UserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards,
+			WebUtils.refreshEntities(ReadOnlyUserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards,
 					userBean::findUserCardById, true);
 			params.add(userCardManagerDialogUserCards.size());
 			return true;
@@ -1018,15 +1016,15 @@ public class UserBean extends BaseBean<User> {
 	 * -------------------- Job Requests Manager Dialog Start --------------------
 	 */
 
-	private User jobRequestsManagerDialogSelectedUser;
+	private ReadOnlyUser jobRequestsManagerDialogSelectedUser;
 
-	@ValidEntityId(entityClass = Job.class, nullable = true)
+	@ValidEntityId(entityClass = ReadOnlyJob.class, nullable = true)
 	private Long jobRequestsManagerDialogFirstJobRequestId;
 
-	@ValidEntityId(entityClass = Job.class, nullable = true)
+	@ValidEntityId(entityClass = ReadOnlyJob.class, nullable = true)
 	private Long jobRequestsManagerDialogSecondJobRequestId;
 
-	@ValidEntityId(entityClass = Job.class, nullable = true)
+	@ValidEntityId(entityClass = ReadOnlyJob.class, nullable = true)
 	private Long jobRequestsManagerDialogThirdJobRequestId;
 
 	public Long getJobRequestsManagerDialogFirstJobRequestId() {
@@ -1066,7 +1064,7 @@ public class UserBean extends BaseBean<User> {
 	}
 
 	private String getJobRequestsManagerDialogJobFromIdHelper(Long jobId) {
-		Job job = jobId != null ? entityBean.exists(jobId, Job.class) ? jobBean.findById(jobId) : null : null;
+		ReadOnlyJob job = jobId != null ? entityBean.exists(jobId, ReadOnlyJob.class) ? jobBean.findById(jobId) : null : null;
 		return WebUtils.getAsString(job, JobConverter.CONVERTER_ID);
 	}
 
@@ -1091,8 +1089,8 @@ public class UserBean extends BaseBean<User> {
 					userBean.setSecondJobRequest(id, jobRequestsManagerDialogSecondJobRequestId);
 					userBean.setThirdJobRequest(id, jobRequestsManagerDialogThirdJobRequestId);
 				}
-				User tmp2 = userBean.findById(id);
-				WebUtils.refreshEntities(User.class, searchResults, selectedEntities, tmp2, userBean::findById, true);
+				ReadOnlyUser tmp2 = userBean.findById(id);
+				WebUtils.refreshEntities(ReadOnlyUser.class, searchResults, selectedEntities, tmp2, userBean::findById, true);
 				return true;
 			}, "lucas.application.userScreen.editJobRequests.message",
 					Utils.asList(WebUtils.getAsString(jobRequestsManagerDialogSelectedUser, UserConverter.CONVERTER_ID)));

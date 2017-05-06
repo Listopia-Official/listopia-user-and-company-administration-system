@@ -15,10 +15,10 @@ import org.apache.shiro.SecurityUtils;
 import org.primefaces.model.StreamedContent;
 
 import florian_haas.lucas.business.*;
-import florian_haas.lucas.model.LoginUser;
-import florian_haas.lucas.model.validation.*;
+import florian_haas.lucas.model.ReadOnlyLoginUser;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
+import florian_haas.lucas.validation.*;
 import florian_haas.lucas.web.converter.LoginUserConverter.ShortLoginUserConverter;
 import florian_haas.lucas.web.converter.ThemeConverter;
 import florian_haas.lucas.web.util.WebUtils;
@@ -67,7 +67,7 @@ public class LoginBean {
 	public String getAdvancedUsername() {
 		String ret = getSimpleUsername();
 		if (ret != null) {
-			LoginUser user = loginBean.findLoginUserByUsername(ret);
+			ReadOnlyLoginUser user = loginBean.findLoginUserByUsername(ret);
 			if (user != null) {
 				ret = WebUtils.getAsString(user, ShortLoginUserConverter.CONVERTER_ID);
 			}
@@ -131,7 +131,7 @@ public class LoginBean {
 		String username = getSimpleUsername();
 		String theme = null;
 		if (username != null && !username.trim().isEmpty() && WebUtils.isPermitted(EnumPermission.LOGIN_USER_FIND_BY_USERNAME)) {
-			LoginUser user = loginBean.findLoginUserByUsername(username);
+			ReadOnlyLoginUser user = loginBean.findLoginUserByUsername(username);
 			theme = user != null ? user.getUiTheme() : null;
 		}
 		return theme != null ? theme : globalDataBean.getDefaultUITheme();
@@ -145,7 +145,7 @@ public class LoginBean {
 		WebUtils.executeTask(params -> {
 			String username = getSimpleUsername();
 			if (username != null && !username.trim().isEmpty()) {
-				LoginUser user = loginBean.findLoginUserByUsername(username);
+				ReadOnlyLoginUser user = loginBean.findLoginUserByUsername(username);
 				params.add(username);
 				params.add(WebUtils.getAsString(preferencesScreenSelectedUITheme, ThemeConverter.CONVERTER_ID));
 				if (user != null) return loginBean.setUITheme(user.getId(), preferencesScreenSelectedUITheme);

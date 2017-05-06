@@ -8,11 +8,11 @@ import javax.faces.convert.FacesConverter;
 import javax.inject.Named;
 
 import florian_haas.lucas.business.LoginUserRoleBeanLocal;
-import florian_haas.lucas.model.LoginUserRole;
+import florian_haas.lucas.model.ReadOnlyLoginUserRole;
 import florian_haas.lucas.web.util.*;
 
 @FacesConverter(LoginUserRoleConverter.CONVERTER_ID)
-public class LoginUserRoleConverter extends DefaultConverter<LoginUserRole> {
+public class LoginUserRoleConverter extends DefaultConverter<ReadOnlyLoginUserRole> {
 
 	public static final String CONVERTER_ID = "lucas:loginUserRoleConverter";
 
@@ -25,7 +25,7 @@ public class LoginUserRoleConverter extends DefaultConverter<LoginUserRole> {
 	}
 
 	@Override
-	protected Object[] getParamsFromValue(LoginUserRole value) {
+	protected Object[] getParamsFromValue(ReadOnlyLoginUserRole value) {
 		return new Object[] {
 				value.getId(), value.getName() };
 	}
@@ -41,7 +41,7 @@ public class LoginUserRoleConverter extends DefaultConverter<LoginUserRole> {
 		}
 
 		@Override
-		protected LoginUserRole getObject(FacesContext context, UIComponent component, String value) {
+		protected ReadOnlyLoginUserRole getObject(FacesContext context, UIComponent component, String value) {
 			if (value == null || value.trim().isEmpty() || value.equals(WebUtils.getTranslatedMessage(this.getNullLangKey()))) return null;
 
 			Long id = null;
@@ -51,7 +51,7 @@ public class LoginUserRoleConverter extends DefaultConverter<LoginUserRole> {
 			catch (NumberFormatException e) {}
 
 			return id != null
-					? WebUtils.getCDIManagerBean(EntityBean.class).exists(id, LoginUserRole.class)
+					? WebUtils.getCDIManagerBean(EntityBean.class).exists(id, ReadOnlyLoginUserRole.class)
 							? WebUtils.getCDIManagerBean(ShortLoginUserRoleConverterEJBHolder.class).getLoginUserRoleBean().findById(id) : null
 					: null;
 		}

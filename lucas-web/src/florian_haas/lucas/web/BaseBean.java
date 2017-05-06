@@ -11,13 +11,13 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.ToggleEvent;
 import org.primefaces.model.*;
 
-import florian_haas.lucas.model.EntityBase;
+import florian_haas.lucas.model.ReadOnlyEntity;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.web.exporter.CustomCSVExporter;
 import florian_haas.lucas.web.util.WebUtils;
 
-public abstract class BaseBean<T extends EntityBase> implements Serializable {
+public abstract class BaseBean<T extends ReadOnlyEntity> implements Serializable {
 
 	private static final long serialVersionUID = -5947754241791290184L;
 
@@ -78,7 +78,7 @@ public abstract class BaseBean<T extends EntityBase> implements Serializable {
 
 	public final void search() {
 		WebUtils.executeTask((params) -> {
-			List<T> results = this.searchEntities();
+			List<? extends T> results = this.searchEntities();
 			searchResults.clear();
 			selectedEntities.clear();
 			searchResults.addAll(results);
@@ -113,7 +113,7 @@ public abstract class BaseBean<T extends EntityBase> implements Serializable {
 
 	public abstract EnumPermission getExportPermission();
 
-	protected abstract List<T> searchEntities();
+	protected abstract List<? extends T> searchEntities();
 
 	protected abstract T entityGetter(Long entityId);
 

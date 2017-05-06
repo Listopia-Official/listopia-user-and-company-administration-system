@@ -7,10 +7,11 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import florian_haas.lucas.model.validation.*;
+import florian_haas.lucas.validation.*;
 
 @Entity
 @ValidTransactionLog
-public class TransactionLog extends EntityBase {
+public class TransactionLog extends EntityBase implements ReadOnlyTransactionLog {
 
 	private static final long serialVersionUID = 7946302440312827012L;
 
@@ -72,8 +73,9 @@ public class TransactionLog extends EntityBase {
 		this.comment = comment;
 	}
 
+	@Override
 	public Account getAccount() {
-		return this.account;
+		return account;
 	}
 
 	public LocalDateTime getDateTime() {
@@ -88,8 +90,9 @@ public class TransactionLog extends EntityBase {
 		return this.actionType;
 	}
 
+	@Override
 	public Account getRelatedAccount() {
-		return this.relatedAccount;
+		return relatedAccount;
 	}
 
 	public BigDecimal getAmount() {

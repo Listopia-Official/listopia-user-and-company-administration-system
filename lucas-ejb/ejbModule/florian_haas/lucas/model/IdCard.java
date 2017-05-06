@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
-public abstract class IdCard extends EntityBase {
+public abstract class IdCard extends EntityBase implements ReadOnlyIdCard {
 
 	private static final long serialVersionUID = 8810801313974710266L;
 
@@ -19,6 +19,7 @@ public abstract class IdCard extends EntityBase {
 
 	private LocalDate validDay;
 
+	@Override
 	public Boolean getBlocked() {
 		return this.blocked;
 	}
@@ -27,8 +28,9 @@ public abstract class IdCard extends EntityBase {
 		this.blocked = blocked;
 	}
 
+	@Override
 	public LocalDate getValidDay() {
-		return validDay;
+		return this.validDay;
 	}
 
 	public void setValidDay(LocalDate validDay) {

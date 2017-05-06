@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class UserCard extends IdCard {
+public class UserCard extends IdCard implements ReadOnlyUserCard {
 
 	private static final long serialVersionUID = -4981744051982144780L;
 
@@ -19,6 +19,7 @@ public class UserCard extends IdCard {
 		this.user = user;
 	}
 
+	@Override
 	public User getUser() {
 		return this.user;
 	}

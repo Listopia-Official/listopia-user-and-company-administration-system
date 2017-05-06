@@ -9,12 +9,12 @@ import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.NotBlank;
 
 import florian_haas.lucas.model.validation.*;
-import florian_haas.lucas.util.validation.*;
+import florian_haas.lucas.validation.*;
 
 @Entity
 @DiscriminatorValue(value = "company")
 @ValidCompanyHierarchy
-public class Company extends AccountOwner {
+public class Company extends AccountOwner implements ReadOnlyCompany {
 
 	private static final long serialVersionUID = -8593998936489707393L;
 

@@ -27,8 +27,9 @@ public class ItemBean implements ItemBeanLocal {
 	@Inject
 	private ItemDAO itemDao;
 
-	@EJB
-	private CompanyBeanLocal companyBean;
+	@Inject
+	@JPADAO
+	private CompanyDAO companyDao;
 
 	@EJB
 	private GlobalDataBeanLocal globalData;
@@ -42,11 +43,10 @@ public class ItemBean implements ItemBeanLocal {
 	@Override
 	@RequiresPermissions(ITEM_SELL)
 	public void sell(Map<Long, Integer> items, Long companyId, EnumPayType payType) {
-		Company company = companyBean.findById(companyId);
-		GlobalData data = globalData.getInstance();
-		Set<ConstraintViolation<GlobalData>> violations = validator.validate(data, NotNullWarehouseRequired.class);
+		Company company = companyDao.findById(companyId);
+		Set<ConstraintViolation<GlobalData>> violations = validator.validate((GlobalData) globalData.getInstance(), NotNullWarehouseRequired.class);
 		if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
-		Company warehouse = globalData.getWarehouse();
+		Company warehouse = (Company) globalData.getWarehouse();
 		items.forEach((itemId, count) -> {
 			Item item = itemDao.findById(itemId);
 			item.setItemsAvaible(item.getItemsAvaible() - count);
@@ -64,7 +64,7 @@ public class ItemBean implements ItemBeanLocal {
 
 	@Override
 	@RequiresPermissions(ITEM_FIND_ALL)
-	public List<Item> findAll() {
+	public List<? extends ReadOnlyItem> findAll() {
 		return itemDao.findAll();
 	}
 
@@ -76,10 +76,10 @@ public class ItemBean implements ItemBeanLocal {
 
 	@Override
 	@RequiresPermissions(ITEM_FIND_DYNAMIC)
-	public List<Item> findItems(Long id, String name, String description, Integer itemsAvaible, BigDecimal pricePerItem, Boolean useId,
-			Boolean useName, Boolean useDescription, Boolean useItemsAvaible, Boolean usePricePerItem, EnumQueryComparator idComparator,
-			EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator, EnumQueryComparator itemsAvaibleComparator,
-			EnumQueryComparator pricePerItemComparator) {
+	public List<? extends ReadOnlyItem> findItems(Long id, String name, String description, Integer itemsAvaible, BigDecimal pricePerItem,
+			Boolean useId, Boolean useName, Boolean useDescription, Boolean useItemsAvaible, Boolean usePricePerItem,
+			EnumQueryComparator idComparator, EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator,
+			EnumQueryComparator itemsAvaibleComparator, EnumQueryComparator pricePerItemComparator) {
 		return itemDao.findItems(id, name, description, itemsAvaible, pricePerItem, useId, useName, useDescription, useItemsAvaible, usePricePerItem,
 				idComparator, nameComparator, descriptionComparator, itemsAvaibleComparator, pricePerItemComparator);
 	}

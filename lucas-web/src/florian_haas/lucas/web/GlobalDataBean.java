@@ -14,9 +14,8 @@ import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.NotBlank;
 
 import florian_haas.lucas.business.GlobalDataBeanLocal;
-import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.EnumPermission;
-import florian_haas.lucas.util.validation.*;
+import florian_haas.lucas.validation.*;
 import florian_haas.lucas.web.util.WebUtils;
 
 @Named

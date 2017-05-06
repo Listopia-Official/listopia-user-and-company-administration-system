@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
-public class Room extends EntityBase {
+public class Room extends EntityBase implements ReadOnlyRoom {
 
 	private static final long serialVersionUID = -5467840420720996782L;
 

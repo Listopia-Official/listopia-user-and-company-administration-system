@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @MappedSuperclass
-public abstract class EntityBase implements Serializable {
+public abstract class EntityBase implements ReadOnlyEntity, Serializable {
 
 	private static final long serialVersionUID = -3022778277072552040L;
 

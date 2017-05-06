@@ -14,7 +14,6 @@ import javax.validation.executable.*;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.security.*;
 import florian_haas.lucas.util.Utils;
 
@@ -89,7 +88,7 @@ public class CompanyBean implements CompanyBeanLocal {
 				Integer minSchoolGrade = globalData.getMinCivilManagerSchoolGrade();
 				int optimalUsersCounter = 0;
 				for (Long id : managerUserIds) {
-					User user = userBean.findById(id);
+					ReadOnlyUser user = userBean.findById(id);
 					if ((user.getSchoolClass() != null ? user.getSchoolClass().getGrade() : Integer.MAX_VALUE) >= minSchoolGrade)
 						optimalUsersCounter++;
 				}
@@ -114,7 +113,7 @@ public class CompanyBean implements CompanyBeanLocal {
 
 	@Override
 	@RequiresPermissions(COMPANY_FIND_ALL)
-	public List<Company> findAll() {
+	public List<? extends ReadOnlyCompany> findAll() {
 		return companyDao.findAll();
 	}
 
@@ -269,9 +268,6 @@ public class CompanyBean implements CompanyBeanLocal {
 		return Boolean.TRUE;
 	}
 
-	public static final String NAME_NOT_UNIQUE_EXCEPTION_MARKER = "notUniqueName";
-	public static final String SECTION_NOT_UNIQUE_EXCEPTION_MARKER = "notUniqueLocation";
-
 	private void checkIsNameUnique(String name) {
 		if (!companyDao.isNameUnique(name)) throw new LucasException("The name is used by another company", NAME_NOT_UNIQUE_EXCEPTION_MARKER);
 	}
@@ -301,13 +297,13 @@ public class CompanyBean implements CompanyBeanLocal {
 
 	@Override
 	@RequiresPermissions(COMPANY_FIND_COMPANY_CARD_BY_ID)
-	public CompanyCard findCompanyCardById(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId) {
+	public ReadOnlyCompanyCard findCompanyCardById(Long companyCardId) {
 		return companyCardDao.findById(companyCardId);
 	}
 
 	@Override
 	@RequiresPermissions(COMPANY_GET_COMPANY_CARDS)
-	public Set<CompanyCard> getCompanyCards(Long companyId) {
+	public Set<? extends ReadOnlyCompanyCard> getCompanyCards(Long companyId) {
 		Company company = companyDao.findById(companyId);
 		return company.getCompanyCards();
 	}
@@ -325,7 +321,7 @@ public class CompanyBean implements CompanyBeanLocal {
 
 	@Override
 	@RequiresPermissions(COMPANY_REMOVE_COMPANY_CARD)
-	public Boolean removeCompanyCard(@ValidEntityId(entityClass = CompanyCard.class) Long companyCardId) {
+	public Boolean removeCompanyCard(Long companyCardId) {
 		CompanyCard card = companyCardDao.findById(companyCardId);
 		Boolean removed = card.getCompany().removeCompanyCard(card);
 		if (removed) {

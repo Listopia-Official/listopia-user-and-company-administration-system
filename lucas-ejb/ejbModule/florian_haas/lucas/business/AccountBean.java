@@ -16,7 +16,7 @@ import org.apache.shiro.authz.AuthorizationException;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.*;
+import florian_haas.lucas.model.validation.UnblockedAccountRequiredValidationGroup;
 import florian_haas.lucas.security.*;
 import florian_haas.lucas.util.Utils;
 
@@ -105,17 +105,17 @@ public class AccountBean implements AccountBeanLocal {
 		transactionAmount = transactionAmount.abs();
 
 		final LocalDateTime dateTime = LocalDateTime.now();
-		LoginUser user = loginBean.findLoginUserByUsername(loginBean.getSubject().getPrincipal().toString());
+		ReadOnlyLoginUser user = loginBean.findLoginUserByUsername(loginBean.getSubject().getPrincipal().toString());
 
 		account1.addTransactionLog(
-				new TransactionLog(account1, dateTime, action, type, account2, transactionAmount, prevBankBalance1, user, comment));
+				new TransactionLog(account1, dateTime, action, type, account2, transactionAmount, prevBankBalance1, (LoginUser) user, comment));
 
 		if (account2 != null) {
 			final BigDecimal prevBankBalance2 = account2.getBankBalance();
 			account2.setBankBalance(account2.getBankBalance().add(transactionAmount));
 
 			account2.addTransactionLog(new TransactionLog(account2, dateTime, EnumAccountAction.CREDIT, EnumAccountActionType.TRANSACTION, account1,
-					transactionAmount, prevBankBalance2, user, comment));
+					transactionAmount, prevBankBalance2, (LoginUser) user, comment));
 		}
 		accountDao.flush();
 		return account1.getId();
@@ -171,20 +171,20 @@ public class AccountBean implements AccountBeanLocal {
 
 	@Override
 	@RequiresPermissions(ACCOUNT_FIND_ALL)
-	public List<Account> findAll() {
+	public List<? extends ReadOnlyAccount> findAll() {
 		return accountDao.findAll();
 	}
 
 	@Override
 	@RequiresPermissions(ACCOUNT_FIND_BY_ID)
-	public Account findById(Long id) {
+	public ReadOnlyAccount findById(Long id) {
 		return accountDao.findById(id);
 	}
 
 	@Override
 	@RequiresPermissions(ACCOUNT_FIND_DYNAMIC)
-	public List<Account> findAccounts(Long id, Long ownerId, EnumAccountOwnerType ownerType, BigDecimal bankBalance, Boolean blocked,
-			Boolean isProtected, Boolean useId, Boolean useOwnerId, Boolean useOwnerType, Boolean useBankBalance, Boolean useBlocked,
+	public List<? extends ReadOnlyAccount> findAccounts(Long id, Long ownerId, EnumAccountOwnerType ownerType, BigDecimal bankBalance,
+			Boolean blocked, Boolean isProtected, Boolean useId, Boolean useOwnerId, Boolean useOwnerType, Boolean useBankBalance, Boolean useBlocked,
 			Boolean useProtected, EnumQueryComparator idComparator, EnumQueryComparator ownerIdComparator, EnumQueryComparator ownerTypeComparator,
 			EnumQueryComparator bankBalanceComparator) {
 		return accountDao.findAccounts(id, ownerId, ownerType, bankBalance, blocked, isProtected, useId, useOwnerId, useOwnerType, useBankBalance,
@@ -193,7 +193,7 @@ public class AccountBean implements AccountBeanLocal {
 
 	@Override
 	@RequiresPermissions(ACCOUNT_FIND_ACCOUNT_OWNER)
-	public AccountOwner findAccountOwnerById(@ValidEntityId(entityClass = AccountOwner.class) Long id) {
+	public ReadOnlyAccountOwner findAccountOwnerById(Long id) {
 		return accountOwnerDao.findById(id);
 	}
 }

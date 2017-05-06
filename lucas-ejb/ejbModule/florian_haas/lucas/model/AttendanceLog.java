@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import florian_haas.lucas.model.validation.ValidTimeMillis;
 
 @Entity
-public class AttendanceLog extends EntityBase {
+public class AttendanceLog extends EntityBase implements ReadOnlyAttendanceLog {
 
 	private static final long serialVersionUID = -4820073122825186188L;
 

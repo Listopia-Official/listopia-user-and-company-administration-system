@@ -8,14 +8,13 @@ import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import florian_haas.lucas.model.validation.ValidSchoolGrade;
-import florian_haas.lucas.util.validation.*;
+import florian_haas.lucas.validation.*;
 
 @Entity
 @Table(uniqueConstraints = {
 		@UniqueConstraint(columnNames = {
 				"COMPANY_ID", "NAME" }) })
-public class Job extends EntityBase {
+public class Job extends EntityBase implements ReadOnlyJob {
 
 	private static final long serialVersionUID = -4555758067528633376L;
 

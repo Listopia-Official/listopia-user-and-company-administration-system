@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import javax.validation.executable.*;
 
 import florian_haas.lucas.database.*;
-import florian_haas.lucas.model.LoginUserRole;
+import florian_haas.lucas.model.*;
 import florian_haas.lucas.security.*;
 
 @Stateless
@@ -73,13 +73,13 @@ public class LoginUserRoleBean implements LoginUserRoleBeanLocal {
 
 	@Override
 	@RequiresPermissions(LOGIN_ROLE_FIND_ALL)
-	public List<LoginUserRole> findAll() {
+	public List<? extends ReadOnlyLoginUserRole> findAll() {
 		return loginUserRoleDao.findAll();
 	}
 
 	@Override
 	@RequiresPermissions(LOGIN_ROLE_FIND_DYNAMIC)
-	public List<LoginUserRole> findLoginUserRoles(Long id, String name, Set<String> permissions, Boolean useId, Boolean useName,
+	public List<? extends ReadOnlyLoginUserRole> findLoginUserRoles(Long id, String name, Set<String> permissions, Boolean useId, Boolean useName,
 			Boolean usePermissions, EnumQueryComparator idComparator, EnumQueryComparator nameComparator, EnumQueryComparator permissionsComparator) {
 		return loginUserRoleDao.findLoginUserRoles(id, name, permissions, useId, useName, usePermissions, idComparator, nameComparator,
 				permissionsComparator);

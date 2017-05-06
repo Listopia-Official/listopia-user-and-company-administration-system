@@ -2,11 +2,11 @@ package florian_haas.lucas.web.converter;
 
 import javax.faces.convert.FacesConverter;
 
-import florian_haas.lucas.model.Job;
+import florian_haas.lucas.model.ReadOnlyJob;
 import florian_haas.lucas.web.util.WebUtils;
 
 @FacesConverter(JobConverter.CONVERTER_ID)
-public class JobConverter extends DefaultConverter<Job> {
+public class JobConverter extends DefaultConverter<ReadOnlyJob> {
 
 	public static final String CONVERTER_ID = "lucas:jobConverter";
 
@@ -19,7 +19,7 @@ public class JobConverter extends DefaultConverter<Job> {
 	}
 
 	@Override
-	protected Object[] getParamsFromValue(Job value) {
+	protected Object[] getParamsFromValue(ReadOnlyJob value) {
 		return new Object[] {
 				value.getId(), value.getName(), WebUtils.getAsString(value.getCompany(), CompanyConverter.CONVERTER_ID) };
 	}

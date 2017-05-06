@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "disc")
-public abstract class AccountOwner extends EntityBase {
+public abstract class AccountOwner extends EntityBase implements ReadOnlyAccountOwner {
 
 	private static final long serialVersionUID = -2651775692956853862L;
 
@@ -19,6 +19,7 @@ public abstract class AccountOwner extends EntityBase {
 		account = new Account(this);
 	}
 
+	@Override
 	public Account getAccount() {
 		return account;
 	}

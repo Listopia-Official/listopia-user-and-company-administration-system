@@ -2,10 +2,10 @@ package florian_haas.lucas.web.converter;
 
 import javax.faces.convert.FacesConverter;
 
-import florian_haas.lucas.model.User;
+import florian_haas.lucas.model.ReadOnlyUser;
 
 @FacesConverter(UserConverter.CONVERTER_ID)
-public class UserConverter extends DefaultConverter<User> {
+public class UserConverter extends DefaultConverter<ReadOnlyUser> {
 
 	public static final String CONVERTER_ID = "lucas:userConverter";
 
@@ -18,13 +18,13 @@ public class UserConverter extends DefaultConverter<User> {
 	}
 
 	@Override
-	protected Object[] getParamsFromValue(User value) {
+	protected Object[] getParamsFromValue(ReadOnlyUser value) {
 		return new Object[] {
 				value.getForename(), value.getSurname(), value.getSchoolClass(), value.getId() };
 	}
 
 	@Override
-	protected String getModifiedDefaultKey(User value, String defaultKey) {
+	protected String getModifiedDefaultKey(ReadOnlyUser value, String defaultKey) {
 		String keySuffix = ".guest";
 		switch (value.getUserType()) {
 			case PUPIL:

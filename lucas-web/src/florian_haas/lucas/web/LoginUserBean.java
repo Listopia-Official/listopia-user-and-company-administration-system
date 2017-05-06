@@ -12,18 +12,16 @@ import org.primefaces.model.DualListModel;
 
 import florian_haas.lucas.business.*;
 import florian_haas.lucas.database.*;
-import florian_haas.lucas.database.validation.QueryComparator;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
-import florian_haas.lucas.util.validation.*;
+import florian_haas.lucas.validation.*;
 import florian_haas.lucas.web.converter.*;
 import florian_haas.lucas.web.util.WebUtils;
 
 @Named
 @ViewScoped
-public class LoginUserBean extends BaseBean<LoginUser> {
+public class LoginUserBean extends BaseBean<ReadOnlyLoginUser> {
 
 	public LoginUserBean() {
 		super("loginUser", 4);
@@ -95,14 +93,14 @@ public class LoginUserBean extends BaseBean<LoginUser> {
 	}
 
 	@Override
-	protected List<LoginUser> searchEntities() {
+	protected List<? extends ReadOnlyLoginUser> searchEntities() {
 		return loginBean.findLoginUsers(searchLoginUserId, searchLoginUserUsername, searchLoginUserUserId, searchLoginUserRoles, useSearchLoginUserId,
 				useSearchLoginUserUsername, useSearchLoginUserUserId, useSearchLoginUserRoles, searchLoginUserIdComparator,
 				searchLoginUserUsernameComparator, searchLoginUserUserIdComparator, searchLoginUserRolesComparator);
 	}
 
 	@Override
-	protected LoginUser entityGetter(Long entityId) {
+	protected ReadOnlyLoginUser entityGetter(Long entityId) {
 		return loginBean.findLoginUserById(entityId);
 	}
 
@@ -212,7 +210,7 @@ public class LoginUserBean extends BaseBean<LoginUser> {
 	@ValidUnhashedPassword
 	private char[] createDefaultLoginUserPassword = null;
 
-	private DualListModel<LoginUserRole> createDefaultLoginUserRolesListModel;
+	private DualListModel<ReadOnlyLoginUserRole> createDefaultLoginUserRolesListModel;
 
 	public String getCreateDefaultLoginUserUsername() {
 		return createDefaultLoginUserUsername;
@@ -230,18 +228,19 @@ public class LoginUserBean extends BaseBean<LoginUser> {
 		this.createDefaultLoginUserPassword = createDefaultLoginUserPassword;
 	}
 
-	public DualListModel<LoginUserRole> getCreateDefaultLoginUserRolesListModel() {
+	public DualListModel<ReadOnlyLoginUserRole> getCreateDefaultLoginUserRolesListModel() {
 		return createDefaultLoginUserRolesListModel;
 	}
 
-	public void setCreateDefaultLoginUserRolesListModel(DualListModel<LoginUserRole> createDefaultLoginUserRolesListModel) {
+	public void setCreateDefaultLoginUserRolesListModel(DualListModel<ReadOnlyLoginUserRole> createDefaultLoginUserRolesListModel) {
 		this.createDefaultLoginUserRolesListModel = createDefaultLoginUserRolesListModel;
 	}
 
 	public void initCreateDefaultLoginUserDialog() {
 		createDefaultLoginUserUsername = null;
 		createDefaultLoginUserPassword = null;
-		createDefaultLoginUserRolesListModel = new DualListModel<>(new ArrayList<>(loginUserRoleBean.findAll()), new ArrayList<LoginUserRole>());
+		createDefaultLoginUserRolesListModel = new DualListModel<>(new ArrayList<>(loginUserRoleBean.findAll()),
+				new ArrayList<ReadOnlyLoginUserRole>());
 	}
 
 	public void createDefaultLoginUser() {
@@ -267,13 +266,13 @@ public class LoginUserBean extends BaseBean<LoginUser> {
 	 * -------------------- Create Bound Login User Dialog Start --------------------
 	 */
 
-	@ValidEntityId(entityClass = User.class)
+	@ValidEntityId(entityClass = ReadOnlyUser.class)
 	private Long createBoundLoginUserBoundUser = null;
 
 	@ValidUnhashedPassword
 	private char[] createBoundLoginUserPassword = null;
 
-	private DualListModel<LoginUserRole> createBoundLoginUserRolesListModel;
+	private DualListModel<ReadOnlyLoginUserRole> createBoundLoginUserRolesListModel;
 
 	public Long getCreateBoundLoginUserBoundUser() {
 		return createBoundLoginUserBoundUser;
@@ -291,24 +290,26 @@ public class LoginUserBean extends BaseBean<LoginUser> {
 		this.createBoundLoginUserPassword = createBoundLoginUserPassword;
 	}
 
-	public DualListModel<LoginUserRole> getCreateBoundLoginUserRolesListModel() {
+	public DualListModel<ReadOnlyLoginUserRole> getCreateBoundLoginUserRolesListModel() {
 		return createBoundLoginUserRolesListModel;
 	}
 
-	public void setCreateBoundLoginUserRolesListModel(DualListModel<LoginUserRole> createBoundLoginUserRolesListModel) {
+	public void setCreateBoundLoginUserRolesListModel(DualListModel<ReadOnlyLoginUserRole> createBoundLoginUserRolesListModel) {
 		this.createBoundLoginUserRolesListModel = createBoundLoginUserRolesListModel;
 	}
 
 	public String getCreateBoundLoginUserBoundUserFromId() {
-		User user = createBoundLoginUserBoundUser != null
-				? entityBean.exists(createBoundLoginUserBoundUser, User.class) ? userBean.findById(createBoundLoginUserBoundUser) : null : null;
+		ReadOnlyUser user = createBoundLoginUserBoundUser != null
+				? entityBean.exists(createBoundLoginUserBoundUser, ReadOnlyUser.class) ? userBean.findById(createBoundLoginUserBoundUser) : null
+				: null;
 		return WebUtils.getAsString(user, UserConverter.CONVERTER_ID);
 	}
 
 	public void initCreateBoundLoginUserDialog() {
 		createBoundLoginUserBoundUser = null;
 		createBoundLoginUserPassword = null;
-		createBoundLoginUserRolesListModel = new DualListModel<>(new ArrayList<>(loginUserRoleBean.findAll()), new ArrayList<LoginUserRole>());
+		createBoundLoginUserRolesListModel = new DualListModel<>(new ArrayList<>(loginUserRoleBean.findAll()),
+				new ArrayList<ReadOnlyLoginUserRole>());
 	}
 
 	public void createBoundLoginUser() {
@@ -322,7 +323,7 @@ public class LoginUserBean extends BaseBean<LoginUser> {
 			return true;
 		}, "lucas.application.loginUserScreen.createBoundLoginUser", (exception, params) -> {
 			return WebUtils.getTranslatedMessage(
-					(exception.getMark().equals(florian_haas.lucas.business.LoginBean.USER_NOT_UNIQUE_EXCEPTION_MARKER)
+					(exception.getMark().equals(florian_haas.lucas.business.LoginBeanLocal.USER_NOT_UNIQUE_EXCEPTION_MARKER)
 							? "lucas.application.loginUserScreen.createBoundLoginUser.notUniqueUser"
 							: "lucas.application.loginUserScreen.createBoundLoginUser.notUniqueUsername"),
 					params.toArray(new Object[params.size()]));
@@ -337,14 +338,14 @@ public class LoginUserBean extends BaseBean<LoginUser> {
 	 * -------------------- Edit Login User Dialog Start --------------------
 	 */
 
-	private LoginUser editLoginUserSelectedUser = null;
+	private ReadOnlyLoginUser editLoginUserSelectedUser = null;
 
 	@NotBlank
 	private String editLoginUserUsername = null;
 
-	private DualListModel<LoginUserRole> editLoginUserRolesListModel;
+	private DualListModel<ReadOnlyLoginUserRole> editLoginUserRolesListModel;
 
-	public LoginUser getEditLoginUserSelectedUser() {
+	public ReadOnlyLoginUser getEditLoginUserSelectedUser() {
 		return this.editLoginUserSelectedUser;
 	}
 
@@ -356,11 +357,11 @@ public class LoginUserBean extends BaseBean<LoginUser> {
 		this.editLoginUserUsername = editLoginUserUsername;
 	}
 
-	public DualListModel<LoginUserRole> getEditLoginUserRolesListModel() {
+	public DualListModel<ReadOnlyLoginUserRole> getEditLoginUserRolesListModel() {
 		return this.editLoginUserRolesListModel;
 	}
 
-	public void setEditLoginUserRolesListModel(DualListModel<LoginUserRole> editLoginUserRolesListModel) {
+	public void setEditLoginUserRolesListModel(DualListModel<ReadOnlyLoginUserRole> editLoginUserRolesListModel) {
 		this.editLoginUserRolesListModel = editLoginUserRolesListModel;
 	}
 
@@ -374,9 +375,9 @@ public class LoginUserBean extends BaseBean<LoginUser> {
 			editLoginUserUsername = editLoginUserSelectedUser.getUsername();
 			if (WebUtils.isPermitted(EnumPermission.LOGIN_USER_GET_ROLES, EnumPermission.LOGIN_USER_ADD_ROLE,
 					EnumPermission.LOGIN_USER_REMOVE_ROLE)) {
-				List<LoginUserRole> rolesOfUser = new ArrayList<>(editLoginUserSelectedUser.getRoles());
-				List<LoginUserRole> roles = new ArrayList<>();
-				List<LoginUserRole> allRoles = loginUserRoleBean.findAll();
+				List<ReadOnlyLoginUserRole> rolesOfUser = new ArrayList<>(editLoginUserSelectedUser.getRoles());
+				List<ReadOnlyLoginUserRole> roles = new ArrayList<>();
+				List<? extends ReadOnlyLoginUserRole> allRoles = loginUserRoleBean.findAll();
 				allRoles.forEach(role -> {
 					if (!rolesOfUser.contains(role)) {
 						roles.add(role);
@@ -397,7 +398,7 @@ public class LoginUserBean extends BaseBean<LoginUser> {
 			}
 			if (WebUtils.isPermitted(EnumPermission.LOGIN_USER_GET_ROLES, EnumPermission.LOGIN_USER_ADD_ROLE,
 					EnumPermission.LOGIN_USER_REMOVE_ROLE)) {
-				List<LoginUserRole> roles = new ArrayList<>(loginBean.getLoginUserRoles(id));
+				List<ReadOnlyLoginUserRole> roles = new ArrayList<>(loginBean.getLoginUserRoles(id));
 				editLoginUserRolesListModel.getTarget().forEach(role -> {
 					if (!roles.contains(role)) {
 						loginBean.addLoginUserRoleToUser(id, role.getId());
@@ -409,9 +410,9 @@ public class LoginUserBean extends BaseBean<LoginUser> {
 					}
 				});
 			}
-			LoginUser newUser = loginBean.findLoginUserById(id);
+			ReadOnlyLoginUser newUser = loginBean.findLoginUserById(id);
 			params.add(WebUtils.getAsString(newUser, LoginUserConverter.CONVERTER_ID));
-			WebUtils.refreshEntities(LoginUser.class, searchResults, selectedEntities, newUser, loginBean::findLoginUserById, true);
+			WebUtils.refreshEntities(ReadOnlyLoginUser.class, searchResults, selectedEntities, newUser, loginBean::findLoginUserById, true);
 			return true;
 		}, "lucas.application.loginUserScreen.editLoginUser", (exception, params) -> {
 			return WebUtils.getTranslatedMessage("lucas.application.loginUserScreen.createBoundLoginUser.notUniqueUsername",
@@ -427,7 +428,7 @@ public class LoginUserBean extends BaseBean<LoginUser> {
 	 * -------------------- New Password Dialog Start --------------------
 	 */
 
-	private LoginUser changePasswordDialogSelectedUser = null;
+	private ReadOnlyLoginUser changePasswordDialogSelectedUser = null;
 
 	@ValidUnhashedPassword
 	private char[] changePasswordDialogPassword = null;
@@ -446,7 +447,7 @@ public class LoginUserBean extends BaseBean<LoginUser> {
 		}
 	}
 
-	public LoginUser getChangePasswordDialogSelectedUser() {
+	public ReadOnlyLoginUser getChangePasswordDialogSelectedUser() {
 		return this.changePasswordDialogSelectedUser;
 	}
 

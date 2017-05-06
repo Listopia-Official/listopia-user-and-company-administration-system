@@ -7,10 +7,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import florian_haas.lucas.model.validation.UniqueValue;
-import florian_haas.lucas.util.validation.TypeNotNull;
+import florian_haas.lucas.validation.TypeNotNull;
 
 @Entity
-public class Employment extends EntityBase {
+public class Employment extends EntityBase implements ReadOnlyEmployment {
 
 	private static final long serialVersionUID = 8794256029793389169L;
 

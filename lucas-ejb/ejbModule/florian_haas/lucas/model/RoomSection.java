@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class RoomSection extends EntityBase {
+public class RoomSection extends EntityBase implements ReadOnlyRoomSection {
 
 	private static final long serialVersionUID = -7109692305948870006L;
 
@@ -35,6 +35,6 @@ public class RoomSection extends EntityBase {
 	}
 
 	public Integer getSectionIndex() {
-		return this.getRoom().getSections().indexOf(this) + 1;
+		return room.getSections().indexOf(this) + 1;
 	}
 }

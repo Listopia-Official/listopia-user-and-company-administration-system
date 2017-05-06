@@ -8,11 +8,11 @@ import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.NotBlank;
 
 import florian_haas.lucas.model.validation.DefaultLoginUserRequired;
-import florian_haas.lucas.util.validation.TypeNotNull;
+import florian_haas.lucas.validation.TypeNotNull;
 
 @Entity
 @Table(name = "loginuser")
-public class LoginUser extends EntityBase {
+public class LoginUser extends EntityBase implements ReadOnlyLoginUser {
 
 	private static final long serialVersionUID = -3076379041617188865L;
 
@@ -48,8 +48,9 @@ public class LoginUser extends EntityBase {
 		this.user = user;
 	}
 
+	@Override
 	public String getUsername() {
-		return username;
+		return this.username;
 	}
 
 	public void setUsername(String username) {
@@ -57,31 +58,34 @@ public class LoginUser extends EntityBase {
 	}
 
 	public String getHashedPassword() {
-		return hashedPassword;
+		return this.hashedPassword;
 	}
 
 	public void setHashedPassword(String hashedPassword) {
 		this.hashedPassword = hashedPassword;
 	}
 
+	@Override
 	public User getUser() {
-		return user;
+		return this.user;
 	}
 
-	public Set<LoginUserRole> getRoles() {
-		return Collections.unmodifiableSet(roles);
+	@Override
+	public Set<ReadOnlyLoginUserRole> getRoles() {
+		return Collections.unmodifiableSet(this.roles);
 	}
 
 	public Boolean addRole(LoginUserRole role) {
-		return roles.add(role);
+		return this.roles.add(role);
 	}
 
 	public Boolean removeRole(LoginUserRole role) {
-		return roles.remove(role);
+		return this.roles.remove(role);
 	}
 
+	@Override
 	public String getUiTheme() {
-		return uiTheme;
+		return this.uiTheme;
 	}
 
 	public void setUiTheme(String uiTheme) {

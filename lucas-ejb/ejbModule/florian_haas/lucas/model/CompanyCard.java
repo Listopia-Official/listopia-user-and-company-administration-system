@@ -4,7 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public class CompanyCard extends IdCard {
+public class CompanyCard extends IdCard implements ReadOnlyCompanyCard {
 
 	private static final long serialVersionUID = 6849568385486037437L;
 

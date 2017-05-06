@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import florian_haas.lucas.model.validation.ValidItemPrice;
+import florian_haas.lucas.validation.ValidItemPrice;
 
 @Entity
-public class PurchaseLog extends EntityBase {
+public class PurchaseLog extends EntityBase implements ReadOnlyPurchaseLog {
 
 	private static final long serialVersionUID = -3291832482461768966L;
 
@@ -63,7 +63,7 @@ public class PurchaseLog extends EntityBase {
 		return this.dateTime;
 	}
 
-	public Item getItem() {
+	public ReadOnlyItem getItem() {
 		return this.item;
 	}
 

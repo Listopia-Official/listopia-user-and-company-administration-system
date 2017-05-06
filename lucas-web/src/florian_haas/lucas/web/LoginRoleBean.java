@@ -12,17 +12,16 @@ import org.primefaces.model.DualListModel;
 
 import florian_haas.lucas.business.LoginUserRoleBeanLocal;
 import florian_haas.lucas.database.*;
-import florian_haas.lucas.database.validation.QueryComparator;
-import florian_haas.lucas.model.LoginUserRole;
+import florian_haas.lucas.model.ReadOnlyLoginUserRole;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
-import florian_haas.lucas.util.validation.*;
+import florian_haas.lucas.validation.*;
 import florian_haas.lucas.web.converter.LoginUserRoleConverter;
 import florian_haas.lucas.web.util.WebUtils;
 
 @Named
 @ViewScoped
-public class LoginRoleBean extends BaseBean<LoginUserRole> {
+public class LoginRoleBean extends BaseBean<ReadOnlyLoginUserRole> {
 
 	public LoginRoleBean() {
 		super("loginRole", 3);
@@ -76,7 +75,7 @@ public class LoginRoleBean extends BaseBean<LoginUserRole> {
 	}
 
 	@Override
-	protected List<LoginUserRole> searchEntities() {
+	protected List<? extends ReadOnlyLoginUserRole> searchEntities() {
 		return loginUserRoleBean.findLoginUserRoles(searchLoginUserRoleId, searchLoginUserRoleName,
 				searchLoginUserRolePermissions != null ? new HashSet<>(searchLoginUserRolePermissions) : null, useSearchLoginUserRoleId,
 				useSearchLoginUserRoleName, useSearchLoginUserRolePermissions, searchLoginUserRoleIdComparator, searchLoginUserRoleNameComparator,
@@ -84,7 +83,7 @@ public class LoginRoleBean extends BaseBean<LoginUserRole> {
 	}
 
 	@Override
-	protected LoginUserRole entityGetter(Long entityId) {
+	protected ReadOnlyLoginUserRole entityGetter(Long entityId) {
 		return loginUserRoleBean.findById(entityId);
 	}
 
@@ -227,7 +226,7 @@ public class LoginRoleBean extends BaseBean<LoginUserRole> {
 
 	public void initPermissionsDialog() {
 		if (!selectedEntities.isEmpty()) {
-			LoginUserRole tmp = selectedEntities.get(0);
+			ReadOnlyLoginUserRole tmp = selectedEntities.get(0);
 			permissionsDialogSelectedRoleString = WebUtils.getAsString(tmp, LoginUserRoleConverter.CONVERTER_ID);
 			permissionsDialogPermissions.clear();
 			permissionsDialogPermissions.addAll(loginUserRoleBean.getPermissions(tmp.getId()));
@@ -239,9 +238,9 @@ public class LoginRoleBean extends BaseBean<LoginUserRole> {
 	 */
 
 	public void removeLoginUserRole() {
-		Iterator<LoginUserRole> it = selectedEntities.iterator();
+		Iterator<ReadOnlyLoginUserRole> it = selectedEntities.iterator();
 		while (it.hasNext()) {
-			LoginUserRole role = it.next();
+			ReadOnlyLoginUserRole role = it.next();
 			WebUtils.executeTask(params -> {
 				params.add(WebUtils.getAsString(role, LoginUserRoleConverter.CONVERTER_ID));
 				Boolean ret = loginUserRoleBean.removeLoginUserRole(role.getId());
@@ -258,7 +257,7 @@ public class LoginRoleBean extends BaseBean<LoginUserRole> {
 	 * -------------------- Edit Login User Role Dialog Start --------------------
 	 */
 
-	private LoginUserRole editLoginUserRole = null;
+	private ReadOnlyLoginUserRole editLoginUserRole = null;
 
 	@NotBlank
 	private String editLoginUserRoleDialogName = null;
@@ -319,8 +318,8 @@ public class LoginRoleBean extends BaseBean<LoginUserRole> {
 					}
 				});
 			}
-			LoginUserRole newRole = loginUserRoleBean.findById(id);
-			WebUtils.refreshEntities(LoginUserRole.class, searchResults, selectedEntities, newRole, loginUserRoleBean::findById, true);
+			ReadOnlyLoginUserRole newRole = loginUserRoleBean.findById(id);
+			WebUtils.refreshEntities(ReadOnlyLoginUserRole.class, searchResults, selectedEntities, newRole, loginUserRoleBean::findById, true);
 			return true;
 		}, "lucas.application.loginRoleScreen.editLoginUserRole", (exception, params) -> {
 			return WebUtils.getTranslatedMessage("lucas.application.loginRoleScreen.editLoginUserRole.notUnique",

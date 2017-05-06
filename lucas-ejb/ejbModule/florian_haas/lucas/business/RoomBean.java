@@ -10,7 +10,6 @@ import javax.validation.executable.*;
 
 import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.model.validation.ValidEntityId;
 import florian_haas.lucas.security.*;
 
 @Stateless
@@ -41,7 +40,7 @@ public class RoomBean implements RoomBeanLocal {
 
 	@Override
 	@RequiresPermissions(ROOM_FIND_ALL)
-	public List<Room> findAll() {
+	public List<? extends ReadOnlyRoom> findAll() {
 		return roomDao.findAll();
 	}
 
@@ -53,15 +52,16 @@ public class RoomBean implements RoomBeanLocal {
 
 	@Override
 	@RequiresPermissions(ROOM_FIND_DYNAMIC)
-	public List<Room> findRooms(Long roomId, String name, Long roomSectionId, Boolean useRoomId, Boolean useName, Boolean useRoomSectionId,
-			EnumQueryComparator roomIdComparator, EnumQueryComparator roomNameComparator, EnumQueryComparator roomSectionIdComparator) {
+	public List<? extends ReadOnlyRoom> findRooms(Long roomId, String name, Long roomSectionId, Boolean useRoomId, Boolean useName,
+			Boolean useRoomSectionId, EnumQueryComparator roomIdComparator, EnumQueryComparator roomNameComparator,
+			EnumQueryComparator roomSectionIdComparator) {
 		return roomDao.findRooms(roomId, name, roomSectionId, useRoomId, useName, useRoomSectionId, roomIdComparator, roomNameComparator,
 				roomSectionIdComparator);
 	}
 
 	@Override
 	@RequiresPermissions(ROOM_SET_NAME)
-	public Boolean setName(@ValidEntityId(entityClass = Room.class) Long roomId, String name) {
+	public Boolean setName(Long roomId, String name) {
 		Room room = roomDao.findById(roomId);
 		if (room.getName().equals(name)) return Boolean.FALSE;
 		checkIsNameUnique(name);
@@ -90,7 +90,7 @@ public class RoomBean implements RoomBeanLocal {
 
 	@Override
 	@RequiresPermissions(ROOM_FIND_ROOM_SECTION_BY_ID)
-	public RoomSection findRoomSectionById(@ValidEntityId(entityClass = RoomSection.class) Long roomSectionId) {
+	public ReadOnlyRoomSection findRoomSectionById(Long roomSectionId) {
 		return roomSectionDao.findById(roomSectionId);
 	}
 

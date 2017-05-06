@@ -6,11 +6,11 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import florian_haas.lucas.util.validation.*;
+import florian_haas.lucas.validation.*;
 
 @Entity
 @DiscriminatorValue(value = "user")
-public class User extends AccountOwner {
+public class User extends AccountOwner implements ReadOnlyUser {
 
 	private static final long serialVersionUID = -2632198556827472552L;
 
