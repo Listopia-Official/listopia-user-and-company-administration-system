@@ -106,7 +106,7 @@
 				icon="fa fa-credit-card"
 				disabled="#{userBean.selectedEntities.size() != 1}" />
 			<p:commandButton
-				rendered="#{not (loginBean.hasPermission(EnumPermission.USER_SET_JOB_REQUESTS) || true)}"
+				rendered="#{loginBean.hasPermission(EnumPermission.USER_SET_JOB_REQUESTS)}"
 				value="#{msg['lucas.application.userScreen.jobRequestsManagerButton.name']}"
 				title="#{msg['lucas.application.userScreen.jobRequestsManagerButton.tooltip']}"
 				update="jobRequestsManagerDialogForm" process="@this"
