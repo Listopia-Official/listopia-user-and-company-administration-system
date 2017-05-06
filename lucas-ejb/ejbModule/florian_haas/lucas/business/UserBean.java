@@ -10,8 +10,8 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.executable.*;
 
-import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
+import florian_haas.lucas.persistence.*;
 import florian_haas.lucas.security.*;
 
 @Stateless

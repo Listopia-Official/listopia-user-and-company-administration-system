@@ -5,7 +5,7 @@
 		<class>florian_haas.lucas.model.EntityBase</class>
 		<class>florian_haas.lucas.model.Attendancedata</class>
 		<class>florian_haas.lucas.model.UserCard</class>
-		<class>florian_haas.lucas.database.converter.LocalDateTimeToTimestampConverter</class>
+		<class>florian_haas.lucas.persistence.converter.LocalDateTimeToTimestampConverter</class>
 		<class>florian_haas.lucas.model.Stopwatch</class>
 		<class>florian_haas.lucas.model.AccountOwner</class>
 		<class>florian_haas.lucas.model.Account</class>

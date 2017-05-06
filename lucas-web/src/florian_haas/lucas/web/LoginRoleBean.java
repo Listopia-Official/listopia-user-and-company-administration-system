@@ -11,8 +11,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.primefaces.model.DualListModel;
 
 import florian_haas.lucas.business.LoginUserRoleBeanLocal;
-import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.ReadOnlyLoginUserRole;
+import florian_haas.lucas.persistence.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.validation.*;

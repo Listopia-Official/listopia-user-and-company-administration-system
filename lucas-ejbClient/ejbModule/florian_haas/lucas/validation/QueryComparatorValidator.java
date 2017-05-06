@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import javax.validation.*;
 
-import florian_haas.lucas.database.*;
+import florian_haas.lucas.persistence.*;
 
 public class QueryComparatorValidator implements ConstraintValidator<QueryComparator, EnumQueryComparator> {
 

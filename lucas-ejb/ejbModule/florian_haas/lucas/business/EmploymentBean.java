@@ -13,8 +13,8 @@ import javax.validation.executable.*;
 
 import org.apache.shiro.authz.annotation.Logical;
 
-import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
+import florian_haas.lucas.persistence.*;
 import florian_haas.lucas.security.*;
 
 @Stateless

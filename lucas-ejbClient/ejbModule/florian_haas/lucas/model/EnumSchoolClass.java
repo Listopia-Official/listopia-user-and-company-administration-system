@@ -3,7 +3,7 @@ package florian_haas.lucas.model;
 import java.util.*;
 import java.util.function.Predicate;
 
-import florian_haas.lucas.database.EnumQueryComparator;
+import florian_haas.lucas.persistence.EnumQueryComparator;
 import florian_haas.lucas.util.Utils;
 
 public enum EnumSchoolClass {

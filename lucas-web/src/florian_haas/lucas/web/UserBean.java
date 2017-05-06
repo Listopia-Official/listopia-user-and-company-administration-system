@@ -15,8 +15,8 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
 import florian_haas.lucas.business.*;
-import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
+import florian_haas.lucas.persistence.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.validation.*;

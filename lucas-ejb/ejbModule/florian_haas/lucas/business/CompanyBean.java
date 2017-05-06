@@ -12,8 +12,8 @@ import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.validation.executable.*;
 
-import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
+import florian_haas.lucas.persistence.*;
 import florian_haas.lucas.security.*;
 import florian_haas.lucas.util.Utils;
 

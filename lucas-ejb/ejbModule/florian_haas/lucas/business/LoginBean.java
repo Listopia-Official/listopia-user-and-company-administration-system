@@ -15,9 +15,9 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.*;
 import org.apache.shiro.subject.Subject;
 
-import florian_haas.lucas.database.*;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.model.validation.DefaultLoginUserRequired;
+import florian_haas.lucas.persistence.*;
 import florian_haas.lucas.security.*;
 
 @Stateless

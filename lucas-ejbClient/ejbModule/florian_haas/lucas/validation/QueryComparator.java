@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 import javax.validation.*;
 import javax.validation.constraints.NotNull;
 
-import florian_haas.lucas.database.EnumQueryComparatorCategory;
+import florian_haas.lucas.persistence.EnumQueryComparatorCategory;
 
 @Target({
 		FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, CONSTRUCTOR, TYPE_USE })
