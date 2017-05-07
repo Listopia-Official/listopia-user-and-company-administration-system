@@ -27,10 +27,9 @@ public class JobBean implements JobBeanLocal {
 
 	@Override
 	@RequiresPermissions(JOB_CREATE)
-	public Long createJob(String name, String description, Long companyId, EnumEmployeePosition position, Integer optimalSchoolGrade,
-			Integer requiredEmploymentsCount, EnumSalaryClass salaryClass) {
-		return addJobHelper(
-				new Job(name, description, companyDao.findById(companyId), position, optimalSchoolGrade, requiredEmploymentsCount, salaryClass));
+	public Long createJob(String name, String description, Long companyId, EnumEmployeePosition position, Integer requiredEmploymentsCount,
+			EnumSalaryClass salaryClass) {
+		return addJobHelper(new Job(name, description, companyDao.findById(companyId), position, requiredEmploymentsCount, salaryClass));
 	}
 
 	private Long addJobHelper(Job job) {
@@ -55,17 +54,16 @@ public class JobBean implements JobBeanLocal {
 	@Override
 	@RequiresPermissions(JOB_FIND_DYNAMIC)
 	public List<? extends ReadOnlyJob> findJobs(Long jobId, String name, String description, Long companyId, EnumSalaryClass salaryClass,
-			Integer optimalSchoolGrade, Integer requiredEmployeesCount, EnumEmployeePosition position, Long employmentId, Boolean useJobId,
-			Boolean useName, Boolean useDescription, Boolean useCompanyId, Boolean useSalaryClass, Boolean useOptimalSchoolGrade,
-			Boolean useRequiredEmployeesCount, Boolean useEmployeePosition, Boolean useEmploymentId, EnumQueryComparator jobIdComparator,
-			EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator, EnumQueryComparator companyIdComparator,
-			EnumQueryComparator salaryClassComparator, EnumQueryComparator optimalSchoolGradeComparator,
+			Integer requiredEmployeesCount, EnumEmployeePosition position, Long employmentId, Boolean useJobId, Boolean useName,
+			Boolean useDescription, Boolean useCompanyId, Boolean useSalaryClass, Boolean useRequiredEmployeesCount, Boolean useEmployeePosition,
+			Boolean useEmploymentId, EnumQueryComparator jobIdComparator, EnumQueryComparator nameComparator,
+			EnumQueryComparator descriptionComparator, EnumQueryComparator companyIdComparator, EnumQueryComparator salaryClassComparator,
 			EnumQueryComparator requiredEmployeesCountComparator, EnumQueryComparator positionComparator,
 			EnumQueryComparator employmentIdComparator) {
-		return jobDao.findJobs(jobId, name, description, companyId, salaryClass, optimalSchoolGrade, requiredEmployeesCount, position, employmentId,
-				useJobId, useName, useDescription, useCompanyId, useSalaryClass, useOptimalSchoolGrade, useRequiredEmployeesCount,
-				useEmployeePosition, useEmploymentId, jobIdComparator, nameComparator, descriptionComparator, companyIdComparator,
-				salaryClassComparator, optimalSchoolGradeComparator, requiredEmployeesCountComparator, positionComparator, employmentIdComparator);
+		return jobDao.findJobs(jobId, name, description, companyId, salaryClass, requiredEmployeesCount, position, employmentId, useJobId, useName,
+				useDescription, useCompanyId, useSalaryClass, useRequiredEmployeesCount, useEmployeePosition, useEmploymentId, jobIdComparator,
+				nameComparator, descriptionComparator, companyIdComparator, salaryClassComparator, requiredEmployeesCountComparator,
+				positionComparator, employmentIdComparator);
 	}
 
 	@Override
@@ -95,17 +93,6 @@ public class JobBean implements JobBeanLocal {
 		if ((job.getSalaryClass() == null && salaryClass == null) || (job.getSalaryClass() != null && job.getSalaryClass() == salaryClass))
 			return Boolean.FALSE;
 		job.setSalaryClass(salaryClass);
-		return Boolean.TRUE;
-	}
-
-	@Override
-	@RequiresPermissions(JOB_SET_OPTIMAL_SCHOOL_GRADE)
-	public Boolean setOptimalSchoolGrade(Long jobId, Integer optimalSchoolGrade) {
-		Job job = jobDao.findById(jobId);
-		if ((job.getOptimalSchoolGrade() == null && optimalSchoolGrade == null)
-				|| (job.getOptimalSchoolGrade() != null && job.getOptimalSchoolGrade().equals(optimalSchoolGrade)))
-			return Boolean.FALSE;
-		job.setOptimalSchoolGrade(optimalSchoolGrade);
 		return Boolean.TRUE;
 	}
 

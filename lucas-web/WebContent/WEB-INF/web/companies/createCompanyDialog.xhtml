@@ -140,7 +140,7 @@
 							value="#{companyBean.createCompanyDialogGenerateJobs}"
 							title="#{msg['lucas.application.companyScreen.createCompanyDialog.generateJobsBooleanCheckbox.tooltip']}">
 							<p:ajax update="createCompanyDialogForm"
-								process="@this nameInputText descriptionInputTextarea sectionIdInputNumber companyTypeSelectOneMenu parentCompanyInputNumber requiredEmployeesCountInputNumber managersDataList isAdvisorRequiredBooleanCheckbox optimalSchoolGradeInputNumber"
+								process="@this nameInputText descriptionInputTextarea sectionIdInputNumber companyTypeSelectOneMenu parentCompanyInputNumber requiredEmployeesCountInputNumber managersDataList isAdvisorRequiredBooleanCheckbox"
 								oncomplete="PF('createCompanyDialog').initPosition()" />
 						</p:selectBooleanCheckbox>
 						<p:outputLabel
@@ -170,26 +170,6 @@
 							minValue="0" id="requiredEmployeesCountInputNumber"
 							decimalPlaces="0"
 							title="#{msg['lucas.application.companyScreen.createCompanyDialog.requiredEmployeesCountInputNumber.tooltip']}" />
-					</p:column>
-				</p:row>
-				<p:row rendered="#{companyBean.createCompanyDialogGenerateJobs}">
-					<p:column>
-						<p:outputLabel
-							value="#{msg['lucas.application.companyScreen.createCompanyDialog.optimalSchoolGradeInputNumber.name']}"
-							title="#{msg['lucas.application.companyScreen.createCompanyDialog.optimalSchoolGradeInputNumber.tooltip']}"
-							for="optimalSchoolGradeInputNumber" />
-					</p:column>
-					<p:column colspan="2">
-						<p:message for="optimalSchoolGradeInputNumber" />
-					</p:column>
-				</p:row>
-				<p:row rendered="#{companyBean.createCompanyDialogGenerateJobs}">
-					<p:column colspan="3">
-						<p:selectOneMenu id="optimalSchoolGradeInputNumber"
-							title="#{msg['lucas.application.companyScreen.createCompanyDialog.optimalSchoolGradeInputNumber.tooltip']}"
-							value="#{companyBean.createCompanyDialogOptimalSchoolGrade}">
-							<f:selectItems value="#{EnumSchoolClass.GRADES}" />
-						</p:selectOneMenu>
 					</p:column>
 				</p:row>
 				<p:row rendered="#{companyBean.createCompanyDialogGenerateJobs}">
@@ -294,7 +274,7 @@
 				<p:row>
 					<p:column>
 						<p:commandButton
-							process="@this nameInputText descriptionInputTextarea sectionIdInputNumber companyTypeSelectOneMenu parentCompanyInputNumber requiredEmployeesCountInputNumber managersDataList isAdvisorRequiredBooleanCheckbox optimalSchoolGradeInputNumber"
+							process="@this nameInputText descriptionInputTextarea sectionIdInputNumber companyTypeSelectOneMenu parentCompanyInputNumber requiredEmployeesCountInputNumber managersDataList isAdvisorRequiredBooleanCheckbox"
 							update="@form" action="#{companyBean.createCompany}"
 							value="#{msg['lucas.application.companyScreen.createCompanyDialog.createCompanyButton.name']}"
 							title="#{msg['lucas.application.companyScreen.createCompanyDialog.createCompanyButton.tooltip']}"

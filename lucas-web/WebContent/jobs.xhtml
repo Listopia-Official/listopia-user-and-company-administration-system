@@ -40,7 +40,7 @@
 				action="#{jobBean.initCreateJobDialog}" process="@this"
 				update="createJobDialogForm" />
 			<ui:fragment
-				rendered="#{loginBean.hasPermissionsOr([EnumPermission.JOB_SET_NAME,EnumPermission.JOB_SET_DESCRIPTION,EnumPermission.JOB_SET_SALARY_CLASS,EnumPermission.JOB_SET_OPTIMAL_SCHOOL_GRADE,EnumPermission.JOB_SET_REQUIRED_EMPLOYMENT_COUNT,EnumPermission.JOB_SET_EMPLOYEE_POSITION])}">
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.JOB_SET_NAME,EnumPermission.JOB_SET_DESCRIPTION,EnumPermission.JOB_SET_SALARY_CLASS,EnumPermission.JOB_SET_REQUIRED_EMPLOYMENT_COUNT,EnumPermission.JOB_SET_EMPLOYEE_POSITION])}">
 				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 				<p:commandButton
 					value="#{msg['lucas.application.jobScreen.editJobButton.name']}"
@@ -117,21 +117,6 @@
 				<p:outputLabel for="searchJobCompanyIdSelectBooleanCheckbox"
 					value="#{msg['lucas.application.jobScreen.searchJobCompanyIdSelectBooleanCheckbox.name']}"
 					title="#{msg['lucas.application.jobScreen.searchJobCompanyIdSelectBooleanCheckbox.tooltip']}" />
-			</p:column>
-			<p:column>
-				<p:selectBooleanCheckbox
-					id="searchJobOptimalSchoolGradeSelectBooleanCheckbox"
-					styleClass="checkbox"
-					value="#{jobBean.useSearchJobOptimalSchoolGrade}"
-					title="#{msg['lucas.application.jobScreen.searchJobOptimalSchoolGradeSelectBooleanCheckbox.tooltip']}">
-					<p:ajax event="change"
-						update="jobSearchCriteriaForm:searchJobOptimalSchoolGradeInputNumber jobSearchCriteriaForm:searchJobOptimalSchoolGradeComparator"
-						process="@this" />
-				</p:selectBooleanCheckbox>
-				<p:outputLabel
-					for="searchJobOptimalSchoolGradeSelectBooleanCheckbox"
-					value="#{msg['lucas.application.jobScreen.searchJobOptimalSchoolGradeSelectBooleanCheckbox.name']}"
-					title="#{msg['lucas.application.jobScreen.searchJobOptimalSchoolGradeSelectBooleanCheckbox.tooltip']}" />
 			</p:column>
 			<p:column>
 				<p:selectBooleanCheckbox
@@ -230,16 +215,6 @@
 				</p:selectOneMenu>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchJobOptimalSchoolGradeComparator"
-					disabled="#{not jobBean.useSearchJobOptimalSchoolGrade}"
-					value="#{jobBean.searchJobOptimalSchoolGradeComparator}"
-					title="#{msg['lucas.application.jobScreen.searchJobOptimalSchoolGradeComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
-			</p:column>
-			<p:column>
 				<p:selectOneMenu id="searchJobRequiredEmploymentsCountComparator"
 					disabled="#{not jobBean.useSearchJobRequiredEmploymentsCount}"
 					value="#{jobBean.searchJobRequiredEmploymentsCountComparator}"
@@ -303,12 +278,6 @@
 					disabled="#{not jobBean.useSearchJobCompanyId}" />
 			</p:column>
 			<p:column>
-				<p:inputNumber value="#{jobBean.searchJobOptimalSchoolGrade}"
-					minValue="0" decimalPlaces="0"
-					id="searchJobOptimalSchoolGradeInputNumber"
-					disabled="#{not jobBean.useSearchJobOptimalSchoolGrade}" />
-			</p:column>
-			<p:column>
 				<p:inputNumber value="#{jobBean.searchJobRequiredEmploymentsCount}"
 					minValue="0" decimalPlaces="0"
 					id="searchJobRequiredEmploymentsCountInputNumber"
@@ -367,29 +336,22 @@
 				converter="#{converterBean.getConverter(CompanyConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column exportable="#{jobBean.resultsDatatableColumns[4]}"
-			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.optimalSchoolGradeColumn.name']}"
-			sortBy="#{entity.optimalSchoolGrade}"
-			visible="#{jobBean.resultsDatatableColumns[4]}">
-			<h:outputText value="#{entity.optimalSchoolGrade}"
-				converter="#{converterBean.getConverter(IntegerNullConverter.CONVERTER_ID)}" />
-		</p:column>
-		<p:column exportable="#{jobBean.resultsDatatableColumns[5]}"
 			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.requiredEmploymentsCountColumn.name']}"
 			sortBy="#{entity.requiredEmploymentsCount}"
-			visible="#{jobBean.resultsDatatableColumns[5]}">
+			visible="#{jobBean.resultsDatatableColumns[4]}">
 			<h:outputText value="#{entity.requiredEmploymentsCount}" />
 		</p:column>
-		<p:column exportable="#{jobBean.resultsDatatableColumns[6]}"
+		<p:column exportable="#{jobBean.resultsDatatableColumns[5]}"
 			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.employeePositionColumn.name']}"
 			sortBy="#{entity.employeePosition}"
-			visible="#{jobBean.resultsDatatableColumns[6]}">
+			visible="#{jobBean.resultsDatatableColumns[5]}">
 			<h:outputText value="#{entity.employeePosition}"
 				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
 		</p:column>
-		<p:column exportable="#{jobBean.resultsDatatableColumns[7]}"
+		<p:column exportable="#{jobBean.resultsDatatableColumns[6]}"
 			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.salaryClassColumn.name']}"
 			sortBy="#{entity.salaryClass}"
-			visible="#{jobBean.resultsDatatableColumns[7]}">
+			visible="#{jobBean.resultsDatatableColumns[6]}">
 			<h:outputText value="#{entity.salaryClass}"
 				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
 		</p:column>

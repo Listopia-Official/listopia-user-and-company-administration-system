@@ -120,26 +120,6 @@
 				<p:row>
 					<p:column>
 						<p:outputLabel
-							value="#{msg['lucas.application.jobScreen.createJobDialog.optimalSchoolGradeInputNumber.name']}"
-							title="#{msg['lucas.application.jobScreen.createJobDialog.optimalSchoolGradeInputNumber.tooltip']}"
-							for="optimalSchoolGradeInputNumber" />
-					</p:column>
-					<p:column>
-						<p:message for="optimalSchoolGradeInputNumber" />
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column colspan="2">
-						<p:selectOneMenu id="optimalSchoolGradeInputNumber"
-							title="#{msg['lucas.application.jobScreen.createJobDialog.optimalSchoolGradeInputNumber.tooltip']}"
-							value="#{jobBean.createJobDialogOptimalSchoolGrade}">
-							<f:selectItems value="#{EnumSchoolClass.GRADES}" />
-						</p:selectOneMenu>
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column>
-						<p:outputLabel
 							value="#{msg['lucas.application.jobScreen.createJobDialog.requiredEmploymentsCountInputNumber.name']}"
 							title="#{msg['lucas.application.jobScreen.createJobDialog.requiredEmploymentsCountInputNumber.tooltip']}"
 							for="requiredEmploymentsCountInputNumber" />
@@ -191,7 +171,7 @@
 				<p:row>
 					<p:column>
 						<p:commandButton
-							process="@this nameInputText descriptionInputTextarea companyIdInputNumber positionSelectOneMenu requiredEmploymentsCountInputNumber optimalSchoolGradeInputNumber salaryClassSelectOneMenu"
+							process="@this nameInputText descriptionInputTextarea companyIdInputNumber positionSelectOneMenu requiredEmploymentsCountInputNumber salaryClassSelectOneMenu"
 							update="@form" action="#{jobBean.createJob}"
 							value="#{msg['lucas.application.jobScreen.createJobDialog.createJobButton.name']}"
 							title="#{msg['lucas.application.jobScreen.createJobDialog.createJobButton.tooltip']}"

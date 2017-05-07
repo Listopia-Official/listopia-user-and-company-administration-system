@@ -364,9 +364,6 @@ public class CompanyBean extends BaseBean<ReadOnlyCompany> {
 	@NotNull
 	private Boolean createCompanyDialogGenerateJobs = Boolean.FALSE;
 
-	@ValidSchoolGrade
-	private Integer createCompanyDialogOptimalSchoolGrade = null;
-
 	public String getCreateCompanyDialogName() {
 		return createCompanyDialogName;
 	}
@@ -481,14 +478,6 @@ public class CompanyBean extends BaseBean<ReadOnlyCompany> {
 		this.createCompanyDialogIsAdvisorRequired = createCompanyDialogIsAdvisorRequired;
 	}
 
-	public Integer getCreateCompanyDialogOptimalSchoolGrade() {
-		return this.createCompanyDialogOptimalSchoolGrade;
-	}
-
-	public void setCreateCompanyDialogOptimalSchoolGrade(Integer createCompanyDialogOptimalSchoolGrade) {
-		this.createCompanyDialogOptimalSchoolGrade = createCompanyDialogOptimalSchoolGrade;
-	}
-
 	public Boolean getCreateCompanyDialogGenerateJobs() {
 		return createCompanyDialogGenerateJobs;
 	}
@@ -508,7 +497,6 @@ public class CompanyBean extends BaseBean<ReadOnlyCompany> {
 		createCompanyDialogTmpManagerId = null;
 		createCompanyDialogSelectedManagerId = null;
 		createCompanyDialogIsAdvisorRequired = Boolean.FALSE;
-		createCompanyDialogOptimalSchoolGrade = null;
 		createCompanyDialogGenerateJobs = Boolean.FALSE;
 	}
 
@@ -519,7 +507,7 @@ public class CompanyBean extends BaseBean<ReadOnlyCompany> {
 							companyBean.findById(companyBean.createCompany(createCompanyDialogName, createCompanyDialogDescription,
 									createCompanyDialogSectionId, createCompanyDialogCompanyType, createCompanyDialogParentCompanyId,
 									createCompanyDialogGenerateJobs, createCompanyDialogManagerUserIds, createCompanyDialogRequiredEmployeesCount,
-									createCompanyDialogIsAdvisorRequired, createCompanyDialogOptimalSchoolGrade,
+									createCompanyDialogIsAdvisorRequired,
 									WebUtils.getTranslatedMessage("lucas.application.companyScreen.createCompanyDialog.defaultAdvisorJobName"),
 									WebUtils.getTranslatedMessage("lucas.application.companyScreen.createCompanyDialog.defaultAdvisorJobDescription"),
 									WebUtils.getTranslatedMessage("lucas.application.companyScreen.createCompanyDialog.defaultManagerJobName"),

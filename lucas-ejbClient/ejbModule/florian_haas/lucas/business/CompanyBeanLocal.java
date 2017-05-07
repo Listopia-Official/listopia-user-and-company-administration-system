@@ -23,9 +23,9 @@ public interface CompanyBeanLocal {
 			@ValidEntityId(entityClass = ReadOnlyRoomSection.class, nullable = true) Long roomSectionId, @NotNull EnumCompanyType companyType,
 			@ValidEntityId(entityClass = ReadOnlyCompany.class, nullable = true) Long parentCompanyId, @NotNull Boolean generateJobs,
 			List<@ValidEntityId(entityClass = ReadOnlyUser.class) Long> managerUserIds, @NotNull @Min(value = 0) Integer requiredEmployeesCount,
-			@NotNull Boolean isAdvisorRequired, @ValidSchoolGrade Integer optimalEmployeesSchoolGrade, @NotBlank String advisorJobName,
-			@NotBlank String advisorJobDescription, @NotBlank String managerJobName, @NotBlank String managerJobDescription,
-			@NotBlank String employeeJobName, @NotBlank String employeeJobDescription);
+			@NotNull Boolean isAdvisorRequired, @NotBlank String advisorJobName, @NotBlank String advisorJobDescription,
+			@NotBlank String managerJobName, @NotBlank String managerJobDescription, @NotBlank String employeeJobName,
+			@NotBlank String employeeJobDescription);
 
 	public List<? extends ReadOnlyCompany> findAll();
 

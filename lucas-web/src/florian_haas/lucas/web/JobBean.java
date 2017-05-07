@@ -35,7 +35,7 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 	private CompanyBeanLocal companyBean;
 
 	public JobBean() {
-		super("job", 8);
+		super("job", 7);
 	}
 
 	@Override
@@ -99,15 +99,6 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 
 	@QueryComparator(category = EnumQueryComparatorCategory.LOGIC)
 	private EnumQueryComparator searchJobSalaryClassComparator = EnumQueryComparator.EQUAL;
-
-	@ValidSchoolGrade
-	private Integer searchJobOptimalSchoolGrade = null;
-
-	@NotNull
-	private Boolean useSearchJobOptimalSchoolGrade = Boolean.FALSE;
-
-	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
-	private EnumQueryComparator searchJobOptimalSchoolGradeComparator = EnumQueryComparator.EQUAL;
 
 	@NotNull
 	@Min(0)
@@ -258,30 +249,6 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 		this.searchJobSalaryClassComparator = searchJobSalaryClassComparator;
 	}
 
-	public Integer getSearchJobOptimalSchoolGrade() {
-		return this.searchJobOptimalSchoolGrade;
-	}
-
-	public void setSearchJobOptimalSchoolGrade(Integer searchJobOptimalSchoolGrade) {
-		this.searchJobOptimalSchoolGrade = searchJobOptimalSchoolGrade;
-	}
-
-	public Boolean getUseSearchJobOptimalSchoolGrade() {
-		return this.useSearchJobOptimalSchoolGrade;
-	}
-
-	public void setUseSearchJobOptimalSchoolGrade(Boolean useSearchJobOptimalSchoolGrade) {
-		this.useSearchJobOptimalSchoolGrade = useSearchJobOptimalSchoolGrade;
-	}
-
-	public EnumQueryComparator getSearchJobOptimalSchoolGradeComparator() {
-		return this.searchJobOptimalSchoolGradeComparator;
-	}
-
-	public void setSearchJobOptimalSchoolGradeComparator(EnumQueryComparator searchJobOptimalSchoolGradeComparator) {
-		this.searchJobOptimalSchoolGradeComparator = searchJobOptimalSchoolGradeComparator;
-	}
-
 	public Integer getSearchJobRequiredEmploymentsCount() {
 		return this.searchJobRequiredEmploymentsCount;
 	}
@@ -357,11 +324,11 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 	@Override
 	protected List<? extends ReadOnlyJob> searchEntities() {
 		return jobBean.findJobs(searchJobId, searchJobName, searchJobDescription, searchJobCompanyId, searchJobSalaryClass,
-				searchJobOptimalSchoolGrade, searchJobRequiredEmploymentsCount, searchJobPosition, searchJobEmploymentId, useSearchJobId,
-				useSearchJobName, useSearchJobDescription, useSearchJobCompanyId, useSearchJobSalaryClass, useSearchJobOptimalSchoolGrade,
-				useSearchJobRequiredEmploymentsCount, useSearchJobPosition, useSearchJobEmploymentId, searchJobIdComparator, searchJobNameComparator,
-				searchJobDescriptionComparator, searchJobCompanyIdComparator, searchJobSalaryClassComparator, searchJobOptimalSchoolGradeComparator,
-				searchJobRequiredEmploymentsCountComparator, searchJobPositionComparator, searchJobEmploymentIdComparator);
+				searchJobRequiredEmploymentsCount, searchJobPosition, searchJobEmploymentId, useSearchJobId, useSearchJobName,
+				useSearchJobDescription, useSearchJobCompanyId, useSearchJobSalaryClass, useSearchJobRequiredEmploymentsCount, useSearchJobPosition,
+				useSearchJobEmploymentId, searchJobIdComparator, searchJobNameComparator, searchJobDescriptionComparator,
+				searchJobCompanyIdComparator, searchJobSalaryClassComparator, searchJobRequiredEmploymentsCountComparator,
+				searchJobPositionComparator, searchJobEmploymentIdComparator);
 	}
 
 	@Override
@@ -385,9 +352,6 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 
 	@NotNull
 	private EnumEmployeePosition createJobDialogPosition = EnumEmployeePosition.EMPLOYEE;
-
-	@ValidSchoolGrade
-	private Integer createJobDialogOptimalSchoolGrade = null;
 
 	@NotNull
 	@Min(0)
@@ -427,14 +391,6 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 		this.createJobDialogPosition = createJobDialogPosition;
 	}
 
-	public Integer getCreateJobDialogOptimalSchoolGrade() {
-		return createJobDialogOptimalSchoolGrade;
-	}
-
-	public void setCreateJobDialogOptimalSchoolGrade(Integer createJobDialogOptimalSchoolGrade) {
-		this.createJobDialogOptimalSchoolGrade = createJobDialogOptimalSchoolGrade;
-	}
-
 	public Integer getCreateJobDialogRequiredEmploymentsCount() {
 		return createJobDialogRequiredEmploymentsCount;
 	}
@@ -462,7 +418,6 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 		createJobDialogDescription = null;
 		createJobDialogCompanyId = null;
 		createJobDialogPosition = EnumEmployeePosition.EMPLOYEE;
-		createJobDialogOptimalSchoolGrade = null;
 		createJobDialogRequiredEmploymentsCount = 1;
 		createJobDialogSalaryClass = null;
 	}
@@ -470,9 +425,8 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 	public void createJob() {
 		WebUtils.executeTask((params) -> {
 			params.add(WebUtils.getAsString(
-					jobBean.findById(
-							jobBean.createJob(createJobDialogName, createJobDialogDescription, createJobDialogCompanyId, createJobDialogPosition,
-									createJobDialogOptimalSchoolGrade, createJobDialogRequiredEmploymentsCount, createJobDialogSalaryClass)),
+					jobBean.findById(jobBean.createJob(createJobDialogName, createJobDialogDescription, createJobDialogCompanyId,
+							createJobDialogPosition, createJobDialogRequiredEmploymentsCount, createJobDialogSalaryClass)),
 					ShortJobConverter.CONVERTER_ID));
 			return true;
 		}, "lucas.application.jobScreen.createJob.message", (exception, params) -> {
@@ -499,9 +453,6 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 
 	@NotNull
 	private EnumEmployeePosition editJobDialogPosition = EnumEmployeePosition.EMPLOYEE;
-
-	@ValidSchoolGrade
-	private Integer editJobDialogOptimalSchoolGrade = null;
 
 	@NotNull
 	@Min(0)
@@ -533,14 +484,6 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 		this.editJobDialogPosition = editJobDialogPosition;
 	}
 
-	public Integer getEditJobDialogOptimalSchoolGrade() {
-		return editJobDialogOptimalSchoolGrade;
-	}
-
-	public void setEditJobDialogOptimalSchoolGrade(Integer editJobDialogOptimalSchoolGrade) {
-		this.editJobDialogOptimalSchoolGrade = editJobDialogOptimalSchoolGrade;
-	}
-
 	public Integer getEditJobDialogRequiredEmploymentsCount() {
 		return editJobDialogRequiredEmploymentsCount;
 	}
@@ -563,7 +506,6 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 			editJobDialogName = editJobDialogSelectedJob.getName();
 			editJobDialogDescription = editJobDialogSelectedJob.getDescription();
 			editJobDialogPosition = editJobDialogSelectedJob.getEmployeePosition();
-			editJobDialogOptimalSchoolGrade = editJobDialogSelectedJob.getOptimalSchoolGrade();
 			editJobDialogRequiredEmploymentsCount = editJobDialogSelectedJob.getRequiredEmploymentsCount();
 			editJobDialogSalaryClass = editJobDialogSelectedJob.getSalaryClass();
 		}
@@ -580,9 +522,6 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 			}
 			if (WebUtils.isPermitted(EnumPermission.JOB_SET_EMPLOYEE_POSITION)) {
 				jobBean.setEmployeePosition(id, editJobDialogPosition);
-			}
-			if (WebUtils.isPermitted(EnumPermission.JOB_SET_OPTIMAL_SCHOOL_GRADE)) {
-				jobBean.setOptimalSchoolGrade(id, editJobDialogOptimalSchoolGrade);
 			}
 			if (WebUtils.isPermitted(EnumPermission.JOB_SET_REQUIRED_EMPLOYMENT_COUNT)) {
 				jobBean.setRequiredEmploymentsCount(id, editJobDialogRequiredEmploymentsCount);

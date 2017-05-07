@@ -216,7 +216,6 @@ public enum EnumPermission {
 	JOB_SET_NAME(JOB, "setName"),
 	JOB_SET_DESCRIPTION(JOB, "setDescription"),
 	JOB_SET_SALARY_CLASS(JOB, "setSalaryClass"),
-	JOB_SET_OPTIMAL_SCHOOL_GRADE(JOB, "setOptimalSchoolGrade"),
 	JOB_SET_REQUIRED_EMPLOYMENT_COUNT(JOB, "setRequiredEmployeesCount"),
 	JOB_SET_EMPLOYEE_POSITION(JOB, "setEmployeePosition"),
 	JOB_DELETE(JOB, "deleteJob"),

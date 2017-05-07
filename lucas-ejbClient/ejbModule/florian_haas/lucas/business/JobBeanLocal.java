@@ -16,24 +16,21 @@ public interface JobBeanLocal {
 
 	public Long createJob(@NotBlank String name, @NotBlankString @Size(max = 255) String description,
 			@ValidEntityId(entityClass = ReadOnlyCompany.class) Long companyId, @NotNull EnumEmployeePosition position,
-			@ValidSchoolGrade Integer optimalSchoolGrade, @NotNull @Min(0) Integer requiredEmploymentsCount, EnumSalaryClass salaryClass);
+			@NotNull @Min(0) Integer requiredEmploymentsCount, EnumSalaryClass salaryClass);
 
 	public ReadOnlyJob findById(@ValidEntityId(entityClass = ReadOnlyJob.class) Long jobId);
 
 	public List<? extends ReadOnlyJob> findAll();
 
 	public List<? extends ReadOnlyJob> findJobs(@NotNull Long jobId, @NotNull String name, String description, @NotNull Long companyId,
-			EnumSalaryClass salaryClass, Integer optimalSchoolGrade, @NotNull Integer requiredEmployeesCount, @NotNull EnumEmployeePosition position,
-			@NotNull Long employmentId, @NotNull Boolean useJobId, @NotNull Boolean useName, @NotNull Boolean useDescription,
-			@NotNull Boolean useCompanyId, @NotNull Boolean useSalaryClass, @NotNull Boolean useOptimalSchoolGrade,
-			@NotNull Boolean useRequiredEmployeesCount, @NotNull Boolean useEmployeePosition, @NotNull Boolean useEmploymentId,
-			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator jobIdComparator,
+			EnumSalaryClass salaryClass, @NotNull Integer requiredEmployeesCount, @NotNull EnumEmployeePosition position, @NotNull Long employmentId,
+			@NotNull Boolean useJobId, @NotNull Boolean useName, @NotNull Boolean useDescription, @NotNull Boolean useCompanyId,
+			@NotNull Boolean useSalaryClass, @NotNull Boolean useRequiredEmployeesCount, @NotNull Boolean useEmployeePosition,
+			@NotNull Boolean useEmploymentId, @QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator jobIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator nameComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator descriptionComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator companyIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator salaryClassComparator,
-
-			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator optimalSchoolGradeComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator requiredEmployeesCountComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator positionComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator employmentIdComparator);
@@ -43,8 +40,6 @@ public interface JobBeanLocal {
 	public Boolean setDescription(@ValidEntityId(entityClass = ReadOnlyJob.class) Long jobId, @NotBlankString @Size(max = 255) String description);
 
 	public Boolean setSalaryClass(@ValidEntityId(entityClass = ReadOnlyJob.class) Long jobId, EnumSalaryClass salaryClass);
-
-	public Boolean setOptimalSchoolGrade(@ValidEntityId(entityClass = ReadOnlyJob.class) Long jobId, @ValidSchoolGrade Integer optimalSchoolGrade);
 
 	public Boolean setRequiredEmploymentsCount(@ValidEntityId(entityClass = ReadOnlyJob.class) Long jobId,
 			@NotNull @Min(0) Integer requiredEmploymentsCount);

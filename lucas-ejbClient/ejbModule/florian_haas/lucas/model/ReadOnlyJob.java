@@ -11,8 +11,6 @@ public interface ReadOnlyJob extends ReadOnlyEntity {
 
 	public EnumSalaryClass getSalaryClass();
 
-	public Integer getOptimalSchoolGrade();
-
 	public Integer getRequiredEmploymentsCount();
 
 	public EnumEmployeePosition getEmployeePosition();

@@ -11,13 +11,13 @@ import florian_haas.lucas.persistence.*;
 public class JobDAOImpl extends DAOImpl<Job> implements JobDAO {
 
 	@Override
-	public List<Job> findJobs(Long jobId, String name, String description, Long companyId, EnumSalaryClass salaryClass, Integer optimalSchoolGrade,
+	public List<Job> findJobs(Long jobId, String name, String description, Long companyId, EnumSalaryClass salaryClass,
 			Integer requiredEmployeesCount, EnumEmployeePosition position, Long employmentId, Boolean useJobId, Boolean useName,
-			Boolean useDescription, Boolean useCompanyId, Boolean useSalaryClass, Boolean useOptimalSchoolGrade, Boolean useRequiredEmployeesCount,
-			Boolean useEmployeePosition, Boolean useEmploymentId, EnumQueryComparator jobIdComparator, EnumQueryComparator nameComparator,
+			Boolean useDescription, Boolean useCompanyId, Boolean useSalaryClass, Boolean useRequiredEmployeesCount, Boolean useEmployeePosition,
+			Boolean useEmploymentId, EnumQueryComparator jobIdComparator, EnumQueryComparator nameComparator,
 			EnumQueryComparator descriptionComparator, EnumQueryComparator companyIdComparator, EnumQueryComparator salaryClassComparator,
-			EnumQueryComparator optimalSchoolGradeComparator, EnumQueryComparator requiredEmployeesCountComparator,
-			EnumQueryComparator positionComparator, EnumQueryComparator employmentIdComparator) {
+			EnumQueryComparator requiredEmployeesCountComparator, EnumQueryComparator positionComparator,
+			EnumQueryComparator employmentIdComparator) {
 		return readOnlyCriteriaQuery((query, root, builder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 
@@ -26,8 +26,6 @@ public class JobDAOImpl extends DAOImpl<Job> implements JobDAO {
 			getSingularRestriction(Job_.description, description, useDescription, descriptionComparator, predicates, builder, root);
 			getSingularRestriction(Company_.id, companyId, useCompanyId, companyIdComparator, predicates, builder, root.join(Job_.company));
 			getSingularRestriction(Job_.salaryClass, salaryClass, useSalaryClass, salaryClassComparator, predicates, builder, root);
-			getSingularRestriction(Job_.optimalSchoolGrade, optimalSchoolGrade, useOptimalSchoolGrade, optimalSchoolGradeComparator, predicates,
-					builder, root);
 			getSingularRestriction(Job_.requiredEmploymentsCount, requiredEmployeesCount, useRequiredEmployeesCount, requiredEmployeesCountComparator,
 					predicates, builder, root);
 			getSingularRestriction(Job_.employeePosition, position, useEmployeePosition, positionComparator, predicates, builder, root);

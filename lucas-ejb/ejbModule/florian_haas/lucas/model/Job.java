@@ -34,11 +34,6 @@ public class Job extends EntityBase implements ReadOnlyJob {
 	@NotNull
 	private Company company;
 
-	@Basic(optional = true)
-	@Column(nullable = true)
-	@ValidSchoolGrade
-	private Integer optimalSchoolGrade = null;
-
 	@Basic(optional = false)
 	@Column(nullable = false)
 	@NotNull
@@ -61,13 +56,12 @@ public class Job extends EntityBase implements ReadOnlyJob {
 
 	Job() {}
 
-	public Job(String name, String description, Company company, EnumEmployeePosition position, Integer optimalSchoolGrade,
-			Integer requiredEmploymentsCount, EnumSalaryClass salaryClass) {
+	public Job(String name, String description, Company company, EnumEmployeePosition position, Integer requiredEmploymentsCount,
+			EnumSalaryClass salaryClass) {
 		this.name = name;
 		this.description = description;
 		this.company = company;
 		this.employeePosition = position;
-		this.optimalSchoolGrade = optimalSchoolGrade;
 		this.requiredEmploymentsCount = requiredEmploymentsCount;
 		this.salaryClass = salaryClass;
 	}
@@ -98,14 +92,6 @@ public class Job extends EntityBase implements ReadOnlyJob {
 
 	public void setSalaryClass(EnumSalaryClass salaryClass) {
 		this.salaryClass = salaryClass;
-	}
-
-	public Integer getOptimalSchoolGrade() {
-		return optimalSchoolGrade;
-	}
-
-	public void setOptimalSchoolGrade(Integer optimalSchoolGrade) {
-		this.optimalSchoolGrade = optimalSchoolGrade;
 	}
 
 	public Integer getRequiredEmploymentsCount() {

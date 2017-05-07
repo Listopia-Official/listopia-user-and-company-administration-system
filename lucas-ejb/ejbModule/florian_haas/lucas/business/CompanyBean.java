@@ -59,9 +59,9 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions(COMPANY_CREATE)
 	public Long createCompany(String name, String description, Long roomSectionId, EnumCompanyType companyType, Long parentCompanyId,
-			Boolean generateJobs, List<Long> managerUserIds, Integer requiredEmployeesCount, Boolean isAdvisorRequired,
-			Integer optimalEmployeesSchoolGrade, String advisorJobName, String advisorJobDescription, String managerJobName,
-			String managerJobDescription, String employeeJobName, String employeeJobDescription) {
+			Boolean generateJobs, List<Long> managerUserIds, Integer requiredEmployeesCount, Boolean isAdvisorRequired, String advisorJobName,
+			String advisorJobDescription, String managerJobName, String managerJobDescription, String employeeJobName,
+			String employeeJobDescription) {
 		checkIsNameUnique(name);
 		if (roomSectionId != null) checkIsSectionUnique(roomSectionId);
 		RoomSection section = roomSectionId != null ? roomSectionDao.findById(roomSectionId) : null;
@@ -93,19 +93,18 @@ public class CompanyBean implements CompanyBeanLocal {
 						optimalUsersCounter++;
 				}
 				if ((optimalUsersCounter < 1) || isAdvisorRequired) {
-					jobBean.createJob(advisorJobName, advisorJobDescription, company.getId(), EnumEmployeePosition.ADVISOR, null, 1, null);
+					jobBean.createJob(advisorJobName, advisorJobDescription, company.getId(), EnumEmployeePosition.ADVISOR, 1, null);
 				}
 			}
 			// Create Job for managers
-			Long managerJobId = jobBean.createJob(managerJobName, managerJobDescription, company.getId(), EnumEmployeePosition.MANAGER, null,
+			Long managerJobId = jobBean.createJob(managerJobName, managerJobDescription, company.getId(), EnumEmployeePosition.MANAGER,
 					optimalCivilManagerCount, null);
 			managerUserIds.forEach(userId -> {
 				employmentBean.createEmployment(userId, managerJobId, null);
 			});
 
 			// Create Job for employees
-			jobBean.createJob(employeeJobName, employeeJobDescription, company.getId(), EnumEmployeePosition.EMPLOYEE, optimalEmployeesSchoolGrade,
-					requiredEmployeesCount, null);
+			jobBean.createJob(employeeJobName, employeeJobDescription, company.getId(), EnumEmployeePosition.EMPLOYEE, requiredEmployeesCount, null);
 		}
 
 		return company.getId();
