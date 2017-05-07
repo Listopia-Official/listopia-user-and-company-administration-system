@@ -25,6 +25,10 @@ public class JobBean implements JobBeanLocal {
 	@JPADAO
 	private CompanyDAO companyDao;
 
+	@Inject
+	@JPADAO
+	private UserDAO userDao;
+
 	@Override
 	@RequiresPermissions(JOB_CREATE)
 	public Long createJob(String name, String description, Long companyId, EnumEmployeePosition position, Integer requiredEmploymentsCount,
@@ -118,6 +122,8 @@ public class JobBean implements JobBeanLocal {
 	@RequiresPermissions(JOB_DELETE)
 	public Boolean deleteJob(Long jobId) {
 		if (jobDao.isReferencedInEmployments(jobId)) return Boolean.FALSE;
+		userDao.clearJobWishes(jobId);
+		userDao.flush();
 		jobDao.delete(jobDao.findById(jobId));
 		return Boolean.TRUE;
 	}

@@ -3,7 +3,6 @@ package florian_haas.lucas.persistence;
 import java.util.List;
 
 import florian_haas.lucas.model.*;
-import florian_haas.lucas.persistence.EnumQueryComparator;
 
 public interface UserDAO extends DAO<User> {
 
@@ -15,5 +14,7 @@ public interface UserDAO extends DAO<User> {
 			EnumQueryComparator searchUserTypeComparator, EnumQueryComparator ranksComparator);
 
 	public List<User> getAllUsersWithJobRequests();
+
+	public void clearJobWishes(Long jobId);
 
 }

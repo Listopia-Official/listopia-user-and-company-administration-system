@@ -3,6 +3,7 @@ package florian_haas.lucas.persistence.impl;
 import java.util.*;
 
 import javax.persistence.criteria.*;
+import javax.persistence.metamodel.SingularAttribute;
 
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.persistence.*;
@@ -64,6 +65,22 @@ public class UserDAOImpl extends DAOImpl<User> implements UserDAO {
 		query.select(user).where(builder.or(builder.isNotNull(user.get(User_.firstJobRequest)), builder.isNotNull(user.get(User_.secondJobRequest)),
 				builder.isNotNull(user.get(User_.thirdJobRequest))));
 		return manager.createQuery(query).getResultList();
+	}
+
+	@Override
+	public void clearJobWishes(Long jobId) {
+		clearJobWish(User_.firstJobRequest, jobId);
+		clearJobWish(User_.secondJobRequest, jobId);
+		clearJobWish(User_.thirdJobRequest, jobId);
+	}
+
+	private void clearJobWish(SingularAttribute<User, Job> wish, Long jobId) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaUpdate<User> query = builder.createCriteriaUpdate(User.class);
+		Root<User> root = query.from(User.class);
+		Path<Job> wishPath = root.get(wish);
+		query.set(wishPath, (Job) null).where(builder.and(builder.equal(wishPath.get(Job_.id), jobId)));
+		System.out.println(manager.createQuery(query).executeUpdate());
 	}
 
 }
