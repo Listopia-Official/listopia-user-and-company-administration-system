@@ -1,0 +1,95 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.employmentScreen.distributeJobsDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="distributeJobsDialog" />
+	<ui:param name="formId" value="distributeJobsDialogForm" />
+	<ui:define name="dialogContent">
+		<p:importEnum type="florian_haas.lucas.model.EnumUserType" />
+		<p:importEnum type="florian_haas.lucas.model.EnumEmployeePosition" />
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.employmentScreen.distributeJobsDialog.validUsersSelectCheckboxMenu.name']}"
+							title="#{msg['lucas.application.employmentScreen.distributeJobsDialog.validUsersSelectCheckboxMenu.tooltip']}"
+							for="validUsersSelectCheckboxMenu" />
+					</p:column>
+					<p:column>
+						<p:message for="validUsersSelectCheckboxMenu" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:selectCheckboxMenu id="validUsersSelectCheckboxMenu"
+							value="#{employmentBean.distributeJobsDialogValidUsers}"
+							multiple="true"
+							title="#{msg['lucas.application.employmentScreen.distributeJobsDialog.validUsersSelectCheckboxMenu.tooltip']}"
+							converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}">
+							<f:selectItems value="#{EnumUserType.ALL_VALUES}" var="userType"
+								itemValue="#{userType}"
+								itemLabel=" #{converterBean.convertEnum(userType)}" />
+						</p:selectCheckboxMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.employmentScreen.distributeJobsDialog.validJobsSelectCheckboxMenu.name']}"
+							title="#{msg['lucas.application.employmentScreen.distributeJobsDialog.validJobsSelectCheckboxMenu.tooltip']}"
+							for="validJobsSelectCheckboxMenu" />
+					</p:column>
+					<p:column>
+						<p:message for="validJobsSelectCheckboxMenu" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:selectCheckboxMenu id="validJobsSelectCheckboxMenu"
+							value="#{employmentBean.distributeJobsDialogValidJobs}"
+							multiple="true"
+							title="#{msg['lucas.application.employmentScreen.distributeJobsDialog.validJobsSelectCheckboxMenu.tooltip']}"
+							converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}">
+							<f:selectItems value="#{EnumEmployeePosition.ALL_VALUES}"
+								var="jobPosition" itemValue="#{jobPosition}"
+								itemLabel=" #{converterBean.convertEnum(jobPosition)}" />
+						</p:selectCheckboxMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton id="startJobDistributionButton"
+							process="@this validUsersSelectCheckboxMenu validJobsSelectCheckboxMenu"
+							update="@form" action="#{employmentBean.distributeJobs}"
+							value="#{msg['lucas.application.employmentScreen.distributeJobsDialog.startJobDistributionButton.name']}"
+							title="#{msg['lucas.application.employmentScreen.distributeJobsDialog.startJobDistributionButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('distributeJobsDialog').hide()}">
+							<p:confirm
+								header="#{msg['lucas.application.employmentScreen.distributeJobsConfirmDialog.header']}"
+								message="#{msg['lucas.application.employmentScreen.distributeJobsConfirmDialog.message']}" />
+						</p:commandButton>
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this" immediate="true"
+							value="#{msg['lucas.application.employmentScreen.distributeJobsDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.employmentScreen.distributeJobsDialog.cancelButton.tooltip']}"
+							oncomplete="PF('distributeJobsDialog').hide()">
+						</p:commandButton>
+					</p:column>
+					<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
+						<ui:param name="block" value="distributeJobsDialogForm" />
+						<ui:param name="trigger"
+							value="distributeJobsDialogForm:startJobDistributionButton" />
+					</ui:include>
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

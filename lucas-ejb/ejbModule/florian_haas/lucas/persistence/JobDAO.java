@@ -1,6 +1,6 @@
 package florian_haas.lucas.persistence;
 
-import java.util.List;
+import java.util.*;
 
 import florian_haas.lucas.model.*;
 
@@ -16,5 +16,7 @@ public interface JobDAO extends DAO<Job> {
 	public Boolean isNameUniqueInJobsOfCompany(Long companyId, String name);
 
 	public Boolean isReferencedInEmployments(Long jobId);
+
+	public List<Job> getEmployeeJobsWhereEmploymentsAreRequired(EnumSet<EnumEmployeePosition> validJobs);
 
 }

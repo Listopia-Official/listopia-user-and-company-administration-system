@@ -169,4 +169,64 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	public Set<EnumWorkShift> getWorkShifts(Long employmentId) {
 		return employmentDao.findById(employmentId).getWorkShifts();
 	}
+
+	@Override
+	@RequiresPermissions(EMPLOYMENT_DISTRIBUTE_JOBS)
+	public List<Integer> distributeJobs(EnumSet<EnumUserType> permittedUserTypes, EnumSet<EnumEmployeePosition> validJobs) {
+		Integer distributedJobs = 0;
+		List<User> relevantUsers = userDao.getAllUsersWithNoEmployments(permittedUserTypes);
+		Collections.shuffle(relevantUsers);
+		LinkedList<User> freeUsersPool = new LinkedList<>();
+		for (User user : relevantUsers) {
+			if (!createEmploymentIfPossible(user, user.getFirstJobRequest(), validJobs)) {
+				if (!createEmploymentIfPossible(user, user.getSecondJobRequest(), validJobs)) {
+					if (!createEmploymentIfPossible(user, user.getThirdJobRequest(), validJobs)) {
+						freeUsersPool.add(user);
+					} else {
+						distributedJobs++;
+					}
+				} else {
+					distributedJobs++;
+				}
+			} else {
+				distributedJobs++;
+			}
+		}
+		relevantUsers.clear();
+		List<Job> freeJobs = jobDao.getEmployeeJobsWhereEmploymentsAreRequired(validJobs);
+		if (!freeJobs.isEmpty()) {
+			Collections.shuffle(freeUsersPool);
+			Iterator<Job> it = freeJobs.iterator();
+			while (it.hasNext()) {
+				Job job = it.next();
+				for (int i = job.getEmployments().size(); i < job.getRequiredEmploymentsCount() & !freeUsersPool.isEmpty(); i++) {
+					User user = freeUsersPool.removeFirst();
+					if (user != null) {
+						createEmploymentIfPossible(user, job, validJobs);
+						distributedJobs++;
+					}
+				}
+				if (job.getEmployments().size() >= job.getRequiredEmploymentsCount()) it.remove();
+			}
+		}
+		Integer remainingJobs = 0;
+		Integer remainingUsers = freeUsersPool.size();
+		freeUsersPool.clear();
+		for (Job job : freeJobs) {
+			if (job.areEmployeesRequiredForJob()) {
+				remainingJobs += (job.getRequiredEmploymentsCount() - job.getEmployments().size());
+			}
+		}
+		freeJobs.clear();
+		return Collections.unmodifiableList(Arrays.asList(distributedJobs, remainingJobs, remainingUsers));
+	}
+
+	private Boolean createEmploymentIfPossible(User user, Job job, EnumSet<EnumEmployeePosition> validJobs) {
+		Boolean ret = Boolean.FALSE;
+		if (job != null && job.areEmployeesRequiredForJob() && validJobs.contains(job.getEmployeePosition())) {
+			createEmployment(user.getId(), job.getId(), null);
+			ret = Boolean.TRUE;
+		}
+		return ret;
+	}
 }

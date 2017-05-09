@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 import javax.ejb.Local;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.persistence.*;
@@ -48,5 +48,8 @@ public interface EmploymentBeanLocal {
 			@QueryComparator(category = EnumQueryComparatorCategory.ARRAY) EnumQueryComparator workShiftsComparator);
 
 	public Set<EnumWorkShift> getWorkShifts(@ValidEntityId(entityClass = ReadOnlyEmployment.class) Long employmentId);
+
+	public List<Integer> distributeJobs(@Size(min = 1) @NotNull EnumSet<@TypeNotNull EnumUserType> permittedUserTypes,
+			@Size(min = 1) @NotNull EnumSet<@TypeNotNull EnumEmployeePosition> validJobs);
 
 }

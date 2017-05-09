@@ -337,4 +337,49 @@ public class EmploymentBean extends BaseBean<ReadOnlyEmployment> {
 			}, "lucas.application.employmentScreen.removeEmployments");
 		}
 	}
+
+	/*
+	 * -------------------- Distribute Jobs Dialog Start --------------------
+	 */
+
+	@Size(min = 1)
+	private List<EnumUserType> distributeJobsDialogValidUsers = new ArrayList<>();
+
+	@Size(min = 1)
+	private List<EnumEmployeePosition> distributeJobsDialogValidJobs = new ArrayList<>();
+
+	public List<EnumUserType> getDistributeJobsDialogValidUsers() {
+		return this.distributeJobsDialogValidUsers;
+	}
+
+	public void setDistributeJobsDialogValidUsers(List<EnumUserType> distributeJobsDialogValidUsers) {
+		this.distributeJobsDialogValidUsers = distributeJobsDialogValidUsers;
+	}
+
+	public List<EnumEmployeePosition> getDistributeJobsDialogValidJobs() {
+		return this.distributeJobsDialogValidJobs;
+	}
+
+	public void setDistributeJobsDialogValidJobs(List<EnumEmployeePosition> distributeJobsDialogValidJobs) {
+		this.distributeJobsDialogValidJobs = distributeJobsDialogValidJobs;
+	}
+
+	public void initDistributeJobsDialog() {
+		distributeJobsDialogValidUsers.clear();
+		distributeJobsDialogValidUsers.add(EnumUserType.PUPIL);
+		distributeJobsDialogValidJobs.clear();
+		distributeJobsDialogValidJobs.add(EnumEmployeePosition.EMPLOYEE);
+	}
+
+	public void distributeJobs() {
+		WebUtils.executeTask(params -> {
+			params.addAll(
+					employmentBean.distributeJobs(EnumSet.copyOf(distributeJobsDialogValidUsers), EnumSet.copyOf(distributeJobsDialogValidJobs)));
+			return true;
+		}, "lucas.application.employmentScreen.distributeJobs.message");
+	}
+
+	/*
+	 * -------------------- Distribute Jobs Dialog End --------------------
+	 */
 }

@@ -1,6 +1,6 @@
 package florian_haas.lucas.persistence;
 
-import java.util.List;
+import java.util.*;
 
 import florian_haas.lucas.model.*;
 
@@ -13,7 +13,7 @@ public interface UserDAO extends DAO<User> {
 			Boolean useRanks, EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator, EnumQueryComparator surnameComparator,
 			EnumQueryComparator searchUserTypeComparator, EnumQueryComparator ranksComparator);
 
-	public List<User> getAllUsersWithJobRequests();
+	public List<User> getAllUsersWithNoEmployments(EnumSet<EnumUserType> permittedUserTypes);
 
 	public void clearJobWishes(Long jobId);
 

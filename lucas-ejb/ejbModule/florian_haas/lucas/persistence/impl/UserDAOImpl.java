@@ -24,22 +24,7 @@ public class UserDAOImpl extends DAOImpl<User> implements UserDAO {
 			getSingularRestriction(User_.surname, surname, useSurname, surnameComparator, predicates, builder, root);
 			getSingularRestrictionCollection(User_.schoolClass, schoolClasses, useSchoolClass, null, predicates, builder, root);
 			if (useUserType) {
-				Predicate pred = null;
-				switch (userType) {
-					case GUEST:
-						pred = builder.or(builder.isNull(root.get(User_.forename)), builder.isNull(root.get(User_.surname)));
-						break;
-					case PUPIL:
-						pred = builder.and(builder.isNotNull(root.get(User_.forename)), builder.isNotNull(root.get(User_.surname)),
-								builder.isNotNull(root.get(User_.schoolClass)));
-						break;
-					case TEACHER:
-						pred = builder.and(builder.isNotNull(root.get(User_.forename)), builder.isNotNull(root.get(User_.surname)),
-								builder.isNull(root.get(User_.schoolClass)));
-						break;
-					default:
-						break;
-				}
+				Predicate pred = getUserTypePredicate(userType, builder, root);
 				if (pred != null) {
 					if (searchUserTypeComparator == EnumQueryComparator.NOT_EQUAL) pred = pred.not();
 					predicates.add(pred);
@@ -51,6 +36,20 @@ public class UserDAOImpl extends DAOImpl<User> implements UserDAO {
 		});
 	}
 
+	private Predicate getUserTypePredicate(EnumUserType userType, CriteriaBuilder builder, Root<User> root) {
+		switch (userType) {
+			case GUEST:
+				return builder.or(builder.isNull(root.get(User_.forename)), builder.isNull(root.get(User_.surname)));
+			case PUPIL:
+				return builder.and(builder.isNotNull(root.get(User_.forename)), builder.isNotNull(root.get(User_.surname)),
+						builder.isNotNull(root.get(User_.schoolClass)));
+			case TEACHER:
+				return builder.and(builder.isNotNull(root.get(User_.forename)), builder.isNotNull(root.get(User_.surname)),
+						builder.isNull(root.get(User_.schoolClass)));
+		}
+		return null;
+	}
+
 	@Override
 	public byte[] getImageFromId(Long userId) {
 		List<byte[]> results = readOnlyJPQLQuery("SELECT u.image from User u where u.id=?1", byte[].class, userId);
@@ -58,12 +57,16 @@ public class UserDAOImpl extends DAOImpl<User> implements UserDAO {
 	}
 
 	@Override
-	public List<User> getAllUsersWithJobRequests() {
+	public List<User> getAllUsersWithNoEmployments(EnumSet<EnumUserType> permittedUserTypes) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<User> query = builder.createQuery(User.class);
 		Root<User> user = query.from(User.class);
-		query.select(user).where(builder.or(builder.isNotNull(user.get(User_.firstJobRequest)), builder.isNotNull(user.get(User_.secondJobRequest)),
-				builder.isNotNull(user.get(User_.thirdJobRequest))));
+		List<Predicate> enumsPredicate = new ArrayList<>();
+		permittedUserTypes.forEach(userType -> {
+			enumsPredicate.add(getUserTypePredicate(userType, builder, user));
+		});
+		query.select(user).where(
+				builder.and(builder.or(enumsPredicate.toArray(new Predicate[enumsPredicate.size()])), builder.isEmpty(user.get(User_.employments))));
 		return manager.createQuery(query).getResultList();
 	}
 
@@ -80,7 +83,7 @@ public class UserDAOImpl extends DAOImpl<User> implements UserDAO {
 		Root<User> root = query.from(User.class);
 		Path<Job> wishPath = root.get(wish);
 		query.set(wishPath, (Job) null).where(builder.and(builder.equal(wishPath.get(Job_.id), jobId)));
-		System.out.println(manager.createQuery(query).executeUpdate());
+		manager.createQuery(query).executeUpdate();
 	}
 
 }

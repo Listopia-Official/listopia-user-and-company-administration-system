@@ -9,6 +9,7 @@
 		<ui:include
 			src="/WEB-INF/web/employments/createEmploymentDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/employments/editEmploymentDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/employments/distributeJobsDialog.xhtml" />
 	</ui:define>
 	<ui:define name="otherContent">
 		<p:importConstants
@@ -55,6 +56,16 @@
 						message="#{msg['lucas.application.employmentScreen.removeEmploymentsConfirmDialog.message']}" />
 				</p:commandButton>
 			</ui:fragment>
+		</p:toolbarGroup>
+		<p:toolbarGroup align="right">
+			<p:commandButton
+				rendered="#{loginBean.hasPermission(EnumPermission.EMPLOYMENT_DISTRIBUTE_JOBS)}"
+				value="#{msg['lucas.application.employmentScreen.jobDistributionButton.name']}"
+				title="#{msg['lucas.application.employmentScreen.jobDistributionButton.tooltip']}"
+				icon="fa fa-clipboard" styleClass="blockAllTrigger"
+				update="distributeJobsDialogForm" process="@this"
+				action="#{employmentBean.initDistributeJobsDialog}"
+				oncomplete="PF('distributeJobsDialog').show()" />
 		</p:toolbarGroup>
 	</ui:define>
 	<ui:define name="searchCriteria">
