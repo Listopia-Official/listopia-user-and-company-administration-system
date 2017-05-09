@@ -35,7 +35,7 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 	private CompanyBeanLocal companyBean;
 
 	public JobBean() {
-		super("job", 7);
+		super("job", 8);
 	}
 
 	@Override
@@ -128,6 +128,16 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 
 	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
 	private EnumQueryComparator searchJobEmploymentIdComparator = EnumQueryComparator.EQUAL;
+
+	@NotNull
+	@Min(0)
+	private Integer searchJobEmploymentsCount = 0;
+
+	@NotNull
+	private Boolean useSearchJobEmploymentsCount = Boolean.FALSE;
+
+	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
+	private EnumQueryComparator searchJobEmploymentsCountComparator = EnumQueryComparator.EQUAL;
 
 	public Long getSearchJobId() {
 		return this.searchJobId;
@@ -324,11 +334,12 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 	@Override
 	protected List<? extends ReadOnlyJob> searchEntities() {
 		return jobBean.findJobs(searchJobId, searchJobName, searchJobDescription, searchJobCompanyId, searchJobSalaryClass,
-				searchJobRequiredEmploymentsCount, searchJobPosition, searchJobEmploymentId, useSearchJobId, useSearchJobName,
-				useSearchJobDescription, useSearchJobCompanyId, useSearchJobSalaryClass, useSearchJobRequiredEmploymentsCount, useSearchJobPosition,
-				useSearchJobEmploymentId, searchJobIdComparator, searchJobNameComparator, searchJobDescriptionComparator,
-				searchJobCompanyIdComparator, searchJobSalaryClassComparator, searchJobRequiredEmploymentsCountComparator,
-				searchJobPositionComparator, searchJobEmploymentIdComparator);
+				searchJobRequiredEmploymentsCount, searchJobPosition, searchJobEmploymentId, searchJobEmploymentsCount, useSearchJobId,
+				useSearchJobName, useSearchJobDescription, useSearchJobCompanyId, useSearchJobSalaryClass, useSearchJobRequiredEmploymentsCount,
+				useSearchJobPosition, useSearchJobEmploymentId, useSearchJobEmploymentsCount, searchJobIdComparator, searchJobNameComparator,
+				searchJobDescriptionComparator, searchJobCompanyIdComparator, searchJobSalaryClassComparator,
+				searchJobRequiredEmploymentsCountComparator, searchJobPositionComparator, searchJobEmploymentIdComparator,
+				searchJobEmploymentsCountComparator);
 	}
 
 	@Override
@@ -411,6 +422,30 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 
 	public void setCreateJobDialogSalaryClass(EnumSalaryClass createJobDialogSalaryClass) {
 		this.createJobDialogSalaryClass = createJobDialogSalaryClass;
+	}
+
+	public Integer getSearchJobEmploymentsCount() {
+		return this.searchJobEmploymentsCount;
+	}
+
+	public void setSearchJobEmploymentsCount(Integer searchJobEmploymentsCount) {
+		this.searchJobEmploymentsCount = searchJobEmploymentsCount;
+	}
+
+	public Boolean getUseSearchJobEmploymentsCount() {
+		return this.useSearchJobEmploymentsCount;
+	}
+
+	public void setUseSearchJobEmploymentsCount(Boolean useSearchJobEmploymentsCount) {
+		this.useSearchJobEmploymentsCount = useSearchJobEmploymentsCount;
+	}
+
+	public EnumQueryComparator getSearchJobEmploymentsCountComparator() {
+		return this.searchJobEmploymentsCountComparator;
+	}
+
+	public void setSearchJobEmploymentsCountComparator(EnumQueryComparator searchJobEmploymentsCountComparator) {
+		this.searchJobEmploymentsCountComparator = searchJobEmploymentsCountComparator;
 	}
 
 	public void initCreateJobDialog() {

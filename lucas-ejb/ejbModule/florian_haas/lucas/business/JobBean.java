@@ -58,16 +58,16 @@ public class JobBean implements JobBeanLocal {
 	@Override
 	@RequiresPermissions(JOB_FIND_DYNAMIC)
 	public List<? extends ReadOnlyJob> findJobs(Long jobId, String name, String description, Long companyId, EnumSalaryClass salaryClass,
-			Integer requiredEmployeesCount, EnumEmployeePosition position, Long employmentId, Boolean useJobId, Boolean useName,
-			Boolean useDescription, Boolean useCompanyId, Boolean useSalaryClass, Boolean useRequiredEmployeesCount, Boolean useEmployeePosition,
-			Boolean useEmploymentId, EnumQueryComparator jobIdComparator, EnumQueryComparator nameComparator,
-			EnumQueryComparator descriptionComparator, EnumQueryComparator companyIdComparator, EnumQueryComparator salaryClassComparator,
-			EnumQueryComparator requiredEmployeesCountComparator, EnumQueryComparator positionComparator,
-			EnumQueryComparator employmentIdComparator) {
-		return jobDao.findJobs(jobId, name, description, companyId, salaryClass, requiredEmployeesCount, position, employmentId, useJobId, useName,
-				useDescription, useCompanyId, useSalaryClass, useRequiredEmployeesCount, useEmployeePosition, useEmploymentId, jobIdComparator,
-				nameComparator, descriptionComparator, companyIdComparator, salaryClassComparator, requiredEmployeesCountComparator,
-				positionComparator, employmentIdComparator);
+			Integer requiredEmployeesCount, EnumEmployeePosition position, Long employmentId, Integer employmentsCount, Boolean useJobId,
+			Boolean useName, Boolean useDescription, Boolean useCompanyId, Boolean useSalaryClass, Boolean useRequiredEmployeesCount,
+			Boolean useEmployeePosition, Boolean useEmploymentId, Boolean useEmploymentsCount, EnumQueryComparator jobIdComparator,
+			EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator, EnumQueryComparator companyIdComparator,
+			EnumQueryComparator salaryClassComparator, EnumQueryComparator requiredEmployeesCountComparator, EnumQueryComparator positionComparator,
+			EnumQueryComparator employmentIdComparator, EnumQueryComparator employmentsCountComparator) {
+		return jobDao.findJobs(jobId, name, description, companyId, salaryClass, requiredEmployeesCount, position, employmentId, employmentsCount,
+				useJobId, useName, useDescription, useCompanyId, useSalaryClass, useRequiredEmployeesCount, useEmployeePosition, useEmploymentId,
+				useEmploymentsCount, jobIdComparator, nameComparator, descriptionComparator, companyIdComparator, salaryClassComparator,
+				requiredEmployeesCountComparator, positionComparator, employmentIdComparator, employmentsCountComparator);
 	}
 
 	@Override

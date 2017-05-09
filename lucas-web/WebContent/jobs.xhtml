@@ -120,6 +120,21 @@
 			</p:column>
 			<p:column>
 				<p:selectBooleanCheckbox
+					id="searchJobEmploymentsCountSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{jobBean.useSearchJobEmploymentsCount}"
+					title="#{msg['lucas.application.jobScreen.searchJobEmploymentsCountSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="jobSearchCriteriaForm:searchJobEmploymentsCountInputNumber jobSearchCriteriaForm:searchJobEmploymentsCountComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchJobEmploymentsCountSelectBooleanCheckbox"
+					value="#{msg['lucas.application.jobScreen.searchJobEmploymentsCountSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.jobScreen.searchJobEmploymentsCountSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
 					id="searchJobRequiredEmploymentsCountSelectBooleanCheckbox"
 					styleClass="checkbox"
 					value="#{jobBean.useSearchJobRequiredEmploymentsCount}"
@@ -215,6 +230,16 @@
 				</p:selectOneMenu>
 			</p:column>
 			<p:column>
+				<p:selectOneMenu id="searchJobEmploymentsCountComparator"
+					disabled="#{not jobBean.useSearchJobEmploymentsCount}"
+					value="#{jobBean.searchJobEmploymentsCountComparator}"
+					title="#{msg['lucas.application.jobScreen.searchJobEmploymentsCountComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
 				<p:selectOneMenu id="searchJobRequiredEmploymentsCountComparator"
 					disabled="#{not jobBean.useSearchJobRequiredEmploymentsCount}"
 					value="#{jobBean.searchJobRequiredEmploymentsCountComparator}"
@@ -278,6 +303,12 @@
 					disabled="#{not jobBean.useSearchJobCompanyId}" />
 			</p:column>
 			<p:column>
+				<p:inputNumber value="#{jobBean.searchJobEmploymentsCount}"
+					minValue="0" decimalPlaces="0"
+					id="searchJobEmploymentsCountInputNumber"
+					disabled="#{not jobBean.useSearchJobEmploymentsCount}" />
+			</p:column>
+			<p:column>
 				<p:inputNumber value="#{jobBean.searchJobRequiredEmploymentsCount}"
 					minValue="0" decimalPlaces="0"
 					id="searchJobRequiredEmploymentsCountInputNumber"
@@ -336,22 +367,28 @@
 				converter="#{converterBean.getConverter(CompanyConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column exportable="#{jobBean.resultsDatatableColumns[4]}"
-			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.requiredEmploymentsCountColumn.name']}"
-			sortBy="#{entity.requiredEmploymentsCount}"
+			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.employmentsSizeColumn.name']}"
+			sortBy="#{entity.employments.size()}"
 			visible="#{jobBean.resultsDatatableColumns[4]}">
-			<h:outputText value="#{entity.requiredEmploymentsCount}" />
+			<h:outputText value="#{entity.employments.size()}" />
 		</p:column>
 		<p:column exportable="#{jobBean.resultsDatatableColumns[5]}"
+			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.requiredEmploymentsCountColumn.name']}"
+			sortBy="#{entity.requiredEmploymentsCount}"
+			visible="#{jobBean.resultsDatatableColumns[5]}">
+			<h:outputText value="#{entity.requiredEmploymentsCount}" />
+		</p:column>
+		<p:column exportable="#{jobBean.resultsDatatableColumns[6]}"
 			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.employeePositionColumn.name']}"
 			sortBy="#{entity.employeePosition}"
-			visible="#{jobBean.resultsDatatableColumns[5]}">
+			visible="#{jobBean.resultsDatatableColumns[6]}">
 			<h:outputText value="#{entity.employeePosition}"
 				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
 		</p:column>
-		<p:column exportable="#{jobBean.resultsDatatableColumns[6]}"
+		<p:column exportable="#{jobBean.resultsDatatableColumns[7]}"
 			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.salaryClassColumn.name']}"
 			sortBy="#{entity.salaryClass}"
-			visible="#{jobBean.resultsDatatableColumns[6]}">
+			visible="#{jobBean.resultsDatatableColumns[7]}">
 			<h:outputText value="#{entity.salaryClass}"
 				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
 		</p:column>

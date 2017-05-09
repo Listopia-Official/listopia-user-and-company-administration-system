@@ -12,12 +12,12 @@ public class JobDAOImpl extends DAOImpl<Job> implements JobDAO {
 
 	@Override
 	public List<Job> findJobs(Long jobId, String name, String description, Long companyId, EnumSalaryClass salaryClass,
-			Integer requiredEmployeesCount, EnumEmployeePosition position, Long employmentId, Boolean useJobId, Boolean useName,
-			Boolean useDescription, Boolean useCompanyId, Boolean useSalaryClass, Boolean useRequiredEmployeesCount, Boolean useEmployeePosition,
-			Boolean useEmploymentId, EnumQueryComparator jobIdComparator, EnumQueryComparator nameComparator,
-			EnumQueryComparator descriptionComparator, EnumQueryComparator companyIdComparator, EnumQueryComparator salaryClassComparator,
-			EnumQueryComparator requiredEmployeesCountComparator, EnumQueryComparator positionComparator,
-			EnumQueryComparator employmentIdComparator) {
+			Integer requiredEmployeesCount, EnumEmployeePosition position, Long employmentId, Integer employmentsCount, Boolean useJobId,
+			Boolean useName, Boolean useDescription, Boolean useCompanyId, Boolean useSalaryClass, Boolean useRequiredEmployeesCount,
+			Boolean useEmployeePosition, Boolean useEmploymentId, Boolean useEmploymentsCount, EnumQueryComparator jobIdComparator,
+			EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator, EnumQueryComparator companyIdComparator,
+			EnumQueryComparator salaryClassComparator, EnumQueryComparator requiredEmployeesCountComparator, EnumQueryComparator positionComparator,
+			EnumQueryComparator employmentIdComparator, EnumQueryComparator employmentsCountComparator) {
 		return readOnlyCriteriaQuery((query, root, builder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 
@@ -31,7 +31,8 @@ public class JobDAOImpl extends DAOImpl<Job> implements JobDAO {
 			getSingularRestriction(Job_.employeePosition, position, useEmployeePosition, positionComparator, predicates, builder, root);
 			getSingularRestriction(Employment_.id, employmentId, useEmploymentId, employmentIdComparator, predicates, builder,
 					root.join(Job_.employments, JoinType.LEFT));
-
+			getSingularRestriction(builder.size(root.get(Job_.employments)), employmentsCount, useEmploymentsCount, employmentsCountComparator,
+					predicates, builder, root);
 			return predicates;
 		});
 	}
