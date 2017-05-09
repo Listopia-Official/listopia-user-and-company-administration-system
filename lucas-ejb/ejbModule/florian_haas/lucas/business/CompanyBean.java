@@ -92,7 +92,7 @@ public class CompanyBean implements CompanyBeanLocal {
 					if ((user.getSchoolClass() != null ? user.getSchoolClass().getGrade() : Integer.MAX_VALUE) >= minSchoolGrade)
 						optimalUsersCounter++;
 				}
-				if ((optimalUsersCounter < 1) || isAdvisorRequired) {
+				if ((!managerUserIds.isEmpty() && optimalUsersCounter < 1) || isAdvisorRequired) {
 					jobBean.createJob(advisorJobName, advisorJobDescription, company.getId(), EnumEmployeePosition.ADVISOR, 1, null);
 				}
 			}
