@@ -70,11 +70,13 @@ public class UserBean implements UserBeanLocal {
 	@Override
 	@RequiresPermissions(USER_FIND_DYNAMIC)
 	public List<? extends ReadOnlyUser> findUsers(Long userId, String forename, String surname, List<EnumSchoolClass> schoolClasses,
-			EnumUserType userType, List<String> ranks, Boolean useUserId, Boolean useForename, Boolean useSurname, Boolean useSchoolClass,
-			Boolean useUserType, Boolean useRanks, EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator,
-			EnumQueryComparator surnameComparator, EnumQueryComparator searchUserTypeComparator, EnumQueryComparator ranksComparator) {
-		return userDao.findUsers(userId, forename, surname, schoolClasses, userType, ranks, useUserId, useForename, useSurname, useSchoolClass,
-				useUserType, useRanks, userIdComparator, forenameComparator, surnameComparator, searchUserTypeComparator, ranksComparator);
+			EnumUserType userType, List<String> ranks, Integer employmentsCount, Boolean useUserId, Boolean useForename, Boolean useSurname,
+			Boolean useSchoolClass, Boolean useUserType, Boolean useRanks, Boolean useEmploymentsCount, EnumQueryComparator userIdComparator,
+			EnumQueryComparator forenameComparator, EnumQueryComparator surnameComparator, EnumQueryComparator searchUserTypeComparator,
+			EnumQueryComparator ranksComparator, EnumQueryComparator employmentsCountComparator) {
+		return userDao.findUsers(userId, forename, surname, schoolClasses, userType, ranks, employmentsCount, useUserId, useForename, useSurname,
+				useSchoolClass, useUserType, useRanks, useEmploymentsCount, userIdComparator, forenameComparator, surnameComparator,
+				searchUserTypeComparator, ranksComparator, employmentsCountComparator);
 	}
 
 	@Override

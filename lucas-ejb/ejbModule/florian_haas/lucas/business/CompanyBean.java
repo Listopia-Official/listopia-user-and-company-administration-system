@@ -125,14 +125,15 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Override
 	@RequiresPermissions(COMPANY_FIND_DYNAMIC)
 	public List<Company> findCompanies(Long companyId, String name, String description, Long roomSectionId, EnumCompanyType companyType,
-			Long parentCompanyId, Long jobId, Boolean areEmployeesRequired, Boolean useId, Boolean useName, Boolean useDescription,
+			Long parentCompanyId, Long jobId, Boolean areEmployeesRequired, Integer jobCount, Boolean useId, Boolean useName, Boolean useDescription,
 			Boolean useRoomSectionId, Boolean useCompanyType, Boolean useParentCompanyId, Boolean useJobId, Boolean useAreEmployeesRequired,
-			EnumQueryComparator idComparator, EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator,
+			Boolean useJobCount, EnumQueryComparator idComparator, EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator,
 			EnumQueryComparator roomSectionIdComparator, EnumQueryComparator companyTypeComparator, EnumQueryComparator parentCompanyIdComparator,
-			EnumQueryComparator jobIdComparator) {
-		return companyDao.findCompanies(companyId, name, description, roomSectionId, companyType, parentCompanyId, jobId, areEmployeesRequired, useId,
-				useName, useDescription, useRoomSectionId, useCompanyType, useParentCompanyId, useJobId, useAreEmployeesRequired, idComparator,
-				nameComparator, descriptionComparator, roomSectionIdComparator, companyTypeComparator, parentCompanyIdComparator, jobIdComparator);
+			EnumQueryComparator jobIdComparator, EnumQueryComparator jobCountComparator) {
+		return companyDao.findCompanies(companyId, name, description, roomSectionId, companyType, parentCompanyId, jobId, areEmployeesRequired,
+				jobCount, useId, useName, useDescription, useRoomSectionId, useCompanyType, useParentCompanyId, useJobId, useAreEmployeesRequired,
+				useJobCount, idComparator, nameComparator, descriptionComparator, roomSectionIdComparator, companyTypeComparator,
+				parentCompanyIdComparator, jobIdComparator, jobCountComparator);
 	}
 
 	@Override

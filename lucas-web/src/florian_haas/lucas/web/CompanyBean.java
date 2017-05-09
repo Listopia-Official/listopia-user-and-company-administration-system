@@ -113,6 +113,16 @@ public class CompanyBean extends BaseBean<ReadOnlyCompany> {
 	@NotNull
 	private Boolean useSearchCompanyAreEmployeesRequired = Boolean.FALSE;
 
+	@NotNull
+	@Min(0)
+	private Integer searchCompanyJobsCount = 0;
+
+	@NotNull
+	private Boolean useSearchCompanyJobsCount = Boolean.FALSE;
+
+	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
+	private EnumQueryComparator searchCompanyJobsCountComparator = EnumQueryComparator.EQUAL;
+
 	public Long getSearchCompanyId() {
 		return this.searchCompanyId;
 	}
@@ -297,6 +307,30 @@ public class CompanyBean extends BaseBean<ReadOnlyCompany> {
 		this.useSearchCompanyAreEmployeesRequired = useSearchCompanyAreEmployeesRequired;
 	}
 
+	public Integer getSearchCompanyJobsCount() {
+		return this.searchCompanyJobsCount;
+	}
+
+	public void setSearchCompanyJobsCount(Integer searchCompanyJobsCount) {
+		this.searchCompanyJobsCount = searchCompanyJobsCount;
+	}
+
+	public Boolean getUseSearchCompanyJobsCount() {
+		return this.useSearchCompanyJobsCount;
+	}
+
+	public void setUseSearchCompanyJobsCount(Boolean useSearchCompanyJobsCount) {
+		this.useSearchCompanyJobsCount = useSearchCompanyJobsCount;
+	}
+
+	public EnumQueryComparator getSearchCompanyJobsCountComparator() {
+		return this.searchCompanyJobsCountComparator;
+	}
+
+	public void setSearchCompanyJobsCountComparator(EnumQueryComparator searchCompanyJobsCountComparator) {
+		this.searchCompanyJobsCountComparator = searchCompanyJobsCountComparator;
+	}
+
 	@Override
 	public EnumPermission getFindDynamicPermission() {
 		return EnumPermission.COMPANY_FIND_DYNAMIC;
@@ -315,11 +349,12 @@ public class CompanyBean extends BaseBean<ReadOnlyCompany> {
 	@Override
 	protected List<? extends ReadOnlyCompany> searchEntities() {
 		return companyBean.findCompanies(searchCompanyId, searchCompanyName, searchCompanyDescription, searchCompanySectionId,
-				searchCompanyCompanyType, searchCompanyParentCompanyId, searchCompanyJobId, searchCompanyAreEmployeesRequired, useSearchCompanyId,
-				useSearchCompanyName, useSearchCompanyDescription, useSearchCompanySectionId, useSearchCompanyCompanyType,
-				useSearchCompanyParentCompanyId, useSearchCompanyJobId, useSearchCompanyAreEmployeesRequired, searchCompanyIdComparator,
-				searchCompanyNameComparator, searchCompanyDescriptionComparator, searchCompanySectionIdComparator, searchCompanyCompanyTypeComparator,
-				searchCompanyParentCompanyIdComparator, searchCompanyJobIdComparator);
+				searchCompanyCompanyType, searchCompanyParentCompanyId, searchCompanyJobId, searchCompanyAreEmployeesRequired, searchCompanyJobsCount,
+				useSearchCompanyId, useSearchCompanyName, useSearchCompanyDescription, useSearchCompanySectionId, useSearchCompanyCompanyType,
+				useSearchCompanyParentCompanyId, useSearchCompanyJobId, useSearchCompanyAreEmployeesRequired, useSearchCompanyJobsCount,
+				searchCompanyIdComparator, searchCompanyNameComparator, searchCompanyDescriptionComparator, searchCompanySectionIdComparator,
+				searchCompanyCompanyTypeComparator, searchCompanyParentCompanyIdComparator, searchCompanyJobIdComparator,
+				searchCompanyJobsCountComparator);
 	}
 
 	@Override

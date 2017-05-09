@@ -13,9 +13,10 @@ public class UserDAOImpl extends DAOImpl<User> implements UserDAO {
 
 	@Override
 	public List<User> findUsers(Long userId, String forename, String surname, List<EnumSchoolClass> schoolClasses, EnumUserType userType,
-			List<String> ranks, Boolean useUserId, Boolean useForename, Boolean useSurname, Boolean useSchoolClass, Boolean useUserType,
-			Boolean useRanks, EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator, EnumQueryComparator surnameComparator,
-			EnumQueryComparator searchUserTypeComparator, EnumQueryComparator ranksComparator) {
+			List<String> ranks, Integer employmentsCount, Boolean useUserId, Boolean useForename, Boolean useSurname, Boolean useSchoolClass,
+			Boolean useUserType, Boolean useRanks, Boolean useEmploymentsCount, EnumQueryComparator userIdComparator,
+			EnumQueryComparator forenameComparator, EnumQueryComparator surnameComparator, EnumQueryComparator searchUserTypeComparator,
+			EnumQueryComparator ranksComparator, EnumQueryComparator employmentsCountComparator) {
 		return readOnlyCriteriaQuery((query, root, builder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 
@@ -31,6 +32,8 @@ public class UserDAOImpl extends DAOImpl<User> implements UserDAO {
 				}
 			}
 			getPluralRestrictionCollection(User_.ranks, ranks, useRanks, ranksComparator, predicates, builder, root);
+			getSingularRestriction(builder.size(root.get(User_.employments)), employmentsCount, useEmploymentsCount, employmentsCountComparator,
+					predicates, builder, root);
 
 			return predicates;
 		});

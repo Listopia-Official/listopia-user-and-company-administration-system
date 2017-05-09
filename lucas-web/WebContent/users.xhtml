@@ -205,6 +205,21 @@
 					title="#{msg['lucas.application.userScreen.searchUserSchoolClassSelectBooleanCheckbox.tooltip']}" />
 			</p:column>
 			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchUserEmploymentsCountSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{userBean.useSearchUserEmploymentsCount}"
+					title="#{msg['lucas.application.userScreen.searchUserEmploymentsCountSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="userSearchCriteriaForm:searchUserEmploymentsCountInputNumber userSearchCriteriaForm:searchUserEmploymentsCountComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchUserEmploymentsCountSelectBooleanCheckbox"
+					value="#{msg['lucas.application.userScreen.searchUserEmploymentsCountSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.userScreen.searchUserEmploymentsCountSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
 				<p:selectBooleanCheckbox id="searchUserRanksSelectBooleanCheckbox"
 					styleClass="checkbox" value="#{userBean.useSearchUserRanks}"
 					title="#{msg['lucas.application.userScreen.searchUserRanksSelectBooleanCheckbox.tooltip']}">
@@ -279,6 +294,16 @@
 				</p:selectOneMenu>
 			</p:column>
 			<p:column>
+				<p:selectOneMenu id="searchUserEmploymentsCountComparator"
+					disabled="#{not userBean.useSearchUserEmploymentsCount}"
+					value="#{userBean.searchUserEmploymentsCountComparator}"
+					title="#{msg['lucas.application.userScreen.searchUserEmploymentsCountComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
 				<p:selectOneMenu id="searchUserRanksComparator"
 					disabled="#{not userBean.useSearchUserRanks}"
 					title="#{msg['lucas.application.userScreen.searchUserRanksComparator.tooltip']}"
@@ -329,6 +354,12 @@
 					disabled="#{not userBean.useSearchUserSchoolClass}">
 					<f:selectItems value="#{EnumSchoolClass.CLASSES}" />
 				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{userBean.searchUserEmploymentsCount}"
+					minValue="0" decimalPlaces="0"
+					id="searchUserEmploymentsCountInputNumber"
+					disabled="#{not userBean.useSearchUserEmploymentsCount}" />
 			</p:column>
 			<p:column>
 				<p:chips id="searchUserRanksChips"

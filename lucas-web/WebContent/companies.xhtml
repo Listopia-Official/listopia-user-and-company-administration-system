@@ -190,6 +190,21 @@
 			</p:column>
 			<p:column>
 				<p:selectBooleanCheckbox
+					id="searchCompanyJobsCountSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{companyBean.useSearchCompanyJobsCount}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyJobsCountSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="companySearchCriteriaForm:searchCompanyJobsCountInputNumber companySearchCriteriaForm:searchCompanyJobsCountComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchCompanyJobsCountSelectBooleanCheckbox"
+					value="#{msg['lucas.application.companyScreen.searchCompanyJobsCountSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyJobsCountSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
 					id="searchCompanyAreEmployeesRequiredSelectBooleanCheckbox"
 					styleClass="checkbox"
 					value="#{companyBean.useSearchCompanyAreEmployeesRequired}"
@@ -275,6 +290,16 @@
 						itemLabel="#{converterBean.convertEnum(comparator)}" />
 				</p:selectOneMenu>
 			</p:column>
+				<p:column>
+				<p:selectOneMenu id="searchCompanyJobsCountComparator"
+					disabled="#{not companyBean.useSearchCompanyJobsCount}"
+					value="#{companyBean.searchCompanyJobsCountComparator}"
+					title="#{msg['lucas.application.companyScreen.searchCompanyJobsCountComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
 			<p:column />
 		</p:row>
 		<p:row>
@@ -319,6 +344,12 @@
 				<p:inputNumber value="#{companyBean.searchCompanyJobId}"
 					minValue="0" decimalPlaces="0" id="searchCompanyJobIdInputNumber"
 					disabled="#{not companyBean.useSearchCompanyJobId}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{companyBean.searchCompanyJobsCount}"
+					minValue="0" decimalPlaces="0"
+					id="searchCompanyJobsCountInputNumber"
+					disabled="#{not companyBean.useSearchCompanyJobsCount}" />
 			</p:column>
 			<p:column>
 				<p:selectBooleanButton

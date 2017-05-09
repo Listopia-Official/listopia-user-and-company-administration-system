@@ -33,15 +33,17 @@ public interface CompanyBeanLocal {
 
 	public List<? extends ReadOnlyCompany> findCompanies(@NotNull Long companyId, @NotNull String name, String description, Long roomSectionId,
 			@NotNull EnumCompanyType companyType, Long parentCompanyId, @NotNull Long jobId, @NotNull Boolean areEmployeesRequired,
-			@NotNull Boolean useId, @NotNull Boolean useName, @NotNull Boolean useDescription, @NotNull Boolean useRoomSectionId,
-			@NotNull Boolean useCompanyType, @NotNull Boolean useParentCompanyId, @NotNull Boolean useJobId, @NotNull Boolean useAreEmployeesRequired,
+			@NotNull Integer jobCount, @NotNull Boolean useId, @NotNull Boolean useName, @NotNull Boolean useDescription,
+			@NotNull Boolean useRoomSectionId, @NotNull Boolean useCompanyType, @NotNull Boolean useParentCompanyId, @NotNull Boolean useJobId,
+			@NotNull Boolean useAreEmployeesRequired, @NotNull Boolean useJobCount,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator nameComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator descriptionComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator roomSectionIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator companyTypeComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator parentCompanyIdComparator,
-			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator jobIdComparator);
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator jobIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator jobCountComparator);
 
 	public Boolean setName(@ValidEntityId(entityClass = ReadOnlyCompany.class) Long companyId, @NotNull @NotBlankString String name);
 

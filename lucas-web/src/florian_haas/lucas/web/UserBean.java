@@ -426,6 +426,16 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 	@QueryComparator(category = EnumQueryComparatorCategory.ARRAY)
 	private EnumQueryComparator searchUserRanksComparator = EnumQueryComparator.MEMBER_OF;
 
+	@NotNull
+	@Min(0)
+	private Integer searchUserEmploymentsCount = 0;
+
+	@NotNull
+	private Boolean useSearchUserEmploymentsCount = Boolean.FALSE;
+
+	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
+	private EnumQueryComparator searchUserEmploymentsCountComparator = EnumQueryComparator.EQUAL;
+
 	public Long getSearchUserId() {
 		return searchUserId;
 	}
@@ -594,6 +604,30 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 		this.searchUserRanksComparator = searchUserRanksComparator;
 	}
 
+	public Integer getSearchUserEmploymentsCount() {
+		return this.searchUserEmploymentsCount;
+	}
+
+	public void setSearchUserEmploymentsCount(Integer searchUserEmploymentsCount) {
+		this.searchUserEmploymentsCount = searchUserEmploymentsCount;
+	}
+
+	public Boolean getUseSearchUserEmploymentsCount() {
+		return this.useSearchUserEmploymentsCount;
+	}
+
+	public void setUseSearchUserEmploymentsCount(Boolean useSearchUserEmploymentsCount) {
+		this.useSearchUserEmploymentsCount = useSearchUserEmploymentsCount;
+	}
+
+	public EnumQueryComparator getSearchUserEmploymentsCountComparator() {
+		return this.searchUserEmploymentsCountComparator;
+	}
+
+	public void setSearchUserEmploymentsCountComparator(EnumQueryComparator searchUserEmploymentsCountComparator) {
+		this.searchUserEmploymentsCountComparator = searchUserEmploymentsCountComparator;
+	}
+
 	@Override
 	public EnumPermission getFindDynamicPermission() {
 		return EnumPermission.USER_FIND_DYNAMIC;
@@ -614,9 +648,10 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 		return userBean.findUsers(searchUserId, searchUserForename, searchUserSurname,
 				EnumSchoolClass.getMatchingClasses(useSearchUserSchoolGrade ? searchUserSchoolGrade : null,
 						useSearchUserSchoolClass ? searchUserSchoolClass : null, searchUserSchoolGradeComparator, searchUserSchoolClassComparator),
-				searchUserType, searchUserRanks, useSearchUserId, useSearchUserForename, useSearchUserSurname,
-				useSearchUserSchoolGrade || useSearchUserSchoolClass, useSearchUserType, useSearchUserRanks, searchUserIdComparator,
-				searchUserForenameComparator, searchUserSurnameComparator, searchUserTypeComparator, searchUserRanksComparator);
+				searchUserType, searchUserRanks, searchUserEmploymentsCount, useSearchUserId, useSearchUserForename, useSearchUserSurname,
+				useSearchUserSchoolGrade || useSearchUserSchoolClass, useSearchUserType, useSearchUserRanks, useSearchUserEmploymentsCount,
+				searchUserIdComparator, searchUserForenameComparator, searchUserSurnameComparator, searchUserTypeComparator,
+				searchUserRanksComparator, searchUserEmploymentsCountComparator);
 	}
 
 	@Override
