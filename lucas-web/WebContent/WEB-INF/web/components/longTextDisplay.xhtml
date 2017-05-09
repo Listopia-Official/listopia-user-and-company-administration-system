@@ -3,17 +3,18 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
-	<p:importConstants
-		type="florian_haas.lucas.web.converter.LongTextConverter" />
-	<p:importConstants
-		type="florian_haas.lucas.web.converter.NullConverter" />
-	<h:outputText value="#{text}" style="display:inline-block;width:90%"
-		converter="#{converterBean.getConverter(LongTextConverter.CONVERTER_ID)}" />
-	<p:commandButton id="showTextButton" icon="fa fa-external-link"
-		title="#{msg['lucas.application.longTextDisplay.viewText.title']}"
-		style="display:inline-block;width:10%"
-		update="displayLongTextDialogForm"
-		action="#{longTextDisplayBean.setText(text)}"
-		oncomplete="PF('displayLongTextDialog').show()"
-		rendered="#{text != null &amp;&amp; text.length() > 45}" />
+	<div style="display: flex; justify-content: space-between;">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.LongTextConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.NullConverter" />
+		<h:outputText value="#{text}"
+			converter="#{converterBean.getConverter(LongTextConverter.CONVERTER_ID)}" />
+		<p:commandButton id="showTextButton" icon="fa fa-external-link"
+			title="#{msg['lucas.application.longTextDisplay.viewText.title']}"
+			update="displayLongTextDialogForm"
+			action="#{longTextDisplayBean.setText(text)}"
+			oncomplete="PF('displayLongTextDialog').show()"
+			rendered="#{text != null &amp;&amp; text.length() > 45}" />
+	</div>
 </ui:composition>
