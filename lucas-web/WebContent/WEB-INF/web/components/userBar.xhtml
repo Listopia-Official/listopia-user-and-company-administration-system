@@ -37,7 +37,7 @@
 							<p:menuButton value="#{loginBean.advancedUsername}"
 								iconPos="right">
 								<p:menuitem icon="fa fa-gear"
-									disabled="#{not loginBean.isUserInDatabase}"
+									disabled="#{not loginBean.isUserInDatabase || not loginBean.hasPermission(EnumPermission.LOGIN_ACCESS_PREFERENCES_VIEW)}"
 									outcome="/preferences.xhtml"
 									value="#{msg['lucas.application.userBar.preferencesButton.name']}"
 									title="#{msg['lucas.application.userBar.preferencesButton.tooltip']}" />
