@@ -5,7 +5,7 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 	<p:importEnum type="florian_haas.lucas.security.EnumPermission" />
 	<p:menu toggleable="true">
-		<p:submenu
+		<p:submenu rendered="#{false}"
 			label="#{msg['lucas.application.mainScreen.navigationMenu.communicationSubmenu.name']}">
 			<p:menuitem disabled="true"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.communicationSubmenu.chatMenuItem.name']}" />
@@ -35,7 +35,7 @@
 				rendered="#{loginBean.hasPermission(EnumPermission.EMPLOYMENT_ACCESS_VIEW)}"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.employmentsMenuItem.name']}" />
 		</p:submenu>
-		<p:submenu
+		<p:submenu rendered="#{false}"
 			label="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.name']}">
 			<p:menuitem disabled="true"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.scanMenuItem.name']}" />
@@ -45,12 +45,13 @@
 				value="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.attendancedataMenuItem.name']}" />
 		</p:submenu>
 		<p:submenu
+			rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_ACCESS_VIEW)}"
 			label="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.name']}">
 			<p:menuitem outcome="/accounts.xhtml"
 				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_ACCESS_VIEW)}"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.accountsMenuItem.name']}" />
 		</p:submenu>
-		<p:submenu
+		<p:submenu rendered="#{false}"
 			label="#{msg['lucas.application.mainScreen.navigationMenu.warehouseSubmenu.name']}">
 			<p:menuitem disabled="true"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.warehouseSubmenu.itemsMenuItem.name']}" />
