@@ -24,7 +24,7 @@
         <dependent-module archiveName="slf4j-api-1.6.4.jar" deploy-path="/lib" handle="module:/classpath/lib/lucas-ejb/lib/slf4j-api-1.6.4.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="slf4j-simple-1.7.25.jar" deploy-path="/lib" handle="module:/classpath/lib/lucas-ejb/lib/slf4j-simple-1.7.25.jar">
+        <dependent-module archiveName="slf4j-jdk14-1.7.22.jar" deploy-path="/lib" handle="module:/classpath/lib/lucas-ejb/lib/slf4j-jdk14-1.7.22.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
     </wb-module>
