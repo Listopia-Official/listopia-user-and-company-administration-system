@@ -28,7 +28,7 @@ public abstract class CollectionConverter<T> extends BasicConverter<Collection<T
 			builder.append(WebUtils.getTranslatedMessage(emptyLangKey));
 		} else {
 			value.forEach(entry -> {
-				builder.append(entryToString(entry) + "<br />");
+				builder.append(entryToString(entry) + "\n");
 			});
 		}
 		return builder.toString().trim();

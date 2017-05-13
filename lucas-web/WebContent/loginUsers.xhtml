@@ -188,7 +188,8 @@
 			sortable="false"
 			visible="#{loginUserBean.resultsDatatableColumns[3]}">
 			<h:outputText value="#{entity.roles}"
-				converter="#{converterBean.getConverter(RolesConverter.CONVERTER_ID)}" escape="false" />
+				converter="#{converterBean.getConverter(RolesConverter.CONVERTER_ID)}"
+				style="white-space: pre-wrap" />
 		</p:column>
 	</ui:define>
 </ui:composition>

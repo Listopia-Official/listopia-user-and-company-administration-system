@@ -406,7 +406,7 @@
 		<p:column exportable="#{companyBean.resultsDatatableColumns[6]}"
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.childCompaniesColumn.name']}"
 			sortable="false" visible="#{companyBean.resultsDatatableColumns[6]}">
-			<h:outputText value="#{entity.childCompanies}" escape="false"
+			<h:outputText value="#{entity.childCompanies}" style="white-space: pre-wrap"
 				converter="#{converterBean.getConverter(CompaniesConverter.CONVERTER_ID)}" />
 		</p:column>
 	</ui:define>
