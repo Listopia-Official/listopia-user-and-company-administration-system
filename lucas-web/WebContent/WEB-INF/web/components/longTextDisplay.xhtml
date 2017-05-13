@@ -8,6 +8,8 @@
 			type="florian_haas.lucas.web.converter.LongTextConverter" />
 		<p:importConstants
 			type="florian_haas.lucas.web.converter.NullConverter" />
+			<p:importConstants
+			type="florian_haas.lucas.web.converter.NullConverterNoText" />
 		<h:outputText value="#{text}"
 			converter="#{converterBean.getConverter(LongTextConverter.CONVERTER_ID)}" />
 		<p:commandButton id="showTextButton" icon="fa fa-external-link"
