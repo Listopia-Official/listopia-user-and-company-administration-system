@@ -28,7 +28,7 @@ import florian_haas.lucas.web.util.WebUtils;
 public class UserBean extends BaseBean<ReadOnlyUser> {
 
 	public UserBean() {
-		super("user", 6);
+		super("user", 7);
 	}
 
 	private static final long serialVersionUID = -2324504686340886417L;

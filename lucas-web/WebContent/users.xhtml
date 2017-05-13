@@ -214,8 +214,7 @@
 						update="userSearchCriteriaForm:searchUserEmploymentsCountInputNumber userSearchCriteriaForm:searchUserEmploymentsCountComparator"
 						process="@this" />
 				</p:selectBooleanCheckbox>
-				<p:outputLabel
-					for="searchUserEmploymentsCountSelectBooleanCheckbox"
+				<p:outputLabel for="searchUserEmploymentsCountSelectBooleanCheckbox"
 					value="#{msg['lucas.application.userScreen.searchUserEmploymentsCountSelectBooleanCheckbox.name']}"
 					title="#{msg['lucas.application.userScreen.searchUserEmploymentsCountSelectBooleanCheckbox.tooltip']}" />
 			</p:column>
@@ -404,8 +403,14 @@
 				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column exportable="#{userBean.resultsDatatableColumns[5]}"
-			headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.ranksColumn.name']}"
+			headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.employmentsColumn.name']}"
+			sortBy="#{entity.employments.size()}"
 			visible="#{userBean.resultsDatatableColumns[5]}">
+			<h:outputText value="#{entity.employments.size()}" />
+		</p:column>
+		<p:column exportable="#{userBean.resultsDatatableColumns[6]}"
+			headerText="#{msg['lucas.application.userScreen.userSearchResultsTable.ranksColumn.name']}"
+			visible="#{userBean.resultsDatatableColumns[6]}">
 			<h:outputText value="#{entity.ranks}"
 				converter="#{converterBean.getConverter(RanksConverter.CONVERTER_ID)}"
 				escape="false" />
