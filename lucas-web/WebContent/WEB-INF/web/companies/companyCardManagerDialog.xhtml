@@ -73,6 +73,7 @@
 								<p:row>
 									<p:column colspan="2">
 										<p:calendar id="validDayCalendar"
+											locale="#{facesContext.viewRoot.locale.language}"
 											value="#{companyBean.companyCardManagerDialogValidDate}"
 											mode="inline">
 											<p:ajax event="dateSelect" process="@this"
