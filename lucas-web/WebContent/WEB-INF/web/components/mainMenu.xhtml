@@ -45,11 +45,14 @@
 				value="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.attendancedataMenuItem.name']}" />
 		</p:submenu>
 		<p:submenu
-			rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_ACCESS_VIEW)}"
+			rendered="#{loginBean.hasPermissionsOr([EnumPermission.ACCOUNT_ACCESS_VIEW,EnumPermission.ACCOUNT_VIEW_TRANSACTION_LOGS])}"
 			label="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.name']}">
 			<p:menuitem outcome="/accounts.xhtml"
 				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_ACCESS_VIEW)}"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.accountsMenuItem.name']}" />
+				<p:menuitem outcome="/transactionLogs.xhtml"
+				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_VIEW_TRANSACTION_LOGS)}"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.transactionLogsMenuItem.name']}" />
 		</p:submenu>
 		<p:submenu rendered="#{false}"
 			label="#{msg['lucas.application.mainScreen.navigationMenu.warehouseSubmenu.name']}">

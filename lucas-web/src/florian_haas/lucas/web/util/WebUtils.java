@@ -368,6 +368,15 @@ public class WebUtils {
 		return getAsString(object, getConverterFromId(converterId));
 	}
 
+	public static Object getAsObject(String value, Converter converter) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		return converter.getAsObject(context, UIComponent.getCurrentComponent(context), value);
+	}
+
+	public static Object getAsObject(String string, String converterId) {
+		return getAsObject(string, getConverterFromId(converterId));
+	}
+
 	public static Converter getConverterFromId(String converterId) {
 		return FacesContext.getCurrentInstance().getApplication().createConverter(converterId);
 	}

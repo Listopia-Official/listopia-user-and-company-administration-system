@@ -1,6 +1,7 @@
 package florian_haas.lucas.business;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -43,5 +44,25 @@ public interface AccountBeanLocal {
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator bankBalanceComparator);
 
 	public ReadOnlyAccountOwner findAccountOwnerById(@ValidEntityId(entityClass = ReadOnlyAccountOwner.class) Long id);
+
+	public ReadOnlyTransactionLog findTransactionLogById(@ValidEntityId(entityClass = ReadOnlyTransactionLog.class) Long id);
+
+	public List<? extends ReadOnlyTransactionLog> findTransactionLogs(@NotNull Long id, @NotNull Long accountId, @NotNull LocalDateTime dateTime,
+			@NotNull EnumAccountAction action, @NotNull EnumAccountActionType actionType, Long relatedAccountId, @NotNull BigDecimal amount,
+			@NotNull BigDecimal previousBankBalance, @NotNull BigDecimal currentBankBalance, Long bankUserId, String comment, @NotNull Boolean useId,
+			@NotNull Boolean useAccountId, @NotNull Boolean useDateTime, @NotNull Boolean useAction, @NotNull Boolean useActionType,
+			@NotNull Boolean useRelatedAccountId, @NotNull Boolean useAmount, @NotNull Boolean usePreviousBankBalance,
+			@NotNull Boolean useCurrentBankBalance, @NotNull Boolean useBankUser, @NotNull Boolean useComment,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator accountIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator dateTimeComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator actionComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator actionTypeComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator relatedAccountIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator amountComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator previousBankBalanceComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator currentBankBalanceComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator bankUserIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator commentComparator);
 
 }

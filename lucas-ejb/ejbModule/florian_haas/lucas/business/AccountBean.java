@@ -45,6 +45,10 @@ public class AccountBean implements AccountBeanLocal {
 	@EJB
 	private EntityBeanLocal entityBean;
 
+	@Inject
+	@JPADAO
+	private TransactionLogDAO transactionLogDao;
+
 	@Override
 	@RequiresPermissions(ACCOUNT_PAY_IN)
 	public Long payIn(Long id, BigDecimal amount, String comment) {
@@ -177,7 +181,7 @@ public class AccountBean implements AccountBeanLocal {
 
 	@Override
 	@RequiresPermissions(ACCOUNT_FIND_BY_ID)
-	public ReadOnlyAccount findById(Long id) {
+	public Account findById(Long id) {
 		return accountDao.findById(id);
 	}
 
@@ -193,7 +197,30 @@ public class AccountBean implements AccountBeanLocal {
 
 	@Override
 	@RequiresPermissions(ACCOUNT_FIND_ACCOUNT_OWNER)
-	public ReadOnlyAccountOwner findAccountOwnerById(Long id) {
+	public AccountOwner findAccountOwnerById(Long id) {
 		return accountOwnerDao.findById(id);
+	}
+
+	@Override
+	@RequiresPermissions(ACCOUNT_FIND_TRANSACTION_LOG_BY_ID)
+	public TransactionLog findTransactionLogById(Long id) {
+		return transactionLogDao.findById(id);
+	}
+
+	@Override
+	@RequiresPermissions(ACCOUNT_VIEW_TRANSACTION_LOGS)
+	public List<? extends ReadOnlyTransactionLog> findTransactionLogs(Long id, Long accountId, LocalDateTime dateTime, EnumAccountAction action,
+			EnumAccountActionType actionType, Long relatedAccountId, BigDecimal amount, BigDecimal previousBankBalance, BigDecimal currentBankBalance,
+			Long bankUserId, String comment, Boolean useId, Boolean useAccountId, Boolean useDateTime, Boolean useAction, Boolean useActionType,
+			Boolean useRelatedAccountId, Boolean useAmount, Boolean usePreviousBankBalance, Boolean useCurrentBankBalance, Boolean useBankUser,
+			Boolean useComment, EnumQueryComparator idComparator, EnumQueryComparator accountIdComparator, EnumQueryComparator dateTimeComparator,
+			EnumQueryComparator actionComparator, EnumQueryComparator actionTypeComparator, EnumQueryComparator relatedAccountIdComparator,
+			EnumQueryComparator amountComparator, EnumQueryComparator previousBankBalanceComparator, EnumQueryComparator currentBankBalanceComparator,
+			EnumQueryComparator bankUserIdComparator, EnumQueryComparator commentComparator) {
+		return transactionLogDao.findTransactionLogs(id, accountId, dateTime, action, actionType, relatedAccountId, amount, previousBankBalance,
+				currentBankBalance, bankUserId, comment, useId, useAccountId, useDateTime, useAction, useActionType, useRelatedAccountId, useAmount,
+				usePreviousBankBalance, useCurrentBankBalance, useBankUser, useComment, idComparator, accountIdComparator, dateTimeComparator,
+				actionComparator, actionTypeComparator, relatedAccountIdComparator, amountComparator, previousBankBalanceComparator,
+				currentBankBalanceComparator, bankUserIdComparator, commentComparator);
 	}
 }

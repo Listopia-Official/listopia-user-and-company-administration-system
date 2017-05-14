@@ -1,0 +1,499 @@
+<ui:composition template="/WEB-INF/web/template/dataTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="siteBean" value="#{transactionLogBean}" />
+	<ui:define name="dialogs">
+		<ui:include src="/WEB-INF/web/components/longTextDisplayDialog.xhtml" />
+	</ui:define>
+	<ui:define name="otherContent">
+		<p:importEnum type="florian_haas.lucas.model.EnumAccountAction" />
+		<p:importEnum type="florian_haas.lucas.model.EnumAccountActionType" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.CurrencyConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.EnumConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.AccountConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.LocalDateTimeConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.LoginUserConverter$ShortLoginUserConverter" />
+	</ui:define>
+	<ui:define name="buttonArea">
+		<p:toolbarGroup align="left">
+
+		</p:toolbarGroup>
+	</ui:define>
+	<ui:define name="searchCriteria">
+		<p:row>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchTransactionLogIdSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{transactionLogBean.useSearchTransactionLogId}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="transactionLogSearchCriteriaForm:searchTransactionLogIdInputNumber transactionLogSearchCriteriaForm:searchTransactionLogIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchTransactionLogIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.transactionLogScreen.searchTransactionLogIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchTransactionLogAccountIdSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{transactionLogBean.useSearchTransactionLogAccountId}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogAccountIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="transactionLogSearchCriteriaForm:searchTransactionLogAccountIdInputNumber transactionLogSearchCriteriaForm:searchTransactionLogAccountIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchTransactionLogAccountIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.transactionLogScreen.searchTransactionLogAccountIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogAccountIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchTransactionLogDateTimeSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{transactionLogBean.useSearchTransactionLogDateTime}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogDateTimeSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="transactionLogSearchCriteriaForm:searchTransactionLogDateTimeCalendar transactionLogSearchCriteriaForm:searchTransactionLogDateTimeComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchTransactionLogDateTimeSelectBooleanCheckbox"
+					value="#{msg['lucas.application.transactionLogScreen.searchTransactionLogDateTimeSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogDateTimeSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchTransactionLogActionSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{transactionLogBean.useSearchTransactionLogAction}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogActionSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="transactionLogSearchCriteriaForm:searchTransactionLogActionSelectOneMenu transactionLogSearchCriteriaForm:searchTransactionLogActionComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchTransactionLogActionSelectBooleanCheckbox"
+					value="#{msg['lucas.application.transactionLogScreen.searchTransactionLogActionSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogActionSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchTransactionLogActionTypeSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{transactionLogBean.useSearchTransactionLogActionType}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogActionTypeSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="transactionLogSearchCriteriaForm:searchTransactionLogActionTypeSelectOneMenu transactionLogSearchCriteriaForm:searchTransactionLogActionTypeComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchTransactionLogActionTypeSelectBooleanCheckbox"
+					value="#{msg['lucas.application.transactionLogScreen.searchTransactionLogActionTypeSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogActionTypeSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchTransactionLogRelatedAccountIdSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{transactionLogBean.useSearchTransactionLogRelatedAccountId}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogRelatedAccountIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="transactionLogSearchCriteriaForm:searchTransactionLogRelatedAccountIdInputNumber transactionLogSearchCriteriaForm:searchTransactionLogRelatedAccountIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchTransactionLogRelatedAccountIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.transactionLogScreen.searchTransactionLogRelatedAccountIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogRelatedAccountIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchTransactionLogPreviousBankBalanceSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{transactionLogBean.useSearchTransactionLogPreviousBankBalance}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogPreviousBankBalanceSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="transactionLogSearchCriteriaForm:searchTransactionLogPreviousBankBalanceInputNumber transactionLogSearchCriteriaForm:searchTransactionLogPreviousBankBalanceComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchTransactionLogPreviousBankBalanceSelectBooleanCheckbox"
+					value="#{msg['lucas.application.transactionLogScreen.searchTransactionLogPreviousBankBalanceSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogPreviousBankBalanceSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchTransactionLogAmountSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{transactionLogBean.useSearchTransactionLogAmount}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogAmountSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="transactionLogSearchCriteriaForm:searchTransactionLogAmountInputNumber transactionLogSearchCriteriaForm:searchTransactionLogAmountComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchTransactionLogAmountSelectBooleanCheckbox"
+					value="#{msg['lucas.application.transactionLogScreen.searchTransactionLogAmountSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogAmountSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchTransactionLogCurrentBankBalanceSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{transactionLogBean.useSearchTransactionLogCurrentBankBalance}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogCurrentBankBalanceSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="transactionLogSearchCriteriaForm:searchTransactionLogCurrentBankBalanceInputNumber transactionLogSearchCriteriaForm:searchTransactionLogCurrentBankBalanceComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchTransactionLogCurrentBankBalanceSelectBooleanCheckbox"
+					value="#{msg['lucas.application.transactionLogScreen.searchTransactionLogCurrentBankBalanceSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogCurrentBankBalanceSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:selectOneMenu id="searchTransactionLogIdComparator"
+					disabled="#{not transactionLogBean.useSearchTransactionLogId}"
+					value="#{transactionLogBean.searchTransactionLogIdComparator}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchTransactionLogAccountIdComparator"
+					disabled="#{not transactionLogBean.useSearchTransactionLogAccountId}"
+					value="#{transactionLogBean.searchTransactionLogAccountIdComparator}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogAccountIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchTransactionLogDateTimeComparator"
+					disabled="#{not transactionLogBean.useSearchTransactionLogDateTime}"
+					value="#{transactionLogBean.searchTransactionLogDateTimeComparator}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogDateTimeComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchTransactionLogActionComparator"
+					disabled="#{not transactionLogBean.useSearchTransactionLogAction}"
+					value="#{transactionLogBean.searchTransactionLogActionComparator}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogActionComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchTransactionLogActionTypeComparator"
+					disabled="#{not transactionLogBean.useSearchTransactionLogActionType}"
+					value="#{transactionLogBean.searchTransactionLogActionTypeComparator}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogActionTypeComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchTransactionLogRelatedAccountIdComparator"
+					disabled="#{not transactionLogBean.useSearchTransactionLogRelatedAccountId}"
+					value="#{transactionLogBean.searchTransactionLogRelatedAccountIdComparator}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogRelatedAccountIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu
+					id="searchTransactionLogPreviousBankBalanceComparator"
+					disabled="#{not transactionLogBean.useSearchTransactionLogPreviousBankBalance}"
+					value="#{transactionLogBean.searchTransactionLogPreviousBankBalanceComparator}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogPreviousBankBalanceComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchTransactionLogAmountComparator"
+					disabled="#{not transactionLogBean.useSearchTransactionLogAmount}"
+					value="#{transactionLogBean.searchTransactionLogAmountComparator}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogAmountComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu
+					id="searchTransactionLogCurrentBankBalanceComparator"
+					disabled="#{not transactionLogBean.useSearchTransactionLogCurrentBankBalance}"
+					value="#{transactionLogBean.searchTransactionLogCurrentBankBalanceComparator}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogCurrentBankBalanceComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:inputNumber value="#{transactionLogBean.searchTransactionLogId}"
+					minValue="0" decimalPlaces="0"
+					id="searchTransactionLogIdInputNumber"
+					disabled="#{not transactionLogBean.useSearchTransactionLogId}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber
+					value="#{transactionLogBean.searchTransactionLogAccountId}"
+					minValue="0" decimalPlaces="0"
+					id="searchTransactionLogAccountIdInputNumber"
+					disabled="#{not transactionLogBean.useSearchTransactionLogAccountId}" />
+			</p:column>
+			<p:column>
+				<p:calendar id="searchTransactionLogDateTimeCalendar"
+					value="#{transactionLogBean.searchTransactionLogDateTime}"
+					showButtonPanel="true" showHour="true" showMinute="true"
+					navigator="true" showSecond="true" timeInput="true"
+					pattern="dd.MM.yyyy HH:mm:ss"
+					locale="#{facesContext.viewRoot.locale.language}"
+					timeControlType="select"
+					disabled="#{not transactionLogBean.useSearchTransactionLogDateTime}" />
+			</p:column>
+			<p:column>
+				<p:selectOneMenu
+					value="#{transactionLogBean.searchTransactionLogAction}"
+					id="searchTransactionLogActionSelectOneMenu"
+					disabled="#{not transactionLogBean.useSearchTransactionLogAction}">
+					<f:selectItems value="#{EnumAccountAction.ALL_VALUES}"
+						var="transactionLog" itemValue="#{transactionLog}"
+						itemLabel="#{converterBean.convertEnum(transactionLog)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu
+					value="#{transactionLogBean.searchTransactionLogActionType}"
+					id="searchTransactionLogActionTypeSelectOneMenu"
+					disabled="#{not transactionLogBean.useSearchTransactionLogActionType}">
+					<f:selectItems value="#{EnumAccountActionType.ALL_VALUES}"
+						var="transactionLog" itemValue="#{transactionLog}"
+						itemLabel="#{converterBean.convertEnum(transactionLog)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:inputNumber
+					value="#{transactionLogBean.searchTransactionLogRelatedAccountId}"
+					minValue="0" decimalPlaces="0"
+					id="searchTransactionLogRelatedAccountIdInputNumber"
+					disabled="#{not transactionLogBean.useSearchTransactionLogRelatedAccountId}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber
+					value="#{transactionLogBean.searchTransactionLogPreviousBankBalance}"
+					minValue="0" decimalPlaces="2" emptyValue="zero"
+					symbol=" #{transactionLogBean.currencySymbol}"
+					symbolPosition="post"
+					id="searchTransactionLogPreviousBankBalanceInputNumber"
+					disabled="#{not transactionLogBean.useSearchTransactionLogPreviousBankBalance}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber
+					value="#{transactionLogBean.searchTransactionLogAmount}"
+					minValue="0" decimalPlaces="2" emptyValue="zero"
+					symbol=" #{transactionLogBean.currencySymbol}"
+					symbolPosition="post" id="searchTransactionLogAmountInputNumber"
+					disabled="#{not transactionLogBean.useSearchTransactionLogAmount}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber
+					value="#{transactionLogBean.searchTransactionLogCurrentBankBalance}"
+					minValue="0" decimalPlaces="2" emptyValue="zero"
+					symbol=" #{transactionLogBean.currencySymbol}"
+					symbolPosition="post"
+					id="searchTransactionLogCurrentBankBalanceInputNumber"
+					disabled="#{not transactionLogBean.useSearchTransactionLogCurrentBankBalance}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchTransactionLogBankUserIdSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{transactionLogBean.useSearchTransactionLogBankUserId}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogBankUserIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="transactionLogSearchCriteriaForm:searchTransactionLogBankUserIdInputNumber transactionLogSearchCriteriaForm:searchTransactionLogBankUserIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchTransactionLogBankUserIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.transactionLogScreen.searchTransactionLogBankUserIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogBankUserIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchTransactionLogCommentSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{transactionLogBean.useSearchTransactionLogComment}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogCommentSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="transactionLogSearchCriteriaForm:searchTransactionLogCommentInputText transactionLogSearchCriteriaForm:searchTransactionLogCommentComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchTransactionLogCommentSelectBooleanCheckbox"
+					value="#{msg['lucas.application.transactionLogScreen.searchTransactionLogCommentSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogCommentSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:selectOneMenu id="searchTransactionLogBankUserIdComparator"
+					disabled="#{not transactionLogBean.useSearchTransactionLogBankUserId}"
+					value="#{transactionLogBean.searchTransactionLogBankUserComparator}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogBankUserIdComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+			<p:column>
+				<p:selectOneMenu id="searchTransactionLogCommentComparator"
+					disabled="#{not transactionLogBean.useSearchTransactionLogComment}"
+					value="#{transactionLogBean.searchTransactionLogCommentComparator}"
+					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogCommentComparator.tooltip']}">
+					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
+						var="comparator" itemValue="#{comparator}"
+						itemLabel="#{converterBean.convertEnum(comparator)}" />
+				</p:selectOneMenu>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:inputNumber
+					value="#{transactionLogBean.searchTransactionLogBankUserId}"
+					minValue="0" decimalPlaces="0"
+					id="searchTransactionLogBankUserIdInputNumber"
+					disabled="#{not transactionLogBean.useSearchTransactionLogBankUserId}" />
+			</p:column>
+			<p:column>
+				<p:inputText
+					value="#{transactionLogBean.searchTransactionLogComment}"
+					id="searchTransactionLogCommentInputText"
+					converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}"
+					disabled="#{not transactionLogBean.useSearchTransactionLogComment}" />
+			</p:column>
+		</p:row>
+	</ui:define>
+	<ui:define name="searchResults">
+		<p:column
+			exportable="#{transactionLogBean.resultsDatatableColumns[0]}"
+			headerText="#{msg['lucas.application.transactionLogScreen.transactionLogSearchResultsTable.idColumn.name']}"
+			sortBy="#{entity.id}"
+			visible="#{transactionLogBean.resultsDatatableColumns[0]}">
+			<h:outputText value="#{entity.id}" />
+		</p:column>
+		<p:column
+			exportable="#{transactionLogBean.resultsDatatableColumns[1]}"
+			headerText="#{msg['lucas.application.transactionLogScreen.transactionLogSearchResultsTable.accountColumn.name']}"
+			sortable="false"
+			visible="#{transactionLogBean.resultsDatatableColumns[1]}">
+			<h:outputText value="#{entity.account}"
+				converter="#{converterBean.getConverter(AccountConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column
+			exportable="#{transactionLogBean.resultsDatatableColumns[2]}"
+			headerText="#{msg['lucas.application.transactionLogScreen.transactionLogSearchResultsTable.dateTimeColumn.name']}"
+			sortBy="#{entity.dateTime}"
+			visible="#{transactionLogBean.resultsDatatableColumns[2]}">
+			<h:outputText value="#{entity.dateTime}"
+				converter="#{converterBean.getConverter(LocalDateTimeConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column
+			exportable="#{transactionLogBean.resultsDatatableColumns[3]}"
+			headerText="#{msg['lucas.application.transactionLogScreen.transactionLogSearchResultsTable.actionColumn.name']}"
+			sortBy="#{entity.action}"
+			visible="#{transactionLogBean.resultsDatatableColumns[3]}">
+			<h:outputText value="#{entity.action}"
+				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column
+			exportable="#{transactionLogBean.resultsDatatableColumns[4]}"
+			headerText="#{msg['lucas.application.transactionLogScreen.transactionLogSearchResultsTable.actionTypeColumn.name']}"
+			sortBy="#{entity.actionType}"
+			visible="#{transactionLogBean.resultsDatatableColumns[4]}">
+			<h:outputText value="#{entity.actionType}"
+				converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column
+			exportable="#{transactionLogBean.resultsDatatableColumns[5]}"
+			headerText="#{msg['lucas.application.transactionLogScreen.transactionLogSearchResultsTable.relatedAccountColumn.name']}"
+			sortable="false"
+			visible="#{transactionLogBean.resultsDatatableColumns[5]}">
+			<h:outputText value="#{entity.relatedAccount}"
+				converter="#{converterBean.getConverter(AccountConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column
+			exportable="#{transactionLogBean.resultsDatatableColumns[6]}"
+			headerText="#{msg['lucas.application.transactionLogScreen.transactionLogSearchResultsTable.previousBankBalanceColumn.name']}"
+			sortBy="#{entity.previousBankBalance}"
+			visible="#{transactionLogBean.resultsDatatableColumns[6]}">
+			<h:outputText value="#{entity.previousBankBalance}"
+				converter="#{converterBean.getManagedConverter(CurrencyConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column
+			exportable="#{transactionLogBean.resultsDatatableColumns[7]}"
+			headerText="#{msg['lucas.application.transactionLogScreen.transactionLogSearchResultsTable.amountColumn.name']}"
+			sortBy="#{entity.amount}"
+			visible="#{transactionLogBean.resultsDatatableColumns[7]}">
+			<h:outputText value="#{entity.amount}"
+				converter="#{converterBean.getManagedConverter(CurrencyConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column
+			exportable="#{transactionLogBean.resultsDatatableColumns[8]}"
+			headerText="#{msg['lucas.application.transactionLogScreen.transactionLogSearchResultsTable.currentBankBalanceColumn.name']}"
+			sortBy="#{entity.currentBankBalance}"
+			visible="#{transactionLogBean.resultsDatatableColumns[8]}">
+			<h:outputText value="#{entity.currentBankBalance}"
+				converter="#{converterBean.getManagedConverter(CurrencyConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column
+			exportable="#{transactionLogBean.resultsDatatableColumns[9]}"
+			headerText="#{msg['lucas.application.transactionLogScreen.transactionLogSearchResultsTable.bankUserColumn.name']}"
+			sortBy="#{entity.bankUser}"
+			visible="#{transactionLogBean.resultsDatatableColumns[9]}">
+			<h:outputText value="#{entity.bankUser}"
+				converter="#{converterBean.getConverter(ShortLoginUserConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column
+			exportable="#{transactionLogBean.resultsDatatableColumns[10]}"
+			headerText="#{msg['lucas.application.transactionLogScreen.transactionLogSearchResultsTable.commentColumn.name']}"
+			sortBy="#{entity.comment}"
+			visible="#{transactionLogBean.resultsDatatableColumns[10]}">
+			<ui:include src="/WEB-INF/web/components/longTextDisplay.xhtml">
+				<ui:param name="text" value="#{entity.comment}" />
+				<ui:param name="short" value="#{true}" />
+			</ui:include>
+		</p:column>
+	</ui:define>
+</ui:composition>
