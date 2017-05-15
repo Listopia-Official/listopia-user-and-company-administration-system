@@ -18,7 +18,7 @@ import florian_haas.lucas.persistence.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.validation.*;
-import florian_haas.lucas.web.converter.AccountOwnerConverter;
+import florian_haas.lucas.web.converter.*;
 import florian_haas.lucas.web.util.WebUtils;
 
 @Named
@@ -297,8 +297,7 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 				params.add(WebUtils.getCurrencyAsString(payInDialogTransactionAmount));
 				params.add(payInDialogComment != null ? payInDialogComment : "");
 				return true;
-			}, "lucas.application.accountScreen.payIn.message",
-					Utils.asList(WebUtils.getAsString(account.getOwner(), AccountOwnerConverter.CONVERTER_ID)));
+			}, "lucas.application.accountScreen.payIn.message", Utils.asList(WebUtils.getAsString(account, AccountConverter.CONVERTER_ID)));
 		}
 		WebUtils.refreshEntities(ReadOnlyAccount.class, searchResults, selectedEntities, accountBean::findById, true);
 	}
@@ -345,8 +344,7 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 				params.add(WebUtils.getCurrencyAsString(payOutDialogTransactionAmount));
 				params.add(payOutDialogComment != null ? payOutDialogComment : "");
 				return true;
-			}, "lucas.application.accountScreen.payOut.message",
-					Utils.asList(WebUtils.getAsString(account.getOwner(), AccountOwnerConverter.CONVERTER_ID)));
+			}, "lucas.application.accountScreen.payOut.message", Utils.asList(WebUtils.getAsString(account, AccountConverter.CONVERTER_ID)));
 		}
 		WebUtils.refreshEntities(ReadOnlyAccount.class, searchResults, selectedEntities, accountBean::findById, true);
 	}
@@ -412,9 +410,8 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 				params.add(WebUtils.getCurrencyAsString(transactionDialogTransactionAmount));
 				params.add(transactionDialogComment != null ? transactionDialogComment : "");
 				return true;
-			}, "lucas.application.accountScreen.transaction.message",
-					Utils.asList(WebUtils.getAsString(account.getOwner(), AccountOwnerConverter.CONVERTER_ID),
-							WebUtils.getAsString(owner, AccountOwnerConverter.CONVERTER_ID)));
+			}, "lucas.application.accountScreen.transaction.message", Utils.asList(WebUtils.getAsString(account, AccountConverter.CONVERTER_ID),
+					WebUtils.getAsString(owner.getAccount(), AccountConverter.CONVERTER_ID)));
 		}
 		WebUtils.refreshEntities(ReadOnlyAccount.class, searchResults, selectedEntities, Arrays.asList(owner.getAccount()), accountBean::findById,
 				true);
@@ -428,8 +425,7 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 		for (ReadOnlyAccount account : selectedEntities) {
 			WebUtils.executeTask(params -> {
 				return accountBean.blockAccount(account.getId());
-			}, "lucas.application.accountScreen.block.message",
-					Utils.asList(WebUtils.getAsString(account.getOwner(), AccountOwnerConverter.CONVERTER_ID)));
+			}, "lucas.application.accountScreen.block.message", Utils.asList(WebUtils.getAsString(account, AccountConverter.CONVERTER_ID)));
 		}
 		WebUtils.refreshEntities(ReadOnlyAccount.class, searchResults, selectedEntities, accountBean::findById, true);
 	}
@@ -438,8 +434,7 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 		for (ReadOnlyAccount account : selectedEntities) {
 			WebUtils.executeTask(params -> {
 				return accountBean.unblockAccount(account.getId());
-			}, "lucas.application.accountScreen.unblock.message",
-					Utils.asList(WebUtils.getAsString(account.getOwner(), AccountOwnerConverter.CONVERTER_ID)));
+			}, "lucas.application.accountScreen.unblock.message", Utils.asList(WebUtils.getAsString(account, AccountConverter.CONVERTER_ID)));
 		}
 		WebUtils.refreshEntities(ReadOnlyAccount.class, searchResults, selectedEntities, accountBean::findById, true);
 	}
@@ -448,8 +443,7 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 		for (ReadOnlyAccount account : selectedEntities) {
 			WebUtils.executeTask(params -> {
 				return accountBean.protect(account.getId());
-			}, "lucas.application.accountScreen.protect.message",
-					Utils.asList(WebUtils.getAsString(account.getOwner(), AccountOwnerConverter.CONVERTER_ID)));
+			}, "lucas.application.accountScreen.protect.message", Utils.asList(WebUtils.getAsString(account, AccountConverter.CONVERTER_ID)));
 		}
 		WebUtils.refreshEntities(ReadOnlyAccount.class, searchResults, selectedEntities, accountBean::findById, true);
 	}
@@ -458,8 +452,7 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 		for (ReadOnlyAccount account : selectedEntities) {
 			WebUtils.executeTask(params -> {
 				return accountBean.unprotect(account.getId());
-			}, "lucas.application.accountScreen.unprotect.message",
-					Utils.asList(WebUtils.getAsString(account.getOwner(), AccountOwnerConverter.CONVERTER_ID)));
+			}, "lucas.application.accountScreen.unprotect.message", Utils.asList(WebUtils.getAsString(account, AccountConverter.CONVERTER_ID)));
 		}
 		WebUtils.refreshEntities(ReadOnlyAccount.class, searchResults, selectedEntities, accountBean::findById, true);
 	}
