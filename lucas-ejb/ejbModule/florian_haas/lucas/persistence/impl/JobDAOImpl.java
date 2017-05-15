@@ -58,12 +58,14 @@ public class JobDAOImpl extends DAOImpl<Job> implements JobDAO {
 	}
 
 	@Override
-	public List<Job> getEmployeeJobsWhereEmploymentsAreRequired(EnumSet<EnumEmployeePosition> validJobs) {
+	public List<Job> getEmployeeJobsWhereEmploymentsAreRequired(EnumSet<EnumEmployeePosition> validJobs, EnumSet<EnumCompanyType> validCompanyTypes) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<Job> query = builder.createQuery(Job.class);
 		Root<Job> jobRoot = query.from(Job.class);
-		query.select(jobRoot).where(builder.and(jobRoot.get(Job_.employeePosition).in(validJobs),
-				builder.lessThan(builder.size(jobRoot.get(Job_.employments)), jobRoot.get(Job_.requiredEmploymentsCount))));
+		query.select(jobRoot)
+				.where(builder.and(jobRoot.join(Job_.company).get(Company_.companyType).in(validCompanyTypes),
+						jobRoot.get(Job_.employeePosition).in(validJobs),
+						builder.lessThan(builder.size(jobRoot.get(Job_.employments)), jobRoot.get(Job_.requiredEmploymentsCount))));
 		return manager.createQuery(query).getResultList();
 	}
 

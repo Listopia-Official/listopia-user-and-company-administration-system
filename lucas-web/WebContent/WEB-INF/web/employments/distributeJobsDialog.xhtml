@@ -13,6 +13,7 @@
 	<ui:define name="dialogContent">
 		<p:importEnum type="florian_haas.lucas.model.EnumUserType" />
 		<p:importEnum type="florian_haas.lucas.model.EnumEmployeePosition" />
+		<p:importEnum type="florian_haas.lucas.model.EnumCompanyType" />
 		<div class="ui-fluid">
 			<p:panelGrid>
 				<p:row>
@@ -36,6 +37,30 @@
 							<f:selectItems value="#{EnumUserType.ALL_VALUES}" var="userType"
 								itemValue="#{userType}"
 								itemLabel=" #{converterBean.convertEnum(userType)}" />
+						</p:selectCheckboxMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.employmentScreen.distributeJobsDialog.validCompanyTypesSelectCheckboxMenu.name']}"
+							title="#{msg['lucas.application.employmentScreen.distributeJobsDialog.validCompanyTypesSelectCheckboxMenu.tooltip']}"
+							for="validCompanyTypesSelectCheckboxMenu" />
+					</p:column>
+					<p:column>
+						<p:message for="validCompanyTypesSelectCheckboxMenu" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:selectCheckboxMenu id="validCompanyTypesSelectCheckboxMenu"
+							value="#{employmentBean.distributeJobsDialogValidCompanyTypes}"
+							multiple="true"
+							title="#{msg['lucas.application.employmentScreen.distributeJobsDialog.validCompanyTypesSelectCheckboxMenu.tooltip']}"
+							converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}">
+							<f:selectItems value="#{EnumCompanyType.ALL_VALUES}"
+								var="companyType" itemValue="#{companyType}"
+								itemLabel=" #{converterBean.convertEnum(companyType)}" />
 						</p:selectCheckboxMenu>
 					</p:column>
 				</p:row>
@@ -66,7 +91,7 @@
 				<p:row>
 					<p:column>
 						<p:commandButton id="startJobDistributionButton"
-							process="@this validUsersSelectCheckboxMenu validJobsSelectCheckboxMenu"
+							process="@this validUsersSelectCheckboxMenu validJobsSelectCheckboxMenu validCompanyTypesSelectCheckboxMenu"
 							update="@form" action="#{employmentBean.distributeJobs}"
 							value="#{msg['lucas.application.employmentScreen.distributeJobsDialog.startJobDistributionButton.name']}"
 							title="#{msg['lucas.application.employmentScreen.distributeJobsDialog.startJobDistributionButton.tooltip']}"

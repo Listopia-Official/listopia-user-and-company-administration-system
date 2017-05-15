@@ -18,6 +18,6 @@ public interface JobDAO extends DAO<Job> {
 
 	public Boolean isReferencedInEmployments(Long jobId);
 
-	public List<Job> getEmployeeJobsWhereEmploymentsAreRequired(EnumSet<EnumEmployeePosition> validJobs);
+	public List<Job> getEmployeeJobsWhereEmploymentsAreRequired(EnumSet<EnumEmployeePosition> validJobs, EnumSet<EnumCompanyType> validCompanyTypes);
 
 }

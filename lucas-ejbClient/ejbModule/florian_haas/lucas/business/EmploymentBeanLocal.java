@@ -50,6 +50,7 @@ public interface EmploymentBeanLocal {
 	public Set<EnumWorkShift> getWorkShifts(@ValidEntityId(entityClass = ReadOnlyEmployment.class) Long employmentId);
 
 	public List<Integer> distributeJobs(@Size(min = 1) @NotNull EnumSet<@TypeNotNull EnumUserType> permittedUserTypes,
-			@Size(min = 1) @NotNull EnumSet<@TypeNotNull EnumEmployeePosition> validJobs);
+			@Size(min = 1) @NotNull EnumSet<@TypeNotNull EnumEmployeePosition> validJobs,
+			@Size(min = 1) @NotNull EnumSet<@TypeNotNull EnumCompanyType> validCompanyTypes);
 
 }

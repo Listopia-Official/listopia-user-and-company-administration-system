@@ -348,6 +348,9 @@ public class EmploymentBean extends BaseBean<ReadOnlyEmployment> {
 	@Size(min = 1)
 	private List<EnumEmployeePosition> distributeJobsDialogValidJobs = new ArrayList<>();
 
+	@Size(min = 1)
+	private List<EnumCompanyType> distributeJobsDialogValidCompanyTypes = new ArrayList<>();
+
 	public List<EnumUserType> getDistributeJobsDialogValidUsers() {
 		return this.distributeJobsDialogValidUsers;
 	}
@@ -364,17 +367,27 @@ public class EmploymentBean extends BaseBean<ReadOnlyEmployment> {
 		this.distributeJobsDialogValidJobs = distributeJobsDialogValidJobs;
 	}
 
+	public List<EnumCompanyType> getDistributeJobsDialogValidCompanyTypes() {
+		return this.distributeJobsDialogValidCompanyTypes;
+	}
+
+	public void setDistributeJobsDialogValidCompanyTypes(List<EnumCompanyType> distributeJobsDialogValidCompanyTypes) {
+		this.distributeJobsDialogValidCompanyTypes = distributeJobsDialogValidCompanyTypes;
+	}
+
 	public void initDistributeJobsDialog() {
 		distributeJobsDialogValidUsers.clear();
 		distributeJobsDialogValidUsers.add(EnumUserType.PUPIL);
 		distributeJobsDialogValidJobs.clear();
 		distributeJobsDialogValidJobs.add(EnumEmployeePosition.EMPLOYEE);
+		distributeJobsDialogValidCompanyTypes.clear();
+		distributeJobsDialogValidCompanyTypes.add(EnumCompanyType.CIVIL);
 	}
 
 	public void distributeJobs() {
 		WebUtils.executeTask(params -> {
-			params.addAll(
-					employmentBean.distributeJobs(EnumSet.copyOf(distributeJobsDialogValidUsers), EnumSet.copyOf(distributeJobsDialogValidJobs)));
+			params.addAll(employmentBean.distributeJobs(EnumSet.copyOf(distributeJobsDialogValidUsers), EnumSet.copyOf(distributeJobsDialogValidJobs),
+					EnumSet.copyOf(distributeJobsDialogValidCompanyTypes)));
 			return true;
 		}, "lucas.application.employmentScreen.distributeJobs.message");
 	}

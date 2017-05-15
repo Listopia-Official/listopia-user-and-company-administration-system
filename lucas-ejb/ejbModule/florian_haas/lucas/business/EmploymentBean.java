@@ -172,15 +172,16 @@ public class EmploymentBean implements EmploymentBeanLocal {
 
 	@Override
 	@RequiresPermissions(EMPLOYMENT_DISTRIBUTE_JOBS)
-	public List<Integer> distributeJobs(EnumSet<EnumUserType> permittedUserTypes, EnumSet<EnumEmployeePosition> validJobs) {
+	public List<Integer> distributeJobs(EnumSet<EnumUserType> permittedUserTypes, EnumSet<EnumEmployeePosition> validJobs,
+			EnumSet<EnumCompanyType> validCompanyTypes) {
 		Integer distributedJobs = 0;
 		List<User> relevantUsers = userDao.getAllUsersWithNoEmployments(permittedUserTypes);
 		Collections.shuffle(relevantUsers);
 		LinkedList<User> freeUsersPool = new LinkedList<>();
 		for (User user : relevantUsers) {
-			if (!createEmploymentIfPossible(user, user.getFirstJobRequest(), validJobs)) {
-				if (!createEmploymentIfPossible(user, user.getSecondJobRequest(), validJobs)) {
-					if (!createEmploymentIfPossible(user, user.getThirdJobRequest(), validJobs)) {
+			if (!createEmploymentIfPossible(user, user.getFirstJobRequest(), validJobs, validCompanyTypes)) {
+				if (!createEmploymentIfPossible(user, user.getSecondJobRequest(), validJobs, validCompanyTypes)) {
+					if (!createEmploymentIfPossible(user, user.getThirdJobRequest(), validJobs, validCompanyTypes)) {
 						freeUsersPool.add(user);
 					} else {
 						distributedJobs++;
@@ -193,7 +194,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 			}
 		}
 		relevantUsers.clear();
-		List<Job> freeJobs = jobDao.getEmployeeJobsWhereEmploymentsAreRequired(validJobs);
+		List<Job> freeJobs = jobDao.getEmployeeJobsWhereEmploymentsAreRequired(validJobs, validCompanyTypes);
 		if (!freeJobs.isEmpty()) {
 			Collections.shuffle(freeUsersPool);
 			Iterator<Job> it = freeJobs.iterator();
@@ -202,7 +203,7 @@ public class EmploymentBean implements EmploymentBeanLocal {
 				for (int i = job.getEmployments().size(); i < job.getRequiredEmploymentsCount() & !freeUsersPool.isEmpty(); i++) {
 					User user = freeUsersPool.removeFirst();
 					if (user != null) {
-						createEmploymentIfPossible(user, job, validJobs);
+						createEmploymentIfPossible(user, job, validJobs, validCompanyTypes);
 						distributedJobs++;
 					}
 				}
@@ -221,9 +222,11 @@ public class EmploymentBean implements EmploymentBeanLocal {
 		return Collections.unmodifiableList(Arrays.asList(distributedJobs, remainingJobs, remainingUsers));
 	}
 
-	private Boolean createEmploymentIfPossible(User user, Job job, EnumSet<EnumEmployeePosition> validJobs) {
+	private Boolean createEmploymentIfPossible(User user, Job job, EnumSet<EnumEmployeePosition> validJobs,
+			EnumSet<EnumCompanyType> validCompanyTypes) {
 		Boolean ret = Boolean.FALSE;
-		if (job != null && job.areEmployeesRequiredForJob() && validJobs.contains(job.getEmployeePosition())) {
+		if (job != null && job.areEmployeesRequiredForJob() && validJobs.contains(job.getEmployeePosition())
+				&& validCompanyTypes.contains(job.getCompany().getCompanyType())) {
 			createEmployment(user.getId(), job.getId(), null);
 			ret = Boolean.TRUE;
 		}
