@@ -6,6 +6,9 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 	<ui:define name="content">
 		<div align="center">
+			<f:metadata>
+				<f:viewAction action="#{redirectLoginBean.redirect}" />
+			</f:metadata>
 			<h:form id="login">
 				<h1>
 					<h:outputText value="#{msg['lucas.application.login.heading']}"
