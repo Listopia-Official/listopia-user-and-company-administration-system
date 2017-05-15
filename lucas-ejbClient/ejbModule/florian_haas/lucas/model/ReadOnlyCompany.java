@@ -2,7 +2,7 @@ package florian_haas.lucas.model;
 
 import java.util.*;
 
-public interface ReadOnlyCompany extends ReadOnlyEntity {
+public interface ReadOnlyCompany extends ReadOnlyAccountOwner {
 
 	public List<? extends ReadOnlyEmployment> getAllEmployees();
 

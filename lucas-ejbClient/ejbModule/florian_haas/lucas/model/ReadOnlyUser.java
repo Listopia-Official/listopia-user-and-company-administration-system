@@ -2,7 +2,7 @@ package florian_haas.lucas.model;
 
 import java.util.*;
 
-public interface ReadOnlyUser extends ReadOnlyEntity {
+public interface ReadOnlyUser extends ReadOnlyAccountOwner {
 
 	public String getForename();
 
