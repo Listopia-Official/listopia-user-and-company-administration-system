@@ -106,8 +106,10 @@
 			<p:column sortBy="#{transactionLog.comment}"
 				visible="#{accountBean.transactionLogsDialogDatatableColumns[8]}"
 				headerText="#{msg['lucas.application.accountScreen.transactionLogDialog.comment']}">
-				<h:outputText value="#{transactionLog.comment}"
-					converter="#{converterBean.getConverter(NullConverter.CONVERTER_ID)}" />
+				<ui:include src="/WEB-INF/web/components/longTextDisplay.xhtml">
+					<ui:param name="text" value="#{transactionLog.comment}" />
+					<ui:param name="short" value="#{true}" />
+				</ui:include>
 			</p:column>
 			<p:column sortable="false"
 				visible="#{accountBean.transactionLogsDialogDatatableColumns[9]}"
