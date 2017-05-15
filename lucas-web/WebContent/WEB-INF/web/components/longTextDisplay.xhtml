@@ -6,19 +6,20 @@
 	<div style="display: flex; justify-content: space-between;">
 		<p:importConstants
 			type="florian_haas.lucas.web.converter.LongTextConverter" />
-			<p:importConstants
+		<p:importConstants
 			type="florian_haas.lucas.web.converter.LongTextConverter$LongTextConverter2" />
 		<p:importConstants
 			type="florian_haas.lucas.web.converter.NullConverter" />
 		<p:importConstants
 			type="florian_haas.lucas.web.converter.NullConverterNoText" />
-		<h:outputText value="#{text}"
+		<h:outputText value="#{text}" rendered="#{!siteBean.paginatorActive}" />
+		<h:outputText value="#{text}" rendered="#{siteBean.paginatorActive}"
 			converter="#{converterBean.getConverter(short != null &amp;&amp; short == true ? LongTextConverter2.CONVERTER_ID : LongTextConverter.CONVERTER_ID)}" />
 		<p:commandButton id="showTextButton" icon="fa fa-external-link"
 			title="#{msg['lucas.application.longTextDisplay.viewText.title']}"
 			update="displayLongTextDialogForm"
 			action="#{longTextDisplayBean.setText(text)}"
 			oncomplete="PF('displayLongTextDialog').show()"
-			rendered="#{text != null &amp;&amp; (short != null &amp;&amp; short == true ? text.length() > 20 : text.length() > 45)}" />
+			rendered="#{siteBean.paginatorActive &amp;&amp; text != null &amp;&amp; (short != null &amp;&amp; short == true ? text.length() > 20 : text.length() > 45)}" />
 	</div>
 </ui:composition>
