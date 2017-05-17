@@ -256,45 +256,65 @@ public class WebUtils {
 				WebUtils.addTranslatedWarningMessage(warnMessageKey, messageComponentId, params);
 			}
 		}
-		catch (ConstraintViolationException e) {
-			handleConstraintViolationException(e, failMessageKey, messageComponentId, params);
+		catch (ConstraintViolationException constraintViolationException) {
+			handleConstraintViolations(Utils.extractConstraintViolations(constraintViolationException), failMessageKey, messageComponentId, params);
 		}
-		catch (ShiroException e2) {
-			WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + getTranslatedMessage("lucas.application.message.accessDenied")
-					+ e2.getLocalizedMessage(), messageComponentId);
-		}
-		catch (LucasException e45) {
-			WebUtils.addErrorMessage(exceptionMessageGetter != null ? exceptionMessageGetter.apply(e45, argParams)
-					: getTranslatedMessage(failMessageKey, params) + e45.getLocalizedMessage(), messageComponentId);
-		}
-		catch (EJBException e25) {
-			Throwable cause = e25.getCause();
-			boolean log = true;
-			if (cause.getCause() instanceof ConstraintViolationException) {
-				handleConstraintViolationException((ConstraintViolationException) cause.getCause(), failMessageKey, messageComponentId, params);
-				log = false;
-			}
-			if (log) {
-				Logger.getAnonymousLogger().log(Level.SEVERE, e25, e25::getMessage);
-				WebUtils.addFatalMessage(getTranslatedMessage(failMessageKey, params) + "\n" + Utils.getStackTraceAsString(e25), messageComponentId);
+		catch (ShiroException shiroException) {
+			Set<ConstraintViolation<?>> violations = Utils.extractConstraintViolations(shiroException);
+			if (violations.isEmpty()) {
+				WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + getTranslatedMessage("lucas.application.message.accessDenied")
+						+ shiroException.getLocalizedMessage(), messageComponentId);
+			} else {
+				handleConstraintViolations(Utils.extractConstraintViolations(shiroException), failMessageKey, messageComponentId, params);
 			}
 		}
-		catch (PersistenceException e3) {
-			e3.printStackTrace();
-			WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + getTranslatedMessage("lucas.application.message.persistenceError")
-					+ e3.getLocalizedMessage(), messageComponentId);
+		catch (LucasException lucasException) {
+			Set<ConstraintViolation<?>> violations = Utils.extractConstraintViolations(lucasException);
+			if (violations.isEmpty()) {
+				WebUtils.addErrorMessage(exceptionMessageGetter != null ? exceptionMessageGetter.apply(lucasException, argParams)
+						: getTranslatedMessage(failMessageKey, params) + lucasException.getLocalizedMessage(), messageComponentId);
+			} else {
+				handleConstraintViolations(Utils.extractConstraintViolations(lucasException), failMessageKey, messageComponentId, params);
+			}
 		}
-		catch (Exception e3) {
-			Logger.getAnonymousLogger().log(Level.SEVERE, e3, e3::getMessage);
-			WebUtils.addFatalMessage(getTranslatedMessage(failMessageKey, params) + "\n" + Utils.getStackTraceAsString(e3), messageComponentId);
+		catch (EJBException ejbException) {
+			Set<ConstraintViolation<?>> violations = Utils.extractConstraintViolations(ejbException);
+			if (violations.isEmpty()) {
+				Logger.getAnonymousLogger().log(Level.SEVERE, ejbException, ejbException::getMessage);
+				WebUtils.addFatalMessage(getTranslatedMessage(failMessageKey, params) + "\n" + Utils.getStackTraceAsString(ejbException),
+						messageComponentId);
+			} else {
+				handleConstraintViolations(violations, failMessageKey, messageComponentId, params);
+			}
+		}
+		catch (PersistenceException persistenceException) {
+			Set<ConstraintViolation<?>> violations = Utils.extractConstraintViolations(persistenceException);
+			persistenceException.printStackTrace();
+			if (violations.isEmpty()) {
+				WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params)
+						+ getTranslatedMessage("lucas.application.message.persistenceError") + persistenceException.getLocalizedMessage(),
+						messageComponentId);
+			} else {
+				handleConstraintViolations(Utils.extractConstraintViolations(persistenceException), failMessageKey, messageComponentId, params);
+			}
+		}
+		catch (Exception exception) {
+			Set<ConstraintViolation<?>> violations = Utils.extractConstraintViolations(exception);
+			if (violations.isEmpty()) {
+				Logger.getAnonymousLogger().log(Level.SEVERE, exception, exception::getMessage);
+				WebUtils.addFatalMessage(getTranslatedMessage(failMessageKey, params) + "\n" + Utils.getStackTraceAsString(exception),
+						messageComponentId);
+			} else {
+				handleConstraintViolations(Utils.extractConstraintViolations(exception), failMessageKey, messageComponentId, params);
+			}
 		}
 		return success;
 
 	}
 
-	private static void handleConstraintViolationException(ConstraintViolationException exception, String failMessageKey, String messageComponentId,
+	private static void handleConstraintViolations(Set<ConstraintViolation<?>> violations, String failMessageKey, String messageComponentId,
 			Object[] params) {
-		for (ConstraintViolation<?> violation : exception.getConstraintViolations()) {
+		for (ConstraintViolation<?> violation : violations) {
 			WebUtils.addErrorMessage(getTranslatedMessage(failMessageKey, params) + violation.getMessage(), messageComponentId);
 		}
 	}
