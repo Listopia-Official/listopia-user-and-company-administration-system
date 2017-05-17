@@ -58,7 +58,8 @@ public class CustomCSVExporter extends CSVExporter {
 				WebUtils.CSV_MIME, filename.concat("." + WebUtils.CSV_TYPE.toLowerCase()));
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+			"rawtypes", "unchecked" })
 	protected String exportValue(FacesContext context, UIComponent component) {
 		if ((component instanceof HtmlCommandLink)) {
 			HtmlCommandLink link = (HtmlCommandLink) component;

@@ -359,7 +359,7 @@ public class WebUtils {
 		return tmp;
 	}
 
-	public static String getAsString(Object object, Converter converter) {
+	public static <T> String getAsString(T object, Converter<T> converter) {
 		FacesContext context = FacesContext.getCurrentInstance();
 		return converter.getAsString(context, UIComponent.getCurrentComponent(context), object);
 	}
@@ -368,7 +368,7 @@ public class WebUtils {
 		return getAsString(object, getConverterFromId(converterId));
 	}
 
-	public static Object getAsObject(String value, Converter converter) {
+	public static <T> T getAsObject(String value, Converter<T> converter) {
 		FacesContext context = FacesContext.getCurrentInstance();
 		return converter.getAsObject(context, UIComponent.getCurrentComponent(context), value);
 	}
@@ -377,8 +377,9 @@ public class WebUtils {
 		return getAsObject(string, getConverterFromId(converterId));
 	}
 
-	public static Converter getConverterFromId(String converterId) {
-		return FacesContext.getCurrentInstance().getApplication().createConverter(converterId);
+	@SuppressWarnings("unchecked")
+	public static Converter<Object> getConverterFromId(String converterId) {
+		return (Converter<Object>) (Converter<?>) FacesContext.getCurrentInstance().getApplication().createConverter(converterId);
 	}
 
 	public static <E extends ReadOnlyEntity> void refreshEntities(Class<E> entityClass, List<E> entityList, List<E> selectedEntities,

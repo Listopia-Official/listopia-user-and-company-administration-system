@@ -7,14 +7,14 @@ import javax.faces.convert.*;
 import florian_haas.lucas.web.util.WebUtils;
 
 @FacesConverter(EnumConverter.CONVERTER_ID)
-public class EnumConverter implements Converter {
+public class EnumConverter implements Converter<Enum<?>> {
 
 	public static final String CONVERTER_ID = "lucas:enumConverter";
 
 	public static final String ENUM_ATTRIBUTE_KEY = "lucas:enumConverterAttribute";
 
 	@Override
-	public String getAsString(FacesContext context, UIComponent component, Object value) {
+	public String getAsString(FacesContext context, UIComponent component, Enum<?> value) {
 		if (value != null) {
 			if (!(value instanceof Enum)) throw new IllegalArgumentException(value.getClass().getName() + " cannot be cast to Enum");
 			component.getAttributes().put(ENUM_ATTRIBUTE_KEY, value.getClass());
@@ -25,7 +25,7 @@ public class EnumConverter implements Converter {
 	@Override
 	@SuppressWarnings({
 			"unchecked", "rawtypes" })
-	public Object getAsObject(FacesContext context, UIComponent component, String value) {
+	public Enum<?> getAsObject(FacesContext context, UIComponent component, String value) {
 		if (value == null || value.trim().isEmpty() || value.equals(getTranslatedName(null))) return null;
 
 		value = value.trim();

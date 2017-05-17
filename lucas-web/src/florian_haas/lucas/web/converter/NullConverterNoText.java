@@ -5,7 +5,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.*;
 
 @FacesConverter(NullConverterNoText.CONVERTER_ID)
-public class NullConverterNoText implements Converter {
+public class NullConverterNoText implements Converter<Object> {
 
 	public static final String CONVERTER_ID = "lucas:nullConverterNoText";
 

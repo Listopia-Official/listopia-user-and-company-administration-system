@@ -17,11 +17,6 @@ public abstract class CollectionConverter<T> extends BasicConverter<Collection<T
 	}
 
 	@Override
-	protected Class<?> getValueClass() {
-		return Collection.class;
-	}
-
-	@Override
 	public String getString(FacesContext context, UIComponent component, Collection<T> value) {
 		StringBuilder builder = new StringBuilder();
 		if (value.isEmpty()) {

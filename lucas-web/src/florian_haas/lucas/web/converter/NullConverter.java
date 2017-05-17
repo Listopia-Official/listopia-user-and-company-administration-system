@@ -7,7 +7,7 @@ import javax.faces.convert.*;
 import florian_haas.lucas.web.util.WebUtils;
 
 @FacesConverter(NullConverter.CONVERTER_ID)
-public class NullConverter implements Converter {
+public class NullConverter implements Converter<Object> {
 
 	public static final String CONVERTER_ID = "lucas:nullConverter";
 	public static final String NO_VALUE_KEY = "lucas.application.nullConverter.null";

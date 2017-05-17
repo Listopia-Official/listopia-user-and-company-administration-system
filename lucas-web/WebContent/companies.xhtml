@@ -198,8 +198,7 @@
 						update="companySearchCriteriaForm:searchCompanyJobsCountInputNumber companySearchCriteriaForm:searchCompanyJobsCountComparator"
 						process="@this" />
 				</p:selectBooleanCheckbox>
-				<p:outputLabel
-					for="searchCompanyJobsCountSelectBooleanCheckbox"
+				<p:outputLabel for="searchCompanyJobsCountSelectBooleanCheckbox"
 					value="#{msg['lucas.application.companyScreen.searchCompanyJobsCountSelectBooleanCheckbox.name']}"
 					title="#{msg['lucas.application.companyScreen.searchCompanyJobsCountSelectBooleanCheckbox.tooltip']}" />
 			</p:column>
@@ -290,7 +289,7 @@
 						itemLabel="#{converterBean.convertEnum(comparator)}" />
 				</p:selectOneMenu>
 			</p:column>
-				<p:column>
+			<p:column>
 				<p:selectOneMenu id="searchCompanyJobsCountComparator"
 					disabled="#{not companyBean.useSearchCompanyJobsCount}"
 					value="#{companyBean.searchCompanyJobsCountComparator}"
@@ -406,7 +405,8 @@
 		<p:column exportable="#{companyBean.resultsDatatableColumns[6]}"
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.childCompaniesColumn.name']}"
 			sortable="false" visible="#{companyBean.resultsDatatableColumns[6]}">
-			<h:outputText value="#{entity.childCompanies}" style="white-space: pre-wrap"
+			<h:outputText value="#{entity.childCompanies}"
+				styleClass="collectionPanel"
 				converter="#{converterBean.getConverter(CompaniesConverter.CONVERTER_ID)}" />
 		</p:column>
 	</ui:define>

@@ -1,27 +1,24 @@
 package florian_haas.lucas.web.converter;
 
-import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.FacesConverter;
-import javax.inject.Named;
 
 import florian_haas.lucas.business.LoginUserRoleBeanLocal;
 import florian_haas.lucas.model.ReadOnlyLoginUserRole;
-import florian_haas.lucas.web.util.*;
 
-@FacesConverter(LoginUserRoleConverter.CONVERTER_ID)
+@FacesConverter(value = LoginUserRoleConverter.CONVERTER_ID, managed = true)
 public class LoginUserRoleConverter extends DefaultConverter<ReadOnlyLoginUserRole> {
 
 	public static final String CONVERTER_ID = "lucas:loginUserRoleConverter";
+
+	// @EJB
+	// private LoginUserRoleBeanLocal loginUserRoleBean;
 
 	public LoginUserRoleConverter() {
 		this(Boolean.FALSE);
 	}
 
 	protected LoginUserRoleConverter(Boolean isShortConverter) {
-		super(isShortConverter, "lucas.application.loginUserRoleConverter");
+		super(isShortConverter, "lucas.application.loginUserRoleConverter", LoginUserRoleBeanLocal.class);
 	}
 
 	@Override
@@ -30,42 +27,18 @@ public class LoginUserRoleConverter extends DefaultConverter<ReadOnlyLoginUserRo
 				value.getId(), value.getName() };
 	}
 
-	@FacesConverter(ShortLoginUserRoleConverter.CONVERTER_ID)
+	@Override
+	protected ReadOnlyLoginUserRole getObjectFromId(Object getter, Long id) {
+		return ((LoginUserRoleBeanLocal) getter).findById(id);
+	}
+
+	@FacesConverter(value = ShortLoginUserRoleConverter.CONVERTER_ID, managed = true)
 	public static class ShortLoginUserRoleConverter extends LoginUserRoleConverter {
 
 		public static final String CONVERTER_ID = "lucas:shortLoginUserRoleConverter";
 
 		public ShortLoginUserRoleConverter() {
 			super(Boolean.TRUE);
-			this.setIsReadonly(Boolean.FALSE);
-		}
-
-		@Override
-		protected ReadOnlyLoginUserRole getObject(FacesContext context, UIComponent component, String value) {
-			if (value == null || value.trim().isEmpty() || value.equals(WebUtils.getTranslatedMessage(this.getNullLangKey()))) return null;
-
-			Long id = null;
-			try {
-				id = Long.valueOf(value.replaceAll("\\D+", ""));
-			}
-			catch (NumberFormatException e) {}
-
-			return id != null
-					? WebUtils.getCDIManagerBean(EntityBean.class).exists(id, ReadOnlyLoginUserRole.class)
-							? WebUtils.getCDIManagerBean(ShortLoginUserRoleConverterEJBHolder.class).getLoginUserRoleBean().findById(id) : null
-					: null;
-		}
-
-		@Named
-		@RequestScoped
-		public static class ShortLoginUserRoleConverterEJBHolder {
-
-			@EJB
-			private LoginUserRoleBeanLocal loginUserRoleBean;
-
-			public LoginUserRoleBeanLocal getLoginUserRoleBean() {
-				return loginUserRoleBean;
-			}
 		}
 
 	}

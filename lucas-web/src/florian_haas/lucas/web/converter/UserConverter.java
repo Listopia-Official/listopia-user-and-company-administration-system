@@ -2,19 +2,23 @@ package florian_haas.lucas.web.converter;
 
 import javax.faces.convert.FacesConverter;
 
+import florian_haas.lucas.business.UserBeanLocal;
 import florian_haas.lucas.model.ReadOnlyUser;
 
-@FacesConverter(UserConverter.CONVERTER_ID)
+@FacesConverter(value = UserConverter.CONVERTER_ID, managed = true)
 public class UserConverter extends DefaultConverter<ReadOnlyUser> {
 
 	public static final String CONVERTER_ID = "lucas:userConverter";
+
+	// @EJB
+	// private UserBeanLocal userBean;
 
 	public UserConverter() {
 		this(Boolean.FALSE);
 	}
 
 	protected UserConverter(Boolean isShortConverter) {
-		super(isShortConverter, "lucas.application.userConverter");
+		super(isShortConverter, "lucas.application.userConverter", UserBeanLocal.class);
 	}
 
 	@Override
@@ -39,6 +43,11 @@ public class UserConverter extends DefaultConverter<ReadOnlyUser> {
 				break;
 		}
 		return defaultKey.concat(keySuffix);
+	}
+
+	@Override
+	protected ReadOnlyUser getObjectFromId(Object getter, Long id) {
+		return ((UserBeanLocal) getter).findById(id);
 	}
 
 	@FacesConverter(ShortUserConverter.CONVERTER_ID)

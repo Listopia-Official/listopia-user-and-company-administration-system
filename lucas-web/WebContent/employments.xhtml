@@ -224,7 +224,8 @@
 			headerText="#{msg['lucas.application.employmentScreen.employmentSearchResultsTable.workShiftsColumn.name']}"
 			sortable="false"
 			visible="#{employmentBean.resultsDatatableColumns[3]}">
-			<h:outputText value="#{entity.workShifts}" style="white-space: pre-wrap"
+			<h:outputText value="#{entity.workShifts}"
+				styleClass="collectionPanel"
 				converter="#{converterBean.getConverter(EnumCollectionConverter.CONVERTER_ID)}" />
 		</p:column>
 	</ui:define>
