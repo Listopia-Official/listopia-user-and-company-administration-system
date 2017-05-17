@@ -19,7 +19,7 @@ public class ConverterBean implements Serializable {
 
 	public static final String NULL_KEY = "lucas.application.converterBean.nullValue";
 
-	public Converter getConverter(String converterId) {
+	public Converter<?> getConverter(String converterId) {
 		return WebUtils.getConverterFromId(converterId);
 	}
 
