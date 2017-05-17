@@ -83,7 +83,7 @@ public class LoginBean {
 	public StreamedContent getImage() {
 		StreamedContent ret = null;
 		Long id = getUserId(getSimpleUsername());
-		if (id != null && SecurityUtils.getSubject().isPermitted(EnumPermission.USER_GET_IMAGE_FROM_ID.getPermissionString())) {
+		if (id != null && WebUtils.isPermitted(EnumPermission.USER_GET_IMAGE_FROM_ID)) {
 			try {
 				ret = WebUtils.getJPEGImage(userBean.getImage(id));
 			}
