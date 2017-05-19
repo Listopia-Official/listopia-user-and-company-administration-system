@@ -133,8 +133,11 @@ public class Utils {
 	}
 
 	public static Set<ConstraintViolation<?>> extractConstraintViolations(Throwable throwable) {
-		if (throwable == null) return null;
-		if (throwable instanceof ConstraintViolationException) return ((ConstraintViolationException) throwable).getConstraintViolations();
+		if (throwable == null) return new HashSet<>();
+		if (throwable instanceof ConstraintViolationException) {
+			Set<ConstraintViolation<?>> violations = ((ConstraintViolationException) throwable).getConstraintViolations();
+			return violations == null ? new HashSet<>() : violations;
+		}
 		return extractConstraintViolations(throwable.getCause());
 	}
 }
