@@ -4,6 +4,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.FacesConverter;
 
+import florian_haas.lucas.business.AccountBeanLocal;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.web.util.WebUtils;
 
@@ -11,6 +12,10 @@ import florian_haas.lucas.web.util.WebUtils;
 public class AccountOwnerConverter extends BasicConverter<ReadOnlyAccountOwner> {
 
 	public static final String CONVERTER_ID = "lucas:accountOwnerConverter";
+
+	public AccountOwnerConverter() {
+		this.setIsReadonly(Boolean.FALSE);
+	}
 
 	@Override
 	protected String getString(FacesContext context, UIComponent uiComponent, ReadOnlyAccountOwner value) {
@@ -24,8 +29,15 @@ public class AccountOwnerConverter extends BasicConverter<ReadOnlyAccountOwner> 
 					ret = WebUtils.getAsString((ReadOnlyUser) value, UserConverter.CONVERTER_ID);
 					break;
 			}
+			uiComponent.getAttributes().put(CONVERTER_ID + ret, value.getId());
 		}
 		return ret;
+	}
+
+	@Override
+	protected ReadOnlyAccountOwner getObject(FacesContext context, UIComponent component, String value) {
+		Object key = component.getAttributes().get(CONVERTER_ID + value);
+		return key != null ? WebUtils.getCDIManagerBean(AccountBeanLocal.class).findAccountOwnerById(Long.parseLong(key.toString().trim())) : null;
 	}
 
 }
