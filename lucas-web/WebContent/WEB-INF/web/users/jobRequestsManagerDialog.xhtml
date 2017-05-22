@@ -13,6 +13,8 @@
 	<ui:define name="dialogContent">
 		<p:importConstants
 			type="florian_haas.lucas.web.converter.NullConverterNoText" />
+			<p:importConstants
+			type="florian_haas.lucas.web.converter.JobConverter" />
 		<p:importEnum type="florian_haas.lucas.model.EnumWorkShift" />
 		<div class="ui-fluid">
 			<p:panelGrid>
@@ -52,51 +54,34 @@
 				</p:row>
 				<p:row>
 					<p:column>
-						<p:inputNumber id="firstJobRequestIdInputNumber"
-							value="#{userBean.jobRequestsManagerDialogFirstJobRequestId}"
-							title="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.firstJobRequestIdInputNumber.tooltip']}"
-							minValue="0" emptyValue="empty" decimalPlaces="0">
-							<p:ajax event="keyup" delay="250" process="@this"
-								update="jobRequestsManagerDialogForm:firstJobRequestIdOutputInputText firstJobRequestIdInputNumberMessage @this" />
-						</p:inputNumber>
+						<ui:include
+							src="/WEB-INF/web/autocomplete/selectJobAutocomplete.xhtml">
+							<ui:param name="id" value="firstJobRequestIdInputNumber" />
+							<ui:param name="title"
+								value="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.firstJobRequestIdInputNumber.tooltip']}" />
+							<ui:param name="value"
+								value="#{userBean.jobRequestsManagerDialogFirstJobRequest}" />
+						</ui:include>
 					</p:column>
 					<p:column>
-						<p:inputNumber id="secondJobRequestIdInputNumber"
-							value="#{userBean.jobRequestsManagerDialogSecondJobRequestId}"
-							title="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.secondJobRequestIdInputNumber.tooltip']}"
-							minValue="0" emptyValue="empty" decimalPlaces="0">
-							<p:ajax event="keyup" delay="250" process="@this"
-								update="jobRequestsManagerDialogForm:secondJobRequestIdOutputInputText secondJobRequestIdInputNumberMessage @this" />
-						</p:inputNumber>
+						<ui:include
+							src="/WEB-INF/web/autocomplete/selectJobAutocomplete.xhtml">
+							<ui:param name="id" value="secondJobRequestIdInputNumber" />
+							<ui:param name="title"
+								value="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.secondJobRequestIdInputNumber.tooltip']}" />
+							<ui:param name="value"
+								value="#{userBean.jobRequestsManagerDialogSecondJobRequest}" />
+						</ui:include>
 					</p:column>
 					<p:column>
-						<p:inputNumber id="thirdJobRequestIdInputNumber"
-							value="#{userBean.jobRequestsManagerDialogThirdJobRequestId}"
-							title="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.thirdJobRequestIdInputNumber.tooltip']}"
-							minValue="0" emptyValue="empty" decimalPlaces="0">
-							<p:ajax event="keyup" delay="250" process="@this"
-								update="jobRequestsManagerDialogForm:thirdJobRequestIdOutputInputText thirdJobRequestIdInputNumberMessage @this" />
-						</p:inputNumber>
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column>
-						<p:inputText
-							title="#{userBean.jobRequestsManagerDialogJobFromIdFirst}"
-							placeholder="#{userBean.jobRequestsManagerDialogJobFromIdFirst}"
-							id="firstJobRequestIdOutputInputText" readonly="true" />
-					</p:column>
-					<p:column>
-						<p:inputText
-							title="#{userBean.jobRequestsManagerDialogJobFromIdSecond}"
-							placeholder="#{userBean.jobRequestsManagerDialogJobFromIdSecond}"
-							id="secondJobRequestIdOutputInputText" readonly="true" />
-					</p:column>
-					<p:column>
-						<p:inputText
-							title="#{userBean.jobRequestsManagerDialogJobFromIdThird}"
-							placeholder="#{userBean.jobRequestsManagerDialogJobFromIdThird}"
-							id="thirdJobRequestIdOutputInputText" readonly="true" />
+						<ui:include
+							src="/WEB-INF/web/autocomplete/selectJobAutocomplete.xhtml">
+							<ui:param name="id" value="thirdJobRequestIdInputNumber" />
+							<ui:param name="title"
+								value="#{msg['lucas.application.userScreen.jobRequestsManagerDialog.thirdJobRequestIdInputNumber.tooltip']}" />
+							<ui:param name="value"
+								value="#{userBean.jobRequestsManagerDialogThirdJobRequest}" />
+						</ui:include>
 					</p:column>
 				</p:row>
 				<p:row>

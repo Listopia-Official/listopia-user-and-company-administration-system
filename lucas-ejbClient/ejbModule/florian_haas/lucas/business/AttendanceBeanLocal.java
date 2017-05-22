@@ -12,17 +12,13 @@ import florian_haas.lucas.validation.*;
 @Local
 public interface AttendanceBeanLocal {
 
-	public Boolean scan(@ValidEntityId(entityClass = ReadOnlyUserCard.class) Long ReadOnlyUserCardId);
+	public Boolean scan(@ValidEntityId(entityClass = ReadOnlyIdCard.class) Long idCard);
 
 	public List<Long> evaluateAll();
 
 	public List<? extends ReadOnlyAttendancedata> findAll();
 
 	public ReadOnlyAttendancedata findById(@ValidEntityId(entityClass = ReadOnlyAttendancedata.class) Long id);
-
-	public ReadOnlyAttendancedata findByUserId(@ValidEntityId(entityClass = ReadOnlyUser.class) Long userId);
-
-	public ReadOnlyAttendancedata findByUserCardId(@ValidEntityId(entityClass = ReadOnlyUserCard.class) Long ReadOnlyUserCardId);
 
 	public List<? extends ReadOnlyAttendancedata> findAttendancedata(@NotNull Long id, @NotNull Boolean isUserInState, @NotNull Long timePresentDay,
 			@NotNull Long validTimeMissing, @NotNull Boolean useId, @NotNull Boolean useIsUserInState, @NotNull Boolean useTimePresentDay,

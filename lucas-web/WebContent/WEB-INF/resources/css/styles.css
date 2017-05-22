@@ -89,3 +89,11 @@
 .ui-messages {
 	white-space: pre-wrap !important;
 }
+
+.ui-autocomplete-panel {
+	width: auto !important;
+}
+
+.collectionPanel {
+	white-space: pre-wrap;
+}

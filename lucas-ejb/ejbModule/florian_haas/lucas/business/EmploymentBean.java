@@ -232,4 +232,10 @@ public class EmploymentBean implements EmploymentBeanLocal {
 		}
 		return ret;
 	}
+
+	@Override
+	@RequiresPermissions(EMPLOYMENT_FIND_BY_DATA)
+	public List<? extends ReadOnlyEmployment> getEmploymentsByData(String data, Integer resultsCount) {
+		return employmentDao.getEmploymentsFromData(data, resultsCount);
+	}
 }

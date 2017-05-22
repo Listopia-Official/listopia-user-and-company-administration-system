@@ -79,20 +79,13 @@
 				</p:row>
 				<p:row>
 					<p:column colspan="2">
-						<p:inputNumber id="companyIdInputNumber"
-							value="#{jobBean.createJobDialogCompanyId}"
-							title="#{msg['lucas.application.jobScreen.createJobDialog.companyIdInputNumber.tooltip']}"
-							minValue="0" emptyValue="empty" decimalPlaces="0">
-							<p:ajax event="keyup" delay="250" process="@this"
-								update="createJobDialogForm:companyIdOutputInputText companyIdInputNumberMessage @this" />
-						</p:inputNumber>
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column colspan="2">
-						<p:inputText title="#{jobBean.createJobDialogCompanyFromId}"
-							placeholder="#{jobBean.createJobDialogCompanyFromId}"
-							id="companyIdOutputInputText" readonly="true" />
+						<ui:include
+							src="/WEB-INF/web/autocomplete/selectCompanyAutocomplete.xhtml">
+							<ui:param name="id" value="companyIdInputNumber" />
+							<ui:param name="title"
+								value="#{msg['lucas.application.jobScreen.createJobDialog.companyIdInputNumber.tooltip']}" />
+							<ui:param name="value" value="#{jobBean.createJobDialogCompany}" />
+						</ui:include>
 					</p:column>
 				</p:row>
 				<p:row>

@@ -36,4 +36,37 @@ public class AccountDAOImpl extends ReadOnlyDAOImpl<Account> implements AccountD
 			return predicates;
 		});
 	}
+
+	@Override
+	public List<Account> getAccountsFromData(String data, Integer resultsCount) {
+		data = data.trim();
+		if (!data.isEmpty()) {
+			CriteriaBuilder builder = manager.getCriteriaBuilder();
+			CriteriaQuery<Account> query = builder.createQuery(Account.class);
+			query.distinct(true);
+			Root<Account> account = query.from(Account.class);
+			List<Predicate> predicates = new ArrayList<>();
+			Join<Account, AccountOwner> owner = account.join(Account_.owner);
+			Join<Account, User> user = builder.treat(owner, User.class);
+			Expression<String> forename = user.get(User_.forename);
+			Expression<String> surname = user.get(User_.surname);
+			Expression<? extends Class<?>> ownerType = owner.type();
+			try {
+				Long id = Long.parseLong(data);
+				predicates.add(builder.equal(account.get(Account_.id), id));
+				predicates.add(builder.equal(owner.get(AccountOwner_.id), id));
+				predicates.add(builder.equal(owner.join(AccountOwner_.idCards, JoinType.LEFT).get(IdCard_.id), id));
+			}
+			catch (NumberFormatException e) {}
+			data = "%" + data.replaceAll(" ", "%") + "%";
+			predicates.add(builder.and(builder.equal(ownerType, builder.literal(User.class)),
+					builder.or(builder.like(builder.concat(forename, surname), data), builder.like(surname, data), builder.like(forename, data))));
+			predicates.add(builder.and(builder.equal(ownerType, builder.literal(Company.class)),
+					builder.like(builder.treat(owner, Company.class).get(Company_.name), data)));
+			query.select(account).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			return manager.createQuery(query).setMaxResults(resultsCount).getResultList();
+		}
+		return new ArrayList<>();
+	}
+
 }

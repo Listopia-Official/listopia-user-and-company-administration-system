@@ -131,4 +131,10 @@ public class JobBean implements JobBeanLocal {
 	private void checkIsNameUnique(Long companyId, String name) {
 		if (!jobDao.isNameUniqueInJobsOfCompany(companyId, name)) throw new LucasException("The name is used by another job of the same company");
 	}
+
+	@Override
+	@RequiresPermissions(JOB_FIND_BY_DATA)
+	public List<? extends ReadOnlyJob> getJobsByData(String data, Integer resultsCount) {
+		return jobDao.getJobsFromData(data, resultsCount);
+	}
 }

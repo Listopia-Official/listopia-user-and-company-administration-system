@@ -29,21 +29,14 @@
 				</p:row>
 				<p:row>
 					<p:column colspan="2">
-						<p:inputNumber id="userIdInputNumber"
-							value="#{employmentBean.createEmploymentDialogUserId}"
-							title="#{msg['lucas.application.employmentScreen.createEmploymentDialog.userIdInputNumber.tooltip']}"
-							minValue="0" emptyValue="empty" decimalPlaces="0">
-							<p:ajax event="keyup" delay="250" process="@this"
-								update="createEmploymentDialogForm:userIdOutputInputText userIdInputNumberMessage @this" />
-						</p:inputNumber>
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column colspan="2">
-						<p:inputText
-							title="#{employmentBean.createEmploymentDialogUserFromId}"
-							placeholder="#{employmentBean.createEmploymentDialogUserFromId}"
-							id="userIdOutputInputText" readonly="true" />
+						<ui:include
+							src="/WEB-INF/web/autocomplete/selectUserAutocomplete.xhtml">
+							<ui:param name="id" value="userIdInputNumber" />
+							<ui:param name="title"
+								value="#{msg['lucas.application.employmentScreen.createEmploymentDialog.userIdInputNumber.tooltip']}" />
+							<ui:param name="value"
+								value="#{employmentBean.createEmploymentDialogUser}" />
+						</ui:include>
 					</p:column>
 				</p:row>
 				<p:row>
@@ -59,21 +52,14 @@
 				</p:row>
 				<p:row>
 					<p:column colspan="2">
-						<p:inputNumber id="jobIdInputNumber"
-							value="#{employmentBean.createEmploymentDialogJobId}"
-							title="#{msg['lucas.application.employmentScreen.createEmploymentDialog.jobIdInputNumber.tooltip']}"
-							minValue="0" emptyValue="empty" decimalPlaces="0">
-							<p:ajax event="keyup" delay="250" process="@this"
-								update="createEmploymentDialogForm:jobIdOutputInputText jobIdInputNumberMessage @this" />
-						</p:inputNumber>
-					</p:column>
-				</p:row>
-				<p:row>
-					<p:column colspan="2">
-						<p:inputText
-							title="#{employmentBean.createEmploymentDialogJobFromId}"
-							placeholder="#{employmentBean.createEmploymentDialogJobFromId}"
-							id="jobIdOutputInputText" readonly="true" />
+						<ui:include
+							src="/WEB-INF/web/autocomplete/selectJobAutocomplete.xhtml">
+							<ui:param name="id" value="jobIdInputNumber" />
+							<ui:param name="title"
+								value="#{msg['lucas.application.employmentScreen.createEmploymentDialog.jobIdInputNumber.tooltip']}" />
+							<ui:param name="value"
+								value="#{employmentBean.createEmploymentDialogJob}" />
+						</ui:include>
 					</p:column>
 				</p:row>
 				<p:row>
@@ -110,8 +96,8 @@
 				<p:row>
 					<p:column>
 						<p:commandButton
-							process="@this userIdInputNumber jobIdInputNumber workShiftsSelectCheckboxMenu" update="@form"
-							action="#{employmentBean.createEmployment}"
+							process="@this userIdInputNumber jobIdInputNumber workShiftsSelectCheckboxMenu"
+							update="@form" action="#{employmentBean.createEmployment}"
 							value="#{msg['lucas.application.employmentScreen.createEmploymentDialog.createEmploymentButton.name']}"
 							title="#{msg['lucas.application.employmentScreen.createEmploymentDialog.createEmploymentButton.tooltip']}"
 							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('createEmploymentDialog').hide()}" />

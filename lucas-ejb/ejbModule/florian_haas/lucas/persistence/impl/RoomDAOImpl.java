@@ -30,4 +30,28 @@ public class RoomDAOImpl extends DAOImpl<Room> implements RoomDAO {
 		return isUnique(name, Room_.name);
 	}
 
+	@Override
+	public List<RoomSection> getRoomsFromData(String data, Integer resultsCount) {
+		data = data.trim();
+		if (!data.isEmpty()) {
+			CriteriaBuilder builder = manager.getCriteriaBuilder();
+			CriteriaQuery<RoomSection> query = builder.createQuery(RoomSection.class);
+			query.distinct(true);
+			Root<RoomSection> section = query.from(RoomSection.class);
+			Join<RoomSection, Room> room = section.join(RoomSection_.room);
+			List<Predicate> predicates = new ArrayList<>();
+			try {
+				Long id = Long.parseLong(data);
+				predicates.add(builder.equal(section.get(RoomSection_.id), id));
+				predicates.add(builder.equal(room.get(Room_.id), id));
+			}
+			catch (NumberFormatException e) {}
+			data = "%" + data.replaceAll(" ", "%") + "%";
+			predicates.add(builder.like(room.get(Room_.name), data));
+			query.select(section).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			return manager.createQuery(query).setMaxResults(resultsCount).getResultList();
+		}
+		return new ArrayList<>();
+	}
+
 }

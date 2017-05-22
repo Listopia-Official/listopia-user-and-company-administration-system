@@ -24,10 +24,10 @@ public class CompanyDAOImpl extends DAOImpl<Company> implements CompanyDAO {
 			getSingularRestriction(Company_.name, name, useName, nameComparator, predicates, builder, root);
 			getSingularRestriction(Company_.description, description, useDescription, descriptionComparator, predicates, builder, root);
 			getSingularRestriction(RoomSection_.id, roomSectionId, useRoomSectionId, roomSectionIdComparator, predicates, builder,
-					root.get(Company_.section));
+					root.join(Company_.section, JoinType.LEFT));
 			getSingularRestriction(Company_.companyType, companyType, useCompanyType, companyTypeComparator, predicates, builder, root);
 			getSingularRestriction(Company_.id, parentCompanyId, useParentCompanyId, parentCompanyIdComparator, predicates, builder,
-					root.get(Company_.parentCompany));
+					root.join(Company_.parentCompany, JoinType.LEFT));
 			getSingularRestriction(Job_.id, jobId, useJobId, jobIdComparator, predicates, builder, root.join(Company_.jobs, JoinType.LEFT));
 			if (useAreEmployeesRequired) {
 				Subquery<Long> subquery = query.subquery(Long.class);
@@ -53,5 +53,37 @@ public class CompanyDAOImpl extends DAOImpl<Company> implements CompanyDAO {
 		return isUnique(roomSectionId, root -> {
 			return root.join(Company_.section).get(RoomSection_.id);
 		});
+	}
+
+	@Override
+	public EnumCompanyType getCompanyTypeFromId(Long companyId) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<EnumCompanyType> query = builder.createQuery(EnumCompanyType.class);
+		Root<Company> root = query.from(Company.class);
+		query.select(root.get(Company_.companyType)).where(builder.equal(root.get(Company_.id), companyId));
+		return manager.createQuery(query).getSingleResult();
+	}
+
+	@Override
+	public List<Company> getCompaniesFromData(String data, Integer resultsCount) {
+		data = data.trim();
+		if (!data.isEmpty()) {
+			CriteriaBuilder builder = manager.getCriteriaBuilder();
+			CriteriaQuery<Company> query = builder.createQuery(Company.class);
+			query.distinct(true);
+			Root<Company> company = query.from(Company.class);
+			List<Predicate> predicates = new ArrayList<>();
+			try {
+				Long id = Long.parseLong(data);
+				predicates.add(builder.equal(company.get(Company_.id), id));
+				predicates.add(builder.equal(company.join(Company_.idCards, JoinType.LEFT).get(IdCard_.id), id));
+			}
+			catch (NumberFormatException e) {}
+			data = "%" + data.replaceAll(" ", "%") + "%";
+			predicates.add(builder.like(company.get(Company_.name), data));
+			query.select(company).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			return manager.createQuery(query).setMaxResults(resultsCount).getResultList();
+		}
+		return new ArrayList<>();
 	}
 }

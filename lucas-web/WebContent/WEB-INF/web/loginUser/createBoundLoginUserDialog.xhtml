@@ -25,28 +25,19 @@
 							for="boundUserIdInputNumber" />
 					</p:column>
 					<p:column colspan="3">
-						<p:inputNumber id="boundUserIdInputNumber"
-							value="#{loginUserBean.createBoundLoginUserBoundUser}"
-							title="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.boundUserIdInputNumber.tooltip']}"
-							minValue="0" emptyValue="empty" decimalPlaces="0">
-							<p:ajax event="keyup" delay="250" process="@this"
-								update="createBoundLoginUserDialogForm:boundUserIdOutputInputText boundUserIdInputNumberMessage @this" />
-						</p:inputNumber>
+						<ui:include
+							src="/WEB-INF/web/autocomplete/selectUserAutocomplete.xhtml">
+							<ui:param name="id" value="boundUserIdInputNumber" />
+							<ui:param name="title"
+								value="#{msg['lucas.application.loginUserScreen.createBoundLoginUserDialog.boundUserIdInputNumber.tooltip']}" />
+							<ui:param name="value"
+								value="#{loginUserBean.createBoundLoginUserBoundUser}" />
+						</ui:include>
 					</p:column>
 					<p:column colspan="2">
 						<p:message for="boundUserIdInputNumber"
 							id="boundUserIdInputNumberMessage" />
 					</p:column>
-				</p:row>
-				<p:row>
-					<p:column />
-					<p:column colspan="3">
-						<p:inputText
-							title="#{loginUserBean.createBoundLoginUserBoundUserFromId}"
-							placeholder="#{loginUserBean.createBoundLoginUserBoundUserFromId}"
-							id="boundUserIdOutputInputText" readonly="true" />
-					</p:column>
-					<p:column colspan="2" />
 				</p:row>
 				<p:row>
 					<p:column>

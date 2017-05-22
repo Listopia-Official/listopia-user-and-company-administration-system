@@ -39,12 +39,12 @@ public interface EmploymentBeanLocal {
 
 	public List<? extends ReadOnlyEmployment> findAll();
 
-	public List<? extends ReadOnlyEmployment> findEmployments(@NotNull Long employmentId, @NotNull Long userId, @NotNull Long jobId,
+	public List<? extends ReadOnlyEmployment> findEmployments(@NotNull Long employmentId, Long userId, Long jobId,
 			Set<@TypeNotNull EnumWorkShift> shifts, @NotNull Boolean useEmploymentId, @NotNull Boolean useUserId, @NotNull Boolean useJobId,
 			@NotNull Boolean useWorkShifts,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator employmentIdComparator,
-			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator userIdComparator,
-			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator jobIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator userIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator jobIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.ARRAY) EnumQueryComparator workShiftsComparator);
 
 	public Set<EnumWorkShift> getWorkShifts(@ValidEntityId(entityClass = ReadOnlyEmployment.class) Long employmentId);
@@ -52,5 +52,7 @@ public interface EmploymentBeanLocal {
 	public List<Integer> distributeJobs(@Size(min = 1) @NotNull EnumSet<@TypeNotNull EnumUserType> permittedUserTypes,
 			@Size(min = 1) @NotNull EnumSet<@TypeNotNull EnumEmployeePosition> validJobs,
 			@Size(min = 1) @NotNull EnumSet<@TypeNotNull EnumCompanyType> validCompanyTypes);
+
+	public List<? extends ReadOnlyEmployment> getEmploymentsByData(@NotNull String data, @NotNull @Min(1) Integer resultsCount);
 
 }

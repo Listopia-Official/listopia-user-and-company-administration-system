@@ -37,11 +37,6 @@ public class User extends AccountOwner implements ReadOnlyUser {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user")
 	@Valid
 	@NotNull
-	private Set<@TypeNotNull UserCard> userCards = new HashSet<>();
-
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "user")
-	@Valid
-	@NotNull
 	private Set<@TypeNotNull Employment> employments = new HashSet<>();
 
 	@OneToOne(optional = true)
@@ -115,18 +110,6 @@ public class User extends AccountOwner implements ReadOnlyUser {
 
 	public Attendancedata getAttendancedata() {
 		return attendancedata;
-	}
-
-	public Set<UserCard> getUserCards() {
-		return Collections.unmodifiableSet(userCards);
-	}
-
-	public Boolean addUserCard(UserCard userCard) {
-		return this.userCards.add(userCard);
-	}
-
-	public Boolean removeUserCard(UserCard userCard) {
-		return this.userCards.remove(userCard);
 	}
 
 	public Set<Employment> getEmployments() {

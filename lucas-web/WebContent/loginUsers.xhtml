@@ -138,7 +138,7 @@
 					disabled="#{not loginUserBean.useSearchLoginUserUserId}"
 					value="#{loginUserBean.searchLoginUserUserIdComparator}"
 					title="#{msg['lucas.application.loginUserScreen.searchLoginUserUserIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
 						var="comparator" itemValue="#{comparator}"
 						itemLabel="#{converterBean.convertEnum(comparator)}" />
 				</p:selectOneMenu>
@@ -156,10 +156,14 @@
 					disabled="#{not loginUserBean.useSearchLoginUserUsername}" />
 			</p:column>
 			<p:column>
-				<p:inputNumber value="#{loginUserBean.searchLoginUserUserId}"
-					minValue="0" decimalPlaces="0"
-					id="searchLoginUserUserIdInputNumber"
-					disabled="#{not loginUserBean.useSearchLoginUserUserId}" />
+				<ui:include
+					src="/WEB-INF/web/autocomplete/selectUserAutocomplete.xhtml">
+					<ui:param name="id" value="searchLoginUserUserIdInputNumber" />
+					<ui:param name="title" value="" />
+					<ui:param name="disabled"
+						value="#{not loginUserBean.useSearchLoginUserUserId}" />
+					<ui:param name="value" value="#{loginUserBean.searchLoginUserUser}" />
+				</ui:include>
 			</p:column>
 		</p:row>
 	</ui:define>

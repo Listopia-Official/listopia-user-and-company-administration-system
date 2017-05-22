@@ -17,4 +17,8 @@ public interface CompanyDAO extends DAO<Company> {
 
 	public Boolean isRoomSectionUnique(Long roomSectionId);
 
+	public EnumCompanyType getCompanyTypeFromId(Long companyId);
+
+	public List<Company> getCompaniesFromData(String data, Integer resultsCount);
+
 }

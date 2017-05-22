@@ -62,11 +62,6 @@ public class Company extends AccountOwner implements ReadOnlyCompany {
 	@Valid
 	private List<@TypeNotNull PurchaseLog> purchaseLogs = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "company")
-	@Valid
-	@NotNull
-	private Set<@TypeNotNull CompanyCard> companyCards = new HashSet<>();
-
 	Company() {}
 
 	public Company(String name, String description, RoomSection section, EnumCompanyType companyType) {
@@ -184,18 +179,6 @@ public class Company extends AccountOwner implements ReadOnlyCompany {
 
 	public Boolean addPurchaseLog(PurchaseLog purchaseLog) {
 		return this.purchaseLogs.add(purchaseLog);
-	}
-
-	public Set<CompanyCard> getCompanyCards() {
-		return Collections.unmodifiableSet(companyCards);
-	}
-
-	public Boolean addCompanyCard(CompanyCard companyCard) {
-		return this.companyCards.add(companyCard);
-	}
-
-	public Boolean removeCompanyCard(CompanyCard companyCard) {
-		return this.companyCards.remove(companyCard);
 	}
 
 	public List<Job> getJobs() {

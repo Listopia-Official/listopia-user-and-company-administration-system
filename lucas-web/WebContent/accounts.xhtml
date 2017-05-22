@@ -196,7 +196,7 @@
 					disabled="#{not accountBean.useSearchAccountOwnerId}"
 					value="#{accountBean.searchAccountOwnerIdComparator}"
 					title="#{msg['lucas.application.accountScreen.searchAccountOwnerIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
 						var="comparator" itemValue="#{comparator}"
 						itemLabel="#{converterBean.convertEnum(comparator)}" />
 				</p:selectOneMenu>
@@ -231,9 +231,14 @@
 					disabled="#{not accountBean.useSearchAccountId}" />
 			</p:column>
 			<p:column>
-				<p:inputNumber value="#{accountBean.searchAccountOwnerId}"
-					minValue="0" decimalPlaces="0" id="searchAccountOwnerIdInputNumber"
-					disabled="#{not accountBean.useSearchAccountOwnerId}" />
+				<ui:include
+					src="/WEB-INF/web/autocomplete/selectAccountOwnerAutocomplete.xhtml">
+					<ui:param name="id" value="searchAccountOwnerIdInputNumber" />
+					<ui:param name="title" value="" />
+					<ui:param name="disabled"
+						value="#{not accountBean.useSearchAccountOwnerId}" />
+					<ui:param name="value" value="#{accountBean.searchAccountOwner}" />
+				</ui:include>
 			</p:column>
 			<p:column>
 				<p:selectOneMenu value="#{accountBean.searchAccountOwnerType}"

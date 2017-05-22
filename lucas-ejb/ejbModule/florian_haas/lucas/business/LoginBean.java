@@ -196,4 +196,16 @@ public class LoginBean implements LoginBeanLocal {
 		}
 	}
 
+	@Override
+	@RequiresPermissions(LOGIN_USER_FIND_BY_DATA)
+	public List<? extends ReadOnlyLoginUser> getLoginUsersByData(String data, Integer resultsCount) {
+		return loginUserDao.getLoginUsersFromData(data, resultsCount);
+	}
+
+	@Override
+	@RequiresPermissions(LOGIN_USER_FIND_BY_ID)
+	public Boolean isBoundLoginUser(Long loginUserId) {
+		return loginUserDao.isBoundLoginUser(loginUserId);
+	}
+
 }

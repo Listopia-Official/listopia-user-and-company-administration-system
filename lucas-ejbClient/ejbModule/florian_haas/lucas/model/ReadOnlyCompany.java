@@ -30,8 +30,6 @@ public interface ReadOnlyCompany extends ReadOnlyAccountOwner {
 
 	public List<? extends ReadOnlyPurchaseLog> getPurchaseLogs();
 
-	public Set<? extends ReadOnlyCompanyCard> getCompanyCards();
-
 	public List<? extends ReadOnlyJob> getJobs();
 
 }

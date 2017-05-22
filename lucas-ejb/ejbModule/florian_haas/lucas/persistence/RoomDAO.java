@@ -2,8 +2,7 @@ package florian_haas.lucas.persistence;
 
 import java.util.List;
 
-import florian_haas.lucas.model.Room;
-import florian_haas.lucas.persistence.EnumQueryComparator;
+import florian_haas.lucas.model.*;
 
 public interface RoomDAO extends DAO<Room> {
 
@@ -11,5 +10,7 @@ public interface RoomDAO extends DAO<Room> {
 			EnumQueryComparator roomIdComparator, EnumQueryComparator nameComparator, EnumQueryComparator sectionIdComparator);
 
 	public Boolean isNameUnique(String name);
+
+	public List<RoomSection> getRoomsFromData(String data, Integer resultsCount);
 
 }

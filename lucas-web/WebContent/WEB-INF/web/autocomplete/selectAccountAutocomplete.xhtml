@@ -1,0 +1,26 @@
+<ui:composition
+	template="/WEB-INF/web/autocomplete/autocompleteTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="templateId" value="#{id}" />
+	<ui:param name="templateValue" value="#{value}" />
+	<ui:param name="templateTitle" value="#{title}" />
+	<ui:param name="templateCompleteMethod" value="completeAccount" />
+	<ui:param name="templateConverterId"
+		value="#{AccountConverter.CONVERTER_ID}" />
+	<ui:define name="autocompleteContent">
+		<p:column>
+			<p:graphicImage value="#{autocompleteBean.imageOfAccountOwner}"
+				width="42px" cache="false" height="42px">
+				<f:param name="entityId" value="#{entity.owner.id}" />
+			</p:graphicImage>
+		</p:column>
+		<p:column>
+			<h:outputText
+				value="#{converterBean.getAsString(entity,AccountConverter.CONVERTER_ID)}" />
+		</p:column>
+	</ui:define>
+</ui:composition>

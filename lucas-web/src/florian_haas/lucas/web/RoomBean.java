@@ -53,8 +53,7 @@ public class RoomBean extends BaseBean<ReadOnlyRoom> {
 	private EnumQueryComparator searchRoomNameComparator = EnumQueryComparator.EQUAL;
 
 	@NotNull
-	@Min(0)
-	private Long searchRoomSectionId = 0l;
+	private ReadOnlyRoomSection searchRoomSection = null;
 
 	@NotNull
 	private Boolean useSearchRoomSectionId = Boolean.FALSE;
@@ -110,12 +109,12 @@ public class RoomBean extends BaseBean<ReadOnlyRoom> {
 		this.searchRoomNameComparator = searchRoomNameComparator;
 	}
 
-	public Long getSearchRoomSectionId() {
-		return searchRoomSectionId;
+	public ReadOnlyRoomSection getSearchRoomSection() {
+		return searchRoomSection;
 	}
 
-	public void setSearchRoomSectionId(Long searchRoomSectionId) {
-		this.searchRoomSectionId = searchRoomSectionId;
+	public void setSearchRoomSection(ReadOnlyRoomSection searchRoomSection) {
+		this.searchRoomSection = searchRoomSection;
 	}
 
 	public Boolean getUseSearchRoomSectionId() {
@@ -151,8 +150,8 @@ public class RoomBean extends BaseBean<ReadOnlyRoom> {
 
 	@Override
 	protected List<? extends ReadOnlyRoom> searchEntities() {
-		return roomBean.findRooms(searchRoomId, searchRoomName, searchRoomSectionId, useSearchRoomId, useSearchRoomName, useSearchRoomSectionId,
-				searchRoomIdComparator, searchRoomNameComparator, searchRoomSectionIdComparator);
+		return roomBean.findRooms(searchRoomId, searchRoomName, searchRoomSection != null ? searchRoomSection.getId() : null, useSearchRoomId,
+				useSearchRoomName, useSearchRoomSectionId, searchRoomIdComparator, searchRoomNameComparator, searchRoomSectionIdComparator);
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package florian_haas.lucas.business;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
 
 import javax.ejb.Local;
 import javax.validation.constraints.*;
@@ -32,17 +32,16 @@ public interface CompanyBeanLocal {
 	public ReadOnlyCompany findById(@ValidEntityId(entityClass = ReadOnlyCompany.class) Long companyId);
 
 	public List<? extends ReadOnlyCompany> findCompanies(@NotNull Long companyId, @NotNull String name, String description, Long roomSectionId,
-			@NotNull EnumCompanyType companyType, Long parentCompanyId, @NotNull Long jobId, @NotNull Boolean areEmployeesRequired,
-			@NotNull Integer jobCount, @NotNull Boolean useId, @NotNull Boolean useName, @NotNull Boolean useDescription,
-			@NotNull Boolean useRoomSectionId, @NotNull Boolean useCompanyType, @NotNull Boolean useParentCompanyId, @NotNull Boolean useJobId,
-			@NotNull Boolean useAreEmployeesRequired, @NotNull Boolean useJobCount,
-			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
+			@NotNull EnumCompanyType companyType, Long parentCompanyId, Long jobId, @NotNull Boolean areEmployeesRequired, @NotNull Integer jobCount,
+			@NotNull Boolean useId, @NotNull Boolean useName, @NotNull Boolean useDescription, @NotNull Boolean useRoomSectionId,
+			@NotNull Boolean useCompanyType, @NotNull Boolean useParentCompanyId, @NotNull Boolean useJobId, @NotNull Boolean useAreEmployeesRequired,
+			@NotNull Boolean useJobCount, @QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator nameComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator descriptionComparator,
-			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator roomSectionIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator roomSectionIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator companyTypeComparator,
-			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator parentCompanyIdComparator,
-			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator jobIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator parentCompanyIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator jobIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator jobCountComparator);
 
 	public Boolean setName(@ValidEntityId(entityClass = ReadOnlyCompany.class) Long companyId, @NotNull @NotBlankString String name);
@@ -72,23 +71,14 @@ public interface CompanyBeanLocal {
 	public Boolean setOutgoings(@ValidEntityId(entityClass = ReadOnlyTaxdata.class) Long taxdataId,
 			@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal outgoings);
 
-	public Long addCompanyCard(@ValidEntityId(entityClass = ReadOnlyCompany.class) Long companyId);
-
-	public Boolean removeCompanyCard(@ValidEntityId(entityClass = ReadOnlyCompanyCard.class) Long companyCardId);
-
-	public Boolean blockCompanyCard(@ValidEntityId(entityClass = ReadOnlyCompanyCard.class) Long companyCardId);
-
-	public Boolean unblockCompanyCard(@ValidEntityId(entityClass = ReadOnlyCompanyCard.class) Long companyCardId);
-
-	public Boolean setValidDate(@ValidEntityId(entityClass = ReadOnlyCompanyCard.class) Long companyCardId, LocalDate validDate);
-
-	public Set<? extends ReadOnlyCompanyCard> getCompanyCards(@ValidEntityId(entityClass = ReadOnlyCompany.class) Long companyId);
-
 	public List<? extends ReadOnlyEmployment> getManagers(@ValidEntityId(entityClass = ReadOnlyCompany.class) Long companyId);
 
 	public List<? extends ReadOnlyEmployment> getAdvisors(@ValidEntityId(entityClass = ReadOnlyCompany.class) Long companyId);
 
 	public List<? extends ReadOnlyEmployment> getEmployees(@ValidEntityId(entityClass = ReadOnlyCompany.class) Long companyId);
 
-	public ReadOnlyCompanyCard findCompanyCardById(@ValidEntityId(entityClass = ReadOnlyCompanyCard.class) Long companyCardId);
+	public EnumCompanyType getCompanyTypeFromId(@ValidEntityId(entityClass = ReadOnlyCompany.class) Long companyId);
+
+	public List<? extends ReadOnlyCompany> getCompaniesByData(@NotNull String data, @NotNull @Min(1) Integer resultsCount);
+
 }

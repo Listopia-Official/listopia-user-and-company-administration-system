@@ -98,4 +98,10 @@ public class RoomBean implements RoomBeanLocal {
 		if (!roomDao.isNameUnique(name)) throw new LucasException("The name is used by another room");
 	}
 
+	@Override
+	@RequiresPermissions(ROOM_FIND_ROOM_SECTION_BY_DATA)
+	public List<? extends ReadOnlyRoomSection> getRoomSectionsByData(String data, Integer resultsCount) {
+		return roomDao.getRoomsFromData(data, resultsCount);
+	}
+
 }

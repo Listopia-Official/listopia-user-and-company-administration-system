@@ -31,13 +31,14 @@ public enum EnumPermission {
 	ACCOUNT_PRINT_TRANSACTION_LOGS(ACCOUNT, "printTransactionLogs"),
 	ACCOUNT_EXPORT_TRANSACTION_LOGS(ACCOUNT, "exportTransactionLogs"),
 	ACCOUNT_FIND_TRANSACTION_LOG_BY_ID(ACCOUNT, "findTransactionLogById"),
+	ACCOUNT_FIND_BY_DATA(ACCOUNT, "findByData"),
+	ACCOUNT_FIND_OWNER_BY_DATA(ACCOUNT, "findOwnerByData"),
 
 	ATTENDANCE_ALL(ATTENDANCE, "*"),
 	ATTENDANCE_SCAN(ATTENDANCE, "scan"),
 	ATTENDANCE_EVALUATE_ALL(ATTENDANCE, "evaluateAll"),
 	ATTENDANCE_FIND_ALL(ATTENDANCE, "findAll"),
 	ATTENDANCE_FIND_BY_ID(ATTENDANCE, "findById"),
-	ATTENDANCE_FIND_BY_USER_CARD_ID(ATTENDANCE, "findByUserCardId"),
 	ATTENDANCE_FIND_DYNAMIC(ATTENDANCE, "findDynamic"),
 
 	COMPANY_ALL(COMPANY, "*"),
@@ -55,19 +56,14 @@ public enum EnumPermission {
 	COMPANY_REMOVE_TAXDATA(COMPANY, "removeTaxdata"),
 	COMPANY_SET_INCOMINGS(COMPANY, "setIncomings"),
 	COMPANY_SET_OUTGOINGS(COMPANY, "setOutgoings"),
-	COMPANY_ADD_COMPANY_CARD(COMPANY, "addCompanyCard"),
-	COMPANY_REMOVE_COMPANY_CARD(COMPANY, "removeCompanyCard"),
-	COMPANY_BLOCK_COMPANY_CARD(COMPANY, "blockCompanyCard"),
-	COMPANY_UNBLOCK_COMPANY_CARD(COMPANY, "unblockCompanyCard"),
 	COMPANY_GET_MANAGERS(COMPANY, "getManagers"),
 	COMPANY_GET_ADVISORS(COMPANY, "getAdvisors"),
 	COMPANY_GET_EMPLOYEES(COMPANY, "getEmployees"),
-	COMPANY_FIND_COMPANY_CARD_BY_ID(COMPANY, "findCompanyCardById"),
-	COMPANY_GET_COMPANY_CARDS(COMPANY, "getCompanyCards"),
-	COMPANY_SET_VALID_DATE_COMPANY_CARD(COMPANY, "setValidDateCompanyCard"),
 	COMPANY_ACCESS_VIEW(COMPANY, "accessView"),
 	COMPANY_PRINT(COMPANY, "print"),
 	COMPANY_EXPORT(COMPANY, "export"),
+	COMPANY_GET_COMPANY_TYPE_FROM_ID(COMPANY, "getCompanyTyoeFromId"),
+	COMPANY_FIND_BY_DATA(COMPANY, "findByData"),
 
 	EMPLOYMENT_ALL(EMPLOYMENT, "*"),
 	EMPLOYMENT_CREATE(EMPLOYMENT, "create"),
@@ -86,6 +82,7 @@ public enum EnumPermission {
 	EMPLOYMENT_ADD_WORK_SHIFT(EMPLOYMENT, "addWorkShift"),
 	EMPLOYMENT_REMOVE_WORK_SHIFT(EMPLOYMENT, "removeWorkShift"),
 	EMPLOYMENT_DISTRIBUTE_JOBS(EMPLOYMENT, "distributeJobs"),
+	EMPLOYMENT_FIND_BY_DATA(EMPLOYMENT, "findByData"),
 
 	ENTITY_ALL(ENTITY, "*"),
 	ENTITY_EXISTS(ENTITY, "exists"),
@@ -150,19 +147,13 @@ public enum EnumPermission {
 	USER_SET_SCHOOL_CLASS(USER, "setSchoolClass"),
 	USER_ADD_RANK(USER, "addRank"),
 	USER_REMOVE_RANK(USER, "removeRank"),
-	USER_ADD_USER_CARD(USER, "addUserCard"),
-	USER_REMOVE_USER_CARD(USER, "removeUserCard"),
-	USER_BLOCK_USER_CARD(USER, "blockUserCard"),
-	USER_UNBLOCK_USER_CARD(USER, "unblockUserCard"),
-	USER_SET_VALID_DATE_USER_CARD(USER, "setValidDate"),
-	USER_FIND_USER_CARD_BY_ID(USER, "findUserCardById"),
 	USER_SET_IMAGE(USER, "setImage"),
 	USER_GET_IMAGE_FROM_ID(USER, "getImageFromId"),
-	USER_GET_USER_CARDS(USER, "getUserCards"),
 	USER_ACCESS_VIEW(USER, "accessView"),
 	USER_PRINT(USER, "print"),
 	USER_EXPORT(USER, "export"),
 	USER_SET_JOB_REQUESTS(USER, "setJobRequests"),
+	USER_FIND_BY_DATA(USER, "findByData"),
 
 	LOGIN_ALL(LOGIN, "*"),
 	LOGIN_CHANGE_PASSWORD(LOGIN, "changePassword"),
@@ -184,6 +175,7 @@ public enum EnumPermission {
 	LOGIN_USER_ACCESS_VIEW(LOGIN_USER, "accessView"),
 	LOGIN_USER_PRINT(LOGIN_USER, "print"),
 	LOGIN_USER_EXPORT(LOGIN_USER, "export"),
+	LOGIN_USER_FIND_BY_DATA(LOGIN_USER, "findByData"),
 
 	LOGIN_ROLE_ALL(LOGIN_ROLE, "*"),
 	LOGIN_ROLE_CREATE(LOGIN_ROLE, "create"),
@@ -211,6 +203,7 @@ public enum EnumPermission {
 	ROOM_ACCESS_VIEW(ROOM, "accessView"),
 	ROOM_PRINT(ROOM, "print"),
 	ROOM_EXPORT(ROOM, "export"),
+	ROOM_FIND_ROOM_SECTION_BY_DATA(ROOM, "findRoomSectionByData"),
 
 	JOB_ALL(JOB, "*"),
 	JOB_CREATE(JOB, "create"),
@@ -225,7 +218,16 @@ public enum EnumPermission {
 	JOB_DELETE(JOB, "deleteJob"),
 	JOB_ACCESS_VIEW(JOB, "accessView"),
 	JOB_PRINT(JOB, "print"),
-	JOB_EXPORT(JOB, "export");
+	JOB_EXPORT(JOB, "export"),
+	JOB_FIND_BY_DATA(JOB, "findByData"),
+
+	ID_CARD_FIND_BY_ID(ID_CARD, "findById"),
+	ID_CARD_GET_FROM_OWNER(ID_CARD, "getFromOwner"),
+	ID_CARD_ADD(ID_CARD, "add"),
+	ID_CARD_REMOVE(ID_CARD, "remove"),
+	ID_CARD_BLOCK(ID_CARD, "block"),
+	ID_CARD_UNBLOCK(ID_CARD, "unblock"),
+	ID_CARD_SET_VALID_DATE(ID_CARD, "setValidDate");
 
 	private String permissionString;
 

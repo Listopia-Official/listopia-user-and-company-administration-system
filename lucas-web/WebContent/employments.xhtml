@@ -142,7 +142,7 @@
 					disabled="#{not employmentBean.useSearchEmploymentUserId}"
 					value="#{employmentBean.searchEmploymentUserIdComparator}"
 					title="#{msg['lucas.application.employmentScreen.searchEmploymentUserIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
 						var="comparator" itemValue="#{comparator}"
 						itemLabel="#{converterBean.convertEnum(comparator)}" />
 				</p:selectOneMenu>
@@ -152,7 +152,7 @@
 					disabled="#{not employmentBean.useSearchEmploymentJobId}"
 					value="#{employmentBean.searchEmploymentJobIdComparator}"
 					title="#{msg['lucas.application.employmentScreen.searchEmploymentJobIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
 						var="comparator" itemValue="#{comparator}"
 						itemLabel="#{converterBean.convertEnum(comparator)}" />
 				</p:selectOneMenu>
@@ -175,16 +175,26 @@
 					disabled="#{not employmentBean.useSearchEmploymentId}" />
 			</p:column>
 			<p:column>
-				<p:inputNumber value="#{employmentBean.searchEmploymentUserId}"
-					minValue="0" decimalPlaces="0"
-					id="searchEmploymentUserIdInputNumber"
-					disabled="#{not employmentBean.useSearchEmploymentUserId}" />
+				<ui:include
+					src="/WEB-INF/web/autocomplete/selectUserAutocomplete.xhtml">
+					<ui:param name="id" value="searchEmploymentUserIdInputNumber" />
+					<ui:param name="title" value="" />
+					<ui:param name="disabled"
+						value="#{not employmentBean.useSearchEmploymentUserId}" />
+					<ui:param name="value"
+						value="#{employmentBean.searchEmploymentUser}" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:inputNumber value="#{employmentBean.searchEmploymentJobId}"
-					minValue="0" decimalPlaces="0"
-					id="searchEmploymentJobIdInputNumber"
-					disabled="#{not employmentBean.useSearchEmploymentJobId}" />
+				<ui:include
+					src="/WEB-INF/web/autocomplete/selectJobAutocomplete.xhtml">
+					<ui:param name="id" value="searchEmploymentJobIdInputNumber" />
+					<ui:param name="title" value="" />
+					<ui:param name="disabled"
+						value="#{not employmentBean.useSearchEmploymentJobId}" />
+					<ui:param name="value"
+						value="#{employmentBean.searchEmploymentJob}" />
+				</ui:include>
 			</p:column>
 			<p:column>
 				<p:selectCheckboxMenu

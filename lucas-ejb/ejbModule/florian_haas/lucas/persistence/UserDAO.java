@@ -18,4 +18,6 @@ public interface UserDAO extends DAO<User> {
 
 	public void clearJobWishes(Long jobId);
 
+	public List<User> getUsersFromData(String data, Integer resultsCount);
+
 }

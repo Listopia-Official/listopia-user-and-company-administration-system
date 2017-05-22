@@ -2,7 +2,6 @@ package florian_haas.lucas.business;
 
 import static florian_haas.lucas.security.EnumPermission.*;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.function.*;
 
@@ -22,10 +21,6 @@ public class UserBean implements UserBeanLocal {
 	@JPADAO
 	@Inject
 	private UserDAO userDao;
-
-	@JPADAO
-	@Inject
-	private UserCardDAO userCardDao;
 
 	@JPADAO
 	@Inject
@@ -121,61 +116,6 @@ public class UserBean implements UserBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions(USER_ADD_USER_CARD)
-	public Long addUserCard(Long userId) {
-		User user = userDao.findById(userId);
-		UserCard userCard = new UserCard(user);
-		userCardDao.persist(userCard);
-		user.addUserCard(userCard);
-		return userCard.getId();
-	}
-
-	@Override
-	@RequiresPermissions(USER_REMOVE_USER_CARD)
-	public Boolean removeUserCard(Long userCardId) {
-		UserCard card = userCardDao.findById(userCardId);
-		Boolean removed = card.getUser().removeUserCard(card);
-		if (removed) {
-			userCardDao.delete(card);
-		}
-		return removed;
-	}
-
-	@Override
-	@RequiresPermissions(USER_BLOCK_USER_CARD)
-	public Boolean blockUserCard(Long userCardId) {
-		UserCard userCard = userCardDao.findById(userCardId);
-		if (userCard.getBlocked()) return Boolean.FALSE;
-		userCard.setBlocked(Boolean.TRUE);
-		return Boolean.TRUE;
-	}
-
-	@Override
-	@RequiresPermissions(USER_UNBLOCK_USER_CARD)
-	public Boolean unblockUserCard(Long userCardId) {
-		UserCard userCard = userCardDao.findById(userCardId);
-		if (!userCard.getBlocked()) return Boolean.FALSE;
-		userCard.setBlocked(Boolean.FALSE);
-		return Boolean.TRUE;
-	}
-
-	@Override
-	@RequiresPermissions(USER_SET_VALID_DATE_USER_CARD)
-	public Boolean setValidDate(Long userCardId, LocalDate validDate) {
-		UserCard userCard = userCardDao.findById(userCardId);
-		if (userCard.getValidDay() != null && userCard.getValidDay().equals(validDate) || userCard.getValidDay() == null && validDate == null)
-			return Boolean.FALSE;
-		userCard.setValidDay(validDate);
-		return Boolean.TRUE;
-	}
-
-	@Override
-	@RequiresPermissions(USER_FIND_USER_CARD_BY_ID)
-	public UserCard findUserCardById(Long userCardId) {
-		return userCardDao.findById(userCardId);
-	}
-
-	@Override
 	@RequiresPermissions(USER_SET_IMAGE)
 	public Boolean setImage(Long userId, byte[] image) {
 		User user = userDao.findById(userId);
@@ -188,13 +128,6 @@ public class UserBean implements UserBeanLocal {
 	@RequiresPermissions(USER_GET_IMAGE_FROM_ID)
 	public byte[] getImage(Long userId) {
 		return userDao.getImageFromId(userId);
-	}
-
-	@Override
-	@RequiresPermissions(USER_GET_USER_CARDS)
-	public Set<? extends ReadOnlyUserCard> getUserCards(Long userId) {
-		User user = userDao.findById(userId);
-		return user.getUserCards();
 	}
 
 	@Override
@@ -225,4 +158,11 @@ public class UserBean implements UserBeanLocal {
 		requestSetter.accept(value);
 		return Boolean.TRUE;
 	}
+
+	@Override
+	@RequiresPermissions(USER_FIND_BY_DATA)
+	public List<? extends ReadOnlyUser> getUsersByData(String data, Integer resultsCount) {
+		return userDao.getUsersFromData(data, resultsCount);
+	}
+
 }

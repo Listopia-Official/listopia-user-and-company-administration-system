@@ -83,8 +83,7 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 	private EnumQueryComparator searchJobDescriptionComparator = EnumQueryComparator.EQUAL;
 
 	@NotNull
-	@Min(0)
-	private Long searchJobCompanyId = 0l;
+	private ReadOnlyCompany searchJobCompany = null;
 
 	@NotNull
 	private Boolean useSearchJobCompanyId = Boolean.FALSE;
@@ -120,8 +119,7 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 	private EnumQueryComparator searchJobPositionComparator = EnumQueryComparator.EQUAL;
 
 	@NotNull
-	@Min(0)
-	private Long searchJobEmploymentId = 0l;
+	private ReadOnlyEmployment searchJobEmployment = null;
 
 	@NotNull
 	private Boolean useSearchJobEmploymentId = Boolean.FALSE;
@@ -211,12 +209,12 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 		this.searchJobDescriptionComparator = searchJobDescriptionComparator;
 	}
 
-	public Long getSearchJobCompanyId() {
-		return this.searchJobCompanyId;
+	public ReadOnlyCompany getSearchJobCompany() {
+		return this.searchJobCompany;
 	}
 
-	public void setSearchJobCompanyId(Long searchJobCompanyId) {
-		this.searchJobCompanyId = searchJobCompanyId;
+	public void setSearchJobCompany(ReadOnlyCompany searchJobCompany) {
+		this.searchJobCompany = searchJobCompany;
 	}
 
 	public Boolean getUseSearchJobCompanyId() {
@@ -307,12 +305,12 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 		this.searchJobPositionComparator = searchJobPositionComparator;
 	}
 
-	public Long getSearchJobEmploymentId() {
-		return this.searchJobEmploymentId;
+	public ReadOnlyEmployment getSearchJobEmployment() {
+		return this.searchJobEmployment;
 	}
 
-	public void setSearchJobEmploymentId(Long searchJobEmploymentId) {
-		this.searchJobEmploymentId = searchJobEmploymentId;
+	public void setSearchJobEmployment(ReadOnlyEmployment searchJobEmployment) {
+		this.searchJobEmployment = searchJobEmployment;
 	}
 
 	public Boolean getUseSearchJobEmploymentId() {
@@ -333,10 +331,11 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 
 	@Override
 	protected List<? extends ReadOnlyJob> searchEntities() {
-		return jobBean.findJobs(searchJobId, searchJobName, searchJobDescription, searchJobCompanyId, searchJobSalaryClass,
-				searchJobRequiredEmploymentsCount, searchJobPosition, searchJobEmploymentId, searchJobEmploymentsCount, useSearchJobId,
-				useSearchJobName, useSearchJobDescription, useSearchJobCompanyId, useSearchJobSalaryClass, useSearchJobRequiredEmploymentsCount,
-				useSearchJobPosition, useSearchJobEmploymentId, useSearchJobEmploymentsCount, searchJobIdComparator, searchJobNameComparator,
+		return jobBean.findJobs(searchJobId, searchJobName, searchJobDescription, searchJobCompany != null ? searchJobCompany.getId() : null,
+				searchJobSalaryClass, searchJobRequiredEmploymentsCount, searchJobPosition,
+				searchJobEmployment != null ? searchJobEmployment.getId() : null, searchJobEmploymentsCount, useSearchJobId, useSearchJobName,
+				useSearchJobDescription, useSearchJobCompanyId, useSearchJobSalaryClass, useSearchJobRequiredEmploymentsCount, useSearchJobPosition,
+				useSearchJobEmploymentId, useSearchJobEmploymentsCount, searchJobIdComparator, searchJobNameComparator,
 				searchJobDescriptionComparator, searchJobCompanyIdComparator, searchJobSalaryClassComparator,
 				searchJobRequiredEmploymentsCountComparator, searchJobPositionComparator, searchJobEmploymentIdComparator,
 				searchJobEmploymentsCountComparator);
@@ -358,8 +357,8 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 	@Size(max = 255)
 	private String createJobDialogDescription;
 
-	@ValidEntityId(entityClass = ReadOnlyCompany.class)
-	private Long createJobDialogCompanyId;
+	@NotNull
+	private ReadOnlyCompany createJobDialogCompany;
 
 	@NotNull
 	private EnumEmployeePosition createJobDialogPosition = EnumEmployeePosition.EMPLOYEE;
@@ -386,12 +385,12 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 		this.createJobDialogDescription = createJobDialogDescription;
 	}
 
-	public Long getCreateJobDialogCompanyId() {
-		return createJobDialogCompanyId;
+	public ReadOnlyCompany getCreateJobDialogCompany() {
+		return createJobDialogCompany;
 	}
 
-	public void setCreateJobDialogCompanyId(Long createJobDialogCompanyId) {
-		this.createJobDialogCompanyId = createJobDialogCompanyId;
+	public void setCreateJobDialogCompany(ReadOnlyCompany createJobDialogCompany) {
+		this.createJobDialogCompany = createJobDialogCompany;
 	}
 
 	public EnumEmployeePosition getCreateJobDialogPosition() {
@@ -408,12 +407,6 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 
 	public void setCreateJobDialogRequiredEmploymentsCount(Integer createJobDialogRequiredEmploymentsCount) {
 		this.createJobDialogRequiredEmploymentsCount = createJobDialogRequiredEmploymentsCount;
-	}
-
-	public String getCreateJobDialogCompanyFromId() {
-		ReadOnlyCompany company = createJobDialogCompanyId != null
-				? entityBean.exists(createJobDialogCompanyId, ReadOnlyCompany.class) ? companyBean.findById(createJobDialogCompanyId) : null : null;
-		return WebUtils.getAsString(company, CompanyConverter.CONVERTER_ID);
 	}
 
 	public EnumSalaryClass getCreateJobDialogSalaryClass() {
@@ -451,7 +444,7 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 	public void initCreateJobDialog() {
 		createJobDialogName = null;
 		createJobDialogDescription = null;
-		createJobDialogCompanyId = null;
+		createJobDialogCompany = null;
 		createJobDialogPosition = EnumEmployeePosition.EMPLOYEE;
 		createJobDialogRequiredEmploymentsCount = 1;
 		createJobDialogSalaryClass = null;
@@ -460,13 +453,13 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 	public void createJob() {
 		WebUtils.executeTask((params) -> {
 			params.add(WebUtils.getAsString(
-					jobBean.findById(jobBean.createJob(createJobDialogName, createJobDialogDescription, createJobDialogCompanyId,
+					jobBean.findById(jobBean.createJob(createJobDialogName, createJobDialogDescription, createJobDialogCompany.getId(),
 							createJobDialogPosition, createJobDialogRequiredEmploymentsCount, createJobDialogSalaryClass)),
 					ShortJobConverter.CONVERTER_ID));
 			return true;
 		}, "lucas.application.jobScreen.createJob.message", (exception, params) -> {
 			return WebUtils.getTranslatedMessage("lucas.application.jobScreen.createJob.message.notUniqueName", createJobDialogName, params.get(0));
-		}, Utils.asList(getCreateJobDialogCompanyFromId()));
+		}, Utils.asList(WebUtils.getAsString(createJobDialogCompany, CompanyConverter.CONVERTER_ID)));
 	}
 
 	/*

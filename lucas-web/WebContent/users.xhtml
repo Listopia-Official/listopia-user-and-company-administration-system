@@ -97,7 +97,7 @@
 				oncomplete="PF('imageManagerDialog').show()" icon="fa fa-image"
 				disabled="#{userBean.selectedEntities.size() != 1}" />
 			<p:commandButton
-				rendered="#{loginBean.hasPermissionsOr([EnumPermission.USER_ADD_USER_CARD,EnumPermission.USER_REMOVE_USER_CARD,EnumPermission.USER_BLOCK_USER_CARD,EnumPermission.USER_UNBLOCK_USER_CARD,EnumPermission.USER_SET_VALID_DATE_USER_CARD]) &amp;&amp; loginBean.hasPermissionsAnd([EnumPermission.USER_FIND_USER_CARD_BY_ID,EnumPermission.USER_GET_USER_CARDS])}"
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.ID_CARD_ADD,EnumPermission.ID_CARD_REMOVE,EnumPermission.ID_CARD_BLOCK,EnumPermission.ID_CARD_UNBLOCK,EnumPermission.ID_CARD_SET_VALID_DATE]) &amp;&amp; loginBean.hasPermissionsAnd([EnumPermission.ID_CARD_FIND_BY_ID,EnumPermission.ID_CARD_GET_FROM_OWNER])}"
 				value="#{msg['lucas.application.userScreen.userCardManagerButton.name']}"
 				title="#{msg['lucas.application.userScreen.userCardManagerButton.tooltip']}"
 				update="userCardManagerDialogForm" process="@this"

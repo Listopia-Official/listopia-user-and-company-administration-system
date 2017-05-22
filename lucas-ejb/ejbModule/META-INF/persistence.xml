@@ -4,7 +4,6 @@
 		<class>florian_haas.lucas.model.User</class>
 		<class>florian_haas.lucas.model.EntityBase</class>
 		<class>florian_haas.lucas.model.Attendancedata</class>
-		<class>florian_haas.lucas.model.UserCard</class>
 		<class>florian_haas.lucas.persistence.converter.LocalDateTimeToTimestampConverter</class>
 		<class>florian_haas.lucas.model.Stopwatch</class>
 		<class>florian_haas.lucas.model.AccountOwner</class>
@@ -22,11 +21,12 @@
 		<class>florian_haas.lucas.model.Room</class>
 		<class>florian_haas.lucas.model.RoomSection</class>
 		<class>florian_haas.lucas.model.Job</class>
+		<class>florian_haas.lucas.model.IdCard</class>
 		<properties>
 			<property name="javax.persistence.schema-generation.database.action" value="create"/>
 			<property name="javax.persistence.schema-generation.scripts.action" value="create"/>
-			<property name="javax.persistence.schema-generation.scripts.create-target" value="E:\JavaEE\scripts\scripts.sql"/>
-			<property name="javax.persistence.schema-generation.scripts.drop-target" value="E:\JavaEE\scripts\scripts.sql"/>
+			<property name="javax.persistence.schema-generation.scripts.create-target" value="E:\JavaEE\sql\scripts.sql"/>
+			<property name="javax.persistence.schema-generation.scripts.drop-target" value="E:\JavaEE\sql\scripts.sql"/>
 			<property name="javax.persistence.schema-generation.create-database-schemas" value="true"/>
 			<property name="eclipselink.logging.exceptions" value="false"/>
 		</properties>

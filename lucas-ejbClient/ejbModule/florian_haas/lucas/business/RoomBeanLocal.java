@@ -20,11 +20,11 @@ public interface RoomBeanLocal {
 
 	public ReadOnlyRoom findById(@ValidEntityId(entityClass = ReadOnlyRoom.class) Long roomId);
 
-	public List<? extends ReadOnlyRoom> findRooms(@NotNull Long roomId, @NotNull String name, @NotNull Long roomSectionId, @NotNull Boolean useRoomId,
+	public List<? extends ReadOnlyRoom> findRooms(@NotNull Long roomId, @NotNull String name, Long roomSectionId, @NotNull Boolean useRoomId,
 			@NotNull Boolean useName, @NotNull Boolean useRoomSectionId,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator roomIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator roomNameComparator,
-			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator roomSectionIdComparator);
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator roomSectionIdComparator);
 
 	public Boolean setName(@ValidEntityId(entityClass = ReadOnlyRoom.class) Long roomId, String name);
 
@@ -34,5 +34,7 @@ public interface RoomBeanLocal {
 			@ValidEntityId(entityClass = ReadOnlyRoomSection.class) Long sectionId);
 
 	public ReadOnlyRoomSection findRoomSectionById(@ValidEntityId(entityClass = ReadOnlyRoomSection.class) Long roomSectionId);
+
+	public List<? extends ReadOnlyRoomSection> getRoomSectionsByData(@NotNull String data, @NotNull @Min(1) Integer resultsCount);
 
 }

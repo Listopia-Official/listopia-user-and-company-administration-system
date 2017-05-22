@@ -49,6 +49,12 @@ public class AccountBean implements AccountBeanLocal {
 	@JPADAO
 	private TransactionLogDAO transactionLogDao;
 
+	@EJB
+	private UserBeanLocal userBean;
+
+	@EJB
+	private CompanyBeanLocal companyBean;
+
 	@Override
 	@RequiresPermissions(ACCOUNT_PAY_IN)
 	public Long payIn(Long id, BigDecimal amount, String comment) {
@@ -222,5 +228,29 @@ public class AccountBean implements AccountBeanLocal {
 				usePreviousBankBalance, useCurrentBankBalance, useBankUser, useComment, idComparator, accountIdComparator, dateTimeComparator,
 				actionComparator, actionTypeComparator, relatedAccountIdComparator, amountComparator, previousBankBalanceComparator,
 				currentBankBalanceComparator, bankUserIdComparator, commentComparator);
+	}
+
+	@Override
+	@RequiresPermissions(ACCOUNT_FIND_BY_ID)
+	public ReadOnlyAccount findByIdIfExists(Long id) {
+		return accountDao.findById(id);
+	}
+
+	@Override
+	@RequiresPermissions(ACCOUNT_FIND_ACCOUNT_OWNER)
+	public ReadOnlyAccountOwner findAccountOwnerByIdIfExists(Long id) {
+		return accountOwnerDao.findById(id);
+	}
+
+	@Override
+	@RequiresPermissions(ACCOUNT_FIND_BY_DATA)
+	public List<? extends ReadOnlyAccount> getAccountsByData(String data, Integer resultsCount) {
+		return accountDao.getAccountsFromData(data, resultsCount);
+	}
+
+	@Override
+	@RequiresPermissions(ACCOUNT_FIND_OWNER_BY_DATA)
+	public List<? extends ReadOnlyAccountOwner> getAccountOwnersByData(String data, Integer resultsCount) {
+		return accountOwnerDao.getAccountOwnersFromData(data, resultsCount);
 	}
 }

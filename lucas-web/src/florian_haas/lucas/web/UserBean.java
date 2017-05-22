@@ -890,25 +890,28 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 	 * -------------------- User Card Manager Dialog Start --------------------
 	 */
 
+	@EJB
+	private IdCardBeanLocal idCardBean;
+
 	private ReadOnlyUser userCardManagerDialogSelectedUser;
 
-	private List<ReadOnlyUserCard> userCardManagerDialogSelectedUserCards = new ArrayList<>();
+	private List<ReadOnlyIdCard> userCardManagerDialogSelectedUserCards = new ArrayList<>();
 
-	private List<ReadOnlyUserCard> userCardManagerDialogUserCards = new ArrayList<>();
+	private List<ReadOnlyIdCard> userCardManagerDialogUserCards = new ArrayList<>();
 
 	private Date userCardManagerDialogValidDate = Date.from(Instant.now());
 
 	public static final String USER_CARD_MANAGER_DIALOG_MESSAGES_ID = "userCardManagerDialogMessages";
 
-	public List<ReadOnlyUserCard> getUserCardManagerDialogUserCards() {
+	public List<ReadOnlyIdCard> getUserCardManagerDialogUserCards() {
 		return this.userCardManagerDialogUserCards;
 	}
 
-	public List<ReadOnlyUserCard> getUserCardManagerDialogSelectedUserCards() {
+	public List<ReadOnlyIdCard> getUserCardManagerDialogSelectedUserCards() {
 		return this.userCardManagerDialogSelectedUserCards;
 	}
 
-	public void setUserCardManagerDialogSelectedUserCards(List<ReadOnlyUserCard> userCardManagerDialogSelectedUserCards) {
+	public void setUserCardManagerDialogSelectedUserCards(List<ReadOnlyIdCard> userCardManagerDialogSelectedUserCards) {
 		this.userCardManagerDialogSelectedUserCards = userCardManagerDialogSelectedUserCards;
 	}
 
@@ -930,15 +933,15 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 			userCardManagerDialogSelectedUserCards.clear();
 			userCardManagerDialogUserCards.clear();
 			userCardManagerDialogValidDate = Date.from(Instant.now());
-			userCardManagerDialogUserCards.addAll(userBean.getUserCards(userCardManagerDialogSelectedUser.getId()));
+			userCardManagerDialogUserCards.addAll(idCardBean.getIdCards(userCardManagerDialogSelectedUser.getId()));
 		}
 	}
 
 	public void userCardManagerDialogNewUserCard() {
 		if (userCardManagerDialogSelectedUser != null) {
 			WebUtils.executeTask(params -> {
-				Long id = userBean.addUserCard(userCardManagerDialogSelectedUser.getId());
-				userCardManagerDialogUserCards.add(userBean.findUserCardById(id));
+				Long id = idCardBean.addIdCard(userCardManagerDialogSelectedUser.getId());
+				userCardManagerDialogUserCards.add(idCardBean.findIdCardById(id));
 				params.add(id);
 				return true;
 			}, "lucas.application.userScreen.createUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
@@ -947,31 +950,31 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 	}
 
 	public void userCardManagerDialogBlockUserCards() {
-		for (ReadOnlyUserCard card : userCardManagerDialogSelectedUserCards) {
+		for (ReadOnlyIdCard card : userCardManagerDialogSelectedUserCards) {
 			Long id = card.getId();
 			if (WebUtils.executeTask(params -> {
 				params.add(id);
-				return userBean.blockUserCard(id);
+				return idCardBean.blockIdCard(id);
 			}, "lucas.application.userScreen.blockUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
 					Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, UserConverter.CONVERTER_ID)))) {
-				ReadOnlyUserCard newCard = userBean.findUserCardById(id);
-				WebUtils.refreshEntities(ReadOnlyUserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
-						userBean::findUserCardById, true);
+				ReadOnlyIdCard newCard = idCardBean.findIdCardById(id);
+				WebUtils.refreshEntities(ReadOnlyIdCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
+						idCardBean::findIdCardById, true);
 			}
 		}
 	}
 
 	public void userCardManagerDialogUnblockUserCards() {
-		for (ReadOnlyUserCard card : userCardManagerDialogSelectedUserCards) {
+		for (ReadOnlyIdCard card : userCardManagerDialogSelectedUserCards) {
 			Long id = card.getId();
 			if (WebUtils.executeTask(params -> {
 				params.add(id);
-				return userBean.unblockUserCard(id);
+				return idCardBean.unblockIdCard(id);
 			}, "lucas.application.userScreen.unblockUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
 					Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, UserConverter.CONVERTER_ID)))) {
-				ReadOnlyUserCard newCard = userBean.findUserCardById(id);
-				WebUtils.refreshEntities(ReadOnlyUserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
-						userBean::findUserCardById, true);
+				ReadOnlyIdCard newCard = idCardBean.findIdCardById(id);
+				WebUtils.refreshEntities(ReadOnlyIdCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
+						idCardBean::findIdCardById, true);
 			}
 		}
 	}
@@ -984,43 +987,43 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 	}
 
 	public void userCardManagerDialogSetValidDay() {
-		for (ReadOnlyUserCard card : userCardManagerDialogSelectedUserCards) {
+		for (ReadOnlyIdCard card : userCardManagerDialogSelectedUserCards) {
 			Long id = card.getId();
 			if (WebUtils.executeTask(params -> {
 				params.add(card.getId());
 				params.add(WebUtils.getAsString(Utils.asLocalDate(userCardManagerDialogValidDate), LocalDateConverter.CONVERTER_ID));
 				params.add(WebUtils.getAsString(card.getValidDay(), LocalDateConverter.CONVERTER_ID));
-				return userBean.setValidDate(id, Utils.asLocalDate(userCardManagerDialogValidDate));
+				return idCardBean.setValidDate(id, Utils.asLocalDate(userCardManagerDialogValidDate));
 			}, "lucas.application.userScreen.setValidDay", USER_CARD_MANAGER_DIALOG_MESSAGES_ID)) {
-				ReadOnlyUserCard newCard = userBean.findUserCardById(id);
-				WebUtils.refreshEntities(ReadOnlyUserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
-						userBean::findUserCardById, true);
+				ReadOnlyIdCard newCard = idCardBean.findIdCardById(id);
+				WebUtils.refreshEntities(ReadOnlyIdCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
+						idCardBean::findIdCardById, true);
 			}
 		}
 	}
 
 	public void userCardManagerDialogRemoveValidDay() {
-		for (ReadOnlyUserCard card : userCardManagerDialogSelectedUserCards) {
+		for (ReadOnlyIdCard card : userCardManagerDialogSelectedUserCards) {
 			Long id = card.getId();
 			if (WebUtils.executeTask(params -> {
 				params.add(card.getId());
-				return userBean.setValidDate(id, null);
+				return idCardBean.setValidDate(id, null);
 			}, "lucas.application.userScreen.removeValidDay", USER_CARD_MANAGER_DIALOG_MESSAGES_ID)) {
-				ReadOnlyUserCard newCard = userBean.findUserCardById(id);
-				WebUtils.refreshEntities(ReadOnlyUserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
-						userBean::findUserCardById, true);
+				ReadOnlyIdCard newCard = idCardBean.findIdCardById(id);
+				WebUtils.refreshEntities(ReadOnlyIdCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
+						idCardBean::findIdCardById, true);
 			}
 		}
 	}
 
 	public void userCardManagerDialogRemoveUserCards() {
 		if (!userCardManagerDialogSelectedUserCards.isEmpty()) {
-			ListIterator<ReadOnlyUserCard> it = userCardManagerDialogSelectedUserCards.listIterator();
+			ListIterator<ReadOnlyIdCard> it = userCardManagerDialogSelectedUserCards.listIterator();
 			while (it.hasNext()) {
 				WebUtils.executeTask(params -> {
-					ReadOnlyUserCard userCard = it.next();
+					ReadOnlyIdCard userCard = it.next();
 					Long id = userCard.getId();
-					Boolean removed = userBean.removeUserCard(id);
+					Boolean removed = idCardBean.removeIdCard(id);
 					if (removed) {
 						userCardManagerDialogUserCards.remove(userCard);
 						it.remove();
@@ -1036,8 +1039,8 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 
 	public void userCardManagerDialogRefreshUserCards() {
 		WebUtils.executeTask((params) -> {
-			WebUtils.refreshEntities(ReadOnlyUserCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards,
-					userBean::findUserCardById, true);
+			WebUtils.refreshEntities(ReadOnlyIdCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards,
+					idCardBean::findIdCardById, true);
 			params.add(userCardManagerDialogUserCards.size());
 			return true;
 		}, "lucas.application.userScreen.refreshUserCards", USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
@@ -1053,65 +1056,42 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 
 	private ReadOnlyUser jobRequestsManagerDialogSelectedUser;
 
-	@ValidEntityId(entityClass = ReadOnlyJob.class, nullable = true)
-	private Long jobRequestsManagerDialogFirstJobRequestId;
+	private ReadOnlyJob jobRequestsManagerDialogFirstJobRequest;
 
-	@ValidEntityId(entityClass = ReadOnlyJob.class, nullable = true)
-	private Long jobRequestsManagerDialogSecondJobRequestId;
+	private ReadOnlyJob jobRequestsManagerDialogSecondJobRequest;
 
-	@ValidEntityId(entityClass = ReadOnlyJob.class, nullable = true)
-	private Long jobRequestsManagerDialogThirdJobRequestId;
+	private ReadOnlyJob jobRequestsManagerDialogThirdJobRequest;
 
-	public Long getJobRequestsManagerDialogFirstJobRequestId() {
-		return this.jobRequestsManagerDialogFirstJobRequestId;
+	public ReadOnlyJob getJobRequestsManagerDialogFirstJobRequest() {
+		return this.jobRequestsManagerDialogFirstJobRequest;
 	}
 
-	public void setJobRequestsManagerDialogFirstJobRequestId(Long jobRequestsManagerDialogFirstJobRequestId) {
-		this.jobRequestsManagerDialogFirstJobRequestId = jobRequestsManagerDialogFirstJobRequestId;
+	public void setJobRequestsManagerDialogFirstJobRequest(ReadOnlyJob jobRequestsManagerDialogFirstJobRequest) {
+		this.jobRequestsManagerDialogFirstJobRequest = jobRequestsManagerDialogFirstJobRequest;
 	}
 
-	public Long getJobRequestsManagerDialogSecondJobRequestId() {
-		return this.jobRequestsManagerDialogSecondJobRequestId;
+	public ReadOnlyJob getJobRequestsManagerDialogSecondJobRequest() {
+		return this.jobRequestsManagerDialogSecondJobRequest;
 	}
 
-	public void setJobRequestsManagerDialogSecondJobRequestId(Long jobRequestsManagerDialogSecondJobRequestId) {
-		this.jobRequestsManagerDialogSecondJobRequestId = jobRequestsManagerDialogSecondJobRequestId;
+	public void setJobRequestsManagerDialogSecondJobRequest(ReadOnlyJob jobRequestsManagerDialogSecondJobRequest) {
+		this.jobRequestsManagerDialogSecondJobRequest = jobRequestsManagerDialogSecondJobRequest;
 	}
 
-	public Long getJobRequestsManagerDialogThirdJobRequestId() {
-		return this.jobRequestsManagerDialogThirdJobRequestId;
+	public ReadOnlyJob getJobRequestsManagerDialogThirdJobRequest() {
+		return this.jobRequestsManagerDialogThirdJobRequest;
 	}
 
-	public void setJobRequestsManagerDialogThirdJobRequestId(Long jobRequestsManagerDialogThirdJobRequestId) {
-		this.jobRequestsManagerDialogThirdJobRequestId = jobRequestsManagerDialogThirdJobRequestId;
-	}
-
-	public String getJobRequestsManagerDialogJobFromIdFirst() {
-		return getJobRequestsManagerDialogJobFromIdHelper(jobRequestsManagerDialogFirstJobRequestId);
-	}
-
-	public String getJobRequestsManagerDialogJobFromIdSecond() {
-		return getJobRequestsManagerDialogJobFromIdHelper(jobRequestsManagerDialogSecondJobRequestId);
-	}
-
-	public String getJobRequestsManagerDialogJobFromIdThird() {
-		return getJobRequestsManagerDialogJobFromIdHelper(jobRequestsManagerDialogThirdJobRequestId);
-	}
-
-	private String getJobRequestsManagerDialogJobFromIdHelper(Long jobId) {
-		ReadOnlyJob job = jobId != null ? entityBean.exists(jobId, ReadOnlyJob.class) ? jobBean.findById(jobId) : null : null;
-		return WebUtils.getAsString(job, JobConverter.CONVERTER_ID);
+	public void setJobRequestsManagerDialogThirdJobRequest(ReadOnlyJob jobRequestsManagerDialogThirdJobRequest) {
+		this.jobRequestsManagerDialogThirdJobRequest = jobRequestsManagerDialogThirdJobRequest;
 	}
 
 	public void initJobRequestsManagerDialog() {
 		if (!selectedEntities.isEmpty()) {
 			jobRequestsManagerDialogSelectedUser = selectedEntities.get(0);
-			jobRequestsManagerDialogFirstJobRequestId = jobRequestsManagerDialogSelectedUser.getFirstJobRequest() != null
-					? jobRequestsManagerDialogSelectedUser.getFirstJobRequest().getId() : null;
-			jobRequestsManagerDialogSecondJobRequestId = jobRequestsManagerDialogSelectedUser.getSecondJobRequest() != null
-					? jobRequestsManagerDialogSelectedUser.getSecondJobRequest().getId() : null;
-			jobRequestsManagerDialogThirdJobRequestId = jobRequestsManagerDialogSelectedUser.getThirdJobRequest() != null
-					? jobRequestsManagerDialogSelectedUser.getThirdJobRequest().getId() : null;
+			jobRequestsManagerDialogFirstJobRequest = jobRequestsManagerDialogSelectedUser.getFirstJobRequest();
+			jobRequestsManagerDialogSecondJobRequest = jobRequestsManagerDialogSelectedUser.getSecondJobRequest();
+			jobRequestsManagerDialogThirdJobRequest = jobRequestsManagerDialogSelectedUser.getThirdJobRequest();
 		}
 	}
 
@@ -1120,9 +1100,12 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 			WebUtils.executeTask(params -> {
 				Long id = jobRequestsManagerDialogSelectedUser.getId();
 				if (WebUtils.isPermitted(EnumPermission.USER_SET_JOB_REQUESTS)) {
-					userBean.setFirstJobRequest(id, jobRequestsManagerDialogFirstJobRequestId);
-					userBean.setSecondJobRequest(id, jobRequestsManagerDialogSecondJobRequestId);
-					userBean.setThirdJobRequest(id, jobRequestsManagerDialogThirdJobRequestId);
+					userBean.setFirstJobRequest(id,
+							jobRequestsManagerDialogFirstJobRequest != null ? jobRequestsManagerDialogFirstJobRequest.getId() : null);
+					userBean.setSecondJobRequest(id,
+							jobRequestsManagerDialogSecondJobRequest != null ? jobRequestsManagerDialogSecondJobRequest.getId() : null);
+					userBean.setThirdJobRequest(id,
+							jobRequestsManagerDialogThirdJobRequest != null ? jobRequestsManagerDialogThirdJobRequest.getId() : null);
 				}
 				ReadOnlyUser tmp2 = userBean.findById(id);
 				WebUtils.refreshEntities(ReadOnlyUser.class, searchResults, selectedEntities, tmp2, userBean::findById, true);

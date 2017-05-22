@@ -3,7 +3,7 @@ package florian_haas.lucas.business;
 import java.util.List;
 
 import javax.ejb.Local;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 import org.apache.shiro.subject.Subject;
 import org.hibernate.validator.constraints.NotBlank;
@@ -42,7 +42,7 @@ public interface LoginBeanLocal {
 			List<@TypeNotNull @TypeMin(0) Long> roleIds, @NotNull Boolean useId, @NotNull Boolean useUsername, @NotNull Boolean useUserId,
 			@NotNull Boolean useRoleIds, @QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator usernameComparator,
-			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator userIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator userIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator roleIdsComparator);
 
 	public Boolean changeUsername(@ValidEntityId(entityClass = ReadOnlyLoginUser.class) Long id, @NotBlank String username);
@@ -58,5 +58,9 @@ public interface LoginBeanLocal {
 	public List<? extends ReadOnlyLoginUser> findAllLoginUsers();
 
 	public List<? extends ReadOnlyLoginUserRole> getLoginUserRoles(@ValidEntityId(entityClass = ReadOnlyLoginUser.class) Long userId);
+
+	public List<? extends ReadOnlyLoginUser> getLoginUsersByData(@NotNull String data, @NotNull @Min(1) Integer resultsCount);
+
+	public Boolean isBoundLoginUser(@ValidEntityId(entityClass = ReadOnlyLoginUser.class) Long loginUserId);
 
 }

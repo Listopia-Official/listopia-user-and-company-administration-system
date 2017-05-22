@@ -69,4 +69,27 @@ public class JobDAOImpl extends DAOImpl<Job> implements JobDAO {
 		return manager.createQuery(query).getResultList();
 	}
 
+	@Override
+	public List<Job> getJobsFromData(String data, Integer resultsCount) {
+		data = data.trim();
+		if (!data.isEmpty()) {
+			CriteriaBuilder builder = manager.getCriteriaBuilder();
+			CriteriaQuery<Job> query = builder.createQuery(Job.class);
+			query.distinct(true);
+			Root<Job> job = query.from(Job.class);
+			List<Predicate> predicates = new ArrayList<>();
+			try {
+				Long id = Long.parseLong(data);
+				predicates.add(builder.equal(job.get(Job_.id), id));
+			}
+			catch (NumberFormatException e) {}
+			data = "%" + data.replaceAll(" ", "%") + "%";
+			predicates.add(builder.like(job.get(Job_.name), data));
+			predicates.add(builder.like(job.join(Job_.company).get(Company_.name), data));
+			query.select(job).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			return manager.createQuery(query).setMaxResults(resultsCount).getResultList();
+		}
+		return new ArrayList<>();
+	}
+
 }

@@ -18,7 +18,7 @@ import florian_haas.lucas.persistence.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.validation.*;
-import florian_haas.lucas.web.converter.*;
+import florian_haas.lucas.web.converter.AccountConverter;
 import florian_haas.lucas.web.util.WebUtils;
 
 @Named
@@ -57,8 +57,7 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 	private EnumQueryComparator searchAccountOwnerIdComparator = EnumQueryComparator.EQUAL;
 
 	@NotNull
-	@Min(0)
-	private Long searchAccountOwnerId = 0l;
+	private ReadOnlyAccountOwner searchAccountOwner = null;
 
 	@NotNull
 	private Boolean useSearchAccountOwnerType = Boolean.FALSE;
@@ -111,10 +110,10 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 
 	@Override
 	protected List<? extends ReadOnlyAccount> searchEntities() {
-		return accountBean.findAccounts(searchAccountId, searchAccountOwnerId, searchAccountOwnerType, searchAccountBankBalance, searchAccountBlocked,
-				searchAccountIsProtected, useSearchAccountId, useSearchAccountOwnerId, useSearchAccountOwnerType, useSearchAccountBankBalance,
-				useSearchAccountBlocked, useSearchAccountIsProtected, searchAccountIdComparator, searchAccountOwnerIdComparator,
-				searchAccountOwnerTypeComparator, searchAccountBankBalanceComparator);
+		return accountBean.findAccounts(searchAccountId, searchAccountOwner != null ? searchAccountOwner.getId() : null, searchAccountOwnerType,
+				searchAccountBankBalance, searchAccountBlocked, searchAccountIsProtected, useSearchAccountId, useSearchAccountOwnerId,
+				useSearchAccountOwnerType, useSearchAccountBankBalance, useSearchAccountBlocked, useSearchAccountIsProtected,
+				searchAccountIdComparator, searchAccountOwnerIdComparator, searchAccountOwnerTypeComparator, searchAccountBankBalanceComparator);
 	}
 
 	@Override
@@ -162,12 +161,12 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 		this.searchAccountOwnerIdComparator = searchAccountOwnerIdComparator;
 	}
 
-	public Long getSearchAccountOwnerId() {
-		return searchAccountOwnerId;
+	public ReadOnlyAccountOwner getSearchAccountOwner() {
+		return searchAccountOwner;
 	}
 
-	public void setSearchAccountOwnerId(Long searchAccountOwnerId) {
-		this.searchAccountOwnerId = searchAccountOwnerId;
+	public void setSearchAccountOwner(ReadOnlyAccountOwner searchAccountOwner) {
+		this.searchAccountOwner = searchAccountOwner;
 	}
 
 	public EnumAccountOwnerType getSearchAccountOwnerType() {
@@ -363,8 +362,8 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 	@ShortComment
 	private String transactionDialogComment = null;
 
-	@ValidEntityId(entityClass = ReadOnlyAccountOwner.class)
-	private Long transactionDialogToId = null;
+	@NotNull
+	private ReadOnlyAccount transactionDialogToAccount = null;
 
 	public BigDecimal getTransactionDialogTransactionAmount() {
 		return transactionDialogTransactionAmount;
@@ -382,39 +381,33 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 		this.transactionDialogComment = transactionDialogComment;
 	}
 
-	public Long getTransactionDialogToId() {
-		return transactionDialogToId;
+	public ReadOnlyAccount getTransactionDialogToAccount() {
+		return transactionDialogToAccount;
 	}
 
-	public void setTransactionDialogToId(Long transactionDialogToId) {
-		this.transactionDialogToId = transactionDialogToId;
-	}
-
-	public String getAccountOwnerFromCurrentId() {
-		ReadOnlyAccountOwner owner = transactionDialogToId != null ? entityBean.exists(transactionDialogToId, ReadOnlyAccountOwner.class)
-				? accountBean.findAccountOwnerById(transactionDialogToId) : null : null;
-		return WebUtils.getAsString(owner, AccountOwnerConverter.CONVERTER_ID);
+	public void setTransactionDialogToAccount(ReadOnlyAccount transactionDialogToAccount) {
+		this.transactionDialogToAccount = transactionDialogToAccount;
 	}
 
 	public void resetTransactionDialog() {
 		transactionDialogTransactionAmount = BigDecimal.ZERO;
 		transactionDialogComment = null;
-		transactionDialogToId = null;
+		transactionDialogToAccount = null;
 	}
 
 	public void transaction() {
-		ReadOnlyAccountOwner owner = accountBean.findAccountOwnerById(transactionDialogToId);
 		for (ReadOnlyAccount account : selectedEntities) {
 			WebUtils.executeTask(params -> {
-				accountBean.transaction(account.getId(), owner.getAccount().getId(), transactionDialogTransactionAmount, transactionDialogComment);
+				accountBean.transaction(account.getId(), transactionDialogToAccount.getId(), transactionDialogTransactionAmount,
+						transactionDialogComment);
 				params.add(WebUtils.getCurrencyAsString(transactionDialogTransactionAmount));
 				params.add(transactionDialogComment != null ? transactionDialogComment : "");
 				return true;
 			}, "lucas.application.accountScreen.transaction.message", Utils.asList(WebUtils.getAsString(account, AccountConverter.CONVERTER_ID),
-					WebUtils.getAsString(owner.getAccount(), AccountConverter.CONVERTER_ID)));
+					WebUtils.getAsString(transactionDialogToAccount, AccountConverter.CONVERTER_ID)));
 		}
-		WebUtils.refreshEntities(ReadOnlyAccount.class, searchResults, selectedEntities, Arrays.asList(owner.getAccount()), accountBean::findById,
-				true);
+		WebUtils.refreshEntities(ReadOnlyAccount.class, searchResults, selectedEntities, Arrays.asList(transactionDialogToAccount),
+				accountBean::findById, true);
 	}
 
 	/*

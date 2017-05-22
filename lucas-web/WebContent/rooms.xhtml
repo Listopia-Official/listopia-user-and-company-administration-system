@@ -40,7 +40,8 @@
 					rendered="#{loginBean.hasPermission(EnumPermission.ROOM_FIND_ROOM_SECTION_BY_ID) &amp;&amp; loginBean.hasPermissionsOr([EnumPermission.ROOM_ADD_SECTION,EnumPermission.ROOM_REMOVE_SECTION])}"
 					value="#{msg['lucas.application.roomScreen.sectionManagerButton.name']}"
 					title="#{msg['lucas.application.roomScreen.sectionManagerButton.tooltip']}"
-					icon="fa fa-table" disabled="#{roomBean.selectedEntities.size() !=1}"
+					icon="fa fa-table"
+					disabled="#{roomBean.selectedEntities.size() !=1}"
 					oncomplete="PF('sectionManagerDialog').show()"
 					action="#{roomBean.initSectionManagerDialog}" process="@this"
 					update="sectionManagerDialogForm" />
@@ -121,7 +122,7 @@
 					disabled="#{not roomBean.useSearchRoomSectionId}"
 					value="#{roomBean.searchRoomSectionIdComparator}"
 					title="#{msg['lucas.application.roomScreen.searchRoomSectionIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
 						var="comparator" itemValue="#{comparator}"
 						itemLabel="#{converterBean.convertEnum(comparator)}" />
 				</p:selectOneMenu>
@@ -139,9 +140,14 @@
 					disabled="#{not roomBean.useSearchRoomName}" />
 			</p:column>
 			<p:column>
-				<p:inputNumber value="#{roomBean.searchRoomSectionId}" minValue="0"
-					decimalPlaces="0" id="searchRoomSectionIdInputNumber"
-					disabled="#{not roomBean.useSearchRoomSectionId}" />
+				<ui:include
+					src="/WEB-INF/web/autocomplete/selectRoomSectionAutocomplete.xhtml">
+					<ui:param name="id" value="searchRoomSectionIdInputNumber" />
+					<ui:param name="title" value="" />
+					<ui:param name="disabled"
+						value="#{not roomBean.useSearchRoomSectionId}" />
+					<ui:param name="value" value="#{roomBean.searchRoomSection}" />
+				</ui:include>
 			</p:column>
 		</p:row>
 	</ui:define>

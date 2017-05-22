@@ -4,7 +4,7 @@ import static florian_haas.lucas.security.EnumPermission.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.ejb.*;
@@ -29,10 +29,6 @@ public class CompanyBean implements CompanyBeanLocal {
 	@Inject
 	@JPADAO
 	private TaxdataDAO taxdataDao;
-
-	@Inject
-	@JPADAO
-	private CompanyCardDAO companyCardDao;
 
 	@Inject
 	@JPADAO
@@ -240,34 +236,6 @@ public class CompanyBean implements CompanyBeanLocal {
 		return Boolean.TRUE;
 	}
 
-	@Override
-	@RequiresPermissions(COMPANY_ADD_COMPANY_CARD)
-	public Long addCompanyCard(Long companyId) {
-		Company company = companyDao.findById(companyId);
-		CompanyCard companyCard = new CompanyCard(company);
-		company.addCompanyCard(companyCard);
-		companyDao.flush();
-		return companyCard.getId();
-	}
-
-	@Override
-	@RequiresPermissions(COMPANY_BLOCK_COMPANY_CARD)
-	public Boolean blockCompanyCard(Long companyCardId) {
-		CompanyCard companyCard = companyCardDao.findById(companyCardId);
-		if (companyCard.getBlocked()) { return Boolean.FALSE; }
-		companyCard.setBlocked(Boolean.TRUE);
-		return Boolean.TRUE;
-	}
-
-	@Override
-	@RequiresPermissions(COMPANY_UNBLOCK_COMPANY_CARD)
-	public Boolean unblockCompanyCard(Long companyCardId) {
-		CompanyCard companyCard = companyCardDao.findById(companyCardId);
-		if (!companyCard.getBlocked()) { return Boolean.FALSE; }
-		companyCard.setBlocked(Boolean.FALSE);
-		return Boolean.TRUE;
-	}
-
 	private void checkIsNameUnique(String name) {
 		if (!companyDao.isNameUnique(name)) throw new LucasException("The name is used by another company", NAME_NOT_UNIQUE_EXCEPTION_MARKER);
 	}
@@ -296,38 +264,15 @@ public class CompanyBean implements CompanyBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions(COMPANY_FIND_COMPANY_CARD_BY_ID)
-	public ReadOnlyCompanyCard findCompanyCardById(Long companyCardId) {
-		return companyCardDao.findById(companyCardId);
+	@RequiresPermissions(COMPANY_GET_COMPANY_TYPE_FROM_ID)
+	public EnumCompanyType getCompanyTypeFromId(Long companyId) {
+		return companyDao.getCompanyTypeFromId(companyId);
 	}
 
 	@Override
-	@RequiresPermissions(COMPANY_GET_COMPANY_CARDS)
-	public Set<? extends ReadOnlyCompanyCard> getCompanyCards(Long companyId) {
-		Company company = companyDao.findById(companyId);
-		return company.getCompanyCards();
-	}
-
-	@Override
-	@RequiresPermissions(COMPANY_SET_VALID_DATE_COMPANY_CARD)
-	public Boolean setValidDate(Long companyCardId, LocalDate validDate) {
-		CompanyCard companyCard = companyCardDao.findById(companyCardId);
-		if (companyCard.getValidDay() != null && companyCard.getValidDay().equals(validDate)
-				|| companyCard.getValidDay() == null && validDate == null)
-			return Boolean.FALSE;
-		companyCard.setValidDay(validDate);
-		return Boolean.TRUE;
-	}
-
-	@Override
-	@RequiresPermissions(COMPANY_REMOVE_COMPANY_CARD)
-	public Boolean removeCompanyCard(Long companyCardId) {
-		CompanyCard card = companyCardDao.findById(companyCardId);
-		Boolean removed = card.getCompany().removeCompanyCard(card);
-		if (removed) {
-			companyCardDao.delete(card);
-		}
-		return removed;
+	@RequiresPermissions(COMPANY_FIND_BY_DATA)
+	public List<? extends ReadOnlyCompany> getCompaniesByData(String data, Integer resultsCount) {
+		return companyDao.getCompaniesFromData(data, resultsCount);
 	}
 
 }

@@ -5,10 +5,16 @@ import java.time.LocalDate;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@MappedSuperclass
-public abstract class IdCard extends EntityBase implements ReadOnlyIdCard {
+@Entity
+@Table(name = "idcard")
+public class IdCard extends EntityBase implements ReadOnlyIdCard {
 
 	private static final long serialVersionUID = 8810801313974710266L;
+
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	@NotNull
+	private AccountOwner owner;
 
 	@Column(nullable = false)
 	@Basic(optional = false)
@@ -17,7 +23,16 @@ public abstract class IdCard extends EntityBase implements ReadOnlyIdCard {
 
 	IdCard() {}
 
+	public IdCard(AccountOwner owner) {
+		this.owner = owner;
+	}
+
 	private LocalDate validDay;
+
+	@Override
+	public AccountOwner getOwner() {
+		return owner;
+	}
 
 	@Override
 	public Boolean getBlocked() {

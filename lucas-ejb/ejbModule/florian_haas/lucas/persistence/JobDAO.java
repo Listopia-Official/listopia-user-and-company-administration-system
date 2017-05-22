@@ -20,4 +20,6 @@ public interface JobDAO extends DAO<Job> {
 
 	public List<Job> getEmployeeJobsWhereEmploymentsAreRequired(EnumSet<EnumEmployeePosition> validJobs, EnumSet<EnumCompanyType> validCompanyTypes);
 
+	public List<Job> getJobsFromData(String data, Integer resultsCount);
+
 }

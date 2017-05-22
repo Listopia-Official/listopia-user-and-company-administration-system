@@ -33,7 +33,7 @@
 			styleClass="dialogToolbar">
 			<p:toolbarGroup align="left">
 				<p:commandButton
-					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_ADD_COMPANY_CARD)}"
+					rendered="#{loginBean.hasPermission(EnumPermission.ID_CARD_ADD)}"
 					value="#{msg['lucas.application.companyScreen.companyCardManagerDialog.newCompanyCardButton.name']}"
 					title="#{msg['lucas.application.companyScreen.companyCardManagerDialog.newCompanyCardButton.tooltip']}"
 					icon="fa fa-plus"
@@ -41,7 +41,7 @@
 					update="@form" />
 				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 				<p:commandButton
-					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_BLOCK_COMPANY_CARD)}"
+					rendered="#{loginBean.hasPermission(EnumPermission.ID_CARD_BLOCK)}"
 					value="#{msg['lucas.application.companyScreen.companyCardManagerDialog.blockCompanyCardButton.name']}"
 					title="#{msg['lucas.application.companyScreen.companyCardManagerDialog.blockCompanyCardButton.tooltip']}"
 					icon="fa fa-lock"
@@ -49,7 +49,7 @@
 					update="@form"
 					disabled="#{empty companyBean.companyCardManagerDialogSelectedCompanyCards}" />
 				<p:commandButton
-					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_UNBLOCK_COMPANY_CARD)}"
+					rendered="#{loginBean.hasPermission(EnumPermission.ID_CARD_UNBLOCK)}"
 					value="#{msg['lucas.application.companyScreen.companyCardManagerDialog.unblockCompanyCardButton.name']}"
 					title="#{msg['lucas.application.companyScreen.companyCardManagerDialog.unblockCompanyCardButton.tooltip']}"
 					icon="fa fa-unlock"
@@ -57,7 +57,7 @@
 					update="@form"
 					disabled="#{empty companyBean.companyCardManagerDialogSelectedCompanyCards}" />
 				<ui:fragment
-					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_VALID_DATE_COMPANY_CARD)}">
+					rendered="#{loginBean.hasPermission(EnumPermission.ID_CARD_SET_VALID_DATE)}">
 					<p:commandButton id="companyCardManagerSetValidDayButton"
 						value="#{msg['lucas.application.companyScreen.companyCardManagerDialog.setValidDayButton.name']}"
 						title="#{msg['lucas.application.companyScreen.companyCardManagerDialog.setValidDayButton.tooltip']}"
@@ -109,7 +109,7 @@
 					<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 				</ui:fragment>
 				<p:commandButton
-					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_REMOVE_COMPANY_CARD)}"
+					rendered="#{loginBean.hasPermission(EnumPermission.ID_CARD_REMOVE)}"
 					value="#{msg['lucas.application.companyScreen.companyCardManagerDialog.removeCompanyCardsButton.name']}"
 					title="#{msg['lucas.application.companyScreen.companyCardManagerDialog.removeCompanyCardsButton.tooltip']}"
 					icon="fa fa-remove"

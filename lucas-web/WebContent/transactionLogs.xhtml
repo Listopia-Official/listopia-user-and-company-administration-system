@@ -21,6 +21,8 @@
 			type="florian_haas.lucas.web.converter.LocalDateTimeConverter" />
 		<p:importConstants
 			type="florian_haas.lucas.web.converter.LoginUserConverter$ShortLoginUserConverter" />
+			<p:importConstants
+			type="florian_haas.lucas.web.converter.LoginUserConverter" />
 	</ui:define>
 	<ui:define name="buttonArea">
 		<p:toolbarGroup align="left">
@@ -178,7 +180,7 @@
 					disabled="#{not transactionLogBean.useSearchTransactionLogAccountId}"
 					value="#{transactionLogBean.searchTransactionLogAccountIdComparator}"
 					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogAccountIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
 						var="comparator" itemValue="#{comparator}"
 						itemLabel="#{converterBean.convertEnum(comparator)}" />
 				</p:selectOneMenu>
@@ -218,7 +220,7 @@
 					disabled="#{not transactionLogBean.useSearchTransactionLogRelatedAccountId}"
 					value="#{transactionLogBean.searchTransactionLogRelatedAccountIdComparator}"
 					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogRelatedAccountIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
 						var="comparator" itemValue="#{comparator}"
 						itemLabel="#{converterBean.convertEnum(comparator)}" />
 				</p:selectOneMenu>
@@ -264,11 +266,16 @@
 					disabled="#{not transactionLogBean.useSearchTransactionLogId}" />
 			</p:column>
 			<p:column>
-				<p:inputNumber
-					value="#{transactionLogBean.searchTransactionLogAccountId}"
-					minValue="0" decimalPlaces="0"
-					id="searchTransactionLogAccountIdInputNumber"
-					disabled="#{not transactionLogBean.useSearchTransactionLogAccountId}" />
+				<ui:include
+					src="/WEB-INF/web/autocomplete/selectAccountAutocomplete.xhtml">
+					<ui:param name="id"
+						value="searchTransactionLogAccountIdInputNumber" />
+					<ui:param name="title" value="" />
+					<ui:param name="disabled"
+						value="#{not transactionLogBean.useSearchTransactionLogAccountId}" />
+					<ui:param name="value"
+						value="#{transactionLogBean.searchTransactionLogAccount}" />
+				</ui:include>
 			</p:column>
 			<p:column>
 				<p:calendar id="searchTransactionLogDateTimeCalendar"
@@ -301,11 +308,16 @@
 				</p:selectOneMenu>
 			</p:column>
 			<p:column>
-				<p:inputNumber
-					value="#{transactionLogBean.searchTransactionLogRelatedAccountId}"
-					minValue="0" decimalPlaces="0"
-					id="searchTransactionLogRelatedAccountIdInputNumber"
-					disabled="#{not transactionLogBean.useSearchTransactionLogRelatedAccountId}" />
+				<ui:include
+					src="/WEB-INF/web/autocomplete/selectAccountAutocomplete.xhtml">
+					<ui:param name="id"
+						value="searchTransactionLogRelatedAccountIdInputNumber" />
+					<ui:param name="title" value="" />
+					<ui:param name="disabled"
+						value="#{not transactionLogBean.useSearchTransactionLogRelatedAccountId}" />
+					<ui:param name="value"
+						value="#{transactionLogBean.searchTransactionLogRelatedAccount}" />
+				</ui:include>
 			</p:column>
 			<p:column>
 				<p:inputNumber
@@ -372,7 +384,7 @@
 					disabled="#{not transactionLogBean.useSearchTransactionLogBankUserId}"
 					value="#{transactionLogBean.searchTransactionLogBankUserComparator}"
 					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogBankUserIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
 						var="comparator" itemValue="#{comparator}"
 						itemLabel="#{converterBean.convertEnum(comparator)}" />
 				</p:selectOneMenu>
@@ -390,11 +402,16 @@
 		</p:row>
 		<p:row>
 			<p:column>
-				<p:inputNumber
-					value="#{transactionLogBean.searchTransactionLogBankUserId}"
-					minValue="0" decimalPlaces="0"
-					id="searchTransactionLogBankUserIdInputNumber"
-					disabled="#{not transactionLogBean.useSearchTransactionLogBankUserId}" />
+				<ui:include
+					src="/WEB-INF/web/autocomplete/selectLoginUserAutocomplete.xhtml">
+					<ui:param name="id"
+						value="searchTransactionLogBankUserIdInputNumber" />
+					<ui:param name="title" value="" />
+					<ui:param name="disabled"
+						value="#{not transactionLogBean.useSearchTransactionLogBankUserId}" />
+					<ui:param name="value"
+						value="#{transactionLogBean.searchTransactionLogBankUser}" />
+				</ui:include>
 			</p:column>
 			<p:column>
 				<p:inputText

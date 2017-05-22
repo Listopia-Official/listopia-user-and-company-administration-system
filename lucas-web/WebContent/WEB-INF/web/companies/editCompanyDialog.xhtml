@@ -13,6 +13,8 @@
 	<ui:define name="dialogContent">
 		<p:importConstants
 			type="florian_haas.lucas.web.converter.NullConverterNoText" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.RoomSectionConverter" />
 		<div class="ui-fluid">
 			<p:panelGrid>
 				<p:row
@@ -81,9 +83,14 @@
 				<p:row
 					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_SECTION)}">
 					<p:column colspan="3">
-						<p:inputNumber value="#{companyBean.editCompanyDialogSectionId}"
-							minValue="0" id="sectionIdInputNumber" decimalPlaces="0"
-							title="#{msg['lucas.application.companyScreen.editCompanyDialog.sectionIdInputNumber.tooltip']}" />
+						<ui:include
+							src="/WEB-INF/web/autocomplete/selectRoomSectionAutocomplete.xhtml">
+							<ui:param name="id" value="sectionIdInputNumber" />
+							<ui:param name="title"
+								value="#{msg['lucas.application.companyScreen.editCompanyDialog.sectionIdInputNumber.tooltip']}" />
+							<ui:param name="value"
+								value="#{companyBean.editCompanyDialogSection}" />
+						</ui:include>
 					</p:column>
 				</p:row>
 				<p:row
@@ -126,24 +133,15 @@
 				<p:row
 					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_PARENT_COMPANY)}">
 					<p:column colspan="3">
-						<p:inputNumber id="parentCompanyInputNumber"
-							value="#{companyBean.editCompanyDialogParentCompanyId}"
-							title="#{msg['lucas.application.companyScreen.editCompanyDialog.parentCompanyIdInputNumber.tooltip']}"
-							minValue="0" emptyValue="empty" decimalPlaces="0">
-							<p:ajax event="keyup" delay="250" process="@this"
-								update="editCompanyDialogForm:companyIdOutputInputText companyIdInputNumberMessage @this" />
-						</p:inputNumber>
+						<ui:include
+							src="/WEB-INF/web/autocomplete/selectCompanyAutocomplete.xhtml">
+							<ui:param name="id" value="parentCompanyInputNumber" />
+							<ui:param name="title"
+								value="#{msg['lucas.application.companyScreen.editCompanyDialog.parentCompanyIdInputNumber.tooltip']}" />
+							<ui:param name="value"
+								value="#{companyBean.editCompanyDialogParentCompany}" />
+						</ui:include>
 					</p:column>
-				</p:row>
-				<p:row
-					rendered="#{loginBean.hasPermission(EnumPermission.COMPANY_SET_PARENT_COMPANY)}">
-					<p:column colspan="3">
-						<p:inputText
-							title="#{companyBean.editCompanyDialogParentCompanyFromId}"
-							placeholder="#{companyBean.editCompanyDialogParentCompanyFromId}"
-							id="companyIdOutputInputText" readonly="true" />
-					</p:column>
-					<p:column colspan="2" />
 				</p:row>
 				<p:row>
 					<p:column>

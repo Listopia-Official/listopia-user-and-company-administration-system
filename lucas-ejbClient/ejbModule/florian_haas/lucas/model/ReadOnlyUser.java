@@ -16,8 +16,6 @@ public interface ReadOnlyUser extends ReadOnlyAccountOwner {
 
 	public ReadOnlyAttendancedata getAttendancedata();
 
-	public Set<? extends ReadOnlyUserCard> getUserCards();
-
 	public Set<? extends ReadOnlyEmployment> getEmployments();
 
 	public byte[] getImage();

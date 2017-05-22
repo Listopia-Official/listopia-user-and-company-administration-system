@@ -44,13 +44,13 @@ public class TransactionLogBean extends BaseBean<ReadOnlyTransactionLog> {
 	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
 	private EnumQueryComparator searchTransactionLogIdComparator = EnumQueryComparator.EQUAL;
 
-	@ValidEntityId(entityClass = ReadOnlyAccount.class)
-	private Long searchTransactionLogAccountId = 0l;
+	@NotNull
+	private ReadOnlyAccount searchTransactionLogAccount = null;
 
 	@NotNull
 	private Boolean useSearchTransactionLogAccountId = Boolean.FALSE;
 
-	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
+	@QueryComparator(category = EnumQueryComparatorCategory.LOGIC)
 	private EnumQueryComparator searchTransactionLogAccountIdComparator = EnumQueryComparator.EQUAL;
 
 	@NotNull
@@ -80,13 +80,12 @@ public class TransactionLogBean extends BaseBean<ReadOnlyTransactionLog> {
 	@QueryComparator(category = EnumQueryComparatorCategory.LOGIC)
 	private EnumQueryComparator searchTransactionLogActionTypeComparator = EnumQueryComparator.EQUAL;
 
-	@ValidEntityId(entityClass = ReadOnlyAccount.class, nullable = true)
-	private Long searchTransactionLogRelatedAccountId = 0l;
+	private ReadOnlyAccount searchTransactionLogRelatedAccount = null;
 
 	@NotNull
 	private Boolean useSearchTransactionLogRelatedAccountId = Boolean.FALSE;
 
-	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
+	@QueryComparator(category = EnumQueryComparatorCategory.LOGIC)
 	private EnumQueryComparator searchTransactionLogRelatedAccountIdComparator = EnumQueryComparator.EQUAL;
 
 	@ValidTransactionAmount
@@ -116,13 +115,12 @@ public class TransactionLogBean extends BaseBean<ReadOnlyTransactionLog> {
 	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
 	private EnumQueryComparator searchTransactionLogCurrentBankBalanceComparator = EnumQueryComparator.EQUAL;
 
-	@ValidEntityId(entityClass = ReadOnlyLoginUser.class, nullable = true)
-	private Long searchTransactionLogBankUserId = 0l;
+	private ReadOnlyLoginUser searchTransactionLogBankUser = null;
 
 	@NotNull
 	private Boolean useSearchTransactionLogBankUserId = Boolean.FALSE;
 
-	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
+	@QueryComparator(category = EnumQueryComparatorCategory.LOGIC)
 	private EnumQueryComparator searchTransactionLogBankUserComparator = EnumQueryComparator.EQUAL;
 
 	@ShortComment
@@ -158,12 +156,12 @@ public class TransactionLogBean extends BaseBean<ReadOnlyTransactionLog> {
 		this.searchTransactionLogIdComparator = searchTransactionLogIdComparator;
 	}
 
-	public Long getSearchTransactionLogAccountId() {
-		return this.searchTransactionLogAccountId;
+	public ReadOnlyAccount getSearchTransactionLogAccount() {
+		return this.searchTransactionLogAccount;
 	}
 
-	public void setSearchTransactionLogAccountId(Long searchTransactionLogAccountId) {
-		this.searchTransactionLogAccountId = searchTransactionLogAccountId;
+	public void setSearchTransactionLogAccount(ReadOnlyAccount searchTransactionLogAccount) {
+		this.searchTransactionLogAccount = searchTransactionLogAccount;
 	}
 
 	public Boolean getUseSearchTransactionLogAccountId() {
@@ -254,12 +252,12 @@ public class TransactionLogBean extends BaseBean<ReadOnlyTransactionLog> {
 		this.searchTransactionLogActionTypeComparator = searchTransactionLogActionTypeComparator;
 	}
 
-	public Long getSearchTransactionLogRelatedAccountId() {
-		return this.searchTransactionLogRelatedAccountId;
+	public ReadOnlyAccount getSearchTransactionLogRelatedAccount() {
+		return this.searchTransactionLogRelatedAccount;
 	}
 
-	public void setSearchTransactionLogRelatedAccountId(Long searchTransactionLogRelatedAccountId) {
-		this.searchTransactionLogRelatedAccountId = searchTransactionLogRelatedAccountId;
+	public void setSearchTransactionLogRelatedAccount(ReadOnlyAccount searchTransactionLogRelatedAccount) {
+		this.searchTransactionLogRelatedAccount = searchTransactionLogRelatedAccount;
 	}
 
 	public Boolean getUseSearchTransactionLogRelatedAccountId() {
@@ -350,12 +348,12 @@ public class TransactionLogBean extends BaseBean<ReadOnlyTransactionLog> {
 		this.searchTransactionLogCurrentBankBalanceComparator = searchTransactionLogCurrentBankBalanceComparator;
 	}
 
-	public Long getSearchTransactionLogBankUserId() {
-		return this.searchTransactionLogBankUserId;
+	public ReadOnlyLoginUser getSearchTransactionLogBankUser() {
+		return this.searchTransactionLogBankUser;
 	}
 
-	public void setSearchTransactionLogBankUserId(Long searchTransactionLogBankUserId) {
-		this.searchTransactionLogBankUserId = searchTransactionLogBankUserId;
+	public void setSearchTransactionLogBankUser(ReadOnlyLoginUser searchTransactionLogBankUser) {
+		this.searchTransactionLogBankUser = searchTransactionLogBankUser;
 	}
 
 	public Boolean getUseSearchTransactionLogBankUserId() {
@@ -415,17 +413,19 @@ public class TransactionLogBean extends BaseBean<ReadOnlyTransactionLog> {
 
 	@Override
 	protected List<? extends ReadOnlyTransactionLog> searchEntities() {
-		return accountBean.findTransactionLogs(searchTransactionLogId, searchTransactionLogAccountId,
+		return accountBean.findTransactionLogs(searchTransactionLogId, searchTransactionLogAccount != null ? searchTransactionLogAccount.getId() : 0l,
 				Utils.asLocalDateTime(searchTransactionLogDateTime), searchTransactionLogAction, searchTransactionLogActionType,
-				searchTransactionLogRelatedAccountId, searchTransactionLogAmount, searchTransactionLogPreviousBankBalance,
-				searchTransactionLogCurrentBankBalance, searchTransactionLogBankUserId, searchTransactionLogComment, useSearchTransactionLogId,
-				useSearchTransactionLogAccountId, useSearchTransactionLogDateTime, useSearchTransactionLogAction, useSearchTransactionLogActionType,
-				useSearchTransactionLogRelatedAccountId, useSearchTransactionLogAmount, useSearchTransactionLogPreviousBankBalance,
-				useSearchTransactionLogCurrentBankBalance, useSearchTransactionLogBankUserId, useSearchTransactionLogComment,
-				searchTransactionLogIdComparator, searchTransactionLogAccountIdComparator, searchTransactionLogDateTimeComparator,
-				searchTransactionLogActionComparator, searchTransactionLogActionTypeComparator, searchTransactionLogRelatedAccountIdComparator,
-				searchTransactionLogAmountComparator, searchTransactionLogPreviousBankBalanceComparator,
-				searchTransactionLogCurrentBankBalanceComparator, searchTransactionLogBankUserComparator, searchTransactionLogCommentComparator);
+				searchTransactionLogRelatedAccount != null ? searchTransactionLogRelatedAccount.getId() : null, searchTransactionLogAmount,
+				searchTransactionLogPreviousBankBalance, searchTransactionLogCurrentBankBalance,
+				searchTransactionLogBankUser != null ? searchTransactionLogBankUser.getId() : null, searchTransactionLogComment,
+				useSearchTransactionLogId, useSearchTransactionLogAccountId, useSearchTransactionLogDateTime, useSearchTransactionLogAction,
+				useSearchTransactionLogActionType, useSearchTransactionLogRelatedAccountId, useSearchTransactionLogAmount,
+				useSearchTransactionLogPreviousBankBalance, useSearchTransactionLogCurrentBankBalance, useSearchTransactionLogBankUserId,
+				useSearchTransactionLogComment, searchTransactionLogIdComparator, searchTransactionLogAccountIdComparator,
+				searchTransactionLogDateTimeComparator, searchTransactionLogActionComparator, searchTransactionLogActionTypeComparator,
+				searchTransactionLogRelatedAccountIdComparator, searchTransactionLogAmountComparator,
+				searchTransactionLogPreviousBankBalanceComparator, searchTransactionLogCurrentBankBalanceComparator,
+				searchTransactionLogBankUserComparator, searchTransactionLogCommentComparator);
 	}
 
 	@Override

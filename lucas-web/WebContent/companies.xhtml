@@ -25,6 +25,8 @@
 			type="florian_haas.lucas.web.converter.NullConverterNoText" />
 		<p:importConstants
 			type="florian_haas.lucas.web.converter.EnumConverter" />
+			<p:importConstants
+			type="florian_haas.lucas.web.converter.JobConverter" />
 		<p:importConstants
 			type="florian_haas.lucas.web.converter.RoomSectionConverter$ShortRoomSectionConverter" />
 	</ui:define>
@@ -49,7 +51,7 @@
 				update="editCompanyDialogForm"
 				disabled="#{companyBean.selectedEntities.size() !=1}" />
 			<p:commandButton resetValues="true"
-				rendered="#{loginBean.hasPermissionsOr([EnumPermission.COMPANY_ADD_COMPANY_CARD,EnumPermission.COMPANY_REMOVE_COMPANY_CARD,EnumPermission.COMPANY_BLOCK_COMPANY_CARD,EnumPermission.COMPANY_UNBLOCK_COMPANY_CARD,EnumPermission.COMPANY_SET_VALID_DATE_COMPANY_CARD]) &amp;&amp; loginBean.hasPermissionsAnd([EnumPermission.COMPANY_FIND_COMPANY_CARD_BY_ID,EnumPermission.COMPANY_GET_COMPANY_CARDS])}"
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.ID_CARD_ADD,EnumPermission.ID_CARD_REMOVE,EnumPermission.ID_CARD_BLOCK,EnumPermission.ID_CARD_UNBLOCK,EnumPermission.ID_CARD_SET_VALID_DATE]) &amp;&amp; loginBean.hasPermissionsAnd([EnumPermission.ID_CARD_FIND_BY_ID,EnumPermission.ID_CARD_GET_FROM_OWNER])}"
 				value="#{msg['lucas.application.companyScreen.companyCardManagerButton.name']}"
 				title="#{msg['lucas.application.companyScreen.companyCardManagerButton.tooltip']}"
 				icon="fa fa-credit-card"
@@ -254,7 +256,7 @@
 					disabled="#{not companyBean.useSearchCompanySectionId}"
 					value="#{companyBean.searchCompanySectionIdComparator}"
 					title="#{msg['lucas.application.companyScreen.searchCompanySectionIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
 						var="comparator" itemValue="#{comparator}"
 						itemLabel="#{converterBean.convertEnum(comparator)}" />
 				</p:selectOneMenu>
@@ -274,7 +276,7 @@
 					disabled="#{not companyBean.useSearchCompanyParentCompanyId}"
 					value="#{companyBean.searchCompanyParentCompanyIdComparator}"
 					title="#{msg['lucas.application.companyScreen.searchCompanyParentCompanyIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
 						var="comparator" itemValue="#{comparator}"
 						itemLabel="#{converterBean.convertEnum(comparator)}" />
 				</p:selectOneMenu>
@@ -284,7 +286,7 @@
 					disabled="#{not companyBean.useSearchCompanyJobId}"
 					value="#{companyBean.searchCompanyJobIdComparator}"
 					title="#{msg['lucas.application.companyScreen.searchCompanyJobIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
+					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
 						var="comparator" itemValue="#{comparator}"
 						itemLabel="#{converterBean.convertEnum(comparator)}" />
 				</p:selectOneMenu>
@@ -319,10 +321,14 @@
 					disabled="#{not companyBean.useSearchCompanyDescription}" />
 			</p:column>
 			<p:column>
-				<p:inputNumber value="#{companyBean.searchCompanySectionId}"
-					minValue="0" decimalPlaces="0"
-					id="searchCompanySectionIdInputNumber"
-					disabled="#{not companyBean.useSearchCompanySectionId}" />
+				<ui:include
+					src="/WEB-INF/web/autocomplete/selectRoomSectionAutocomplete.xhtml">
+					<ui:param name="id" value="searchCompanySectionIdInputNumber" />
+					<ui:param name="title" value="" />
+					<ui:param name="disabled"
+						value="#{not companyBean.useSearchCompanySectionId}" />
+					<ui:param name="value" value="#{companyBean.searchCompanySection}" />
+				</ui:include>
 			</p:column>
 			<p:column>
 				<p:selectOneMenu value="#{companyBean.searchCompanyCompanyType}"
@@ -334,15 +340,25 @@
 				</p:selectOneMenu>
 			</p:column>
 			<p:column>
-				<p:inputNumber value="#{companyBean.searchCompanyParentCompanyId}"
-					minValue="0" decimalPlaces="0" emptyValue="empty"
-					id="searchCompanyParentCompanyIdInputNumber"
-					disabled="#{not companyBean.useSearchCompanyParentCompanyId}" />
+				<ui:include
+					src="/WEB-INF/web/autocomplete/selectCompanyAutocomplete.xhtml">
+					<ui:param name="id" value="searchCompanyParentCompanyIdInputNumber" />
+					<ui:param name="title" value="" />
+					<ui:param name="disabled"
+						value="#{not companyBean.useSearchCompanyParentCompanyId}" />
+					<ui:param name="value"
+						value="#{companyBean.searchCompanyParentCompany}" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:inputNumber value="#{companyBean.searchCompanyJobId}"
-					minValue="0" decimalPlaces="0" id="searchCompanyJobIdInputNumber"
-					disabled="#{not companyBean.useSearchCompanyJobId}" />
+				<ui:include
+					src="/WEB-INF/web/autocomplete/selectJobAutocomplete.xhtml">
+					<ui:param name="id" value="searchCompanyJobIdInputNumber" />
+					<ui:param name="title" value="" />
+					<ui:param name="disabled"
+						value="#{not companyBean.useSearchCompanyJobId}" />
+					<ui:param name="value" value="#{companyBean.searchCompanyJob}" />
+				</ui:include>
 			</p:column>
 			<p:column>
 				<p:inputNumber value="#{companyBean.searchCompanyJobsCount}"

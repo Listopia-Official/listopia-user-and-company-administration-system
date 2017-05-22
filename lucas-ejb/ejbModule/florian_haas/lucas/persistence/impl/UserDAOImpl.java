@@ -89,4 +89,30 @@ public class UserDAOImpl extends DAOImpl<User> implements UserDAO {
 		manager.createQuery(query).executeUpdate();
 	}
 
+	@Override
+	public List<User> getUsersFromData(String data, Integer resultsCount) {
+		data = data.trim();
+		if (!data.isEmpty()) {
+			CriteriaBuilder builder = manager.getCriteriaBuilder();
+			CriteriaQuery<User> query = builder.createQuery(User.class);
+			query.distinct(true);
+			Root<User> user = query.from(User.class);
+			List<Predicate> predicates = new ArrayList<>();
+			Expression<String> forename = user.get(User_.forename);
+			Expression<String> surname = user.get(User_.surname);
+			try {
+				Long id = Long.parseLong(data);
+				predicates.add(builder.equal(user.get(User_.id), id));
+				predicates.add(builder.equal(user.join(User_.idCards, JoinType.LEFT).get(IdCard_.id), id));
+			}
+			catch (NumberFormatException e) {}
+			data = "%" + data.replaceAll(" ", "%") + "%";
+			predicates.add(
+					builder.or(builder.like(builder.concat(forename, surname), data), builder.like(surname, data), builder.like(forename, data)));
+			query.select(user).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			return manager.createQuery(query).setMaxResults(resultsCount).getResultList();
+		}
+		return new ArrayList<>();
+	}
+
 }

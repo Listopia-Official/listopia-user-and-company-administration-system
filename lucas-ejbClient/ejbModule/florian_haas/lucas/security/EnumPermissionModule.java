@@ -8,6 +8,7 @@ public enum EnumPermissionModule {
 	EMPLOYMENT("employment"),
 	ENTITY("entity"),
 	GLOBAL_DATA("globalData"),
+	ID_CARD("idCard"),
 	ITEM("item"),
 	JOB("job"),
 	LOGIN("login"),

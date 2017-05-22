@@ -47,4 +47,42 @@ public class LoginUserDAOImpl extends DAOImpl<LoginUser> implements LoginUserDAO
 			return root.join(LoginUser_.user).get(User_.id);
 		});
 	}
+
+	@Override
+	public List<LoginUser> getLoginUsersFromData(String data, Integer resultsCount) {
+		data = data.trim();
+		if (!data.isEmpty()) {
+			CriteriaBuilder builder = manager.getCriteriaBuilder();
+			CriteriaQuery<LoginUser> query = builder.createQuery(LoginUser.class);
+			query.distinct(true);
+			Root<LoginUser> loginUser = query.from(LoginUser.class);
+			List<Predicate> predicates = new ArrayList<>();
+			Join<LoginUser, User> user = loginUser.join(LoginUser_.user, JoinType.LEFT);
+			Expression<String> forename = user.get(User_.forename);
+			Expression<String> surname = user.get(User_.surname);
+			try {
+				Long id = Long.parseLong(data);
+				predicates.add(builder.equal(loginUser.get(LoginUser_.id), id));
+				predicates.add(builder.equal(user.get(User_.id), id));
+			}
+			catch (NumberFormatException e) {}
+			data = "%" + data.replaceAll(" ", "%") + "%";
+			predicates.add(builder.like(loginUser.get(LoginUser_.username), data));
+			predicates.add(
+					builder.or(builder.like(builder.concat(forename, surname), data), builder.like(surname, data), builder.like(forename, data)));
+			query.select(loginUser).where(builder.or(predicates.toArray(new Predicate[predicates.size()])));
+			return manager.createQuery(query).setMaxResults(resultsCount).getResultList();
+		}
+		return new ArrayList<>();
+	}
+
+	@Override
+	public Boolean isBoundLoginUser(Long loginUserId) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Long> query = builder.createQuery(Long.class);
+		Root<LoginUser> loginUser = query.from(LoginUser.class);
+		Path<User> referencedUser = loginUser.get(LoginUser_.user);
+		query.select(builder.count(builder.isNotNull(referencedUser))).where(builder.equal(loginUser.get(LoginUser_.id), loginUserId));
+		return manager.createQuery(query).getSingleResult() > 0;
+	}
 }

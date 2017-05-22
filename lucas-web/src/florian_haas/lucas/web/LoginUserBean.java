@@ -60,13 +60,12 @@ public class LoginUserBean extends BaseBean<ReadOnlyLoginUser> {
 	@QueryComparator(category = EnumQueryComparatorCategory.TEXT)
 	private EnumQueryComparator searchLoginUserUsernameComparator = EnumQueryComparator.EQUAL;
 
-	@Min(0)
-	private Long searchLoginUserUserId = null;
+	private ReadOnlyUser searchLoginUserUser = null;
 
 	@NotNull
 	private Boolean useSearchLoginUserUserId = Boolean.FALSE;
 
-	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
+	@QueryComparator(category = EnumQueryComparatorCategory.LOGIC)
 	private EnumQueryComparator searchLoginUserUserIdComparator = EnumQueryComparator.EQUAL;
 
 	private List<@TypeNotNull @TypeMin(0) Long> searchLoginUserRoles = new ArrayList<>();
@@ -94,9 +93,9 @@ public class LoginUserBean extends BaseBean<ReadOnlyLoginUser> {
 
 	@Override
 	protected List<? extends ReadOnlyLoginUser> searchEntities() {
-		return loginBean.findLoginUsers(searchLoginUserId, searchLoginUserUsername, searchLoginUserUserId, searchLoginUserRoles, useSearchLoginUserId,
-				useSearchLoginUserUsername, useSearchLoginUserUserId, useSearchLoginUserRoles, searchLoginUserIdComparator,
-				searchLoginUserUsernameComparator, searchLoginUserUserIdComparator, searchLoginUserRolesComparator);
+		return loginBean.findLoginUsers(searchLoginUserId, searchLoginUserUsername, searchLoginUserUser != null ? searchLoginUserUser.getId() : null,
+				searchLoginUserRoles, useSearchLoginUserId, useSearchLoginUserUsername, useSearchLoginUserUserId, useSearchLoginUserRoles,
+				searchLoginUserIdComparator, searchLoginUserUsernameComparator, searchLoginUserUserIdComparator, searchLoginUserRolesComparator);
 	}
 
 	@Override
@@ -152,12 +151,12 @@ public class LoginUserBean extends BaseBean<ReadOnlyLoginUser> {
 		this.searchLoginUserUsernameComparator = searchLoginUserUsernameComparator;
 	}
 
-	public Long getSearchLoginUserUserId() {
-		return searchLoginUserUserId;
+	public ReadOnlyUser getSearchLoginUserUser() {
+		return searchLoginUserUser;
 	}
 
-	public void setSearchLoginUserUserId(Long searchLoginUserUserId) {
-		this.searchLoginUserUserId = searchLoginUserUserId;
+	public void setSearchLoginUserUser(ReadOnlyUser searchLoginUserUser) {
+		this.searchLoginUserUser = searchLoginUserUser;
 	}
 
 	public Boolean getUseSearchLoginUserUserId() {
@@ -266,19 +265,19 @@ public class LoginUserBean extends BaseBean<ReadOnlyLoginUser> {
 	 * -------------------- Create Bound Login User Dialog Start --------------------
 	 */
 
-	@ValidEntityId(entityClass = ReadOnlyUser.class)
-	private Long createBoundLoginUserBoundUser = null;
+	@NotNull
+	private ReadOnlyUser createBoundLoginUserBoundUser = null;
 
 	@ValidUnhashedPassword
 	private char[] createBoundLoginUserPassword = null;
 
 	private DualListModel<ReadOnlyLoginUserRole> createBoundLoginUserRolesListModel;
 
-	public Long getCreateBoundLoginUserBoundUser() {
+	public ReadOnlyUser getCreateBoundLoginUserBoundUser() {
 		return createBoundLoginUserBoundUser;
 	}
 
-	public void setCreateBoundLoginUserBoundUser(Long createBoundLoginUserBoundUser) {
+	public void setCreateBoundLoginUserBoundUser(ReadOnlyUser createBoundLoginUserBoundUser) {
 		this.createBoundLoginUserBoundUser = createBoundLoginUserBoundUser;
 	}
 
@@ -298,13 +297,6 @@ public class LoginUserBean extends BaseBean<ReadOnlyLoginUser> {
 		this.createBoundLoginUserRolesListModel = createBoundLoginUserRolesListModel;
 	}
 
-	public String getCreateBoundLoginUserBoundUserFromId() {
-		ReadOnlyUser user = createBoundLoginUserBoundUser != null
-				? entityBean.exists(createBoundLoginUserBoundUser, ReadOnlyUser.class) ? userBean.findById(createBoundLoginUserBoundUser) : null
-				: null;
-		return WebUtils.getAsString(user, UserConverter.CONVERTER_ID);
-	}
-
 	public void initCreateBoundLoginUserDialog() {
 		createBoundLoginUserBoundUser = null;
 		createBoundLoginUserPassword = null;
@@ -317,7 +309,7 @@ public class LoginUserBean extends BaseBean<ReadOnlyLoginUser> {
 			List<Long> ids = new ArrayList<>();
 			createBoundLoginUserRolesListModel.getTarget().forEach(role -> ids.add(role.getId()));
 			params.add(WebUtils.getAsString(
-					loginBean.findLoginUserById(loginBean.newLoginUser(createBoundLoginUserBoundUser, createBoundLoginUserPassword, ids)),
+					loginBean.findLoginUserById(loginBean.newLoginUser(createBoundLoginUserBoundUser.getId(), createBoundLoginUserPassword, ids)),
 					LoginUserConverter.CONVERTER_ID));
 			Arrays.fill(createBoundLoginUserPassword, 'c');
 			return true;
@@ -327,7 +319,7 @@ public class LoginUserBean extends BaseBean<ReadOnlyLoginUser> {
 							? "lucas.application.loginUserScreen.createBoundLoginUser.notUniqueUser"
 							: "lucas.application.loginUserScreen.createBoundLoginUser.notUniqueUsername"),
 					params.toArray(new Object[params.size()]));
-		}, Utils.asList(WebUtils.getAsString(userBean.findById(createBoundLoginUserBoundUser), UserConverter.CONVERTER_ID)));
+		}, Utils.asList(WebUtils.getAsString(createBoundLoginUserBoundUser, UserConverter.CONVERTER_ID)));
 	}
 
 	/*

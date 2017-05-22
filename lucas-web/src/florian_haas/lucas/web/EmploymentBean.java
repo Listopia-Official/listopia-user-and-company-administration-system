@@ -45,8 +45,7 @@ public class EmploymentBean extends BaseBean<ReadOnlyEmployment> {
 	private EnumQueryComparator searchEmploymentIdComparator = EnumQueryComparator.EQUAL;
 
 	@NotNull
-	@Min(0)
-	private Long searchEmploymentUserId = 0l;
+	private ReadOnlyUser searchEmploymentUser = null;
 
 	@NotNull
 	private Boolean useSearchEmploymentUserId = Boolean.FALSE;
@@ -55,8 +54,7 @@ public class EmploymentBean extends BaseBean<ReadOnlyEmployment> {
 	private EnumQueryComparator searchEmploymentUserIdComparator = EnumQueryComparator.EQUAL;
 
 	@NotNull
-	@Min(0)
-	private Long searchEmploymentJobId = 0l;
+	private ReadOnlyJob searchEmploymentJob = null;
 
 	@NotNull
 	private Boolean useSearchEmploymentJobId = Boolean.FALSE;
@@ -101,12 +99,12 @@ public class EmploymentBean extends BaseBean<ReadOnlyEmployment> {
 		this.searchEmploymentIdComparator = searchEmploymentIdComparator;
 	}
 
-	public Long getSearchEmploymentUserId() {
-		return searchEmploymentUserId;
+	public ReadOnlyUser getSearchEmploymentUser() {
+		return searchEmploymentUser;
 	}
 
-	public void setSearchEmploymentUserId(Long searchEmploymentUserId) {
-		this.searchEmploymentUserId = searchEmploymentUserId;
+	public void setSearchEmploymentUser(ReadOnlyUser searchEmploymentUser) {
+		this.searchEmploymentUser = searchEmploymentUser;
 	}
 
 	public Boolean getUseSearchEmploymentUserId() {
@@ -125,12 +123,12 @@ public class EmploymentBean extends BaseBean<ReadOnlyEmployment> {
 		this.searchEmploymentUserIdComparator = searchEmploymentUserIdComparator;
 	}
 
-	public Long getSearchEmploymentJobId() {
-		return searchEmploymentJobId;
+	public ReadOnlyJob getSearchEmploymentJob() {
+		return searchEmploymentJob;
 	}
 
-	public void setSearchEmploymentJobId(Long searchEmploymentJobId) {
-		this.searchEmploymentJobId = searchEmploymentJobId;
+	public void setSearchEmploymentJob(ReadOnlyJob searchEmploymentJob) {
+		this.searchEmploymentJob = searchEmploymentJob;
 	}
 
 	public Boolean getUseSearchEmploymentJobId() {
@@ -190,7 +188,8 @@ public class EmploymentBean extends BaseBean<ReadOnlyEmployment> {
 
 	@Override
 	protected List<? extends ReadOnlyEmployment> searchEntities() {
-		return employmentBean.findEmployments(searchEmploymentId, searchEmploymentUserId, searchEmploymentJobId,
+		return employmentBean.findEmployments(searchEmploymentId, searchEmploymentUser != null ? searchEmploymentUser.getId() : null,
+				searchEmploymentJob != null ? searchEmploymentJob.getId() : null,
 				!searchEmploymentWorkShifts.isEmpty() ? new HashSet<>(searchEmploymentWorkShifts) : null, useSearchEmploymentId,
 				useSearchEmploymentUserId, useSearchEmploymentJobId, useSearchEmploymentWorkShifts, searchEmploymentIdComparator,
 				searchEmploymentUserIdComparator, searchEmploymentJobIdComparator, searchEmploymentWorkShiftsComparator);
@@ -205,29 +204,29 @@ public class EmploymentBean extends BaseBean<ReadOnlyEmployment> {
 	 * -------------------- Create Employment Dialog Start --------------------
 	 */
 
-	@ValidEntityId(entityClass = ReadOnlyUser.class)
-	private Long createEmploymentDialogUserId;
+	@NotNull
+	private ReadOnlyUser createEmploymentDialogUser;
 
-	@ValidEntityId(entityClass = ReadOnlyJob.class)
-	private Long createEmploymentDialogJobId;
+	@NotNull
+	private ReadOnlyJob createEmploymentDialogJob;
 
 	@NotNull
 	private List<@TypeNotNull EnumWorkShift> createEmploymentDialogWorkShifts = new ArrayList<>();
 
-	public Long getCreateEmploymentDialogUserId() {
-		return this.createEmploymentDialogUserId;
+	public ReadOnlyUser getCreateEmploymentDialogUser() {
+		return this.createEmploymentDialogUser;
 	}
 
-	public void setCreateEmploymentDialogUserId(Long createEmploymentDialogUserId) {
-		this.createEmploymentDialogUserId = createEmploymentDialogUserId;
+	public void setCreateEmploymentDialogUser(ReadOnlyUser createEmploymentDialogUser) {
+		this.createEmploymentDialogUser = createEmploymentDialogUser;
 	}
 
-	public Long getCreateEmploymentDialogJobId() {
-		return this.createEmploymentDialogJobId;
+	public ReadOnlyJob getCreateEmploymentDialogJob() {
+		return this.createEmploymentDialogJob;
 	}
 
-	public void setCreateEmploymentDialogJobId(Long createEmploymentDialogJobId) {
-		this.createEmploymentDialogJobId = createEmploymentDialogJobId;
+	public void setCreateEmploymentDialogJob(ReadOnlyJob createEmploymentDialogJob) {
+		this.createEmploymentDialogJob = createEmploymentDialogJob;
 	}
 
 	public List<EnumWorkShift> getCreateEmploymentDialogWorkShifts() {
@@ -238,32 +237,21 @@ public class EmploymentBean extends BaseBean<ReadOnlyEmployment> {
 		this.createEmploymentDialogWorkShifts = createEmploymentDialogWorkShifts;
 	}
 
-	public String getCreateEmploymentDialogUserFromId() {
-		ReadOnlyUser user = createEmploymentDialogUserId != null
-				? entityBean.exists(createEmploymentDialogUserId, ReadOnlyUser.class) ? userBean.findById(createEmploymentDialogUserId) : null : null;
-		return WebUtils.getAsString(user, UserConverter.CONVERTER_ID);
-	}
-
-	public String getCreateEmploymentDialogJobFromId() {
-		ReadOnlyJob job = createEmploymentDialogJobId != null
-				? entityBean.exists(createEmploymentDialogJobId, ReadOnlyJob.class) ? jobBean.findById(createEmploymentDialogJobId) : null : null;
-		return WebUtils.getAsString(job, JobConverter.CONVERTER_ID);
-	}
-
 	public void initCreateEmploymentDialog() {
-		createEmploymentDialogUserId = null;
-		createEmploymentDialogJobId = null;
+		createEmploymentDialogUser = null;
+		createEmploymentDialogJob = null;
 		createEmploymentDialogWorkShifts.clear();
 	}
 
 	public void createEmployment() {
 		WebUtils.executeTask((params) -> {
 			params.add(WebUtils.getAsString(
-					employmentBean.findById(employmentBean.createEmployment(createEmploymentDialogUserId, createEmploymentDialogJobId,
+					employmentBean.findById(employmentBean.createEmployment(createEmploymentDialogUser.getId(), createEmploymentDialogJob.getId(),
 							createEmploymentDialogWorkShifts.isEmpty() ? null : new HashSet<>(createEmploymentDialogWorkShifts))),
 					EmploymentConverter.CONVERTER_ID));
 			return true;
-		}, "lucas.application.employmentScreen.createEmployment.message", Utils.asList(getCreateEmploymentDialogUserFromId()));
+		}, "lucas.application.employmentScreen.createEmployment.message",
+				Utils.asList(WebUtils.getAsString(createEmploymentDialogUser, UserConverter.CONVERTER_ID)));
 	}
 
 	/*

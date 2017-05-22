@@ -1,10 +1,9 @@
 package florian_haas.lucas.business;
 
-import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
 
 import javax.ejb.Local;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.persistence.*;
@@ -24,8 +23,6 @@ public interface UserBeanLocal {
 	public List<? extends ReadOnlyUser> findAll();
 
 	public ReadOnlyUser findById(@ValidEntityId(entityClass = ReadOnlyUser.class) Long userId);
-
-	public ReadOnlyUserCard findUserCardById(@ValidEntityId(entityClass = ReadOnlyUserCard.class) Long userCardId);
 
 	public List<? extends ReadOnlyUser> findUsers(@NotNull Long userId, String forename, String surname,
 			@NotNull List<@TypeNotNull EnumSchoolClass> schoolClasses, @NotNull EnumUserType userType,
@@ -49,18 +46,6 @@ public interface UserBeanLocal {
 
 	public Boolean removeRank(@ValidEntityId(entityClass = ReadOnlyUser.class) Long userId, @NotNull @NotBlankString String rank);
 
-	public Set<? extends ReadOnlyUserCard> getUserCards(@ValidEntityId(entityClass = ReadOnlyUser.class) Long userId);
-
-	public Long addUserCard(@ValidEntityId(entityClass = ReadOnlyUser.class) Long userId);
-
-	public Boolean removeUserCard(@ValidEntityId(entityClass = ReadOnlyUserCard.class) Long userCardId);
-
-	public Boolean blockUserCard(@ValidEntityId(entityClass = ReadOnlyUserCard.class) Long userCardId);
-
-	public Boolean unblockUserCard(@ValidEntityId(entityClass = ReadOnlyUserCard.class) Long userCardId);
-
-	public Boolean setValidDate(@ValidEntityId(entityClass = ReadOnlyUserCard.class) Long userCardId, LocalDate validDate);
-
 	public Boolean setImage(@ValidEntityId(entityClass = ReadOnlyUser.class) Long userId, byte[] image);
 
 	public byte[] getImage(@ValidEntityId(entityClass = ReadOnlyUser.class) Long userId);
@@ -73,5 +58,7 @@ public interface UserBeanLocal {
 
 	public Boolean setThirdJobRequest(@ValidEntityId(entityClass = ReadOnlyUser.class) Long userId,
 			@ValidEntityId(entityClass = ReadOnlyJob.class, nullable = true) Long jobId);
+
+	public List<? extends ReadOnlyUser> getUsersByData(@NotNull String data, @NotNull @Min(1) Integer resultsCount);
 
 }

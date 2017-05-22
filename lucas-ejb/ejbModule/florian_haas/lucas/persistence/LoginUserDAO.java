@@ -3,7 +3,6 @@ package florian_haas.lucas.persistence;
 import java.util.List;
 
 import florian_haas.lucas.model.LoginUser;
-import florian_haas.lucas.persistence.EnumQueryComparator;
 
 public interface LoginUserDAO extends DAO<LoginUser> {
 
@@ -16,4 +15,8 @@ public interface LoginUserDAO extends DAO<LoginUser> {
 	public Boolean isUsernameUnique(String username);
 
 	public Boolean isReferencedUserUnique(Long referencedUserId);
+
+	public List<LoginUser> getLoginUsersFromData(String data, Integer resultsCount);
+
+	public Boolean isBoundLoginUser(Long loginUserId);
 }

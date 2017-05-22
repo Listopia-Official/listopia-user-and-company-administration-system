@@ -22,19 +22,19 @@ public interface JobBeanLocal {
 
 	public List<? extends ReadOnlyJob> findAll();
 
-	public List<? extends ReadOnlyJob> findJobs(@NotNull Long jobId, @NotNull String name, String description, @NotNull Long companyId,
-			EnumSalaryClass salaryClass, @NotNull Integer requiredEmployeesCount, @NotNull EnumEmployeePosition position, @NotNull Long employmentId,
+	public List<? extends ReadOnlyJob> findJobs(@NotNull Long jobId, @NotNull String name, String description, Long companyId,
+			EnumSalaryClass salaryClass, @NotNull Integer requiredEmployeesCount, @NotNull EnumEmployeePosition position, Long employmentId,
 			@NotNull Integer employmentsCount, @NotNull Boolean useJobId, @NotNull Boolean useName, @NotNull Boolean useDescription,
 			@NotNull Boolean useCompanyId, @NotNull Boolean useSalaryClass, @NotNull Boolean useRequiredEmployeesCount,
 			@NotNull Boolean useEmployeePosition, @NotNull Boolean useEmploymentId, @NotNull Boolean useEmploymentsCount,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator jobIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator nameComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator descriptionComparator,
-			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator companyIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator companyIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator salaryClassComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator requiredEmployeesCountComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator positionComparator,
-			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator employmentIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator employmentIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator employmentsCountComparator);
 
 	public Boolean setName(@ValidEntityId(entityClass = ReadOnlyJob.class) Long jobId, @NotBlank String name);
@@ -49,5 +49,7 @@ public interface JobBeanLocal {
 	public Boolean setEmployeePosition(@ValidEntityId(entityClass = ReadOnlyJob.class) Long jobId, @NotNull EnumEmployeePosition employeePosition);
 
 	public Boolean deleteJob(@ValidEntityId(entityClass = ReadOnlyJob.class) Long jobId);
+
+	public List<? extends ReadOnlyJob> getJobsByData(@NotNull String data, @NotNull @Min(1) Integer resultsCount);
 
 }

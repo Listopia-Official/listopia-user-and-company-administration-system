@@ -27,6 +27,10 @@ public class AttendanceBean implements AttendanceBeanLocal {
 	@EJB
 	private UserBeanLocal userBean;
 
+	@Inject
+	@JPADAO
+	private IdCardDAO idCardDao;
+
 	@EJB
 	private GlobalDataBeanLocal globalData;
 
@@ -35,10 +39,11 @@ public class AttendanceBean implements AttendanceBeanLocal {
 
 	@Override
 	@RequiresPermissions(ATTENDANCE_SCAN)
-	public Boolean scan(Long userCardId) {
-		ReadOnlyUserCard userCard = userBean.findUserCardById(userCardId);
-		if (userCard.getBlocked() || (userCard.getValidDay() != null && !userCard.getValidDay().equals(LocalDate.now()))) {
-			ReadOnlyUser user = userCard.getUser();
+	public Boolean scan(Long idCardId) {
+		ReadOnlyIdCard idCard = idCardDao.findById(idCardId);
+		if (idCard.getOwner().getOwnerType() == EnumAccountOwnerType.USER && idCard.getBlocked()
+				|| (idCard.getValidDay() != null && !idCard.getValidDay().equals(LocalDate.now()))) {
+			ReadOnlyUser user = (ReadOnlyUser) idCard.getOwner();
 			if (user.getUserType() != EnumUserType.TEACHER) {
 				ReadOnlyAttendancedata attendancedata = user.getAttendancedata();
 				if (attendancedata != null) {
@@ -114,17 +119,6 @@ public class AttendanceBean implements AttendanceBeanLocal {
 	@RequiresPermissions(ATTENDANCE_FIND_BY_ID)
 	public Attendancedata findById(Long id) {
 		return attendanceDao.findById(id);
-	}
-
-	@Override
-	public ReadOnlyAttendancedata findByUserId(Long userId) {
-		return userBean.findById(userId).getAttendancedata();
-	}
-
-	@Override
-	@RequiresPermissions(ATTENDANCE_FIND_BY_USER_CARD_ID)
-	public ReadOnlyAttendancedata findByUserCardId(Long userCardId) {
-		return userBean.findUserCardById(userCardId).getUser().getAttendancedata();
 	}
 
 	@Override

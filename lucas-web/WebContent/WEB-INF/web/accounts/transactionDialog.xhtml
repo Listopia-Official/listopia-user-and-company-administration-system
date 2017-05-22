@@ -13,6 +13,8 @@
 	<ui:define name="dialogContent">
 		<p:importConstants
 			type="florian_haas.lucas.web.converter.NullConverterNoText" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.AccountConverter" />
 		<div class="ui-fluid">
 			<p:panelGrid>
 				<p:row>
@@ -39,29 +41,21 @@
 						<p:outputLabel
 							value="#{msg['lucas.application.accountScreen.transactionDialog.toInputNumber.name']}"
 							title="#{msg['lucas.application.accountScreen.transactionDialog.toInputNumber.tooltip']}"
-							for="amountInputNumber" />
+							for="toAutocomplete" />
 					</p:column>
 					<p:column>
-						<p:inputNumber id="toInputNumber"
-							value="#{accountBean.transactionDialogToId}"
-							title="#{msg['lucas.application.accountScreen.transactionDialog.toInputNumber.tooltip']}"
-							minValue="0" emptyValue="empty" decimalPlaces="0">
-							<p:ajax event="keyup" delay="250" process="@this"
-								update="transactionDialogForm:toIdOutputInputText toInputNumberMessage @this" />
-						</p:inputNumber>
+						<ui:include
+							src="/WEB-INF/web/autocomplete/selectAccountAutocomplete.xhtml">
+							<ui:param name="id" value="toAutocomplete" />
+							<ui:param name="title"
+								value="#{msg['lucas.application.accountScreen.transactionDialog.toInputNumber.tooltip']}" />
+							<ui:param name="value"
+								value="#{accountBean.transactionDialogToAccount}" />
+						</ui:include>
 					</p:column>
 					<p:column>
-						<p:message for="toInputNumber" id="toInputNumberMessage" />
+						<p:message for="toAutocomplete" id="toInputNumberMessage" />
 					</p:column>
-				</p:row>
-				<p:row>
-					<p:column />
-					<p:column>
-						<p:inputText title="#{accountBean.accountOwnerFromCurrentId}"
-							placeholder="#{accountBean.accountOwnerFromCurrentId}"
-							id="toIdOutputInputText" readonly="true" />
-					</p:column>
-					<p:column />
 				</p:row>
 				<p:row>
 					<p:column>
@@ -73,7 +67,8 @@
 					<p:column>
 						<p:inputText id="commentInputText"
 							value="#{accountBean.transactionDialogComment}"
-							converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}" maxlength="64"
+							converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}"
+							maxlength="64"
 							title="#{msg['lucas.application.accountScreen.transactionDialog.commentInputText.tooltip']}" />
 					</p:column>
 					<p:column>
@@ -90,7 +85,7 @@
 				<p:row>
 					<p:column>
 						<p:commandButton
-							process="@this amountInputNumber toInputNumber commentInputText"
+							process="@this amountInputNumber toAutocomplete commentInputText"
 							update="@form dataAccorditionPanel:accountSearchResultsForm:accountSearchResultsTable"
 							action="#{accountBean.transaction}"
 							value="#{msg['lucas.application.accountScreen.transactionDialog.transactionButton.name']}"
