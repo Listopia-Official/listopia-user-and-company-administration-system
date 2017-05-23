@@ -23,6 +23,8 @@ public interface AccountBeanLocal {
 	public Long transaction(@ValidEntityId(entityClass = ReadOnlyAccount.class) Long from,
 			@ValidEntityId(entityClass = ReadOnlyAccount.class) Long to, @ValidTransactionAmount BigDecimal amount, @ShortComment String comment);
 
+	public void undoTransaction(@ValidEntityId(entityClass = ReadOnlyTransactionLog.class) Long transactionLogId, @ShortComment String comment);
+
 	public Boolean blockAccount(@ValidEntityId(entityClass = ReadOnlyAccount.class) Long id);
 
 	public Boolean unblockAccount(@ValidEntityId(entityClass = ReadOnlyAccount.class) Long id);

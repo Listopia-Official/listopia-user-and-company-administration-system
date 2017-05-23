@@ -21,12 +21,22 @@
 			type="florian_haas.lucas.web.converter.LocalDateTimeConverter" />
 		<p:importConstants
 			type="florian_haas.lucas.web.converter.LoginUserConverter$ShortLoginUserConverter" />
-			<p:importConstants
+		<p:importConstants
 			type="florian_haas.lucas.web.converter.LoginUserConverter" />
 	</ui:define>
 	<ui:define name="buttonArea">
 		<p:toolbarGroup align="left">
-
+			<p:commandButton
+				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_UNDO_TRANSACTION)}"
+				value="#{msg['lucas.application.transactionLogScreen.undoTransaction.name']}"
+				title="#{msg['lucas.application.transactionLogScreen.undoTransaction.tooltip']}"
+				icon="fa fa-undo" process="@this"
+				action="#{transactionLogBean.undoTransaction}"
+				disabled="#{transactionLogBean.selectedEntities.size() &lt;= 0}">
+				<p:confirm
+					header="#{msg['lucas.application.transactionLogScreen.undoTransactionConfirmDialog.header']}"
+					message="#{msg['lucas.application.transactionLogScreen.undoTransactionConfirmDialog.message']}" />
+			</p:commandButton>
 		</p:toolbarGroup>
 	</ui:define>
 	<ui:define name="searchCriteria">

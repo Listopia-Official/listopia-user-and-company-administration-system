@@ -253,4 +253,17 @@ public class AccountBean implements AccountBeanLocal {
 	public List<? extends ReadOnlyAccountOwner> getAccountOwnersByData(String data, Integer resultsCount) {
 		return accountOwnerDao.getAccountOwnersFromData(data, resultsCount);
 	}
+
+	@Override
+	@RequiresPermissions(ACCOUNT_UNDO_TRANSACTION)
+	public void undoTransaction(Long transactionLogId, String comment) {
+		TransactionLog log = transactionLogDao.findById(transactionLogId);
+		Account relatedAccount = log.getRelatedAccount();
+		if (relatedAccount == null) {
+			transaction(log.getAction() == EnumAccountAction.CREDIT ? log.getAmount().negate() : log.getAmount(), log.getAccount().getId(), null,
+					comment);
+		} else {
+			transaction(log.getAmount().abs(), relatedAccount.getId(), log.getAccount().getId(), comment);
+		}
+	}
 }

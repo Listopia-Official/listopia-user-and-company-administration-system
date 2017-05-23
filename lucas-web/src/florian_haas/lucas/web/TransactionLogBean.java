@@ -15,6 +15,8 @@ import florian_haas.lucas.persistence.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.validation.*;
+import florian_haas.lucas.web.converter.AccountConverter;
+import florian_haas.lucas.web.util.WebUtils;
 
 @Named
 @ViewScoped
@@ -435,6 +437,17 @@ public class TransactionLogBean extends BaseBean<ReadOnlyTransactionLog> {
 
 	public String getCurrencySymbol() {
 		return globalDataBean.getCurrencySymbol();
+	}
+
+	public void undoTransaction() {
+		for (ReadOnlyTransactionLog log : selectedEntities) {
+			WebUtils.executeTask(params -> {
+				accountBean.undoTransaction(log.getId(),
+						WebUtils.getTranslatedMessage("lucas.application.transactionLogScreen.undoTransaction.comment", log.getId()));
+				return true;
+			}, "lucas.application.transactionLogScreen.undoTransaction.message",
+					Utils.asList(log.getId(), WebUtils.getAsString(log.getAccount(), AccountConverter.CONVERTER_ID)));
+		}
 	}
 
 }
