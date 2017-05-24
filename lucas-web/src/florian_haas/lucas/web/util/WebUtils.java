@@ -271,8 +271,10 @@ public class WebUtils {
 		catch (LucasException lucasException) {
 			Set<ConstraintViolation<?>> violations = Utils.extractConstraintViolations(lucasException);
 			if (violations.isEmpty()) {
-				WebUtils.addErrorMessage(exceptionMessageGetter != null ? exceptionMessageGetter.apply(lucasException, argParams)
-						: getTranslatedMessage(failMessageKey, params) + lucasException.getLocalizedMessage(), messageComponentId);
+				String message = exceptionMessageGetter != null ? exceptionMessageGetter.apply(lucasException, argParams) : null;
+				WebUtils.addErrorMessage(
+						message != null ? message : getTranslatedMessage(failMessageKey, params) + lucasException.getLocalizedMessage(),
+						messageComponentId);
 			} else {
 				handleConstraintViolations(Utils.extractConstraintViolations(lucasException), failMessageKey, messageComponentId, params);
 			}
