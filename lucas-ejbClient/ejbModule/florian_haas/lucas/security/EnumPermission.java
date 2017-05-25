@@ -222,6 +222,7 @@ public enum EnumPermission {
 	JOB_EXPORT(JOB, "export"),
 	JOB_FIND_BY_DATA(JOB, "findByData"),
 
+	ID_CARD_ALL(ID_CARD, "*"),
 	ID_CARD_FIND_BY_ID(ID_CARD, "findById"),
 	ID_CARD_GET_FROM_OWNER(ID_CARD, "getFromOwner"),
 	ID_CARD_ADD(ID_CARD, "add"),
