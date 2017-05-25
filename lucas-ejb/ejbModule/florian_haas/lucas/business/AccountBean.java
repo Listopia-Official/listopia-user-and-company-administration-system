@@ -4,21 +4,18 @@ import static florian_haas.lucas.security.EnumPermission.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.ejb.*;
 import javax.inject.Inject;
-import javax.validation.*;
+import javax.validation.Validator;
 import javax.validation.executable.*;
-
-import org.apache.shiro.authz.AuthorizationException;
 
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.persistence.*;
 import florian_haas.lucas.security.*;
 import florian_haas.lucas.util.Utils;
-import florian_haas.lucas.validation.UnblockedAccountRequiredValidationGroup;
 
 @Stateless
 @ValidateOnExecution(type = ExecutableType.IMPLICIT)
@@ -81,23 +78,22 @@ public class AccountBean implements AccountBeanLocal {
 		}
 
 		if (account1.getIsProtected() && !loginBean.getSubject().isPermitted(ACCOUNT_TRANSACTION_FROM_PROTECTED.getPermissionString()))
-			throw new AuthorizationException(
-					loginBean.getSubject().getPrincipal() + " is not permitted to start a transaction from a protected account");
+			throw new LucasException(loginBean.getSubject().getPrincipal() + " is not permitted to start a transaction from a protected account",
+					NO_PERMISSION_FOR_TRANSACTION_FROM_PROTECTED_EXCEPTION_MARKER);
 
 		if (account2 != null && account2.getIsProtected()
 				&& !loginBean.getSubject().isPermitted(ACCOUNT_TRANSACTION_TO_PROTECTED.getPermissionString()))
-			throw new AuthorizationException(
-					loginBean.getSubject().getPrincipal() + " is not permitted to start a transaction to a protected account");
+			throw new LucasException(loginBean.getSubject().getPrincipal() + " is not permitted to start a transaction to a protected account",
+					NO_PERMISSION_FOR_TRANSACTION_TO_PROTECTED_EXCEPTION_MARKER);
 
 		if (Utils.isGreatherThan(amount.abs(), globalData.getTransactionLimit())
 				&& !loginBean.getSubject().isPermitted(ACCOUNT_IGNORE_TRANSACTION_LIMIT.getPermissionString()))
-			throw new AuthorizationException(loginBean.getSubject().getPrincipal() + " is not permitted to ignore transaction limit");
+			throw new LucasException(loginBean.getSubject().getPrincipal() + " is not permitted to ignore transaction limit",
+					NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT);
 
-		Set<ConstraintViolation<Account>> violations = validator.validate(account1, UnblockedAccountRequiredValidationGroup.class);
-		if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
+		if (account1.getBlocked()) throw new LucasException("Account (transaction source) is blocked", FROM_BLOCKED);
 
-		if (account2 != null) violations = validator.validate(account2, UnblockedAccountRequiredValidationGroup.class);
-		if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
+		if (account2 != null && account2.getBlocked()) throw new LucasException("Account (transaction target) is blocked", TO_BLOCKED);
 
 		BigDecimal transactionAmount = amount;
 		EnumAccountActionType type = EnumAccountActionType.BANK;
@@ -110,6 +106,11 @@ public class AccountBean implements AccountBeanLocal {
 		final EnumAccountAction action = Utils.isLessThanZero(transactionAmount) ? EnumAccountAction.DEBIT : EnumAccountAction.CREDIT;
 
 		final BigDecimal prevBankBalance1 = account1.getBankBalance();
+
+		if (action == EnumAccountAction.DEBIT && Utils.isLessThanZero(prevBankBalance1.add(transactionAmount)))
+			throw new LucasException("The transaction amount is greater than the bank balabnce of the account",
+					TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE);
+
 		account1.setBankBalance(account1.getBankBalance().add(transactionAmount));
 
 		transactionAmount = transactionAmount.abs();

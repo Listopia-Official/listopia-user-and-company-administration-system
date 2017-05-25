@@ -445,8 +445,30 @@ public class TransactionLogBean extends BaseBean<ReadOnlyTransactionLog> {
 				accountBean.undoTransaction(log.getId(),
 						WebUtils.getTranslatedMessage("lucas.application.transactionLogScreen.undoTransaction.comment", log.getId()));
 				return true;
-			}, "lucas.application.transactionLogScreen.undoTransaction.message",
-					Utils.asList(log.getId(), WebUtils.getAsString(log.getAccount(), AccountConverter.CONVERTER_ID)));
+			}, "lucas.application.transactionLogScreen.undoTransaction.message", (exception, params) -> {
+				String key = null;
+				switch (exception.getMark()) {
+					case AccountBeanLocal.NO_PERMISSION_FOR_TRANSACTION_FROM_PROTECTED_EXCEPTION_MARKER:
+						key = "lucas.application.transactionLogScreen.undoTransaction.message.fail.fromProtected";
+						break;
+					case AccountBeanLocal.NO_PERMISSION_FOR_TRANSACTION_TO_PROTECTED_EXCEPTION_MARKER:
+						key = "lucas.application.transactionLogScreen.undoTransaction.message.fail.toProtected";
+						break;
+					case AccountBeanLocal.NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT:
+						key = "lucas.application.transactionLogScreen.undoTransaction.message.fail.transactionLimitExceeded";
+						break;
+					case AccountBeanLocal.FROM_BLOCKED:
+						key = "lucas.application.transactionLogScreen.undoTransaction.message.fail.fromBlocked";
+						break;
+					case AccountBeanLocal.TO_BLOCKED:
+						key = "lucas.application.transactionLogScreen.undoTransaction.message.fail.toBlocked";
+						break;
+					case AccountBeanLocal.TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE:
+						key = "lucas.application.transactionLogScreen.undoTransaction.message.fail.amountGreaterThanBankBalance";
+						break;
+				}
+				return key != null ? WebUtils.getTranslatedMessage(key, params.toArray(new Object[params.size()])) : null;
+			}, Utils.asList(log.getId(), WebUtils.getAsString(log.getAccount(), AccountConverter.CONVERTER_ID)));
 		}
 	}
 

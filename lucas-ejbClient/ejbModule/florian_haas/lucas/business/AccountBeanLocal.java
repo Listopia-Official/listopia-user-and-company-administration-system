@@ -14,6 +14,13 @@ import florian_haas.lucas.validation.*;
 @Local
 public interface AccountBeanLocal {
 
+	public static final String NO_PERMISSION_FOR_TRANSACTION_FROM_PROTECTED_EXCEPTION_MARKER = "noTransactionFromProtected";
+	public static final String NO_PERMISSION_FOR_TRANSACTION_TO_PROTECTED_EXCEPTION_MARKER = "noTransactionToProtected";
+	public static final String NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT = "illegalTransactionAmount";
+	public static final String FROM_BLOCKED = "fromIsBlocked";
+	public static final String TO_BLOCKED = "toIsBlocked";
+	public static final String TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE = "transactionAmountGreaterThanBankBalance";
+
 	public Long payIn(@ValidEntityId(entityClass = ReadOnlyAccount.class) Long account, @ValidTransactionAmount BigDecimal amount,
 			@ShortComment String comment);
 
