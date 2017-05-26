@@ -21,14 +21,15 @@ public interface AccountBeanLocal {
 	public static final String TO_BLOCKED = "toIsBlocked";
 	public static final String TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE = "transactionAmountGreaterThanBankBalance";
 
-	public Long payIn(@ValidEntityId(entityClass = ReadOnlyAccount.class) Long account, @ValidTransactionAmount BigDecimal amount,
+	public void payIn(@ValidEntityId(entityClass = ReadOnlyAccount.class) Long account, @ValidTransactionAmount BigDecimal amount,
 			@ShortComment String comment);
 
-	public Long payOut(@ValidEntityId(entityClass = ReadOnlyAccount.class) Long account, @ValidTransactionAmount BigDecimal amount,
+	public Boolean payOut(@ValidEntityId(entityClass = ReadOnlyAccount.class) Long account, @ValidNullableTransactionAmount BigDecimal amount,
 			@ShortComment String comment);
 
-	public Long transaction(@ValidEntityId(entityClass = ReadOnlyAccount.class) Long from,
-			@ValidEntityId(entityClass = ReadOnlyAccount.class) Long to, @ValidTransactionAmount BigDecimal amount, @ShortComment String comment);
+	public Boolean transaction(@ValidEntityId(entityClass = ReadOnlyAccount.class) Long from,
+			@ValidEntityId(entityClass = ReadOnlyAccount.class) Long to, @ValidNullableTransactionAmount BigDecimal amount,
+			@ShortComment String comment);
 
 	public void undoTransaction(@ValidEntityId(entityClass = ReadOnlyTransactionLog.class) Long transactionLogId, @ShortComment String comment);
 

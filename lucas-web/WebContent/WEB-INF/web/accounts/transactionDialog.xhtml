@@ -26,11 +26,21 @@
 					</p:column>
 					<p:column>
 						<p:inputNumber id="amountInputNumber"
+							disabled="#{accountBean.transactionDialogAll}"
 							value="#{accountBean.transactionDialogTransactionAmount}"
 							title="#{msg['lucas.application.accountScreen.transactionDialog.amountInputNumber.tooltip']}"
 							minValue="0" symbol=" #{accountBean.currencySymbol}"
 							maxValue="#{accountBean.transactionLimit}" symbolPosition="post"
 							emptyValue="empty" decimalPlaces="2" />
+					</p:column>
+					<p:column>
+						<p:selectBooleanButton id="allBooleanCheckbox"
+							value="#{accountBean.transactionDialogAll}"
+							onLabel="#{msg['lucas.application.accountScreen.transactionDialog.allBooleanButton.name']}"
+							offLabel="#{msg['lucas.application.accountScreen.transactionDialog.allBooleanButton.name']}"
+							title="#{msg['lucas.application.accountScreen.transactionDialog.allBooleanButton.tooltip']}">
+							<p:ajax process="@this" update="amountInputNumber" />
+						</p:selectBooleanButton>
 					</p:column>
 					<p:column>
 						<p:message for="amountInputNumber" />
@@ -43,7 +53,7 @@
 							title="#{msg['lucas.application.accountScreen.transactionDialog.toInputNumber.tooltip']}"
 							for="toAutocomplete" />
 					</p:column>
-					<p:column>
+					<p:column colspan="2">
 						<ui:include
 							src="/WEB-INF/web/autocomplete/selectAccountAutocomplete.xhtml">
 							<ui:param name="id" value="toAutocomplete" />
@@ -64,7 +74,7 @@
 							title="#{msg['lucas.application.accountScreen.transactionDialog.commentInputText.tooltip']}"
 							for="commentInputText" />
 					</p:column>
-					<p:column>
+					<p:column colspan="2">
 						<p:inputText id="commentInputText"
 							value="#{accountBean.transactionDialogComment}"
 							converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}"
@@ -76,7 +86,7 @@
 					</p:column>
 				</p:row>
 				<p:row>
-					<p:column colspan="2">
+					<p:column colspan="3">
 						<h:outputText
 							value="#{msg['lucas.application.accountScreen.transactionDialog.info']}"
 							style="font-style:italic" />
@@ -92,7 +102,7 @@
 							title="#{msg['lucas.application.accountScreen.transactionDialog.transactionButton.tooltip']}"
 							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('transactionDialog').hide()}" />
 					</p:column>
-					<p:column>
+					<p:column colspan="2">
 						<p:commandButton process="@this"
 							value="#{msg['lucas.application.accountScreen.transactionDialog.cancelButton.name']}"
 							title="#{msg['lucas.application.accountScreen.transactionDialog.cancelButton.tooltip']}"

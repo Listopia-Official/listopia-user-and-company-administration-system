@@ -54,23 +54,23 @@ public class AccountBean implements AccountBeanLocal {
 
 	@Override
 	@RequiresPermissions(ACCOUNT_PAY_IN)
-	public Long payIn(Long id, BigDecimal amount, String comment) {
-		return transaction(amount, id, null, comment);
+	public void payIn(Long id, BigDecimal amount, String comment) {
+		transaction(amount, id, null, comment);
 	}
 
 	@Override
 	@RequiresPermissions(ACCOUNT_PAY_OUT)
-	public Long payOut(Long id, BigDecimal amount, String comment) {
-		return transaction(amount.negate(), id, null, comment);
+	public Boolean payOut(Long id, BigDecimal amount, String comment) {
+		return transaction(amount != null ? amount.negate() : null, id, null, comment);
 	}
 
 	@Override
 	@RequiresPermissions(ACCOUNT_TRANSACTION)
-	public Long transaction(Long from, Long to, BigDecimal amount, String comment) {
+	public Boolean transaction(Long from, Long to, BigDecimal amount, String comment) {
 		return transaction(amount, from, to, comment);
 	}
 
-	private Long transaction(BigDecimal amount, Long account1Id, Long account2Id, String comment) {
+	private Boolean transaction(BigDecimal amount, Long account1Id, Long account2Id, String comment) {
 		Account account1 = accountDao.findById(account1Id);
 		Account account2 = null;
 		if (account2Id != null) {
@@ -86,50 +86,54 @@ public class AccountBean implements AccountBeanLocal {
 			throw new LucasException(loginBean.getSubject().getPrincipal() + " is not permitted to start a transaction to a protected account",
 					NO_PERMISSION_FOR_TRANSACTION_TO_PROTECTED_EXCEPTION_MARKER);
 
-		if (Utils.isGreatherThan(amount.abs(), globalData.getTransactionLimit())
-				&& !loginBean.getSubject().isPermitted(ACCOUNT_IGNORE_TRANSACTION_LIMIT.getPermissionString()))
-			throw new LucasException(loginBean.getSubject().getPrincipal() + " is not permitted to ignore transaction limit",
-					NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT);
+		BigDecimal transactionAmount = amount == null ? account2 == null ? account1.getBankBalance().negate() : account1.getBankBalance() : amount;
 
-		if (account1.getBlocked()) throw new LucasException("Account (transaction source) is blocked", FROM_BLOCKED);
+		if (!Utils.isZero(transactionAmount)) {
+			if (Utils.isGreatherThan(transactionAmount.abs(), globalData.getTransactionLimit())
+					&& !loginBean.getSubject().isPermitted(ACCOUNT_IGNORE_TRANSACTION_LIMIT.getPermissionString()))
+				throw new LucasException(loginBean.getSubject().getPrincipal() + " is not permitted to ignore transaction limit",
+						NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT);
 
-		if (account2 != null && account2.getBlocked()) throw new LucasException("Account (transaction target) is blocked", TO_BLOCKED);
+			if (account1.getBlocked()) throw new LucasException("Account (transaction source) is blocked", FROM_BLOCKED);
 
-		BigDecimal transactionAmount = amount;
-		EnumAccountActionType type = EnumAccountActionType.BANK;
+			if (account2 != null && account2.getBlocked()) throw new LucasException("Account (transaction target) is blocked", TO_BLOCKED);
 
-		if (account2 != null) {
-			type = EnumAccountActionType.TRANSACTION;
-			transactionAmount = transactionAmount.negate();
+			EnumAccountActionType type = EnumAccountActionType.BANK;
+
+			if (account2 != null) {
+				type = EnumAccountActionType.TRANSACTION;
+				transactionAmount = transactionAmount.negate();
+			}
+
+			final EnumAccountAction action = Utils.isLessThanZero(transactionAmount) ? EnumAccountAction.DEBIT : EnumAccountAction.CREDIT;
+
+			final BigDecimal prevBankBalance1 = account1.getBankBalance();
+
+			if (action == EnumAccountAction.DEBIT && Utils.isLessThanZero(prevBankBalance1.add(transactionAmount)))
+				throw new LucasException("The transaction amount is greater than the bank balabnce of the account",
+						TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE);
+
+			account1.setBankBalance(account1.getBankBalance().add(transactionAmount));
+
+			transactionAmount = transactionAmount.abs();
+
+			final LocalDateTime dateTime = LocalDateTime.now();
+			ReadOnlyLoginUser user = loginBean.findLoginUserByUsername(loginBean.getSubject().getPrincipal().toString());
+
+			account1.addTransactionLog(
+					new TransactionLog(account1, dateTime, action, type, account2, transactionAmount, prevBankBalance1, (LoginUser) user, comment));
+
+			if (account2 != null) {
+				final BigDecimal prevBankBalance2 = account2.getBankBalance();
+				account2.setBankBalance(account2.getBankBalance().add(transactionAmount));
+
+				account2.addTransactionLog(new TransactionLog(account2, dateTime, EnumAccountAction.CREDIT, EnumAccountActionType.TRANSACTION,
+						account1, transactionAmount, prevBankBalance2, (LoginUser) user, comment));
+			}
+			accountDao.flush();
+			return Boolean.TRUE;
 		}
-
-		final EnumAccountAction action = Utils.isLessThanZero(transactionAmount) ? EnumAccountAction.DEBIT : EnumAccountAction.CREDIT;
-
-		final BigDecimal prevBankBalance1 = account1.getBankBalance();
-
-		if (action == EnumAccountAction.DEBIT && Utils.isLessThanZero(prevBankBalance1.add(transactionAmount)))
-			throw new LucasException("The transaction amount is greater than the bank balabnce of the account",
-					TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE);
-
-		account1.setBankBalance(account1.getBankBalance().add(transactionAmount));
-
-		transactionAmount = transactionAmount.abs();
-
-		final LocalDateTime dateTime = LocalDateTime.now();
-		ReadOnlyLoginUser user = loginBean.findLoginUserByUsername(loginBean.getSubject().getPrincipal().toString());
-
-		account1.addTransactionLog(
-				new TransactionLog(account1, dateTime, action, type, account2, transactionAmount, prevBankBalance1, (LoginUser) user, comment));
-
-		if (account2 != null) {
-			final BigDecimal prevBankBalance2 = account2.getBankBalance();
-			account2.setBankBalance(account2.getBankBalance().add(transactionAmount));
-
-			account2.addTransactionLog(new TransactionLog(account2, dateTime, EnumAccountAction.CREDIT, EnumAccountActionType.TRANSACTION, account1,
-					transactionAmount, prevBankBalance2, (LoginUser) user, comment));
-		}
-		accountDao.flush();
-		return account1.getId();
+		return Boolean.FALSE;
 	}
 
 	@Override

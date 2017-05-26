@@ -325,6 +325,9 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 	 * -------------------- Pay Out Dialog Start --------------------
 	 */
 
+	@NotNull
+	private Boolean payOutDialogAll = Boolean.FALSE;
+
 	@ValidTransactionAmount
 	private BigDecimal payOutDialogTransactionAmount = BigDecimal.ZERO;
 
@@ -347,7 +350,16 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 		this.payOutDialogComment = payOutDialogComment;
 	}
 
+	public Boolean getPayOutDialogAll() {
+		return this.payOutDialogAll;
+	}
+
+	public void setPayOutDialogAll(Boolean payOutDialogAll) {
+		this.payOutDialogAll = payOutDialogAll;
+	}
+
 	public void resetPayOutDialog() {
+		payOutDialogAll = Boolean.FALSE;
 		payOutDialogTransactionAmount = BigDecimal.ZERO;
 		payOutDialogComment = null;
 	}
@@ -355,10 +367,10 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 	public void payOut() {
 		for (ReadOnlyAccount account : selectedEntities) {
 			WebUtils.executeTask(params -> {
-				accountBean.payOut(account.getId(), payOutDialogTransactionAmount, payOutDialogComment);
-				params.add(WebUtils.getCurrencyAsString(payOutDialogTransactionAmount));
+				params.add(WebUtils.getCurrencyAsString(payOutDialogAll ? account.getBankBalance() : payOutDialogTransactionAmount));
 				params.add(payOutDialogComment != null ? payOutDialogComment : "");
-				return true;
+				params.add(getCurrencySymbol());
+				return accountBean.payOut(account.getId(), payOutDialogAll ? null : payOutDialogTransactionAmount, payOutDialogComment);
 			}, "lucas.application.accountScreen.payOut.message", (exception, params) -> {
 				String key = null;
 				switch (exception.getMark()) {
@@ -390,6 +402,9 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 	/*
 	 * -------------------- Transaction Dialog Start --------------------
 	 */
+
+	@NotNull
+	private Boolean transactionDialogAll = Boolean.FALSE;
 
 	@ValidTransactionAmount
 	private BigDecimal transactionDialogTransactionAmount = BigDecimal.ZERO;
@@ -424,20 +439,29 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 		this.transactionDialogToAccount = transactionDialogToAccount;
 	}
 
+	public Boolean getTransactionDialogAll() {
+		return this.transactionDialogAll;
+	}
+
+	public void setTransactionDialogAll(Boolean transactionDialogAll) {
+		this.transactionDialogAll = transactionDialogAll;
+	}
+
 	public void resetTransactionDialog() {
 		transactionDialogTransactionAmount = BigDecimal.ZERO;
 		transactionDialogComment = null;
 		transactionDialogToAccount = null;
+		transactionDialogAll = Boolean.FALSE;
 	}
 
 	public void transaction() {
 		for (ReadOnlyAccount account : selectedEntities) {
 			WebUtils.executeTask(params -> {
-				accountBean.transaction(account.getId(), transactionDialogToAccount.getId(), transactionDialogTransactionAmount,
-						transactionDialogComment);
-				params.add(WebUtils.getCurrencyAsString(transactionDialogTransactionAmount));
+				params.add(WebUtils.getCurrencyAsString(transactionDialogAll ? account.getBankBalance() : transactionDialogTransactionAmount));
 				params.add(transactionDialogComment != null ? transactionDialogComment : "");
-				return true;
+				params.add(getCurrencySymbol());
+				return accountBean.transaction(account.getId(), transactionDialogToAccount.getId(),
+						transactionDialogAll ? null : transactionDialogTransactionAmount, transactionDialogComment);
 			}, "lucas.application.accountScreen.transaction.message", (exception, params) -> {
 				String key = null;
 				switch (exception.getMark()) {

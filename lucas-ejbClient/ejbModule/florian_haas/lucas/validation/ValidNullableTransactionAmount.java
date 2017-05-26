@@ -6,16 +6,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.*;
 
 import javax.validation.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.DecimalMin;
 
 @Target({
 		FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, CONSTRUCTOR })
 @Retention(RUNTIME)
 @Constraint(validatedBy = {})
 @Documented
-@ValidNullableTransactionAmount
-@NotNull
-public @interface ValidTransactionAmount {
+@DecimalMin(value = "0.0", inclusive = false)
+public @interface ValidNullableTransactionAmount {
 
 	String message() default "Invalid transaction amount";
 
