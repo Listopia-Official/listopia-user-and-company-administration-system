@@ -454,16 +454,16 @@ public class TransactionLogBean extends BaseBean<ReadOnlyTransactionLog> {
 					case AccountBeanLocal.NO_PERMISSION_FOR_TRANSACTION_TO_PROTECTED_EXCEPTION_MARKER:
 						key = "lucas.application.transactionLogScreen.undoTransaction.message.fail.toProtected";
 						break;
-					case AccountBeanLocal.NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT:
+					case AccountBeanLocal.NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT_EXCEPTION_MARKER:
 						key = "lucas.application.transactionLogScreen.undoTransaction.message.fail.transactionLimitExceeded";
 						break;
-					case AccountBeanLocal.FROM_BLOCKED:
+					case AccountBeanLocal.FROM_BLOCKED_EXCEPTION_MARKER:
 						key = "lucas.application.transactionLogScreen.undoTransaction.message.fail.fromBlocked";
 						break;
-					case AccountBeanLocal.TO_BLOCKED:
+					case AccountBeanLocal.TO_BLOCKED_EXCEPTION_MARKER:
 						key = "lucas.application.transactionLogScreen.undoTransaction.message.fail.toBlocked";
 						break;
-					case AccountBeanLocal.TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE:
+					case AccountBeanLocal.TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE_EXCEPTION_MARKER:
 						key = "lucas.application.transactionLogScreen.undoTransaction.message.fail.amountGreaterThanBankBalance";
 						break;
 				}

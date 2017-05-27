@@ -303,11 +303,11 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 					case AccountBeanLocal.NO_PERMISSION_FOR_TRANSACTION_TO_PROTECTED_EXCEPTION_MARKER:
 						key = "lucas.application.accountScreen.payIn.message.fail.protected";
 						break;
-					case AccountBeanLocal.NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT:
+					case AccountBeanLocal.NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT_EXCEPTION_MARKER:
 						key = "lucas.application.accountScreen.payIn.message.fail.transactionLimitExceeded";
 						break;
-					case AccountBeanLocal.FROM_BLOCKED:
-					case AccountBeanLocal.TO_BLOCKED:
+					case AccountBeanLocal.FROM_BLOCKED_EXCEPTION_MARKER:
+					case AccountBeanLocal.TO_BLOCKED_EXCEPTION_MARKER:
 						key = "lucas.application.accountScreen.payIn.message.fail.blocked";
 						break;
 				}
@@ -378,14 +378,14 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 					case AccountBeanLocal.NO_PERMISSION_FOR_TRANSACTION_TO_PROTECTED_EXCEPTION_MARKER:
 						key = "lucas.application.accountScreen.payOut.message.fail.protected";
 						break;
-					case AccountBeanLocal.NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT:
+					case AccountBeanLocal.NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT_EXCEPTION_MARKER:
 						key = "lucas.application.accountScreen.payOut.message.fail.transactionLimitExceeded";
 						break;
-					case AccountBeanLocal.FROM_BLOCKED:
-					case AccountBeanLocal.TO_BLOCKED:
+					case AccountBeanLocal.FROM_BLOCKED_EXCEPTION_MARKER:
+					case AccountBeanLocal.TO_BLOCKED_EXCEPTION_MARKER:
 						key = "lucas.application.accountScreen.payOut.message.fail.blocked";
 						break;
-					case AccountBeanLocal.TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE:
+					case AccountBeanLocal.TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE_EXCEPTION_MARKER:
 						key = "lucas.application.accountScreen.payOut.message.fail.amountGreaterThanBankBalance";
 						break;
 				}
@@ -471,16 +471,16 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 					case AccountBeanLocal.NO_PERMISSION_FOR_TRANSACTION_TO_PROTECTED_EXCEPTION_MARKER:
 						key = "lucas.application.accountScreen.transaction.message.fail.toProtected";
 						break;
-					case AccountBeanLocal.NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT:
+					case AccountBeanLocal.NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT_EXCEPTION_MARKER:
 						key = "lucas.application.accountScreen.transaction.message.fail.transactionLimitExceeded";
 						break;
-					case AccountBeanLocal.FROM_BLOCKED:
+					case AccountBeanLocal.FROM_BLOCKED_EXCEPTION_MARKER:
 						key = "lucas.application.accountScreen.transaction.message.fail.fromBlocked";
 						break;
-					case AccountBeanLocal.TO_BLOCKED:
+					case AccountBeanLocal.TO_BLOCKED_EXCEPTION_MARKER:
 						key = "lucas.application.accountScreen.transaction.message.fail.toBlocked";
 						break;
-					case AccountBeanLocal.TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE:
+					case AccountBeanLocal.TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE_EXCEPTION_MARKER:
 						key = "lucas.application.accountScreen.transaction.message.fail.amountGreaterThanBankBalance";
 						break;
 				}

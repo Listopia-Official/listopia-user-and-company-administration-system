@@ -92,11 +92,11 @@ public class AccountBean implements AccountBeanLocal {
 			if (Utils.isGreatherThan(transactionAmount.abs(), globalData.getTransactionLimit())
 					&& !loginBean.getSubject().isPermitted(ACCOUNT_IGNORE_TRANSACTION_LIMIT.getPermissionString()))
 				throw new LucasException(loginBean.getSubject().getPrincipal() + " is not permitted to ignore transaction limit",
-						NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT);
+						NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT_EXCEPTION_MARKER);
 
-			if (account1.getBlocked()) throw new LucasException("Account (transaction source) is blocked", FROM_BLOCKED);
+			if (account1.getBlocked()) throw new LucasException("Account (transaction source) is blocked", FROM_BLOCKED_EXCEPTION_MARKER);
 
-			if (account2 != null && account2.getBlocked()) throw new LucasException("Account (transaction target) is blocked", TO_BLOCKED);
+			if (account2 != null && account2.getBlocked()) throw new LucasException("Account (transaction target) is blocked", TO_BLOCKED_EXCEPTION_MARKER);
 
 			EnumAccountActionType type = EnumAccountActionType.BANK;
 
@@ -111,7 +111,7 @@ public class AccountBean implements AccountBeanLocal {
 
 			if (action == EnumAccountAction.DEBIT && Utils.isLessThanZero(prevBankBalance1.add(transactionAmount)))
 				throw new LucasException("The transaction amount is greater than the bank balabnce of the account",
-						TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE);
+						TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE_EXCEPTION_MARKER);
 
 			account1.setBankBalance(account1.getBankBalance().add(transactionAmount));
 
