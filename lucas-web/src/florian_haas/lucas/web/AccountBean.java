@@ -483,6 +483,9 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 					case AccountBeanLocal.TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE_EXCEPTION_MARKER:
 						key = "lucas.application.accountScreen.transaction.message.fail.amountGreaterThanBankBalance";
 						break;
+					case AccountBeanLocal.SAME_ACCOUNT_AS_SOURCE_AND_TARGET_EXCEPTION_MARKER:
+						key = "lucas.application.accountScreen.transaction.message.fail.sameAccountAsSourceAndTarget";
+						break;
 				}
 				return key != null ? WebUtils.getTranslatedMessage(key, params.toArray(new Object[params.size()])) : null;
 			}, Utils.asList(WebUtils.getAsString(account, AccountConverter.CONVERTER_ID),

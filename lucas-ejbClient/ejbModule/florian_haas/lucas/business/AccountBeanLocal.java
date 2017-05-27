@@ -20,6 +20,7 @@ public interface AccountBeanLocal {
 	public static final String FROM_BLOCKED_EXCEPTION_MARKER = "fromIsBlocked";
 	public static final String TO_BLOCKED_EXCEPTION_MARKER = "toIsBlocked";
 	public static final String TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE_EXCEPTION_MARKER = "transactionAmountGreaterThanBankBalance";
+	public static final String SAME_ACCOUNT_AS_SOURCE_AND_TARGET_EXCEPTION_MARKER = "sameAccountAsSourceAndTarget";
 
 	public void payIn(@ValidEntityId(entityClass = ReadOnlyAccount.class) Long account, @ValidTransactionAmount BigDecimal amount,
 			@ShortComment String comment);

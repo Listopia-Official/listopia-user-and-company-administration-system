@@ -96,7 +96,11 @@ public class AccountBean implements AccountBeanLocal {
 
 			if (account1.getBlocked()) throw new LucasException("Account (transaction source) is blocked", FROM_BLOCKED_EXCEPTION_MARKER);
 
-			if (account2 != null && account2.getBlocked()) throw new LucasException("Account (transaction target) is blocked", TO_BLOCKED_EXCEPTION_MARKER);
+			if (account2 != null && account2.getBlocked())
+				throw new LucasException("Account (transaction target) is blocked", TO_BLOCKED_EXCEPTION_MARKER);
+
+			if (account1 != null && account2 != null && account1.equals(account2))
+				throw new LucasException("The source and the target account are equal", SAME_ACCOUNT_AS_SOURCE_AND_TARGET_EXCEPTION_MARKER);
 
 			EnumAccountActionType type = EnumAccountActionType.BANK;
 
