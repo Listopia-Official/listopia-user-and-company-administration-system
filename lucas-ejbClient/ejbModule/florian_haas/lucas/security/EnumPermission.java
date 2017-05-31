@@ -218,6 +218,7 @@ public enum EnumPermission {
 	ROOM_PRINT(ROOM, "print"),
 	ROOM_EXPORT(ROOM, "export"),
 	ROOM_FIND_ROOM_SECTION_BY_DATA(ROOM, "findRoomSectionByData"),
+	ROOM_REMOVE(ROOM, "remove"),
 
 	JOB_ALL(JOB, "*"),
 	JOB_CREATE(JOB, "create"),

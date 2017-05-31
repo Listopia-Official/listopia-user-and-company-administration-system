@@ -37,4 +37,6 @@ public interface RoomBeanLocal {
 
 	public List<? extends ReadOnlyRoomSection> getRoomSectionsByData(@NotNull String data, @NotNull @Min(1) Integer resultsCount);
 
+	public Boolean removeRoom(@ValidEntityId(entityClass = ReadOnlyRoom.class) Long roomId);
+
 }

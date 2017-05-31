@@ -47,13 +47,17 @@
 					update="sectionManagerDialogForm" />
 				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 			</ui:fragment>
-			<p:commandButton resetValues="true" disabled="true"
+			<p:commandButton
+				disabled="#{roomBean.selectedEntities.size() &lt;=0}"
+				action="#{roomBean.removeRooms}"
 				value="#{msg['lucas.application.roomScreen.removeRoomButton.name']}"
 				title="#{msg['lucas.application.roomScreen.removeRoomButton.tooltip']}"
-				icon="fa fa-remove" />
-			<ui:remove>oncomplete="PF('createRoomDialog').show()"
-					action="#{roomBean.initCreateRoomDialog}" process="@this"
-					update="createRoomDialogForm" </ui:remove>
+				icon="fa fa-remove" process="@this"
+				update="dataAccorditionPanel:roomSearchResultsForm:roomSearchResultsTable">
+				<p:confirm
+					header="#{msg['lucas.application.roomScreen.removeRoomConfirmDialog.header']}"
+					message="#{msg['lucas.application.roomScreen.removeRoomConfirmDialog.message']}" />
+			</p:commandButton>
 		</p:toolbarGroup>
 	</ui:define>
 	<ui:define name="searchCriteria">

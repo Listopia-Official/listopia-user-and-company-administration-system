@@ -104,4 +104,15 @@ public class RoomBean implements RoomBeanLocal {
 		return roomDao.getRoomsFromData(data, resultsCount);
 	}
 
+	@Override
+	@RequiresPermissions(ROOM_REMOVE)
+	public Boolean removeRoom(Long roomId) {
+		Room room = roomDao.findById(roomId);
+		for (RoomSection section : room.getSections()) {
+			if (roomSectionDao.isReferenced(section.getId())) return Boolean.FALSE;
+		}
+		roomDao.delete(room);
+		return Boolean.TRUE;
+	}
+
 }

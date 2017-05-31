@@ -306,4 +306,20 @@ public class RoomBean extends BaseBean<ReadOnlyRoom> {
 	 * -------------------- Section Manager Dialog End --------------------
 	 */
 
+	public void removeRooms() {
+		Iterator<ReadOnlyRoom> it = selectedEntities.iterator();
+		while (it.hasNext()) {
+			ReadOnlyRoom room = it.next();
+			WebUtils.executeTask(params -> {
+				params.add(WebUtils.getAsString(room, RoomConverter.CONVERTER_ID));
+				Boolean ret = roomBean.removeRoom(room.getId());
+				if (ret) {
+					searchResults.remove(room);
+					it.remove();
+				}
+				return ret;
+			}, "lucas.application.roomScreen.removeRoom");
+		}
+	}
+
 }
