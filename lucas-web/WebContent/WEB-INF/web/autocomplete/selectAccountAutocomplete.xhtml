@@ -19,8 +19,18 @@
 			</p:graphicImage>
 		</p:column>
 		<p:column>
-			<h:outputText
-				value="#{converterBean.getAsString(entity,AccountConverter.CONVERTER_ID)}" />
+			<div style="display: flex; flex-wrap: nowrap; align-items: center">
+				<h:outputText
+					value="#{converterBean.getAsString(entity,AccountConverter.CONVERTER_ID)}" />
+			</div>
+		</p:column>
+		<p:column>
+			<p:graphicImage width="30px" height="30px" library="images"
+				name="security-on.svg" rendered="#{entity.isProtected}"
+				style="vertical-align:middle" />
+			<p:graphicImage width="30px" height="30px" library="images"
+				name="locked-padlock.svg" rendered="#{entity.blocked}"
+				style="vertical-align:middle" />
 		</p:column>
 	</ui:define>
 </ui:composition>
