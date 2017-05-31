@@ -27,7 +27,7 @@ import florian_haas.lucas.business.LucasException;
 import florian_haas.lucas.model.ReadOnlyEntity;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
-import florian_haas.lucas.web.converter.CurrencyConverter;
+import florian_haas.lucas.web.converter.*;
 
 public class WebUtils {
 
@@ -179,7 +179,7 @@ public class WebUtils {
 	public static String getTranslatedMessage(String key, Object... params) {
 		String message = getTranslatedMessage(key);
 		for (int i = 0; i < params.length; i++) {
-			if (params[i] != null) message = message.replaceAll("\\?" + i, params[i].toString());
+			if (params[i] != null) message = message.replace("?" + i, params[i].toString());
 		}
 		return message;
 	}
@@ -451,6 +451,11 @@ public class WebUtils {
 	public static String getCurrencyAsString(BigDecimal currency) {
 		FacesContext context = FacesContext.getCurrentInstance();
 		return getCDIManagerBean(CurrencyConverter.class).getAsString(context, UIComponent.getCurrentComponent(context), currency);
+	}
+
+	public static String getRealCurrencyAsString(BigDecimal currency) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		return getCDIManagerBean(RealCurrencyConverter.class).getAsString(context, UIComponent.getCurrentComponent(context), currency);
 	}
 
 	public static <T> T getCDIManagerBean(Class<T> clazz) {

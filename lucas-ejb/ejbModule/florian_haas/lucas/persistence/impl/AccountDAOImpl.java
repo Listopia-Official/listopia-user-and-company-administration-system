@@ -69,4 +69,14 @@ public class AccountDAOImpl extends ReadOnlyDAOImpl<Account> implements AccountD
 		return new ArrayList<>();
 	}
 
+	@Override
+	public BigDecimal getGlobalBankBalance() {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<BigDecimal> query = builder.createQuery(BigDecimal.class);
+		Root<Account> account = query.from(Account.class);
+		query.select(builder.sum(account.get(Account_.bankBalance)));
+		BigDecimal ret = manager.createQuery(query).getSingleResult();
+		return ret == null ? BigDecimal.ZERO : ret;
+	}
+
 }

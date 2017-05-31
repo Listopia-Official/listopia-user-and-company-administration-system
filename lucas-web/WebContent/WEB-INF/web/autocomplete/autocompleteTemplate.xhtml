@@ -13,5 +13,8 @@
 		itemLabel="#{converterBean.getAsString(entity,templateConverterId)}"
 		itemValue="#{entity}" scrollHeight="250" queryDelay="500">
 		<ui:insert name="autocompleteContent" />
+		<p:ajax event="itemSelect" update="#{componentsToUpdate}" />
+		<p:ajax event="keypress" update="#{componentsToUpdate}" />
+		<p:ajax event="change" update="#{componentsToUpdate}" />
 	</p:autoComplete>
 </ui:composition>

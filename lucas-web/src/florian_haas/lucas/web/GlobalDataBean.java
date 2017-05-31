@@ -13,7 +13,7 @@ import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import florian_haas.lucas.business.GlobalDataBeanLocal;
+import florian_haas.lucas.business.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.validation.*;
 import florian_haas.lucas.web.util.WebUtils;
@@ -27,12 +27,15 @@ public class GlobalDataBean implements Serializable {
 	@EJB
 	private GlobalDataBeanLocal globalDataBean;
 
+	@EJB
+	private AccountBeanLocal accountBean;
+
 	@NotNull
 	@Min(1)
 	private Long maxIdleTime = 30000l;
 
 	@NotBlank
-	private String currencySymbol = "L";
+	private String currencySymbol = " Gd";
 
 	@NotNull
 	@DecimalMin(value = "0", inclusive = false)
@@ -73,6 +76,25 @@ public class GlobalDataBean implements Serializable {
 	@Min(1)
 	@NotNull
 	private Long maxUserImageUploadSizeBytes = 1000000l;
+
+	@NotBlank
+	private String realCurrencySymbol = " €";
+
+	@NotNull
+	@DecimalMin(value = "0.0", inclusive = false)
+	private BigDecimal rateOfExchange = BigDecimal.ONE;
+
+	@NotNull
+	@DecimalMin(value = "0.0", inclusive = false)
+	private BigDecimal rateOfBackExchange = BigDecimal.ONE;
+
+	private BigDecimal moneyInCirculation = BigDecimal.ZERO;
+
+	private BigDecimal moneyOnAccounts = BigDecimal.ZERO;
+
+	private BigDecimal allMoney = BigDecimal.ZERO;
+
+	private BigDecimal realMoneyCount = BigDecimal.ONE;
 
 	public Long getMaxIdleTime() {
 		return maxIdleTime;
@@ -174,6 +196,46 @@ public class GlobalDataBean implements Serializable {
 		this.minCivilManagerSchoolGrade = minCivilManagerSchoolGrade;
 	}
 
+	public String getRealCurrencySymbol() {
+		return this.realCurrencySymbol;
+	}
+
+	public void setRealCurrencySymbol(String realCurrencySymbol) {
+		this.realCurrencySymbol = realCurrencySymbol;
+	}
+
+	public BigDecimal getMoneyInCirculation() {
+		return this.moneyInCirculation;
+	}
+
+	public BigDecimal getMoneyOnAccounts() {
+		return this.moneyOnAccounts;
+	}
+
+	public BigDecimal getAllMoney() {
+		return this.allMoney;
+	}
+
+	public BigDecimal getRealMoneyCount() {
+		return this.realMoneyCount;
+	}
+
+	public BigDecimal getRateOfExchange() {
+		return rateOfExchange;
+	}
+
+	public void setRateOfExchange(BigDecimal rateOfExchange) {
+		this.rateOfExchange = rateOfExchange;
+	}
+
+	public BigDecimal getRateOfBackExchange() {
+		return rateOfBackExchange;
+	}
+
+	public void setRateOfBackExchange(BigDecimal rateOfBackExchange) {
+		this.rateOfBackExchange = rateOfBackExchange;
+	}
+
 	@PostConstruct
 	public void refresh() {
 		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_MAX_IDLE_TIME)) {
@@ -213,6 +275,27 @@ public class GlobalDataBean implements Serializable {
 		}
 		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_MIN_CIVIL_MANAGER_SCHOOL_GRADE)) {
 			minCivilManagerSchoolGrade = globalDataBean.getMinCivilManagerSchoolGrade();
+		}
+		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_REAL_CURRENCY_SYMBOL)) {
+			realCurrencySymbol = globalDataBean.getRealCurrencySymbol();
+		}
+		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_RATE_OF_EXCHANGE)) {
+			rateOfExchange = globalDataBean.getRateOfExchange();
+		}
+		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_RATE_OF_BACK_EXCHANGE)) {
+			rateOfBackExchange = globalDataBean.getRateOfBackExchange();
+		}
+		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_MONEY_IN_CIRCULATION)) {
+			moneyInCirculation = globalDataBean.getMoneyInCirculation();
+		}
+		if (WebUtils.isPermitted(EnumPermission.ACCOUNT_GET_TOTAL_MONEY_IN_ACCOUNTS)) {
+			moneyOnAccounts = accountBean.getTotalMoneyInAccounts();
+		}
+		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_MONEY_IN_CIRCULATION, EnumPermission.ACCOUNT_GET_TOTAL_MONEY_IN_ACCOUNTS)) {
+			allMoney = globalDataBean.getAllFictionalMoney();
+		}
+		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_REAL_MONEY_COUNT)) {
+			realMoneyCount = globalDataBean.getRealMoneyCount();
 		}
 	}
 
@@ -254,6 +337,12 @@ public class GlobalDataBean implements Serializable {
 				"lucas.application.globalDataScreen.setOptimalManagerCount");
 		changeValue(minCivilManagerSchoolGrade, globalDataBean::setMinCivilManagerSchoolGrade,
 				EnumPermission.GLOBAL_DATA_SET_MIN_CIVIL_MANAGER_SCHOOL_GRADE, "lucas.application.globalDataScreen.setMinCivilManagerSchoolGrade");
+		changeValue(realCurrencySymbol, globalDataBean::setRealCurrencySymbol, EnumPermission.GLOBAL_DATA_SET_REAL_CURRENCY_SYMBOL,
+				"lucas.application.globalDataScreen.setRealCurrencySymbol");
+		changeValue(rateOfExchange, globalDataBean::setRateOfExchange, EnumPermission.GLOBAL_DATA_SET_RATE_OF_EXCHANGE,
+				"lucas.application.globalDataScreen.setRateOfExchange");
+		changeValue(rateOfBackExchange, globalDataBean::setRateOfBackExchange, EnumPermission.GLOBAL_DATA_SET_RATE_OF_BACK_EXCHANGE,
+				"lucas.application.globalDataScreen.setRateOfBackExchange");
 	}
 
 	private <T> void changeValue(T value, Predicate<T> setter, EnumPermission permission, String messagePrefix) {

@@ -12,4 +12,6 @@ public interface AccountDAO extends ReadOnlyDAO<Account> {
 			EnumQueryComparator bankBalanceComparator);
 
 	public List<Account> getAccountsFromData(String data, Integer resultsCount);
+
+	public BigDecimal getGlobalBankBalance();
 }

@@ -44,6 +44,18 @@ public interface GlobalDataBeanLocal {
 
 	public Integer getMinCivilManagerSchoolGrade();
 
+	public BigDecimal getMoneyInCirculation();
+
+	public BigDecimal getAllFictionalMoney();
+
+	public BigDecimal getRateOfExchange();
+
+	public BigDecimal getRateOfBackExchange();
+
+	public BigDecimal getRealMoneyCount();
+
+	public String getRealCurrencySymbol();
+
 	public Boolean setSalary(@NotNull EnumSalaryClass salaryClass, @MinimumWage BigDecimal salary);
 
 	public Boolean setMinTimePresent(@NotNull @Min(1) Long minTimePresent);
@@ -73,5 +85,23 @@ public interface GlobalDataBeanLocal {
 	public Boolean setOptimalCivilManagerCount(@NotNull @Min(1) Integer optimalCivilManagerCount);
 
 	public Boolean setMinCivilManagerSchoolGrade(@NotNull @ValidSchoolGrade Integer minCivilManagerSchoolGrade);
+
+	public Boolean setMoneyInCirculation(@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal moneyInCirculation);
+
+	public void addMoneyInCirculation(@NotNull @DecimalMin(value = "0.0", inclusive = false) BigDecimal moneyToAdd);
+
+	public void subtractMoneyInCirculation(@NotNull @DecimalMin(value = "0.0", inclusive = false) BigDecimal moneyToSubtract);
+
+	public Boolean setRateOfExchange(@NotNull @DecimalMin(value = "0.0", inclusive = false) BigDecimal rateofExchange);
+
+	public Boolean setRateOfBackExchange(@NotNull @DecimalMin(value = "0.0", inclusive = false) BigDecimal rateofExchange);
+
+	public Boolean setRealMoneyCount(@NotNull @DecimalMin(value = "0.0", inclusive = true) BigDecimal realMoneyCount);
+
+	public Boolean addRealMoneyCount(@NotNull @DecimalMin(value = "0.0", inclusive = false) BigDecimal realMoneyToAdd);
+
+	public Boolean subtractRealMoneyCount(@NotNull @DecimalMin(value = "0.0", inclusive = false) BigDecimal realMoneyToSubtract);
+
+	public Boolean setRealCurrencySymbol(@NotBlank String realCurrencySymbol);
 
 }

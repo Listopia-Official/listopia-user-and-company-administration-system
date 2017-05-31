@@ -191,6 +191,48 @@
 								value="#{msg['lucas.application.globalDataScreen.minCivilManagerSchoolGradeSelectOne.name']}"
 								title="#{msg['lucas.application.globalDataScreen.minCivilManagerSchoolGradeSelectOne.tooltip']}" />
 						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_REAL_CURRENCY_SYMBOL)}">
+							<p:outputLabel for="realCurrencySymbolInputText"
+								value="#{msg['lucas.application.globalDataScreen.realCurrencySymbolInputText.name']}"
+								title="#{msg['lucas.application.globalDataScreen.realCurrencySymbolInputText.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_RATE_OF_EXCHANGE)}">
+							<p:outputLabel for="rateOfExchangeInputNumber"
+								value="#{msg['lucas.application.globalDataScreen.rateOfExchangeInputNumber.name']}"
+								title="#{msg['lucas.application.globalDataScreen.rateOfExchangeInputNumber.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_RATE_OF_BACK_EXCHANGE)}">
+							<p:outputLabel for="rateOfBackExchangeInputNumber"
+								value="#{msg['lucas.application.globalDataScreen.rateOfBackExchangeInputNumber.name']}"
+								title="#{msg['lucas.application.globalDataScreen.rateOfBackExchangeInputNumber.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_MONEY_IN_CIRCULATION)}">
+							<p:outputLabel for="moneyInCirculationInputNumber"
+								value="#{msg['lucas.application.globalDataScreen.moneyInCirculationInputNumber.name']}"
+								title="#{msg['lucas.application.globalDataScreen.moneyInCirculationInputNumber.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_GET_TOTAL_MONEY_IN_ACCOUNTS)}">
+							<p:outputLabel for="moneyOnAccountsInputNumber"
+								value="#{msg['lucas.application.globalDataScreen.moneyOnAccountsInputNumber.name']}"
+								title="#{msg['lucas.application.globalDataScreen.moneyOnAccountsInputNumber.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermissionsAnd([EnumPermission.ACCOUNT_GET_TOTAL_MONEY_IN_ACCOUNTS,EnumPermission.GLOBAL_DATA_GET_MONEY_IN_CIRCULATION])}">
+							<p:outputLabel for="allMoneyInputNumber"
+								value="#{msg['lucas.application.globalDataScreen.allMoneyInputNumber.name']}"
+								title="#{msg['lucas.application.globalDataScreen.allMoneyInputNumber.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_REAL_MONEY_COUNT)}">
+							<p:outputLabel for="realMoneyCountInputNumber"
+								value="#{msg['lucas.application.globalDataScreen.realMoneyCountInputNumber.name']}"
+								title="#{msg['lucas.application.globalDataScreen.realMoneyCountInputNumber.tooltip']}" />
+						</p:column>
 					</p:row>
 					<p:row>
 						<p:column
@@ -210,10 +252,65 @@
 								<f:selectItems value="#{EnumSchoolClass.GRADES}" />
 							</p:selectOneMenu>
 						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_REAL_CURRENCY_SYMBOL)}">
+							<p:inputText id="realCurrencySymbolInputText"
+								readonly="#{not loginBean.hasPermission(EnumPermission.GLOBAL_DATA_SET_REAL_CURRENCY_SYMBOL)}"
+								value="#{globalDataBean.realCurrencySymbol}"
+								title="#{msg['lucas.application.globalDataScreen.realCurrencySymbolInputText.tooltip']}" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_RATE_OF_EXCHANGE)}">
+							<p:inputNumber id="rateOfExchangeInputNumber"
+								readonly="#{not loginBean.hasPermission(EnumPermission.GLOBAL_DATA_SET_RATE_OF_EXCHANGE)}"
+								title="#{msg['lucas.application.globalDataScreen.rateOfExchangeInputNumber.tooltip']}"
+								value="#{globalDataBean.rateOfExchange}" minValue="0.001"
+								maxValue="500" decimalPlaces="3" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_RATE_OF_BACK_EXCHANGE)}">
+							<p:inputNumber id="rateOfBackExchangeInputNumber"
+								readonly="#{not loginBean.hasPermission(EnumPermission.GLOBAL_DATA_SET_RATE_OF_BACK_EXCHANGE)}"
+								title="#{msg['lucas.application.globalDataScreen.rateOfBackExchangeInputNumber.tooltip']}"
+								value="#{globalDataBean.rateOfBackExchange}" minValue="0.001"
+								maxValue="500" decimalPlaces="3" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_MONEY_IN_CIRCULATION)}">
+							<p:inputNumber id="moneyInCirculationInputNumber" readonly="true"
+								symbol=" #{accountBean.currencySymbol}"
+								title="#{msg['lucas.application.globalDataScreen.moneyInCirculationInputNumber.tooltip']}"
+								value="#{globalDataBean.moneyInCirculation}" decimalPlaces="2"
+								symbolPosition="post" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_GET_TOTAL_MONEY_IN_ACCOUNTS)}">
+							<p:inputNumber id="moneyOnAccountsInputNumber" readonly="true"
+								symbol=" #{accountBean.currencySymbol}"
+								title="#{msg['lucas.application.globalDataScreen.moneyOnAccountsInputNumber.tooltip']}"
+								value="#{globalDataBean.moneyOnAccounts}" decimalPlaces="2"
+								symbolPosition="post" />
+						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermissionsAnd([EnumPermission.ACCOUNT_GET_TOTAL_MONEY_IN_ACCOUNTS,EnumPermission.GLOBAL_DATA_GET_MONEY_IN_CIRCULATION])}">
+							<p:inputNumber id="allMoneyInputNumber" readonly="true"
+								symbol=" #{accountBean.currencySymbol}"
+								title="#{msg['lucas.application.globalDataScreen.allMoneyInputNumber.tooltip']}"
+								value="#{globalDataBean.allMoney}" decimalPlaces="2"
+								symbolPosition="post" />
+						</p:column>
+							<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_REAL_MONEY_COUNT)}">
+							<p:inputNumber id="realMoneyCountInputNumber" readonly="true"
+								symbol=" #{accountBean.realCurrencySymbol}"
+								title="#{msg['lucas.application.globalDataScreen.realMoneyCountInputNumber.tooltip']}"
+								value="#{globalDataBean.realMoneyCount}" decimalPlaces="2"
+								symbolPosition="post" />
+						</p:column>
 					</p:row>
 					<p:row>
 						<p:column
-							rendered="#{loginBean.hasPermissionsOr([EnumPermission.GLOBAL_DATA_SET_MAX_IDLE_TIME,EnumPermission.GLOBAL_DATA_SET_CURRENCY_SYMBOL,EnumPermission.GLOBAL_DATA_SET_TRANSACTION_LIMIT,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_WIDTH,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_HEIGHT,EnumPermission.GLOBAL_DATA_SET_MINIMUM_WAGE,EnumPermission.GLOBAL_DATA_ADD_UI_THEME,EnumPermission.GLOBAL_DATA_REMOVE_UI_THEME,EnumPermission.GLOBAL_DATA_SET_DEFAULT_UI_THEME,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_UPLOAD_SIZE_BYTES,EnumPermission.GLOBAL_DATA_SET_OPTIMAL_CIVIL_MANAGER_COUNT,	EnumPermission.GLOBAL_DATA_SET_MIN_CIVIL_MANAGER_SCHOOL_GRADE])}">
+							rendered="#{loginBean.hasPermissionsOr([EnumPermission.GLOBAL_DATA_SET_MAX_IDLE_TIME,EnumPermission.GLOBAL_DATA_SET_CURRENCY_SYMBOL,EnumPermission.GLOBAL_DATA_SET_TRANSACTION_LIMIT,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_WIDTH,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_HEIGHT,EnumPermission.GLOBAL_DATA_SET_MINIMUM_WAGE,EnumPermission.GLOBAL_DATA_ADD_UI_THEME,EnumPermission.GLOBAL_DATA_REMOVE_UI_THEME,EnumPermission.GLOBAL_DATA_SET_DEFAULT_UI_THEME,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_UPLOAD_SIZE_BYTES,EnumPermission.GLOBAL_DATA_SET_OPTIMAL_CIVIL_MANAGER_COUNT,EnumPermission.GLOBAL_DATA_SET_MIN_CIVIL_MANAGER_SCHOOL_GRADE,EnumPermission.GLOBAL_DATA_SET_REAL_CURRENCY_SYMBOL,EnumPermission.GLOBAL_DATA_SET_RATE_OF_EXCHANGE])}">
 							<p:commandButton
 								value="#{msg['lucas.application.globalDataScreen.saveButton.name']}"
 								title="#{msg['lucas.application.globalDataScreen.saveButton.tooltip']}"

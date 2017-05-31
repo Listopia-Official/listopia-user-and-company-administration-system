@@ -9,6 +9,8 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.executable.*;
 
+import org.apache.shiro.authz.annotation.Logical;
+
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.persistence.*;
 import florian_haas.lucas.security.*;
@@ -26,6 +28,10 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	@Inject
 	@JPADAO
 	private CompanyDAO companyDao;
+
+	@Inject
+	@JPADAO
+	private AccountDAO accountDao;
 
 	@Override
 	@RequiresPermissions(GLOBAL_DATA_GET_SALARIES)
@@ -264,6 +270,122 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 		GlobalData newInstance = newInstance();
 		if (!newInstance.getMinCivilManagerSchoolGrade().equals(minCivilManagerSchoolGrade)) {
 			newInstance.setMinCivilManagerSchoolGrade(minCivilManagerSchoolGrade);
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_GET_MONEY_IN_CIRCULATION)
+	public BigDecimal getMoneyInCirculation() {
+		return newInstance().getMoneyInCirculation();
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_SET_MONEY_IN_CIRCULATION)
+	public Boolean setMoneyInCirculation(BigDecimal moneyInCirculation) {
+		GlobalData newInstance = newInstance();
+		if (!Utils.isEqual(newInstance.getMoneyInCirculation(), moneyInCirculation)) {
+			newInstance.setMoneyInCirculation(moneyInCirculation);
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_SET_MONEY_IN_CIRCULATION)
+	public void addMoneyInCirculation(BigDecimal moneyToAdd) {
+		this.setMoneyInCirculation(this.getMoneyInCirculation().add(moneyToAdd));
+	}
+
+	@Override
+
+	public void subtractMoneyInCirculation(BigDecimal moneyToSubtract) {
+		this.setMoneyInCirculation(this.getMoneyInCirculation().subtract(moneyToSubtract));
+	}
+
+	@Override
+	@RequiresPermissions(value = {
+			GLOBAL_DATA_GET_MONEY_IN_CIRCULATION, ACCOUNT_GET_TOTAL_MONEY_IN_ACCOUNTS }, logical = Logical.AND)
+	public BigDecimal getAllFictionalMoney() {
+		return accountDao.getGlobalBankBalance().add(this.getMoneyInCirculation());
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_GET_RATE_OF_EXCHANGE)
+	public BigDecimal getRateOfExchange() {
+		return newInstance().getRateOfExchange();
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_SET_RATE_OF_EXCHANGE)
+	public Boolean setRateOfExchange(BigDecimal rateofExchange) {
+		GlobalData newInstance = newInstance();
+		if (!Utils.isEqual(newInstance.getRateOfExchange(), rateofExchange)) {
+			newInstance.setRateOfExchange(rateofExchange);
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_GET_RATE_OF_BACK_EXCHANGE)
+	public BigDecimal getRateOfBackExchange() {
+		return newInstance().getRateOfBackExchange();
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_SET_RATE_OF_BACK_EXCHANGE)
+	public Boolean setRateOfBackExchange(BigDecimal rateOfBackExchange) {
+		GlobalData newInstance = newInstance();
+		if (!Utils.isEqual(newInstance.getRateOfBackExchange(), rateOfBackExchange)) {
+			newInstance.setRateOfBackExchange(rateOfBackExchange);
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_GET_REAL_MONEY_COUNT)
+	public BigDecimal getRealMoneyCount() {
+		return newInstance().getRealMoneyCount();
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_GET_REAL_CURRENCY_SYMBOL)
+	public String getRealCurrencySymbol() {
+		return newInstance().getRealCurrencySymbol();
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_SET_REAL_MONEY_COUNT)
+	public Boolean setRealMoneyCount(BigDecimal realMoneyCount) {
+		GlobalData newInstance = newInstance();
+		if (!Utils.isEqual(newInstance.getRealMoneyCount(), realMoneyCount)) {
+			newInstance.setRealMoneyCount(realMoneyCount);
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_SET_REAL_MONEY_COUNT)
+	public Boolean addRealMoneyCount(BigDecimal realMoneyToAdd) {
+		return setRealMoneyCount(this.getRealMoneyCount().add(realMoneyToAdd));
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_SET_REAL_MONEY_COUNT)
+	public Boolean subtractRealMoneyCount(BigDecimal realMoneyToSubtract) {
+		return setRealMoneyCount(this.getRealMoneyCount().subtract(realMoneyToSubtract));
+	}
+
+	@Override
+	@RequiresPermissions(GLOBAL_DATA_SET_REAL_CURRENCY_SYMBOL)
+	public Boolean setRealCurrencySymbol(String realCurrencySymbol) {
+		GlobalData newInstance = newInstance();
+		if (!Utils.isEqual(newInstance.getRealCurrencySymbol(), realCurrencySymbol)) {
+			newInstance.setRealCurrencySymbol(realCurrencySymbol);
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;

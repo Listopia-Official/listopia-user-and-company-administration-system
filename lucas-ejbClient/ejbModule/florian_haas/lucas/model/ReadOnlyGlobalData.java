@@ -33,4 +33,14 @@ public interface ReadOnlyGlobalData extends ReadOnlyEntity {
 
 	public Integer getMinCivilManagerSchoolGrade();
 
+	public BigDecimal getRealMoneyCount();
+
+	public BigDecimal getMoneyInCirculation();
+
+	public BigDecimal getRateOfExchange();
+
+	public BigDecimal getRateOfBackExchange();
+
+	public String getRealCurrencySymbol();
+
 }

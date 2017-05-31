@@ -55,27 +55,39 @@ public class AccountBean implements AccountBeanLocal {
 	@Override
 	@RequiresPermissions(ACCOUNT_PAY_IN)
 	public void payIn(Long id, BigDecimal amount, String comment) {
-		transaction(amount, id, null, comment);
+		this.payIn(id, amount, Boolean.TRUE, comment);
+	}
+
+	private void payIn(Long id, BigDecimal amount, Boolean checkTransactionLimit, String comment) {
+		transaction(amount, id, null, checkTransactionLimit, comment);
 	}
 
 	@Override
 	@RequiresPermissions(ACCOUNT_PAY_OUT)
 	public Boolean payOut(Long id, BigDecimal amount, String comment) {
-		return transaction(amount != null ? amount.negate() : null, id, null, comment);
+		return this.payOut(id, amount, Boolean.TRUE, comment);
+	}
+
+	private Boolean payOut(Long id, BigDecimal amount, Boolean checkTransactionLimit, String comment) {
+		return transaction(amount != null ? amount.negate() : null, id, null, checkTransactionLimit, comment);
 	}
 
 	@Override
 	@RequiresPermissions(ACCOUNT_TRANSACTION)
 	public Boolean transaction(Long from, Long to, BigDecimal amount, String comment) {
-		return transaction(amount, from, to, comment);
+		return transaction(amount, from, to, Boolean.TRUE, comment);
 	}
 
-	private Boolean transaction(BigDecimal amount, Long account1Id, Long account2Id, String comment) {
+	private void checkTransactionLimit(BigDecimal transactionAmount) throws LucasException {
+		if (Utils.isGreatherThan(transactionAmount.abs(), globalData.getTransactionLimit())
+				&& !loginBean.getSubject().isPermitted(ACCOUNT_IGNORE_TRANSACTION_LIMIT.getPermissionString()))
+			throw new LucasException(loginBean.getSubject().getPrincipal() + " is not permitted to ignore transaction limit",
+					NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT_EXCEPTION_MARKER);
+	}
+
+	private Boolean transaction(BigDecimal amount, Long account1Id, Long account2Id, Boolean checkTransactionLimit, String comment) {
 		Account account1 = accountDao.findById(account1Id);
-		Account account2 = null;
-		if (account2Id != null) {
-			account2 = accountDao.findById(account2Id);
-		}
+		Account account2 = account2Id != null ? accountDao.findById(account2Id) : null;
 
 		if (account1.getIsProtected() && !loginBean.getSubject().isPermitted(ACCOUNT_TRANSACTION_FROM_PROTECTED.getPermissionString()))
 			throw new LucasException(loginBean.getSubject().getPrincipal() + " is not permitted to start a transaction from a protected account",
@@ -89,10 +101,8 @@ public class AccountBean implements AccountBeanLocal {
 		BigDecimal transactionAmount = amount == null ? account2 == null ? account1.getBankBalance().negate() : account1.getBankBalance() : amount;
 
 		if (!Utils.isZero(transactionAmount)) {
-			if (Utils.isGreatherThan(transactionAmount.abs(), globalData.getTransactionLimit())
-					&& !loginBean.getSubject().isPermitted(ACCOUNT_IGNORE_TRANSACTION_LIMIT.getPermissionString()))
-				throw new LucasException(loginBean.getSubject().getPrincipal() + " is not permitted to ignore transaction limit",
-						NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT_EXCEPTION_MARKER);
+
+			if (checkTransactionLimit) checkTransactionLimit(transactionAmount);
 
 			if (account1.getBlocked()) throw new LucasException("Account (transaction source) is blocked", FROM_BLOCKED_EXCEPTION_MARKER);
 
@@ -114,8 +124,16 @@ public class AccountBean implements AccountBeanLocal {
 			final BigDecimal prevBankBalance1 = account1.getBankBalance();
 
 			if (action == EnumAccountAction.DEBIT && Utils.isLessThanZero(prevBankBalance1.add(transactionAmount)))
-				throw new LucasException("The transaction amount is greater than the bank balabnce of the account",
+				throw new LucasException("The transaction amount is greater than the bank balance of the account",
 						TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE_EXCEPTION_MARKER);
+
+			if (action == EnumAccountAction.CREDIT && type == EnumAccountActionType.BANK) {
+				if (Utils.isLessThanZero(globalData.getMoneyInCirculation().subtract(transactionAmount.abs())))
+					throw new LucasException("There isn't enough money in circulation", NOT_ENOUGH_MONEY_IN_CIRCULATION_EXCEPTION_MARKER);
+				globalData.subtractMoneyInCirculation(transactionAmount.abs());
+			} else if (action == EnumAccountAction.DEBIT && type == EnumAccountActionType.BANK) {
+				globalData.addMoneyInCirculation(transactionAmount.abs());
+			}
 
 			account1.setBankBalance(account1.getBankBalance().add(transactionAmount));
 
@@ -138,6 +156,35 @@ public class AccountBean implements AccountBeanLocal {
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;
+	}
+
+	@Override
+	@RequiresPermissions(ACCOUNT_EXCHANGE_REAL_CURRENCY_TO_FICTIONAL)
+	public void exchangeRealCurrencyToFictional(BigDecimal amount, Long transferToAccount, String transactionComment) {
+		BigDecimal fictionalAmount = globalData.getRateOfExchange().multiply(amount).abs();
+		checkTransactionLimit(fictionalAmount);
+		globalData.addMoneyInCirculation(fictionalAmount);
+		globalData.addRealMoneyCount(amount);
+		if (transferToAccount != null) payIn(transferToAccount, fictionalAmount, Boolean.FALSE, transactionComment);
+	}
+
+	@Override
+	@RequiresPermissions(ACCOUNT_EXCHANGE_FICTIONAL_CURRENCY_TO_REAL)
+	public Boolean exchangeFictionalCurrencyToReal(Long fromAccount, BigDecimal amount, Boolean all, String transactionComment) {
+		BigDecimal fictionalAmount = amount.abs();
+		if (fromAccount != null) {
+			fictionalAmount = all ? accountDao.findById(fromAccount).getBankBalance() : amount;
+			if (!payOut(fromAccount, all ? null : amount, transactionComment)) return Boolean.FALSE;
+		}
+		checkTransactionLimit(fictionalAmount);
+		if (Utils.isLessThanZero(globalData.getMoneyInCirculation().subtract(fictionalAmount)))
+			throw new LucasException("There isn't enough money in circulation", NOT_ENOUGH_MONEY_IN_CIRCULATION_EXCEPTION_MARKER);
+		globalData.subtractMoneyInCirculation(fictionalAmount);
+		BigDecimal realAmount = amount.multiply(globalData.getRateOfBackExchange()).abs();
+		if (Utils.isLessThanZero(globalData.getRealMoneyCount().subtract(realAmount)))
+			throw new LucasException("There isn't enough real money to give back", NOT_ENOUGH_REAL_MONEY_EXCEPTION_MARKER);
+		globalData.subtractRealMoneyCount(realAmount);
+		return Boolean.TRUE;
 	}
 
 	@Override
@@ -270,9 +317,15 @@ public class AccountBean implements AccountBeanLocal {
 		Account relatedAccount = log.getRelatedAccount();
 		if (relatedAccount == null) {
 			transaction(log.getAction() == EnumAccountAction.CREDIT ? log.getAmount().negate() : log.getAmount(), log.getAccount().getId(), null,
-					comment);
+					Boolean.TRUE, comment);
 		} else {
-			transaction(log.getAmount().abs(), relatedAccount.getId(), log.getAccount().getId(), comment);
+			transaction(log.getAmount().abs(), relatedAccount.getId(), log.getAccount().getId(), Boolean.TRUE, comment);
 		}
+	}
+
+	@Override
+	@RequiresPermissions(ACCOUNT_GET_TOTAL_MONEY_IN_ACCOUNTS)
+	public BigDecimal getTotalMoneyInAccounts() {
+		return accountDao.getGlobalBankBalance();
 	}
 }

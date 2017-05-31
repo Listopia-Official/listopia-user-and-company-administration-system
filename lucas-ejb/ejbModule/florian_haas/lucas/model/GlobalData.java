@@ -43,25 +43,30 @@ public class GlobalData extends EntityBase implements ReadOnlyGlobalData {
 	private BigDecimal transactionLimit = new BigDecimal("20.0");
 
 	@Basic(optional = false)
+	@Column(nullable = false)
 	@NotBlank
-	private String currencySymbol = " Gd";
+	private String currencySymbol = "Gd";
 
 	@Basic(optional = false)
+	@Column(nullable = false)
 	@Min(1)
 	@NotNull
 	private Long maxIdleTime = 30000l;
 
 	@Basic(optional = false)
+	@Column(nullable = false)
 	@NotNull
 	@Min(50)
 	private Integer maxUserImageWidth = 300;
 
 	@Basic(optional = false)
+	@Column(nullable = false)
 	@NotNull
 	@Min(50)
 	private Integer maxUserImageHeight = 300;
 
 	@Basic(optional = false)
+	@Column(nullable = false)
 	@NotBlank
 	private String defaultUITheme = "omega";
 
@@ -73,18 +78,52 @@ public class GlobalData extends EntityBase implements ReadOnlyGlobalData {
 			"redmond", "rocket", "sam", "smoothness", "south-street", "start", "sunny", "swanky-purse", "trontastic", "ui-darkness", "ui-lightness",
 			"vader");
 
+	@Basic(optional = false)
+	@Column(nullable = false)
 	@Min(1)
 	@NotNull
 	private Long maxUserImageUploadSizeByte = 1000000l;
 
 	@Basic(optional = false)
+	@Column(nullable = false)
 	@NotNull
 	@Min(1)
 	private Integer civilCompanyOptimalManagerCount = 2;
 
+	@Basic(optional = false)
+	@Column(nullable = false)
 	@ValidSchoolGrade
 	@NotNull
 	private Integer minCivilManagerSchoolGrade = 8;
+
+	@Basic(optional = false)
+	@Column(nullable = false, scale = 7, precision = 38)
+	@NotNull
+	@DecimalMin(value = "0.0", inclusive = true)
+	private BigDecimal moneyInCirculation = BigDecimal.ZERO;
+
+	@Basic(optional = false)
+	@Column(nullable = false, scale = 7, precision = 38)
+	@NotNull
+	@DecimalMin(value = "0.0", inclusive = false)
+	private BigDecimal rateOfExchange = BigDecimal.ONE;
+
+	@Basic(optional = false)
+	@Column(nullable = false, scale = 7, precision = 38)
+	@NotNull
+	@DecimalMin(value = "0.0", inclusive = false)
+	private BigDecimal rateOfBackExchange = BigDecimal.ONE;
+
+	@Basic(optional = false)
+	@Column(nullable = false, scale = 7, precision = 38)
+	@NotNull
+	@DecimalMin(value = "0.0", inclusive = true)
+	private BigDecimal realMoneyCount = BigDecimal.ZERO;
+
+	@Basic(optional = false)
+	@Column(nullable = false)
+	@NotBlank
+	private String realCurrencySymbol = "€";
 
 	public Map<EnumSalaryClass, BigDecimal> getSalaries() {
 		return Collections.unmodifiableMap(salaries);
@@ -200,6 +239,51 @@ public class GlobalData extends EntityBase implements ReadOnlyGlobalData {
 
 	public void setMinCivilManagerSchoolGrade(Integer minCivilManagerSchoolGrade) {
 		this.minCivilManagerSchoolGrade = minCivilManagerSchoolGrade;
+	}
+
+	@Override
+	public BigDecimal getMoneyInCirculation() {
+		return moneyInCirculation;
+	}
+
+	public void setMoneyInCirculation(BigDecimal moneyInCirculation) {
+		this.moneyInCirculation = moneyInCirculation;
+	}
+
+	@Override
+	public BigDecimal getRateOfExchange() {
+		return this.rateOfExchange;
+	}
+
+	public void setRateOfExchange(BigDecimal rateOfExchange) {
+		this.rateOfExchange = rateOfExchange;
+	}
+
+	@Override
+	public BigDecimal getRateOfBackExchange() {
+		return this.rateOfBackExchange;
+	}
+
+	public void setRateOfBackExchange(BigDecimal rateOfBackExchange) {
+		this.rateOfBackExchange = rateOfBackExchange;
+	}
+
+	@Override
+	public BigDecimal getRealMoneyCount() {
+		return this.realMoneyCount;
+	}
+
+	public void setRealMoneyCount(BigDecimal realMoneyCount) {
+		this.realMoneyCount = realMoneyCount;
+	}
+
+	@Override
+	public String getRealCurrencySymbol() {
+		return this.realCurrencySymbol;
+	}
+
+	public void setRealCurrencySymbol(String realCurrencySymbol) {
+		this.realCurrencySymbol = realCurrencySymbol;
 	}
 
 }

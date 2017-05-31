@@ -1,0 +1,103 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.accountScreen.currencyBackExchangeDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="currencyBackExchangeDialog" />
+	<ui:param name="formId" value="currencyBackExchangeDialogForm" />
+	<ui:define name="dialogContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.NullConverterNoText" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.AccountConverter" />
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.accountScreen.currencyBackExchangeDialog.fromAutocomplete.name']}"
+							title="#{msg['lucas.application.accountScreen.currencyBackExchangeDialog.fromAutocomplete.tooltip']}"
+							for="fromAutocomplete" />
+					</p:column>
+					<p:column colspan="2">
+						<ui:include
+							src="/WEB-INF/web/autocomplete/selectAccountAutocomplete.xhtml">
+							<ui:param name="id" value="fromAutocomplete" />
+							<ui:param name="title"
+								value="#{msg['lucas.application.accountScreen.currencyBackExchangeDialog.fromAutocomplete.tooltip']}" />
+							<ui:param name="value"
+								value="#{accountBean.currencyBackExchangeDialogFromAccount}" />
+							<ui:param name="componentsToUpdate"
+								value="exchangeAllBackBooleanButton amountInputNumber" />
+						</ui:include>
+					</p:column>
+					<p:column>
+						<p:message for="fromAutocomplete" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.accountScreen.currencyBackExchangeDialog.amountInputNumber.name']}"
+							title="#{msg['lucas.application.accountScreen.currencyBackExchangeDialog.amountInputNumber.tooltip']}"
+							for="amountInputNumber" />
+					</p:column>
+					<p:column>
+						<p:inputNumber id="amountInputNumber"
+							disabled="#{accountBean.currencyBackExchangeDialogExchangeAll &amp;&amp; not empty accountBean.currencyBackExchangeDialogFromAccount}"
+							value="#{accountBean.currencyBackExchangeDialogAmount}"
+							title="#{msg['lucas.application.accountScreen.currencyBackExchangeDialog.amountInputNumber.tooltip']}"
+							minValue="0" symbol=" #{accountBean.currencySymbol}"
+							maxValue="#{accountBean.transactionLimit}" symbolPosition="post"
+							emptyValue="empty" decimalPlaces="2" />
+					</p:column>
+					<p:column>
+						<p:selectBooleanButton id="exchangeAllBackBooleanButton"
+							disabled="#{empty accountBean.currencyBackExchangeDialogFromAccount}"
+							value="#{accountBean.currencyBackExchangeDialogExchangeAll}"
+							onLabel="#{msg['lucas.application.accountScreen.currencyBackExchangeDialog.exchangeAllBackBooleanButton.name']}"
+							offLabel="#{msg['lucas.application.accountScreen.currencyBackExchangeDialog.exchangeAllBackBooleanButton.name']}"
+							title="#{msg['lucas.application.accountScreen.currencyBackExchangeDialog.exchangeAllBackBooleanButton.tooltip']}">
+							<p:ajax process="@this" update="amountInputNumber" />
+						</p:selectBooleanButton>
+					</p:column>
+					<p:column>
+						<p:message for="amountInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<h:outputText
+							value="#{msg['lucas.application.accountScreen.currencyBackExchangeDialog.info']}"
+							style="font-style:italic" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this amountInputNumber fromAutocomplete exchangeAllBackBooleanButton"
+							update="@form dataAccorditionPanel:accountSearchResultsForm:accountSearchResultsTable"
+							action="#{accountBean.exchangeCurrencyBack}"
+							value="#{msg['lucas.application.accountScreen.currencyBackExchangeDialog.exchangeCurrencyButton.name']}"
+							title="#{msg['lucas.application.accountScreen.currencyBackExchangeDialog.exchangeCurrencyButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('currencyBackExchangeDialog').hide()}" />
+					</p:column>
+					<p:column colspan="2">
+						<p:commandButton process="@this"
+							value="#{msg['lucas.application.accountScreen.currencyBackExchangeDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.accountScreen.currencyBackExchangeDialog.cancelButton.tooltip']}"
+							oncomplete="PF('currencyBackExchangeDialog').hide()"
+							immediate="true">
+						</p:commandButton>
+					</p:column>
+					<p:column />
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

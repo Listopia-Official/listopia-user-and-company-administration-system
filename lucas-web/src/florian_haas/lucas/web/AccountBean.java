@@ -253,6 +253,10 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 		return globalDataBean.getCurrencySymbol();
 	}
 
+	public String getRealCurrencySymbol() {
+		return globalDataBean.getRealCurrencySymbol();
+	}
+
 	public BigDecimal getTransactionLimit() {
 		return SecurityUtils.getSubject().isPermitted(EnumPermission.ACCOUNT_IGNORE_TRANSACTION_LIMIT.getPermissionString())
 				? new BigDecimal(Integer.toString(Integer.MAX_VALUE)) : globalDataBean.getTransactionLimit();
@@ -309,6 +313,9 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 					case AccountBeanLocal.FROM_BLOCKED_EXCEPTION_MARKER:
 					case AccountBeanLocal.TO_BLOCKED_EXCEPTION_MARKER:
 						key = "lucas.application.accountScreen.payIn.message.fail.blocked";
+						break;
+					case AccountBeanLocal.NOT_ENOUGH_MONEY_IN_CIRCULATION_EXCEPTION_MARKER:
+						key = "lucas.application.accountScreen.payIn.message.fail.notEnoughMoneyInCirculation";
 						break;
 				}
 				return key != null ? WebUtils.getTranslatedMessage(key, params.toArray(new Object[params.size()])) : null;
@@ -573,4 +580,160 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 	public void transactionLogDialogOnToggle(ToggleEvent e) {
 		transactionLogsDialogDatatableColumns.set((Integer) e.getData(), e.getVisibility() == Visibility.VISIBLE);
 	}
+
+	/*
+	 * -------------------- Currency Exchange Dialog Start --------------------
+	 */
+
+	@ValidTransactionAmount
+	private BigDecimal currencyExchangeDialogAmount = BigDecimal.ZERO;
+
+	private ReadOnlyAccount currencyExchangeDialogToAccount = null;
+
+	public BigDecimal getCurrencyExchangeDialogAmount() {
+		return this.currencyExchangeDialogAmount;
+	}
+
+	public void setCurrencyExchangeDialogAmount(BigDecimal currencyExchangeDialogAmount) {
+		this.currencyExchangeDialogAmount = currencyExchangeDialogAmount;
+	}
+
+	public ReadOnlyAccount getCurrencyExchangeDialogToAccount() {
+		return this.currencyExchangeDialogToAccount;
+	}
+
+	public void setCurrencyExchangeDialogToAccount(ReadOnlyAccount currencyExchangeDialogToAccount) {
+		this.currencyExchangeDialogToAccount = currencyExchangeDialogToAccount;
+	}
+
+	public void resetCurrencyExchangeDialog() {
+		currencyExchangeDialogAmount = BigDecimal.ZERO;
+		currencyExchangeDialogToAccount = null;
+	}
+
+	public void exchangeCurrency() {
+		WebUtils.executeTask((params) -> {
+			params.add(WebUtils.getRealCurrencyAsString(currencyExchangeDialogAmount));
+			params.add(WebUtils.getCurrencyAsString(globalDataBean.getRateOfExchange().multiply(currencyExchangeDialogAmount).abs()));
+			String accountAsString = WebUtils.getAsString(currencyExchangeDialogToAccount, AccountConverter.CONVERTER_ID);
+			params.add(currencyExchangeDialogToAccount == null ? ""
+					: WebUtils.getTranslatedMessage("lucas.application.accountScreen.exchangeCurrency.message.success2", accountAsString));
+			params.add(accountAsString);
+			accountBean.exchangeRealCurrencyToFictional(currencyExchangeDialogAmount,
+					currencyExchangeDialogToAccount != null ? currencyExchangeDialogToAccount.getId() : null,
+					WebUtils.getTranslatedMessage("lucas.application.accountScreen.exchangeCurrency.payInComment"));
+			return true;
+		}, "lucas.application.accountScreen.exchangeCurrency.message", (exception, params) -> {
+			String key = null;
+			switch (exception.getMark()) {
+				case AccountBeanLocal.NO_PERMISSION_FOR_TRANSACTION_FROM_PROTECTED_EXCEPTION_MARKER:
+				case AccountBeanLocal.NO_PERMISSION_FOR_TRANSACTION_TO_PROTECTED_EXCEPTION_MARKER:
+					key = "lucas.application.accountScreen.exchangeCurrency.message.fail.protected";
+					break;
+				case AccountBeanLocal.NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT_EXCEPTION_MARKER:
+					key = "lucas.application.accountScreen.exchangeCurrency.message.fail.transactionLimitExceeded";
+					break;
+				case AccountBeanLocal.FROM_BLOCKED_EXCEPTION_MARKER:
+				case AccountBeanLocal.TO_BLOCKED_EXCEPTION_MARKER:
+					key = "lucas.application.accountScreen.exchangeCurrency.message.fail.blocked";
+					break;
+			}
+			return key != null ? WebUtils.getTranslatedMessage(key, params.toArray(new Object[params.size()])) : null;
+		});
+	}
+
+	/*
+	 * -------------------- Currency Exchange Dialog End --------------------
+	 */
+
+	/*
+	 * -------------------- Currency Back Exchange Dialog Start --------------------
+	 */
+
+	@ValidTransactionAmount
+	private BigDecimal currencyBackExchangeDialogAmount = BigDecimal.ZERO;
+
+	private ReadOnlyAccount currencyBackExchangeDialogFromAccount = null;
+
+	@NotNull
+	private Boolean currencyBackExchangeDialogExchangeAll = Boolean.FALSE;
+
+	public BigDecimal getCurrencyBackExchangeDialogAmount() {
+		return currencyBackExchangeDialogAmount;
+	}
+
+	public void setCurrencyBackExchangeDialogAmount(BigDecimal currencyBackExchangeDialogAmount) {
+		this.currencyBackExchangeDialogAmount = currencyBackExchangeDialogAmount;
+	}
+
+	public ReadOnlyAccount getCurrencyBackExchangeDialogFromAccount() {
+		return currencyBackExchangeDialogFromAccount;
+	}
+
+	public void setCurrencyBackExchangeDialogFromAccount(ReadOnlyAccount currencyBackExchangeDialogFromAccount) {
+		this.currencyBackExchangeDialogFromAccount = currencyBackExchangeDialogFromAccount;
+	}
+
+	public Boolean getCurrencyBackExchangeDialogExchangeAll() {
+		return this.currencyBackExchangeDialogExchangeAll;
+	}
+
+	public void setCurrencyBackExchangeDialogExchangeAll(Boolean currencyBackExchangeDialogExchangeAll) {
+		this.currencyBackExchangeDialogExchangeAll = currencyBackExchangeDialogExchangeAll;
+	}
+
+	public void resetCurrencyBackExchangeDialog() {
+		currencyBackExchangeDialogAmount = BigDecimal.ZERO;
+		currencyBackExchangeDialogFromAccount = null;
+		currencyBackExchangeDialogExchangeAll = Boolean.FALSE;
+	}
+
+	public void exchangeCurrencyBack() {
+		WebUtils.executeTask((params) -> {
+			currencyBackExchangeDialogAmount = currencyBackExchangeDialogFromAccount != null && currencyBackExchangeDialogExchangeAll
+					? Utils.isZero(currencyBackExchangeDialogFromAccount.getBankBalance()) ? BigDecimal.ONE
+							: currencyBackExchangeDialogFromAccount.getBankBalance()
+					: currencyBackExchangeDialogAmount;
+			params.add(WebUtils.getCurrencyAsString(currencyBackExchangeDialogAmount));
+			params.add(WebUtils.getRealCurrencyAsString(globalDataBean.getRateOfBackExchange().multiply(currencyBackExchangeDialogAmount).abs()));
+			String accountAsString = WebUtils.getAsString(currencyBackExchangeDialogFromAccount, AccountConverter.CONVERTER_ID);
+			params.add(currencyBackExchangeDialogFromAccount == null ? ""
+					: WebUtils.getTranslatedMessage("lucas.application.accountScreen.exchangeCurrencyBack.message.success2", accountAsString));
+			params.add(accountAsString);
+			params.add(getCurrencySymbol());
+			return accountBean.exchangeFictionalCurrencyToReal(
+					currencyBackExchangeDialogFromAccount != null ? currencyBackExchangeDialogFromAccount.getId() : null,
+					currencyBackExchangeDialogAmount, currencyBackExchangeDialogExchangeAll,
+					WebUtils.getTranslatedMessage("lucas.application.accountScreen.exchangeCurrencyBack.payOutComment"));
+		}, "lucas.application.accountScreen.exchangeCurrencyBack.message", (exception, params) -> {
+			String key = null;
+			switch (exception.getMark()) {
+				case AccountBeanLocal.NO_PERMISSION_FOR_TRANSACTION_FROM_PROTECTED_EXCEPTION_MARKER:
+				case AccountBeanLocal.NO_PERMISSION_FOR_TRANSACTION_TO_PROTECTED_EXCEPTION_MARKER:
+					key = "lucas.application.accountScreen.exchangeCurrencyBack.message.fail.protected";
+					break;
+				case AccountBeanLocal.NO_PERMISSION_FOR_EXCEEDING_TRANSACTION_LIMIT_EXCEPTION_MARKER:
+					key = "lucas.application.accountScreen.exchangeCurrencyBack.message.fail.transactionLimitExceeded";
+					break;
+				case AccountBeanLocal.FROM_BLOCKED_EXCEPTION_MARKER:
+				case AccountBeanLocal.TO_BLOCKED_EXCEPTION_MARKER:
+					key = "lucas.application.accountScreen.exchangeCurrencyBack.message.fail.blocked";
+					break;
+				case AccountBeanLocal.TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE_EXCEPTION_MARKER:
+					key = "lucas.application.accountScreen.exchangeCurrencyBack.message.fail.amountGreaterThanBankBalance";
+					break;
+				case AccountBeanLocal.NOT_ENOUGH_MONEY_IN_CIRCULATION_EXCEPTION_MARKER:
+					key = "lucas.application.accountScreen.exchangeCurrencyBack.message.fail.notEnoughMoneyInCirculation";
+					break;
+				case AccountBeanLocal.NOT_ENOUGH_REAL_MONEY_EXCEPTION_MARKER:
+					key = "lucas.application.accountScreen.exchangeCurrencyBack.message.fail.notEnoughRealMoney";
+					break;
+			}
+			return key != null ? WebUtils.getTranslatedMessage(key, params.toArray(new Object[params.size()])) : null;
+		});
+	}
+
+	/*
+	 * -------------------- Currency Back Exchange Dialog End --------------------
+	 */
 }

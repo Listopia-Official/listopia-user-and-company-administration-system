@@ -21,6 +21,8 @@ public interface AccountBeanLocal {
 	public static final String TO_BLOCKED_EXCEPTION_MARKER = "toIsBlocked";
 	public static final String TRANSACTION_AMOUNT_GREATER_THAN_BANK_BALANCE_EXCEPTION_MARKER = "transactionAmountGreaterThanBankBalance";
 	public static final String SAME_ACCOUNT_AS_SOURCE_AND_TARGET_EXCEPTION_MARKER = "sameAccountAsSourceAndTarget";
+	public static final String NOT_ENOUGH_MONEY_IN_CIRCULATION_EXCEPTION_MARKER = "notEnoughMoneyInCirculation";
+	public static final String NOT_ENOUGH_REAL_MONEY_EXCEPTION_MARKER = "notEnoughRealMoney";
 
 	public void payIn(@ValidEntityId(entityClass = ReadOnlyAccount.class) Long account, @ValidTransactionAmount BigDecimal amount,
 			@ShortComment String comment);
@@ -83,5 +85,13 @@ public interface AccountBeanLocal {
 	public List<? extends ReadOnlyAccount> getAccountsByData(@NotNull String data, @NotNull @Min(1) Integer resultsCount);
 
 	public List<? extends ReadOnlyAccountOwner> getAccountOwnersByData(@NotNull String data, @NotNull @Min(1) Integer resultsCount);
+
+	public BigDecimal getTotalMoneyInAccounts();
+
+	public void exchangeRealCurrencyToFictional(@ValidTransactionAmount BigDecimal amount,
+			@ValidEntityId(entityClass = ReadOnlyAccount.class, nullable = true) Long transferToAccount, @ShortComment String transactionComment);
+
+	public Boolean exchangeFictionalCurrencyToReal(@ValidEntityId(entityClass = ReadOnlyAccount.class, nullable = true) Long fromAccount,
+			@ValidTransactionAmount BigDecimal amount, @NotNull Boolean all, @ShortComment String transactionComment);
 
 }

@@ -11,6 +11,9 @@
 		<ui:include src="/WEB-INF/web/accounts/transactionDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/accounts/transactionLogDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/components/longTextDisplayDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/accounts/currencyExchangeDialog.xhtml" />
+		<ui:include
+			src="/WEB-INF/web/accounts/currencyBackExchangeDialog.xhtml" />
 	</ui:define>
 	<ui:define name="otherContent">
 		<p:importEnum type="florian_haas.lucas.model.EnumAccountOwnerType" />
@@ -49,6 +52,26 @@
 				icon="fa fa-retweet" process="@this" update="transactionDialogForm"
 				disabled="#{accountBean.selectedEntities.size() &lt;= 0}"
 				oncomplete="PF('transactionDialog').show()" />
+			<ui:fragment
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.ACCOUNT_EXCHANGE_REAL_CURRENCY_TO_FICTIONAL,EnumPermission.ACCOUNT_EXCHANGE_FICTIONAL_CURRENCY_TO_REAL])}">
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			</ui:fragment>
+			<p:commandButton resetValues="true"
+				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_EXCHANGE_REAL_CURRENCY_TO_FICTIONAL)}"
+				value="#{msg['lucas.application.accountScreen.currencyExchangeButton.name']}"
+				title="#{msg['lucas.application.accountScreen.currencyExchangeButton.tooltip']}"
+				action="#{accountBean.resetCurrencyExchangeDialog}"
+				icon="fa fa-mail-forward" process="@this"
+				update="currencyExchangeDialogForm"
+				oncomplete="PF('currencyExchangeDialog').show()" />
+			<p:commandButton resetValues="true"
+				update="currencyBackExchangeDialogForm"
+				oncomplete="PF('currencyBackExchangeDialog').show()"
+				action="#{accountBean.resetCurrencyBackExchangeDialog}"
+				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_EXCHANGE_FICTIONAL_CURRENCY_TO_REAL)}"
+				value="#{msg['lucas.application.accountScreen.currencyBackExchangeButton.name']}"
+				title="#{msg['lucas.application.accountScreen.currencyBackExchangeButton.tooltip']}"
+				icon="fa fa-mail-reply" process="@this" />
 			<ui:fragment
 				rendered="#{loginBean.hasPermissionsOr([EnumPermission.ACCOUNT_BLOCK,EnumPermission.ACCOUNT_UNBLOCK,EnumPermission.ACCOUNT_PROTECT,EnumPermission.ACCOUNT_UNPROTECT])}">
 				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
