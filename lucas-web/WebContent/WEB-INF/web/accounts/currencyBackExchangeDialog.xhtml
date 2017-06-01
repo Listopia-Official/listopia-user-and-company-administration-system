@@ -58,7 +58,7 @@
 					</p:column>
 					<p:column>
 						<p:selectBooleanButton id="exchangeAllBackBooleanButton"
-							disabled="#{empty accountBean.currencyBackExchangeDialogFromAccount}"
+							disabled="#{accountBean.currencyBackExchangeDialogFromAccount == null}"
 							value="#{accountBean.currencyBackExchangeDialogExchangeAll}"
 							onLabel="#{msg['lucas.application.accountScreen.currencyBackExchangeDialog.exchangeAllBackBooleanButton.name']}"
 							offLabel="#{msg['lucas.application.accountScreen.currencyBackExchangeDialog.exchangeAllBackBooleanButton.name']}"
