@@ -13,7 +13,8 @@ public class Attendancedata extends EntityBase implements ReadOnlyAttendancedata
 
 	private static final long serialVersionUID = -2732516380228841229L;
 
-	@OneToOne(optional = false, mappedBy = "attendancedata")
+	@OneToOne(optional = false, mappedBy = "attendancedata", cascade = {
+			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	@NotNull
 	private User user;
 

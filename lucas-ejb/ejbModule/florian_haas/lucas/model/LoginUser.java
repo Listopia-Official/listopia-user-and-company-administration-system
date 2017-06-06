@@ -24,14 +24,15 @@ public class LoginUser extends EntityBase implements ReadOnlyLoginUser {
 	private String hashedPassword;
 
 	@JoinColumn(unique = true)
-	@OneToOne
+	@OneToOne(cascade = {
+			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	@Null(groups = DefaultLoginUserRequired.class)
 	private User user;
 
 	private String uiTheme = null;
 
 	@OneToMany(cascade = {
-			CascadeType.PERSIST, CascadeType.REFRESH })
+			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	@NotNull
 	private Set<@TypeNotNull LoginUserRole> roles = new HashSet<>();
 

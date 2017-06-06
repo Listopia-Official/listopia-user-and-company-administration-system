@@ -29,7 +29,7 @@ public class Company extends AccountOwner implements ReadOnlyCompany {
 	private String description;
 
 	@OneToOne(cascade = {
-			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.MERGE }, optional = true)
+			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE }, optional = true)
 	@JoinColumn(nullable = true, unique = true)
 	private RoomSection section;
 
@@ -38,11 +38,13 @@ public class Company extends AccountOwner implements ReadOnlyCompany {
 	@NotNull
 	private EnumCompanyType companyType;
 
-	@ManyToOne(optional = true)
+	@ManyToOne(optional = true, cascade = {
+			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	@JoinColumn(nullable = true)
 	private Company parentCompany;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parentCompany")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "parentCompany", cascade = {
+			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	@NotNull
 	private Set<@TypeNotNull Company> childCompanies = new HashSet<>();
 

@@ -32,7 +32,8 @@ public class GlobalData extends EntityBase implements ReadOnlyGlobalData {
 	private BigDecimal minimumWage = new BigDecimal("1.0");
 
 	@NotNull(groups = NotNullWarehouseRequired.class)
-	@OneToOne(fetch = FetchType.LAZY, optional = true)
+	@OneToOne(fetch = FetchType.LAZY, optional = true, cascade = {
+			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	@JoinColumn(nullable = true)
 	private Company warehouse;
 

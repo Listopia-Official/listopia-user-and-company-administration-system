@@ -13,12 +13,14 @@ public class Employment extends EntityBase implements ReadOnlyEmployment {
 
 	private static final long serialVersionUID = 8794256029793389169L;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, cascade = {
+			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	@JoinColumn(nullable = false)
 	@NotNull
 	private User user;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, cascade = {
+			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	@JoinColumn(nullable = false)
 	@NotNull
 	private Job job;

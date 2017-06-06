@@ -14,7 +14,8 @@ public class TransactionLog extends EntityBase implements ReadOnlyTransactionLog
 
 	private static final long serialVersionUID = 7946302440312827012L;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, cascade = {
+			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	@JoinColumn(nullable = false)
 	@NotNull
 	private Account account;
@@ -34,7 +35,8 @@ public class TransactionLog extends EntityBase implements ReadOnlyTransactionLog
 	@NotNull
 	private EnumAccountActionType actionType;
 
-	@OneToOne(optional = true)
+	@OneToOne(optional = true, cascade = {
+			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	@JoinColumn(nullable = true)
 	private Account relatedAccount;
 
@@ -48,7 +50,8 @@ public class TransactionLog extends EntityBase implements ReadOnlyTransactionLog
 	@ValidBankBalance
 	private BigDecimal previousBankBalance;
 
-	@OneToOne(optional = true)
+	@OneToOne(optional = true, cascade = {
+			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	@JoinColumn(nullable = true)
 	private LoginUser bankUser;
 

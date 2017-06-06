@@ -29,7 +29,8 @@ public class Job extends EntityBase implements ReadOnlyJob {
 	@Size(max = 255)
 	private String description;
 
-	@ManyToOne
+	@ManyToOne(optional = false, cascade = {
+			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	@JoinColumn(nullable = false)
 	@NotNull
 	private Company company;

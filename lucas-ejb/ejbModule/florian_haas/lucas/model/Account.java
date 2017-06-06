@@ -14,7 +14,8 @@ public class Account extends EntityBase implements ReadOnlyAccount {
 
 	private static final long serialVersionUID = -8880641005184863518L;
 
-	@OneToOne(mappedBy = "account", optional = false)
+	@OneToOne(mappedBy = "account", optional = false, cascade = {
+			CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	@NotNull
 	private AccountOwner owner;
 
