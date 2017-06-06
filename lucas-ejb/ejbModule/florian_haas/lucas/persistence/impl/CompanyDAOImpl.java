@@ -28,15 +28,11 @@ public class CompanyDAOImpl extends DAOImpl<Company> implements CompanyDAO {
 			getSingularRestriction(Company_.companyType, companyType, useCompanyType, companyTypeComparator, predicates, builder, root);
 			getSingularRestriction(Company_.id, parentCompanyId, useParentCompanyId, parentCompanyIdComparator, predicates, builder,
 					root.join(Company_.parentCompany, JoinType.LEFT));
-			getSingularRestriction(Job_.id, jobId, useJobId, jobIdComparator, predicates, builder, root.join(Company_.jobs, JoinType.LEFT));
+			Join<Company, Job> jobJoin = root.join(Company_.jobs, JoinType.LEFT);
+			getSingularRestriction(Job_.id, jobId, useJobId, jobIdComparator, predicates, builder, jobJoin);
 			if (useAreEmployeesRequired) {
-				Subquery<Long> subquery = query.subquery(Long.class);
-				Root<Job> jobRoot = subquery.from(Job.class);
-				subquery.select(builder.count(jobRoot));
-				subquery.where(builder.greaterThanOrEqualTo(builder.size(jobRoot.get(Job_.employments)), jobRoot.get(Job_.requiredEmploymentsCount)));
-				Predicate pred = builder.equal(subquery, builder.size(root.get(Company_.jobs)));
-				if (areEmployeesRequired) pred = pred.not();
-				predicates.add(pred);
+				Predicate pred = builder.lessThan(builder.size(jobJoin.get(Job_.employments)), jobJoin.get(Job_.requiredEmploymentsCount));
+				predicates.add(areEmployeesRequired ? pred : pred.not());
 			}
 			getSingularRestriction(builder.size(root.get(Company_.jobs)), jobCount, useJobCount, jobCountComparator, predicates, builder, root);
 			return predicates;
