@@ -102,46 +102,54 @@
 		</p:row>
 		<p:row>
 			<p:column>
-				<p:selectOneMenu id="searchRoomIdComparator"
-					disabled="#{not roomBean.useSearchRoomId}"
-					value="#{roomBean.searchRoomIdComparator}"
-					title="#{msg['lucas.application.roomScreen.searchRoomIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchRoomIdComparator" />
+					<ui:param name="enabled" value="#{roomBean.useSearchRoomId}" />
+					<ui:param name="title"
+						value="lucas.application.roomScreen.searchRoomIdComparator.tooltip" />
+					<ui:param name="value" value="#{roomBean.searchRoomIdComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+					<ui:param name="targetComponent" value="searchRoomIdInputNumber" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchRoomNameComparator"
-					disabled="#{not roomBean.useSearchRoomName}"
-					value="#{roomBean.searchRoomNameComparator}"
-					title="#{msg['lucas.application.roomScreen.searchRoomNameComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchRoomNameComparator" />
+					<ui:param name="enabled" value="#{roomBean.useSearchRoomName}" />
+					<ui:param name="title"
+						value="lucas.application.roomScreen.searchRoomNameComparator.tooltip" />
+					<ui:param name="value" value="#{roomBean.searchRoomNameComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.TEXT_COMPARATORS}" />
+					<ui:param name="targetComponent" value="searchRoomNameInputText" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchRoomSectionIdComparator"
-					disabled="#{not roomBean.useSearchRoomSectionId}"
-					value="#{roomBean.searchRoomSectionIdComparator}"
-					title="#{msg['lucas.application.roomScreen.searchRoomSectionIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchRoomSectionIdComparator" />
+					<ui:param name="enabled" value="#{roomBean.useSearchRoomSectionId}" />
+					<ui:param name="title"
+						value="lucas.application.roomScreen.searchRoomSectionIdComparator.tooltip" />
+					<ui:param name="value"
+						value="#{roomBean.searchRoomSectionIdComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchRoomSectionIdInputNumber" />
+				</ui:include>
 			</p:column>
 		</p:row>
 		<p:row>
 			<p:column>
 				<p:inputNumber value="#{roomBean.searchRoomId}" minValue="0"
 					decimalPlaces="0" id="searchRoomIdInputNumber"
-					disabled="#{not roomBean.useSearchRoomId}" />
+					disabled="#{not roomBean.useSearchRoomId|| converterBean.isDisabled(roomBean.searchRoomIdComparator)}" />
 			</p:column>
 			<p:column>
 				<p:inputText value="#{roomBean.searchRoomName}"
 					id="searchRoomNameInputText"
-					disabled="#{not roomBean.useSearchRoomName}" />
+					disabled="#{not roomBean.useSearchRoomName|| converterBean.isDisabled(roomBean.searchRoomNameComparator)}" />
 			</p:column>
 			<p:column>
 				<ui:include
@@ -149,7 +157,7 @@
 					<ui:param name="id" value="searchRoomSectionIdInputNumber" />
 					<ui:param name="title" value="" />
 					<ui:param name="disabled"
-						value="#{not roomBean.useSearchRoomSectionId}" />
+						value="#{not roomBean.useSearchRoomSectionId|| converterBean.isDisabled(roomBean.searchRoomSectionIdComparator)}" />
 					<ui:param name="value" value="#{roomBean.searchRoomSection}" />
 				</ui:include>
 			</p:column>

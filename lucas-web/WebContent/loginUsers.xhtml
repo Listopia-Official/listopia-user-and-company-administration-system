@@ -114,46 +114,61 @@
 		</p:row>
 		<p:row>
 			<p:column>
-				<p:selectOneMenu id="searchLoginUserIdComparator"
-					disabled="#{not loginUserBean.useSearchLoginUserId}"
-					value="#{loginUserBean.searchLoginUserIdComparator}"
-					title="#{msg['lucas.application.loginUserScreen.searchLoginUserIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchLoginUserIdComparator" />
+					<ui:param name="enabled"
+						value="#{loginUserBean.useSearchLoginUserId}" />
+					<ui:param name="title"
+						value="lucas.application.loginUserScreen.searchLoginUserIdComparator.tooltip" />
+					<ui:param name="value"
+						value="#{loginUserBean.searchLoginUserIdComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchLoginUserIdInputNumber" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchLoginUserUsernameComparator"
-					disabled="#{not loginUserBean.useSearchLoginUserUsername}"
-					value="#{loginUserBean.searchLoginUserUsernameComparator}"
-					title="#{msg['lucas.application.loginUserScreen.searchLoginUserUsernameComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchLoginUserUsernameComparator" />
+					<ui:param name="enabled"
+						value="#{loginUserBean.useSearchLoginUserUsername}" />
+					<ui:param name="title"
+						value="lucas.application.loginUserScreen.searchLoginUserUsernameComparator.tooltip" />
+					<ui:param name="value"
+						value="#{loginUserBean.searchLoginUserUsernameComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.TEXT_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchLoginUserUsernameInputText" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchLoginUserUserIdComparator"
-					disabled="#{not loginUserBean.useSearchLoginUserUserId}"
-					value="#{loginUserBean.searchLoginUserUserIdComparator}"
-					title="#{msg['lucas.application.loginUserScreen.searchLoginUserUserIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchLoginUserUserIdComparator" />
+					<ui:param name="enabled"
+						value="#{loginUserBean.useSearchLoginUserUserId}" />
+					<ui:param name="title"
+						value="lucas.application.loginUserScreen.searchLoginUserUserIdComparator.tooltip" />
+					<ui:param name="value"
+						value="#{loginUserBean.searchLoginUserUserIdComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchLoginUserUserIdInputNumber" />
+				</ui:include>
 			</p:column>
 		</p:row>
 		<p:row>
 			<p:column>
 				<p:inputNumber value="#{loginUserBean.searchLoginUserId}"
 					minValue="0" decimalPlaces="0" id="searchLoginUserIdInputNumber"
-					disabled="#{not loginUserBean.useSearchLoginUserId}" />
+					disabled="#{not loginUserBean.useSearchLoginUserId|| converterBean.isDisabled(loginUserBean.searchLoginUserIdComparator)}" />
 			</p:column>
 			<p:column>
 				<p:inputText value="#{loginUserBean.searchLoginUserUsername}"
 					id="searchLoginUserUsernameInputText"
-					disabled="#{not loginUserBean.useSearchLoginUserUsername}" />
+					disabled="#{not loginUserBean.useSearchLoginUserUsername|| converterBean.isDisabled(loginUserBean.searchLoginUserUsernameComparator)}" />
 			</p:column>
 			<p:column>
 				<ui:include
@@ -161,7 +176,7 @@
 					<ui:param name="id" value="searchLoginUserUserIdInputNumber" />
 					<ui:param name="title" value="" />
 					<ui:param name="disabled"
-						value="#{not loginUserBean.useSearchLoginUserUserId}" />
+						value="#{not loginUserBean.useSearchLoginUserUserId|| converterBean.isDisabled(loginUserBean.searchLoginUserUserIdComparator)}" />
 					<ui:param name="value" value="#{loginUserBean.searchLoginUserUser}" />
 				</ui:include>
 			</p:column>

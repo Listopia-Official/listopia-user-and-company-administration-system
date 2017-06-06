@@ -144,9 +144,13 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 			case NOT_EQUAL:
 				return builder.notEqual(attribute, value);
 			case LIKE:
-				if (value instanceof String) { return builder.like((Expression<String>) (Expression<?>) attribute, (String) value); }
+				if (value instanceof String) return builder.like((Expression<String>) (Expression<?>) attribute, (String) value);
 			case NOT_LIKE:
-				if (value instanceof String) { return builder.notLike((Expression<String>) (Expression<?>) attribute, (String) value); }
+				if (value instanceof String) return builder.notLike((Expression<String>) (Expression<?>) attribute, (String) value);
+			case NULL:
+				return builder.isNull(attribute);
+			case NOT_NULL:
+				return builder.isNotNull(attribute);
 			default:
 				return null;
 		}
@@ -214,22 +218,20 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 
 		switch (comparator) {
 			case MEMBER_OF:
-				if (value == null) {
-					predicates.add(builder.isEmpty(expression));
-				} else {
-					value.forEach(val -> {
-						predicates.add(builder.isMember(val, expression));
-					});
-				}
+				value.forEach(val -> {
+					predicates.add(builder.isMember(val, expression));
+				});
 				return predicates;
 			case NOT_MEMBER_OF:
-				if (value == null) {
-					predicates.add(builder.isNotEmpty(expression));
-				} else {
-					value.forEach(val -> {
-						predicates.add(builder.isNotMember(val, expression));
-					});
-				}
+				value.forEach(val -> {
+					predicates.add(builder.isNotMember(val, expression));
+				});
+				return predicates;
+			case EMPTY:
+				predicates.add(builder.isEmpty(expression));
+				return predicates;
+			case NOT_EMPTY:
+				predicates.add(builder.isNotEmpty(expression));
 				return predicates;
 			default:
 				return predicates;

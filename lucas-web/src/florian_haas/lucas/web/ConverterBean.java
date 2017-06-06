@@ -7,6 +7,7 @@ import javax.enterprise.inject.spi.*;
 import javax.faces.convert.Converter;
 import javax.inject.Named;
 
+import florian_haas.lucas.persistence.EnumQueryComparator;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.web.converter.EnumConverter;
 import florian_haas.lucas.web.util.WebUtils;
@@ -41,5 +42,10 @@ public class ConverterBean implements Serializable {
 
 	public String getStackTrace(Exception e) {
 		return Utils.getStackTraceAsString(e);
+	}
+
+	public Boolean isDisabled(EnumQueryComparator comparator) {
+		return comparator == EnumQueryComparator.EMPTY || comparator == EnumQueryComparator.NOT_EMPTY || comparator == EnumQueryComparator.NULL
+				|| comparator == EnumQueryComparator.NOT_NULL;
 	}
 }

@@ -233,108 +233,138 @@
 		</p:row>
 		<p:row>
 			<p:column>
-				<p:selectOneMenu id="searchUserIdComparator"
-					disabled="#{not userBean.useSearchUserId}"
-					value="#{userBean.searchUserIdComparator}"
-					title="#{msg['lucas.application.userScreen.searchUserIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchUserIdComparator" />
+					<ui:param name="enabled" value="#{userBean.useSearchUserId}" />
+					<ui:param name="title"
+						value="lucas.application.userScreen.searchUserIdComparator.tooltip" />
+					<ui:param name="value" value="#{userBean.searchUserIdComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+					<ui:param name="targetComponent" value="searchUserIdInputNumber" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchUserForenameComparator"
-					disabled="#{not userBean.useSearchUserForename}"
-					title="#{msg['lucas.application.userScreen.searchUserForenameComparator.tooltip']}"
-					value="#{userBean.searchUserForenameComparator}">
-					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchUserForenameComparator" />
+					<ui:param name="enabled" value="#{userBean.useSearchUserForename}" />
+					<ui:param name="title"
+						value="lucas.application.userScreen.searchUserForenameComparator.tooltip" />
+					<ui:param name="value"
+						value="#{userBean.searchUserForenameComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.TEXT_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchUserForenameInputText" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchUserSurnameComparator"
-					disabled="#{not userBean.useSearchUserSurname}"
-					title="#{msg['lucas.application.userScreen.searchUserSurnameComparator.tooltip']}"
-					value="#{userBean.searchUserSurnameComparator}">
-					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchUserSurnameComparator" />
+					<ui:param name="enabled" value="#{userBean.useSearchUserSurname}" />
+					<ui:param name="title"
+						value="lucas.application.userScreen.searchUserSurnameComparator.tooltip" />
+					<ui:param name="value"
+						value="#{userBean.searchUserSurnameComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.TEXT_COMPARATORS}" />
+					<ui:param name="targetComponent" value="searchUserSurnameInputText" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchUserTypeComparator"
-					disabled="#{not userBean.useSearchUserType}"
-					title="#{msg['lucas.application.userScreen.searchUserTypeComparator.tooltip']}"
-					value="#{userBean.searchUserTypeComparator}">
-					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchUserTypeComparator" />
+					<ui:param name="enabled" value="#{userBean.useSearchUserType}" />
+					<ui:param name="title"
+						value="lucas.application.userScreen.searchUserTypeComparator.tooltip" />
+					<ui:param name="value" value="#{userBean.searchUserTypeComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS_NOT_NULL}" />
+					<ui:param name="targetComponent"
+						value="searchUserTypeSelectOneMenu" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchUserSchoolGradeComparator"
-					disabled="#{not userBean.useSearchUserSchoolGrade}"
-					title="#{msg['lucas.application.userScreen.searchUserSchoolGradeComparator.tooltip']}"
-					value="#{userBean.searchUserSchoolGradeComparator}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchUserSchoolGradeComparator" />
+					<ui:param name="enabled"
+						value="#{userBean.useSearchUserSchoolGrade}" />
+					<ui:param name="title"
+						value="lucas.application.userScreen.searchUserSchoolGradeComparator.tooltip" />
+					<ui:param name="value"
+						value="#{userBean.searchUserSchoolGradeComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchUserSchoolGradeSelectOneMenu" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchUserSchoolClassComparator"
-					disabled="#{not userBean.useSearchUserSchoolClass}"
-					title="#{msg['lucas.application.userScreen.searchUserSchoolClassComparator.tooltip']}"
-					value="#{userBean.searchUserSchoolClassComparator}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchUserSchoolClassComparator" />
+					<ui:param name="enabled"
+						value="#{userBean.useSearchUserSchoolClass}" />
+					<ui:param name="title"
+						value="lucas.application.userScreen.searchUserSchoolClassComparator.tooltip" />
+					<ui:param name="value"
+						value="#{userBean.searchUserSchoolClassComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchUserSchoolClassSelectOneMenu" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchUserEmploymentsCountComparator"
-					disabled="#{not userBean.useSearchUserEmploymentsCount}"
-					value="#{userBean.searchUserEmploymentsCountComparator}"
-					title="#{msg['lucas.application.userScreen.searchUserEmploymentsCountComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchUserEmploymentsCountComparator" />
+					<ui:param name="enabled"
+						value="#{userBean.useSearchUserEmploymentsCount}" />
+					<ui:param name="title"
+						value="lucas.application.userScreen.searchUserEmploymentsCountComparator.tooltip" />
+					<ui:param name="value"
+						value="#{userBean.searchUserEmploymentsCountComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchUserEmploymentsCountInputNumber" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchUserRanksComparator"
-					disabled="#{not userBean.useSearchUserRanks}"
-					title="#{msg['lucas.application.userScreen.searchUserRanksComparator.tooltip']}"
-					value="#{userBean.searchUserRanksComparator}">
-					<f:selectItems value="#{EnumQueryComparator.ARRAY_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchUserRanksComparator" />
+					<ui:param name="enabled" value="#{userBean.useSearchUserRanks}" />
+					<ui:param name="title"
+						value="lucas.application.userScreen.searchUserRanksComparator.tooltip" />
+					<ui:param name="value"
+						value="#{userBean.searchUserRanksComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.ARRAY_COMPARATORS}" />
+					<ui:param name="targetComponent" value="searchUserRanksChips" />
+				</ui:include>
 			</p:column>
 		</p:row>
 		<p:row>
 			<p:column>
 				<p:inputNumber value="#{userBean.searchUserId}" minValue="0"
 					decimalPlaces="0" id="searchUserIdInputNumber"
-					disabled="#{not userBean.useSearchUserId}" />
+					disabled="#{not userBean.useSearchUserId || converterBean.isDisabled(userBean.searchUserIdComparator)}" />
 			</p:column>
 			<p:column>
 				<p:inputText value="#{userBean.searchUserForename}"
 					id="searchUserForenameInputText"
-					disabled="#{not userBean.useSearchUserForename}"
+					disabled="#{not userBean.useSearchUserForename || converterBean.isDisabled(userBean.searchUserForenameComparator)}"
 					converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}" />
 			</p:column>
 			<p:column>
 				<p:inputText value="#{userBean.searchUserSurname}"
 					id="searchUserSurnameInputText"
-					disabled="#{not userBean.useSearchUserSurname}"
+					disabled="#{not userBean.useSearchUserSurname || converterBean.isDisabled(userBean.searchUserSurnameComparator)}"
 					converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}" />
 			</p:column>
 			<p:column>
 				<p:selectOneMenu value="#{userBean.searchUserType}"
 					id="searchUserTypeSelectOneMenu"
-					disabled="#{not userBean.useSearchUserType}">
+					disabled="#{not userBean.useSearchUserType || converterBean.isDisabled(userBean.searchUserTypeComparator)}">
 					<f:selectItems value="#{EnumUserType.ALL_VALUES}" var="userType"
 						itemValue="#{userType}"
 						itemLabel="#{converterBean.convertEnum(userType)}" />
@@ -343,14 +373,14 @@
 			<p:column>
 				<p:selectOneMenu value="#{userBean.searchUserSchoolGrade}"
 					id="searchUserSchoolGradeSelectOneMenu"
-					disabled="#{not userBean.useSearchUserSchoolGrade}">
+					disabled="#{not userBean.useSearchUserSchoolGrade || converterBean.isDisabled(userBean.searchUserSchoolGradeComparator)}">
 					<f:selectItems value="#{EnumSchoolClass.GRADES}" />
 				</p:selectOneMenu>
 			</p:column>
 			<p:column>
 				<p:selectOneMenu value="#{userBean.searchUserSchoolClass}"
 					id="searchUserSchoolClassSelectOneMenu"
-					disabled="#{not userBean.useSearchUserSchoolClass}">
+					disabled="#{not userBean.useSearchUserSchoolClass|| converterBean.isDisabled(userBean.searchUserSchoolClassComparator)}">
 					<f:selectItems value="#{EnumSchoolClass.CLASSES}" />
 				</p:selectOneMenu>
 			</p:column>
@@ -358,12 +388,12 @@
 				<p:inputNumber value="#{userBean.searchUserEmploymentsCount}"
 					minValue="0" decimalPlaces="0"
 					id="searchUserEmploymentsCountInputNumber"
-					disabled="#{not userBean.useSearchUserEmploymentsCount}" />
+					disabled="#{not userBean.useSearchUserEmploymentsCount|| converterBean.isDisabled(userBean.searchUserEmploymentsCountComparator)}" />
 			</p:column>
 			<p:column>
 				<p:chips id="searchUserRanksChips"
 					value="#{userBean.searchUserRanks}"
-					disabled="#{not userBean.useSearchUserRanks}" />
+					disabled="#{not userBean.useSearchUserRanks|| converterBean.isDisabled(userBean.searchUserRanksComparator)}" />
 			</p:column>
 		</p:row>
 	</ui:define>

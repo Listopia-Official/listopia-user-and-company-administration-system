@@ -191,112 +191,148 @@
 		</p:row>
 		<p:row>
 			<p:column>
-				<p:selectOneMenu id="searchJobIdComparator"
-					disabled="#{not jobBean.useSearchJobId}"
-					value="#{jobBean.searchJobIdComparator}"
-					title="#{msg['lucas.application.jobScreen.searchJobIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchJobIdComparator" />
+					<ui:param name="enabled" value="#{jobBean.useSearchJobId}" />
+					<ui:param name="title"
+						value="lucas.application.jobScreen.searchJobIdComparator.tooltip" />
+					<ui:param name="value" value="#{jobBean.searchJobIdComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+					<ui:param name="targetComponent" value="searchJobIdInputNumber" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchJobNameComparator"
-					disabled="#{not jobBean.useSearchJobName}"
-					value="#{jobBean.searchJobNameComparator}"
-					title="#{msg['lucas.application.jobScreen.searchJobNameComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchJobNameComparator" />
+					<ui:param name="enabled" value="#{jobBean.useSearchJobName}" />
+					<ui:param name="title"
+						value="lucas.application.jobScreen.searchJobNameComparator.tooltip" />
+					<ui:param name="value" value="#{jobBean.searchJobNameComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.TEXT_COMPARATORS}" />
+					<ui:param name="targetComponent" value="searchJobNameInputText" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchJobDescriptionComparator"
-					disabled="#{not jobBean.useSearchJobDescription}"
-					value="#{jobBean.searchJobDescriptionComparator}"
-					title="#{msg['lucas.application.jobScreen.searchJobDescriptionComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchJobDescriptionComparator" />
+					<ui:param name="enabled" value="#{jobBean.useSearchJobDescription}" />
+					<ui:param name="title"
+						value="lucas.application.jobScreen.searchJobDescriptionComparator.tooltip" />
+					<ui:param name="value"
+						value="#{jobBean.searchJobDescriptionComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.TEXT_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchJobDescriptionInputText" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchJobCompanyIdComparator"
-					disabled="#{not jobBean.useSearchJobCompanyId}"
-					value="#{jobBean.searchJobCompanyIdComparator}"
-					title="#{msg['lucas.application.jobScreen.searchJobCompanyIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchJobCompanyIdComparator" />
+					<ui:param name="enabled" value="#{jobBean.useSearchJobCompanyId}" />
+					<ui:param name="title"
+						value="lucas.application.jobScreen.searchJobCompanyIdComparator.tooltip" />
+					<ui:param name="value"
+						value="#{jobBean.searchJobCompanyIdComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchJobCompanyIdInputNumber" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchJobEmploymentsCountComparator"
-					disabled="#{not jobBean.useSearchJobEmploymentsCount}"
-					value="#{jobBean.searchJobEmploymentsCountComparator}"
-					title="#{msg['lucas.application.jobScreen.searchJobEmploymentsCountComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchJobEmploymentsCountComparator" />
+					<ui:param name="enabled"
+						value="#{jobBean.useSearchJobEmploymentsCount}" />
+					<ui:param name="title"
+						value="lucas.application.jobScreen.searchJobEmploymentsCountComparator.tooltip" />
+					<ui:param name="value"
+						value="#{jobBean.searchJobEmploymentsCountComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchJobEmploymentsCountInputNumber" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchJobRequiredEmploymentsCountComparator"
-					disabled="#{not jobBean.useSearchJobRequiredEmploymentsCount}"
-					value="#{jobBean.searchJobRequiredEmploymentsCountComparator}"
-					title="#{msg['lucas.application.jobScreen.searchJobRequiredEmploymentsCountComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id"
+						value="searchJobRequiredEmploymentsCountComparator" />
+					<ui:param name="enabled"
+						value="#{jobBean.useSearchJobRequiredEmploymentsCount}" />
+					<ui:param name="title"
+						value="lucas.application.jobScreen.searchJobRequiredEmploymentsCountComparator.tooltip" />
+					<ui:param name="value"
+						value="#{jobBean.searchJobRequiredEmploymentsCountComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchJobRequiredEmploymentsCountInputNumber" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchJobEmploymentIdComparator"
-					disabled="#{not jobBean.useSearchJobEmploymentId}"
-					value="#{jobBean.searchJobEmploymentIdComparator}"
-					title="#{msg['lucas.application.jobScreen.searchJobEmploymentIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchJobEmploymentIdComparator" />
+					<ui:param name="enabled"
+						value="#{jobBean.useSearchJobEmploymentId}" />
+					<ui:param name="title"
+						value="lucas.application.jobScreen.searchJobEmploymentIdComparator.tooltip" />
+					<ui:param name="value"
+						value="#{jobBean.searchJobEmploymentIdComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchJobEmploymentIdInputNumber" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchJobEmployeePositionComparator"
-					disabled="#{not jobBean.useSearchJobPosition}"
-					value="#{jobBean.searchJobPositionComparator}"
-					title="#{msg['lucas.application.jobScreen.searchJobEmployeePositionComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchJobEmployeePositionComparator" />
+					<ui:param name="enabled" value="#{jobBean.useSearchJobPosition}" />
+					<ui:param name="title"
+						value="lucas.application.jobScreen.searchJobEmployeePositionComparator.tooltip" />
+					<ui:param name="value"
+						value="#{jobBean.searchJobPositionComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchEmployeePositionSelectOneMenu" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchJobSalaryClassComparator"
-					disabled="#{not jobBean.useSearchJobSalaryClass}"
-					value="#{jobBean.searchJobSalaryClassComparator}"
-					title="#{msg['lucas.application.jobScreen.searchJobSalaryClassComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchJobSalaryClassComparator" />
+					<ui:param name="enabled" value="#{jobBean.useSearchJobSalaryClass}" />
+					<ui:param name="title"
+						value="lucas.application.jobScreen.searchJobSalaryClassComparator.tooltip" />
+					<ui:param name="value"
+						value="#{jobBean.searchJobSalaryClassComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchSalaryClassSelectOneMenu" />
+				</ui:include>
 			</p:column>
 		</p:row>
 		<p:row>
 			<p:column>
 				<p:inputNumber value="#{jobBean.searchJobId}" minValue="0"
 					decimalPlaces="0" id="searchJobIdInputNumber"
-					disabled="#{not jobBean.useSearchJobId}" />
+					disabled="#{not jobBean.useSearchJobId || converterBean.isDisabled(jobBean.searchJobIdComparator)}" />
 			</p:column>
 			<p:column>
 				<p:inputText value="#{jobBean.searchJobName}"
 					id="searchJobNameInputText"
-					disabled="#{not jobBean.useSearchJobName}" />
+					disabled="#{not jobBean.useSearchJobName || converterBean.isDisabled(jobBean.searchJobNameComparator)}" />
 			</p:column>
 			<p:column>
 				<p:inputText value="#{jobBean.searchJobDescription}"
 					id="searchJobDescriptionInputText"
 					converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}"
-					disabled="#{not jobBean.useSearchJobDescription}" />
+					disabled="#{not jobBean.useSearchJobDescription || converterBean.isDisabled(jobBean.searchJobDescriptionComparator)}" />
 			</p:column>
 			<p:column>
 				<ui:include
@@ -304,7 +340,7 @@
 					<ui:param name="id" value="searchJobCompanyIdInputNumber" />
 					<ui:param name="title" value="" />
 					<ui:param name="disabled"
-						value="#{not jobBean.useSearchJobCompanyId}" />
+						value="#{not jobBean.useSearchJobCompanyId || converterBean.isDisabled(jobBean.searchJobCompanyIdComparator)}" />
 					<ui:param name="value" value="#{jobBean.searchJobCompany}" />
 				</ui:include>
 			</p:column>
@@ -312,13 +348,13 @@
 				<p:inputNumber value="#{jobBean.searchJobEmploymentsCount}"
 					minValue="0" decimalPlaces="0"
 					id="searchJobEmploymentsCountInputNumber"
-					disabled="#{not jobBean.useSearchJobEmploymentsCount}" />
+					disabled="#{not jobBean.useSearchJobEmploymentsCount || converterBean.isDisabled(jobBean.searchJobEmploymentsCountComparator)}" />
 			</p:column>
 			<p:column>
 				<p:inputNumber value="#{jobBean.searchJobRequiredEmploymentsCount}"
 					minValue="0" decimalPlaces="0"
 					id="searchJobRequiredEmploymentsCountInputNumber"
-					disabled="#{not jobBean.useSearchJobRequiredEmploymentsCount}" />
+					disabled="#{not jobBean.useSearchJobRequiredEmploymentsCount || converterBean.isDisabled(jobBean.searchJobRequiredEmploymentsCountComparator)}" />
 			</p:column>
 			<p:column>
 				<ui:include
@@ -326,14 +362,14 @@
 					<ui:param name="id" value="searchJobEmploymentIdInputNumber" />
 					<ui:param name="title" value="" />
 					<ui:param name="disabled"
-						value="#{not jobBean.useSearchJobEmploymentId}" />
+						value="#{not jobBean.useSearchJobEmploymentId || converterBean.isDisabled(jobBean.searchJobEmploymentIdComparator)}" />
 					<ui:param name="value" value="#{jobBean.searchJobEmployment}" />
 				</ui:include>
 			</p:column>
 			<p:column>
 				<p:selectOneMenu value="#{jobBean.searchJobPosition}"
 					id="searchEmployeePositionSelectOneMenu"
-					disabled="#{not jobBean.useSearchJobPosition}">
+					disabled="#{not jobBean.useSearchJobPosition || converterBean.isDisabled(jobBean.searchJobPositionComparator)}">
 					<f:selectItems value="#{EnumEmployeePosition.ALL_VALUES}"
 						var="employeePosition" itemValue="#{employeePosition}"
 						itemLabel="#{converterBean.convertEnum(employeePosition)}" />
@@ -342,7 +378,7 @@
 			<p:column>
 				<p:selectOneMenu value="#{jobBean.searchJobSalaryClass}"
 					id="searchSalaryClassSelectOneMenu"
-					disabled="#{not jobBean.useSearchJobSalaryClass}">
+					disabled="#{not jobBean.useSearchJobSalaryClass || converterBean.isDisabled(jobBean.searchJobSalaryClassComparator)}">
 					<f:selectItems value="#{EnumSalaryClass.ALL_VALUES}"
 						var="salaryClass" itemValue="#{salaryClass}"
 						itemLabel="#{converterBean.convertEnum(salaryClass)}" />

@@ -100,7 +100,12 @@ public enum EnumSchoolClass {
 	public static List<EnumSchoolClass> getMatchingClasses(Integer schoolGrade, String schoolClass, EnumQueryComparator schoolGradeComparator,
 			EnumQueryComparator schoolClassComparator) {
 		List<EnumSchoolClass> ret = new ArrayList<>();
-		if (schoolClass != null || schoolGrade != null) {
+		if (schoolGradeComparator == EnumQueryComparator.NULL && schoolClass != null && schoolClassComparator != EnumQueryComparator.NULL
+				|| schoolGrade != null && schoolGradeComparator != EnumQueryComparator.NULL && schoolClassComparator == EnumQueryComparator.NULL) {
+			;
+		} else if (schoolGradeComparator == EnumQueryComparator.NULL || schoolClassComparator == EnumQueryComparator.NULL) {
+			ret.add(null);
+		} else if (schoolClass != null || schoolGrade != null) {
 			for (EnumSchoolClass value : EnumSchoolClass.values()) {
 				Predicate<Integer> gradePred = getPredicateFromQueryComparator(schoolGradeComparator, EnumQueryComparator.NUMERIC_COMPARATORS,
 						value.getGrade());
@@ -126,6 +131,18 @@ public enum EnumSchoolClass {
 				case MEMBER_OF:
 				case NOT_LIKE:
 				case NOT_MEMBER_OF:
+				case EMPTY:
+				case NOT_EMPTY:
+					break;
+				case NULL:
+					ret = (arg) -> {
+						return Boolean.FALSE;
+					};
+					break;
+				case NOT_NULL:
+					ret = (arg) -> {
+						return Boolean.TRUE;
+					};
 					break;
 				case GREATER_EQUAL:
 					ret = (arg) -> {

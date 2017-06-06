@@ -108,34 +108,50 @@
 		</p:row>
 		<p:row>
 			<p:column>
-				<p:selectOneMenu id="searchLoginUserRoleIdComparator"
-					disabled="#{not loginRoleBean.useSearchLoginUserRoleId}"
-					value="#{loginRoleBean.searchLoginUserRoleIdComparator}"
-					title="#{msg['lucas.application.loginRoleScreen.searchLoginUserRoleIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchLoginUserRoleIdComparator" />
+					<ui:param name="enabled"
+						value="#{loginRoleBean.useSearchLoginUserRoleId}" />
+					<ui:param name="title"
+						value="lucas.application.loginRoleScreen.searchLoginUserRoleIdComparator.tooltip" />
+					<ui:param name="value"
+						value="#{loginRoleBean.searchLoginUserRoleIdComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchLoginUserRoleIdInputNumber" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchLoginUserRoleNameComparator"
-					disabled="#{not loginRoleBean.useSearchLoginUserRoleName}"
-					value="#{loginRoleBean.searchLoginUserRoleNameComparator}"
-					title="#{msg['lucas.application.loginRoleScreen.searchLoginUserRoleNameComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchLoginUserRoleNameComparator" />
+					<ui:param name="enabled"
+						value="#{loginRoleBean.useSearchLoginUserRoleName}" />
+					<ui:param name="title"
+						value="lucas.application.loginRoleScreen.searchLoginUserRoleNameComparator.tooltip" />
+					<ui:param name="value"
+						value="#{loginRoleBean.searchLoginUserRoleNameComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.TEXT_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchLoginUserRoleNameInputText" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchLoginUserRolePermissionsComparator"
-					disabled="#{not loginRoleBean.useSearchLoginUserRolePermissions}"
-					value="#{loginRoleBean.searchLoginUserRolePermissionsComparator}"
-					title="#{msg['lucas.application.loginRoleScreen.searchLoginUserRolePermissionsComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.ARRAY_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id"
+						value="searchLoginUserRolePermissionsComparator" />
+					<ui:param name="enabled"
+						value="#{loginRoleBean.useSearchLoginUserRolePermissions}" />
+					<ui:param name="title"
+						value="lucas.application.loginRoleScreen.searchLoginUserRolePermissionsComparator.tooltip" />
+					<ui:param name="value"
+						value="#{loginRoleBean.searchLoginUserRolePermissionsComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.ARRAY_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchLoginUserRolePermissionsChips" />
+				</ui:include>
 			</p:column>
 		</p:row>
 		<p:row>
@@ -143,17 +159,17 @@
 				<p:inputNumber value="#{loginRoleBean.searchLoginUserRoleId}"
 					minValue="0" decimalPlaces="0"
 					id="searchLoginUserRoleIdInputNumber"
-					disabled="#{not loginRoleBean.useSearchLoginUserRoleId}" />
+					disabled="#{not loginRoleBean.useSearchLoginUserRoleId|| converterBean.isDisabled(loginRoleBean.searchLoginUserRoleIdComparator)}" />
 			</p:column>
 			<p:column>
 				<p:inputText value="#{loginRoleBean.searchLoginUserRoleName}"
 					id="searchLoginUserRoleNameInputText"
-					disabled="#{not loginRoleBean.useSearchLoginUserRoleName}" />
+					disabled="#{not loginRoleBean.useSearchLoginUserRoleName|| converterBean.isDisabled(loginRoleBean.searchLoginUserRoleNameComparator)}" />
 			</p:column>
 			<p:column>
 				<p:chips id="searchLoginUserRolePermissionsChips"
 					value="#{loginRoleBean.searchLoginUserRolePermissions}"
-					disabled="#{not loginRoleBean.useSearchLoginUserRolePermissions}" />
+					disabled="#{not loginRoleBean.useSearchLoginUserRolePermissions|| converterBean.isDisabled(loginRoleBean.searchLoginUserRolePermissionsComparator)}" />
 			</p:column>
 		</p:row>
 	</ui:define>

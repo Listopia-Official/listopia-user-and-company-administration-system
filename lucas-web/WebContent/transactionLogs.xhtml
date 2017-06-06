@@ -176,96 +176,143 @@
 		</p:row>
 		<p:row>
 			<p:column>
-				<p:selectOneMenu id="searchTransactionLogIdComparator"
-					disabled="#{not transactionLogBean.useSearchTransactionLogId}"
-					value="#{transactionLogBean.searchTransactionLogIdComparator}"
-					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchTransactionLogIdComparator" />
+					<ui:param name="enabled"
+						value="#{transactionLogBean.useSearchTransactionLogId}" />
+					<ui:param name="title"
+						value="lucas.application.transactionLogScreen.searchTransactionLogIdComparator.tooltip" />
+					<ui:param name="value"
+						value="#{transactionLogBean.searchTransactionLogIdComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchTransactionLogIdInputNumber" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchTransactionLogAccountIdComparator"
-					disabled="#{not transactionLogBean.useSearchTransactionLogAccountId}"
-					value="#{transactionLogBean.searchTransactionLogAccountIdComparator}"
-					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogAccountIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchTransactionLogAccountIdComparator" />
+					<ui:param name="enabled"
+						value="#{transactionLogBean.useSearchTransactionLogAccountId}" />
+					<ui:param name="title"
+						value="lucas.application.transactionLogScreen.searchTransactionLogAccountIdComparator.tooltip" />
+					<ui:param name="value"
+						value="#{transactionLogBean.searchTransactionLogAccountIdComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchTransactionLogAccountIdInputNumber" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchTransactionLogDateTimeComparator"
-					disabled="#{not transactionLogBean.useSearchTransactionLogDateTime}"
-					value="#{transactionLogBean.searchTransactionLogDateTimeComparator}"
-					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogDateTimeComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchTransactionLogDateTimeComparator" />
+					<ui:param name="enabled"
+						value="#{transactionLogBean.useSearchTransactionLogDateTime}" />
+					<ui:param name="title"
+						value="lucas.application.transactionLogScreen.searchTransactionLogDateTimeComparator.tooltip" />
+					<ui:param name="value"
+						value="#{transactionLogBean.searchTransactionLogDateTimeComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchTransactionLogDateTimeCalendar" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchTransactionLogActionComparator"
-					disabled="#{not transactionLogBean.useSearchTransactionLogAction}"
-					value="#{transactionLogBean.searchTransactionLogActionComparator}"
-					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogActionComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchTransactionLogActionComparator" />
+					<ui:param name="enabled"
+						value="#{transactionLogBean.useSearchTransactionLogAction}" />
+					<ui:param name="title"
+						value="lucas.application.transactionLogScreen.searchTransactionLogActionComparator.tooltip" />
+					<ui:param name="value"
+						value="#{transactionLogBean.searchTransactionLogActionComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchTransactionLogActionSelectOneMenu" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchTransactionLogActionTypeComparator"
-					disabled="#{not transactionLogBean.useSearchTransactionLogActionType}"
-					value="#{transactionLogBean.searchTransactionLogActionTypeComparator}"
-					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogActionTypeComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id"
+						value="searchTransactionLogActionTypeComparator" />
+					<ui:param name="enabled"
+						value="#{transactionLogBean.useSearchTransactionLogActionType}" />
+					<ui:param name="title"
+						value="lucas.application.transactionLogScreen.searchTransactionLogActionTypeComparator.tooltip" />
+					<ui:param name="value"
+						value="#{transactionLogBean.searchTransactionLogActionTypeComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchTransactionLogActionTypeSelectOneMenu" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchTransactionLogRelatedAccountIdComparator"
-					disabled="#{not transactionLogBean.useSearchTransactionLogRelatedAccountId}"
-					value="#{transactionLogBean.searchTransactionLogRelatedAccountIdComparator}"
-					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogRelatedAccountIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id"
+						value="searchTransactionLogRelatedAccountIdComparator" />
+					<ui:param name="enabled"
+						value="#{transactionLogBean.useSearchTransactionLogRelatedAccountId}" />
+					<ui:param name="title"
+						value="lucas.application.transactionLogScreen.searchTransactionLogRelatedAccountIdComparator.tooltip" />
+					<ui:param name="value"
+						value="#{transactionLogBean.searchTransactionLogRelatedAccountIdComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchTransactionLogRelatedAccountIdInputNumber" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu
-					id="searchTransactionLogPreviousBankBalanceComparator"
-					disabled="#{not transactionLogBean.useSearchTransactionLogPreviousBankBalance}"
-					value="#{transactionLogBean.searchTransactionLogPreviousBankBalanceComparator}"
-					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogPreviousBankBalanceComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id"
+						value="searchTransactionLogPreviousBankBalanceComparator" />
+					<ui:param name="enabled"
+						value="#{transactionLogBean.useSearchTransactionLogPreviousBankBalance}" />
+					<ui:param name="title"
+						value="lucas.application.transactionLogScreen.searchTransactionLogPreviousBankBalanceComparator.tooltip" />
+					<ui:param name="value"
+						value="#{transactionLogBean.searchTransactionLogPreviousBankBalanceComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchTransactionLogPreviousBankBalanceInputNumber" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchTransactionLogAmountComparator"
-					disabled="#{not transactionLogBean.useSearchTransactionLogAmount}"
-					value="#{transactionLogBean.searchTransactionLogAmountComparator}"
-					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogAmountComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchTransactionLogAmountComparator" />
+					<ui:param name="enabled"
+						value="#{transactionLogBean.useSearchTransactionLogAmount}" />
+					<ui:param name="title"
+						value="lucas.application.transactionLogScreen.searchTransactionLogAmountComparator.tooltip" />
+					<ui:param name="value"
+						value="#{transactionLogBean.searchTransactionLogAmountComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchTransactionLogAmountInputNumber" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu
-					id="searchTransactionLogCurrentBankBalanceComparator"
-					disabled="#{not transactionLogBean.useSearchTransactionLogCurrentBankBalance}"
-					value="#{transactionLogBean.searchTransactionLogCurrentBankBalanceComparator}"
-					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogCurrentBankBalanceComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.NUMERIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id"
+						value="searchTransactionLogCurrentBankBalanceComparator" />
+					<ui:param name="enabled"
+						value="#{transactionLogBean.useSearchTransactionLogCurrentBankBalance}" />
+					<ui:param name="title"
+						value="lucas.application.transactionLogScreen.searchTransactionLogCurrentBankBalanceComparator.tooltip" />
+					<ui:param name="value"
+						value="#{transactionLogBean.searchTransactionLogCurrentBankBalanceComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchTransactionLogCurrentBankBalanceInputNumber" />
+				</ui:include>
 			</p:column>
 		</p:row>
 		<p:row>
@@ -273,7 +320,7 @@
 				<p:inputNumber value="#{transactionLogBean.searchTransactionLogId}"
 					minValue="0" decimalPlaces="0"
 					id="searchTransactionLogIdInputNumber"
-					disabled="#{not transactionLogBean.useSearchTransactionLogId}" />
+					disabled="#{not transactionLogBean.useSearchTransactionLogId|| converterBean.isDisabled(transactionLogBean.searchTransactionLogIdComparator)}" />
 			</p:column>
 			<p:column>
 				<ui:include
@@ -282,7 +329,7 @@
 						value="searchTransactionLogAccountIdInputNumber" />
 					<ui:param name="title" value="" />
 					<ui:param name="disabled"
-						value="#{not transactionLogBean.useSearchTransactionLogAccountId}" />
+						value="#{not transactionLogBean.useSearchTransactionLogAccountId|| converterBean.isDisabled(transactionLogBean.searchTransactionLogAccountIdComparator)}" />
 					<ui:param name="value"
 						value="#{transactionLogBean.searchTransactionLogAccount}" />
 				</ui:include>
@@ -295,13 +342,13 @@
 					pattern="dd.MM.yyyy HH:mm:ss"
 					locale="#{facesContext.viewRoot.locale.language}"
 					timeControlType="select"
-					disabled="#{not transactionLogBean.useSearchTransactionLogDateTime}" />
+					disabled="#{not transactionLogBean.useSearchTransactionLogDateTime|| converterBean.isDisabled(transactionLogBean.searchTransactionLogDateTimeComparator)}" />
 			</p:column>
 			<p:column>
 				<p:selectOneMenu
 					value="#{transactionLogBean.searchTransactionLogAction}"
 					id="searchTransactionLogActionSelectOneMenu"
-					disabled="#{not transactionLogBean.useSearchTransactionLogAction}">
+					disabled="#{not transactionLogBean.useSearchTransactionLogAction|| converterBean.isDisabled(transactionLogBean.searchTransactionLogActionComparator)}">
 					<f:selectItems value="#{EnumAccountAction.ALL_VALUES}"
 						var="transactionLog" itemValue="#{transactionLog}"
 						itemLabel="#{converterBean.convertEnum(transactionLog)}" />
@@ -311,7 +358,7 @@
 				<p:selectOneMenu
 					value="#{transactionLogBean.searchTransactionLogActionType}"
 					id="searchTransactionLogActionTypeSelectOneMenu"
-					disabled="#{not transactionLogBean.useSearchTransactionLogActionType}">
+					disabled="#{not transactionLogBean.useSearchTransactionLogActionType|| converterBean.isDisabled(transactionLogBean.searchTransactionLogActionTypeComparator)}">
 					<f:selectItems value="#{EnumAccountActionType.ALL_VALUES}"
 						var="transactionLog" itemValue="#{transactionLog}"
 						itemLabel="#{converterBean.convertEnum(transactionLog)}" />
@@ -324,7 +371,7 @@
 						value="searchTransactionLogRelatedAccountIdInputNumber" />
 					<ui:param name="title" value="" />
 					<ui:param name="disabled"
-						value="#{not transactionLogBean.useSearchTransactionLogRelatedAccountId}" />
+						value="#{not transactionLogBean.useSearchTransactionLogRelatedAccountId|| converterBean.isDisabled(transactionLogBean.searchTransactionLogRelatedAccountIdComparator)}" />
 					<ui:param name="value"
 						value="#{transactionLogBean.searchTransactionLogRelatedAccount}" />
 				</ui:include>
@@ -336,7 +383,7 @@
 					symbol=" #{transactionLogBean.currencySymbol}"
 					symbolPosition="post"
 					id="searchTransactionLogPreviousBankBalanceInputNumber"
-					disabled="#{not transactionLogBean.useSearchTransactionLogPreviousBankBalance}" />
+					disabled="#{not transactionLogBean.useSearchTransactionLogPreviousBankBalance|| converterBean.isDisabled(transactionLogBean.searchTransactionLogPreviousBankBalanceComparator)}" />
 			</p:column>
 			<p:column>
 				<p:inputNumber
@@ -344,7 +391,7 @@
 					minValue="0" decimalPlaces="2" emptyValue="zero"
 					symbol=" #{transactionLogBean.currencySymbol}"
 					symbolPosition="post" id="searchTransactionLogAmountInputNumber"
-					disabled="#{not transactionLogBean.useSearchTransactionLogAmount}" />
+					disabled="#{not transactionLogBean.useSearchTransactionLogAmount|| converterBean.isDisabled(transactionLogBean.searchTransactionLogAmountComparator)}" />
 			</p:column>
 			<p:column>
 				<p:inputNumber
@@ -353,7 +400,7 @@
 					symbol=" #{transactionLogBean.currencySymbol}"
 					symbolPosition="post"
 					id="searchTransactionLogCurrentBankBalanceInputNumber"
-					disabled="#{not transactionLogBean.useSearchTransactionLogCurrentBankBalance}" />
+					disabled="#{not transactionLogBean.useSearchTransactionLogCurrentBankBalance|| converterBean.isDisabled(transactionLogBean.searchTransactionLogCurrentBankBalanceComparator)}" />
 			</p:column>
 		</p:row>
 		<p:row>
@@ -390,24 +437,35 @@
 		</p:row>
 		<p:row>
 			<p:column>
-				<p:selectOneMenu id="searchTransactionLogBankUserIdComparator"
-					disabled="#{not transactionLogBean.useSearchTransactionLogBankUserId}"
-					value="#{transactionLogBean.searchTransactionLogBankUserComparator}"
-					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogBankUserIdComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.LOGIC_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id"
+						value="searchTransactionLogBankUserIdComparator" />
+					<ui:param name="enabled"
+						value="#{transactionLogBean.useSearchTransactionLogBankUserId}" />
+					<ui:param name="title"
+						value="lucas.application.transactionLogScreen.searchTransactionLogBankUserIdComparator.tooltip" />
+					<ui:param name="value"
+						value="#{transactionLogBean.searchTransactionLogBankUserComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchTransactionLogBankUserIdInputNumber" />
+				</ui:include>
 			</p:column>
 			<p:column>
-				<p:selectOneMenu id="searchTransactionLogCommentComparator"
-					disabled="#{not transactionLogBean.useSearchTransactionLogComment}"
-					value="#{transactionLogBean.searchTransactionLogCommentComparator}"
-					title="#{msg['lucas.application.transactionLogScreen.searchTransactionLogCommentComparator.tooltip']}">
-					<f:selectItems value="#{EnumQueryComparator.TEXT_COMPARATORS}"
-						var="comparator" itemValue="#{comparator}"
-						itemLabel="#{converterBean.convertEnum(comparator)}" />
-				</p:selectOneMenu>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchTransactionLogCommentComparator" />
+					<ui:param name="enabled"
+						value="#{transactionLogBean.useSearchTransactionLogComment}" />
+					<ui:param name="title"
+						value="lucas.application.transactionLogScreen.searchTransactionLogCommentComparator.tooltip" />
+					<ui:param name="value"
+						value="#{transactionLogBean.searchTransactionLogCommentComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.TEXT_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchTransactionLogCommentInputText" />
+				</ui:include>
 			</p:column>
 		</p:row>
 		<p:row>
@@ -418,7 +476,7 @@
 						value="searchTransactionLogBankUserIdInputNumber" />
 					<ui:param name="title" value="" />
 					<ui:param name="disabled"
-						value="#{not transactionLogBean.useSearchTransactionLogBankUserId}" />
+						value="#{not transactionLogBean.useSearchTransactionLogBankUserId|| converterBean.isDisabled(transactionLogBean.searchTransactionLogBankUserComparator)}" />
 					<ui:param name="value"
 						value="#{transactionLogBean.searchTransactionLogBankUser}" />
 				</ui:include>
@@ -428,7 +486,7 @@
 					value="#{transactionLogBean.searchTransactionLogComment}"
 					id="searchTransactionLogCommentInputText"
 					converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}"
-					disabled="#{not transactionLogBean.useSearchTransactionLogComment}" />
+					disabled="#{not transactionLogBean.useSearchTransactionLogComment|| converterBean.isDisabled(transactionLogBean.searchTransactionLogCommentComparator)}" />
 			</p:column>
 		</p:row>
 	</ui:define>
