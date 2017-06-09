@@ -385,6 +385,36 @@
 				</p:selectOneMenu>
 			</p:column>
 		</p:row>
+		<p:row>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchJobAreEmploymentsRequiredSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{jobBean.useSearchJobAreEmploymentsRequired}"
+					title="#{msg['lucas.application.jobScreen.searchJobAreEmploymentsRequiredSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="jobSearchCriteriaForm:searchJobAreEmploymentsRequiredBooleanButton"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchJobAreEmploymentsRequiredSelectBooleanCheckbox"
+					value="#{msg['lucas.application.jobScreen.searchJobAreEmploymentsRequiredSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.jobScreen.searchJobAreEmploymentsRequiredSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column />
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:selectBooleanButton
+					offLabel="#{msg['lucas.application.booleanConverter.normal.false']}"
+					onLabel="#{msg['lucas.application.booleanConverter.normal.true']}"
+					id="searchJobAreEmploymentsRequiredBooleanButton"
+					value="#{jobBean.searchJobAreEmploymentsRequired}"
+					disabled="#{not jobBean.useSearchJobAreEmploymentsRequired}" />
+			</p:column>
+		</p:row>
 	</ui:define>
 	<ui:define name="searchResults">
 		<p:column exportable="#{jobBean.resultsDatatableColumns[0]}"

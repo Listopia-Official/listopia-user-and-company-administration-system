@@ -24,9 +24,10 @@ public interface JobBeanLocal {
 
 	public List<? extends ReadOnlyJob> findJobs(@NotNull Long jobId, @NotNull String name, String description, Long companyId,
 			EnumSalaryClass salaryClass, @NotNull Integer requiredEmployeesCount, @NotNull EnumEmployeePosition position, Long employmentId,
-			@NotNull Integer employmentsCount, @NotNull Boolean useJobId, @NotNull Boolean useName, @NotNull Boolean useDescription,
-			@NotNull Boolean useCompanyId, @NotNull Boolean useSalaryClass, @NotNull Boolean useRequiredEmployeesCount,
-			@NotNull Boolean useEmployeePosition, @NotNull Boolean useEmploymentId, @NotNull Boolean useEmploymentsCount,
+			@NotNull Integer employmentsCount, @NotNull Boolean areEmploymentsRequired, @NotNull Boolean useJobId, @NotNull Boolean useName,
+			@NotNull Boolean useDescription, @NotNull Boolean useCompanyId, @NotNull Boolean useSalaryClass,
+			@NotNull Boolean useRequiredEmployeesCount, @NotNull Boolean useEmployeePosition, @NotNull Boolean useEmploymentId,
+			@NotNull Boolean useEmploymentsCount, @NotNull Boolean useAreEmploymentsRequired,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator jobIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator nameComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator descriptionComparator,

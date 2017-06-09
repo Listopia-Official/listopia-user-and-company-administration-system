@@ -48,4 +48,14 @@ public class Room extends EntityBase implements ReadOnlyRoom {
 	public Boolean removeSection(RoomSection section) {
 		return this.sections.remove(section);
 	}
+
+	@Override
+	public Integer getOccupiedSectionsCount() {
+		return (int) sections.parallelStream().filter(section -> section.getCompany() != null).count();
+	}
+
+	@Override
+	public Integer getFreeSectionsCount() {
+		return (int) sections.parallelStream().filter(section -> section.getCompany() == null).count();
+	}
 }

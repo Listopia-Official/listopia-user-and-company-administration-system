@@ -25,15 +25,16 @@ public interface UserBeanLocal {
 	public ReadOnlyUser findById(@ValidEntityId(entityClass = ReadOnlyUser.class) Long userId);
 
 	public List<? extends ReadOnlyUser> findUsers(@NotNull Long userId, String forename, String surname, @NotNull List<EnumSchoolClass> schoolClasses,
-			@NotNull EnumUserType userType, List<@NotBlankString @TypeNotNull String> ranks, @NotNull Integer employmentsCount,
+			@NotNull EnumUserType userType, List<@NotBlankString @TypeNotNull String> ranks, @NotNull Integer employmentsCount, Long employmentId,
 			@NotNull Boolean useUserId, @NotNull Boolean useForename, @NotNull Boolean useSurname, @NotNull Boolean useSchoolClass,
-			@NotNull Boolean useUserType, @NotNull Boolean useRanks, @NotNull Boolean useEmploymentsCount,
+			@NotNull Boolean useUserType, @NotNull Boolean useRanks, @NotNull Boolean useEmploymentsCount, @NotNull Boolean useEmploymentId,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator userIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator forenameComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator surnameComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator searchUserTypeComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.ARRAY) EnumQueryComparator ranksComparator,
-			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator employmentsCountComparator);
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator employmentsCountComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator employmentIdComparator);
 
 	public Boolean setForename(@ValidEntityId(entityClass = ReadOnlyUser.class) Long userId, @NotBlankString String forename);
 

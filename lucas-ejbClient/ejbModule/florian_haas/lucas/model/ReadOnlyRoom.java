@@ -8,4 +8,8 @@ public interface ReadOnlyRoom extends ReadOnlyEntity {
 
 	public List<? extends ReadOnlyRoomSection> getSections();
 
+	public Integer getOccupiedSectionsCount();
+
+	public Integer getFreeSectionsCount();
+
 }

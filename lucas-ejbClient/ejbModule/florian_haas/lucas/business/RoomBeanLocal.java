@@ -20,11 +20,17 @@ public interface RoomBeanLocal {
 
 	public ReadOnlyRoom findById(@ValidEntityId(entityClass = ReadOnlyRoom.class) Long roomId);
 
-	public List<? extends ReadOnlyRoom> findRooms(@NotNull Long roomId, @NotNull String name, Long roomSectionId, @NotNull Boolean useRoomId,
-			@NotNull Boolean useName, @NotNull Boolean useRoomSectionId,
+	public List<? extends ReadOnlyRoom> findRooms(@NotNull Long roomId, @NotNull String name, Long roomSectionId, @NotNull Integer sectionsCount,
+			@NotNull Integer occupiedSectionsCount, @NotNull Integer freeSectionsCount, Long companyId, @NotNull Boolean useRoomId,
+			@NotNull Boolean useName, @NotNull Boolean useRoomSectionId, @NotNull Boolean useSectionsCount, @NotNull Boolean useOccupiedSectionsCount,
+			@NotNull Boolean useFreeSectionsCount, @NotNull Boolean useCompany,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator roomIdComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator roomNameComparator,
-			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator roomSectionIdComparator);
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator roomSectionIdComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator sectionsCountComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator occupiedSectionsCountComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator freeSectionsCountComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator companyComparator);
 
 	public Boolean setName(@ValidEntityId(entityClass = ReadOnlyRoom.class) Long roomId, String name);
 

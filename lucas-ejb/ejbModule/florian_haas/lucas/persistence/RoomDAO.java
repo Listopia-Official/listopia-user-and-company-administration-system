@@ -6,8 +6,12 @@ import florian_haas.lucas.model.*;
 
 public interface RoomDAO extends DAO<Room> {
 
-	public List<Room> findRooms(Long roomId, String name, Long sectionId, Boolean useRoomId, Boolean useName, Boolean useSectionId,
-			EnumQueryComparator roomIdComparator, EnumQueryComparator nameComparator, EnumQueryComparator sectionIdComparator);
+	public List<Room> findRooms(Long roomId, String name, Long roomSectionId, Integer sectionsCount, Integer occupiedSectionsCount,
+			Integer freeSectionsCount, Long companyId, Boolean useRoomId, Boolean useName, Boolean useRoomSectionId, Boolean useSectionsCount,
+			Boolean useOccupiedSectionsCount, Boolean useFreeSectionsCount, Boolean useCompany, EnumQueryComparator roomIdComparator,
+			EnumQueryComparator roomNameComparator, EnumQueryComparator roomSectionIdComparator, EnumQueryComparator sectionsCountComparator,
+			EnumQueryComparator occupiedSectionsCountComparator, EnumQueryComparator freeSectionsCountComparator,
+			EnumQueryComparator companyComparator);
 
 	public Boolean isNameUnique(String name);
 

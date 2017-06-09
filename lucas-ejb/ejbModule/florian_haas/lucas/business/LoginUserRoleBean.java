@@ -79,10 +79,11 @@ public class LoginUserRoleBean implements LoginUserRoleBeanLocal {
 
 	@Override
 	@RequiresPermissions(LOGIN_ROLE_FIND_DYNAMIC)
-	public List<? extends ReadOnlyLoginUserRole> findLoginUserRoles(Long id, String name, Set<String> permissions, Boolean useId, Boolean useName,
-			Boolean usePermissions, EnumQueryComparator idComparator, EnumQueryComparator nameComparator, EnumQueryComparator permissionsComparator) {
-		return loginUserRoleDao.findLoginUserRoles(id, name, permissions, useId, useName, usePermissions, idComparator, nameComparator,
-				permissionsComparator);
+	public List<? extends ReadOnlyLoginUserRole> findLoginUserRoles(Long id, String name, Set<String> permissions, Long loginUserId, Boolean useId,
+			Boolean useName, Boolean usePermissions, Boolean useLoginUserId, EnumQueryComparator idComparator, EnumQueryComparator nameComparator,
+			EnumQueryComparator permissionsComparator, EnumQueryComparator loginUserIdComparator) {
+		return loginUserRoleDao.findLoginUserRoles(id, name, permissions, loginUserId, useId, useName, usePermissions, useLoginUserId, idComparator,
+				nameComparator, permissionsComparator, loginUserIdComparator);
 	}
 
 	@Override

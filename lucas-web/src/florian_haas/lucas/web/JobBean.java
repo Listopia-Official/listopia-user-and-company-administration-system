@@ -137,6 +137,12 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
 	private EnumQueryComparator searchJobEmploymentsCountComparator = EnumQueryComparator.EQUAL;
 
+	@NotNull
+	private Boolean searchJobAreEmploymentsRequired = Boolean.FALSE;
+
+	@NotNull
+	private Boolean useSearchJobAreEmploymentsRequired = Boolean.FALSE;
+
 	public Long getSearchJobId() {
 		return this.searchJobId;
 	}
@@ -329,16 +335,32 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 		this.searchJobEmploymentIdComparator = searchJobEmploymentIdComparator;
 	}
 
+	public Boolean getSearchJobAreEmploymentsRequired() {
+		return searchJobAreEmploymentsRequired;
+	}
+
+	public void setSearchJobAreEmploymentsRequired(Boolean searchJobAreEmploymentsRequired) {
+		this.searchJobAreEmploymentsRequired = searchJobAreEmploymentsRequired;
+	}
+
+	public Boolean getUseSearchJobAreEmploymentsRequired() {
+		return useSearchJobAreEmploymentsRequired;
+	}
+
+	public void setUseSearchJobAreEmploymentsRequired(Boolean useSearchJobAreEmploymentsRequired) {
+		this.useSearchJobAreEmploymentsRequired = useSearchJobAreEmploymentsRequired;
+	}
+
 	@Override
 	protected List<? extends ReadOnlyJob> searchEntities() {
 		return jobBean.findJobs(searchJobId, searchJobName, searchJobDescription, searchJobCompany != null ? searchJobCompany.getId() : null,
 				searchJobSalaryClass, searchJobRequiredEmploymentsCount, searchJobPosition,
-				searchJobEmployment != null ? searchJobEmployment.getId() : null, searchJobEmploymentsCount, useSearchJobId, useSearchJobName,
-				useSearchJobDescription, useSearchJobCompanyId, useSearchJobSalaryClass, useSearchJobRequiredEmploymentsCount, useSearchJobPosition,
-				useSearchJobEmploymentId, useSearchJobEmploymentsCount, searchJobIdComparator, searchJobNameComparator,
-				searchJobDescriptionComparator, searchJobCompanyIdComparator, searchJobSalaryClassComparator,
-				searchJobRequiredEmploymentsCountComparator, searchJobPositionComparator, searchJobEmploymentIdComparator,
-				searchJobEmploymentsCountComparator);
+				searchJobEmployment != null ? searchJobEmployment.getId() : null, searchJobEmploymentsCount, searchJobAreEmploymentsRequired,
+				useSearchJobId, useSearchJobName, useSearchJobDescription, useSearchJobCompanyId, useSearchJobSalaryClass,
+				useSearchJobRequiredEmploymentsCount, useSearchJobPosition, useSearchJobEmploymentId, useSearchJobEmploymentsCount,
+				useSearchJobAreEmploymentsRequired, searchJobIdComparator, searchJobNameComparator, searchJobDescriptionComparator,
+				searchJobCompanyIdComparator, searchJobSalaryClassComparator, searchJobRequiredEmploymentsCountComparator,
+				searchJobPositionComparator, searchJobEmploymentIdComparator, searchJobEmploymentsCountComparator);
 	}
 
 	@Override
@@ -585,5 +607,4 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 			}, "lucas.application.jobScreen.removeJobs");
 		}
 	}
-
 }

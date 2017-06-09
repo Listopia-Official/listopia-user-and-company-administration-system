@@ -13,6 +13,10 @@
 		<ui:include
 			src="/WEB-INF/web/loginUserRole/editLoginUserRoleDialog.xhtml" />
 	</ui:define>
+	<ui:define name="otherContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.LoginUserConverter" />
+	</ui:define>
 	<ui:define name="buttonArea">
 		<p:toolbarGroup align="left">
 			<ui:fragment
@@ -92,6 +96,20 @@
 			</p:column>
 			<p:column>
 				<p:selectBooleanCheckbox
+					id="searchLoginUserRoleUserSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{loginRoleBean.useSearchLoginUserRoleUser}"
+					title="#{msg['lucas.application.loginRoleScreen.searchLoginUserRoleUserSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="loginRoleSearchCriteriaForm:searchLoginUserRoleUserAutocomplete loginRoleSearchCriteriaForm:searchLoginUserRoleUserComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchLoginUserRoleUserSelectBooleanCheckbox"
+					value="#{msg['lucas.application.loginRoleScreen.searchLoginUserRoleUserSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.loginRoleScreen.searchLoginUserRoleUserSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
 					id="searchLoginUserRolePermissionsSelectBooleanCheckbox"
 					styleClass="checkbox"
 					value="#{loginRoleBean.useSearchLoginUserRolePermissions}"
@@ -139,6 +157,21 @@
 			</p:column>
 			<p:column>
 				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchLoginUserRoleUserComparator" />
+					<ui:param name="enabled"
+						value="#{loginRoleBean.useSearchLoginUserRoleUser}" />
+					<ui:param name="title"
+						value="lucas.application.loginRoleScreen.searchLoginUserRoleUserComparator.tooltip" />
+					<ui:param name="value"
+						value="#{loginRoleBean.searchLoginUserRoleUserComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS_NOT_NULL}" />
+					<ui:param name="targetComponent"
+						value="searchLoginUserRoleUserAutocomplete" />
+				</ui:include>
+			</p:column>
+			<p:column>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
 					<ui:param name="id"
 						value="searchLoginUserRolePermissionsComparator" />
 					<ui:param name="enabled"
@@ -167,7 +200,19 @@
 					disabled="#{not loginRoleBean.useSearchLoginUserRoleName|| converterBean.isDisabled(loginRoleBean.searchLoginUserRoleNameComparator)}" />
 			</p:column>
 			<p:column>
+				<ui:include
+					src="/WEB-INF/web/autocomplete/selectLoginUserAutocomplete.xhtml">
+					<ui:param name="id" value="searchLoginUserRoleUserAutocomplete" />
+					<ui:param name="title" value="" />
+					<ui:param name="disabled"
+						value="#{not loginRoleBean.useSearchLoginUserRoleUser|| converterBean.isDisabled(loginRoleBean.searchLoginUserRoleUserComparator)}" />
+					<ui:param name="value"
+						value="#{loginRoleBean.searchLoginUserRoleUser}" />
+				</ui:include>
+			</p:column>
+			<p:column>
 				<p:chips id="searchLoginUserRolePermissionsChips"
+					styleClass="chip-width"
 					value="#{loginRoleBean.searchLoginUserRolePermissions}"
 					disabled="#{not loginRoleBean.useSearchLoginUserRolePermissions|| converterBean.isDisabled(loginRoleBean.searchLoginUserRolePermissionsComparator)}" />
 			</p:column>

@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.primefaces.model.DualListModel;
 
 import florian_haas.lucas.business.LoginUserRoleBeanLocal;
-import florian_haas.lucas.model.ReadOnlyLoginUserRole;
+import florian_haas.lucas.model.*;
 import florian_haas.lucas.persistence.*;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
@@ -54,6 +54,15 @@ public class LoginRoleBean extends BaseBean<ReadOnlyLoginUserRole> {
 	private List<@TypeNotNull @NotBlankString String> searchLoginUserRolePermissions = new ArrayList<>();
 
 	@NotNull
+	private ReadOnlyLoginUser searchLoginUserRoleUser = null;
+
+	@NotNull
+	private Boolean useSearchLoginUserRoleUser = Boolean.FALSE;
+
+	@QueryComparator(category = EnumQueryComparatorCategory.LOGIC)
+	private EnumQueryComparator searchLoginUserRoleUserComparator = EnumQueryComparator.EQUAL;
+
+	@NotNull
 	private Boolean useSearchLoginUserRolePermissions = Boolean.FALSE;
 
 	@QueryComparator(category = EnumQueryComparatorCategory.ARRAY)
@@ -77,9 +86,10 @@ public class LoginRoleBean extends BaseBean<ReadOnlyLoginUserRole> {
 	@Override
 	protected List<? extends ReadOnlyLoginUserRole> searchEntities() {
 		return loginUserRoleBean.findLoginUserRoles(searchLoginUserRoleId, searchLoginUserRoleName,
-				searchLoginUserRolePermissions != null ? new HashSet<>(searchLoginUserRolePermissions) : null, useSearchLoginUserRoleId,
-				useSearchLoginUserRoleName, useSearchLoginUserRolePermissions, searchLoginUserRoleIdComparator, searchLoginUserRoleNameComparator,
-				searchLoginUserRolePermissionsComparator);
+				searchLoginUserRolePermissions != null ? new HashSet<>(searchLoginUserRolePermissions) : null,
+				searchLoginUserRoleUser != null ? searchLoginUserRoleUser.getId() : null, useSearchLoginUserRoleId, useSearchLoginUserRoleName,
+				useSearchLoginUserRolePermissions, useSearchLoginUserRoleUser, searchLoginUserRoleIdComparator, searchLoginUserRoleNameComparator,
+				searchLoginUserRolePermissionsComparator, searchLoginUserRoleUserComparator);
 	}
 
 	@Override
@@ -162,6 +172,30 @@ public class LoginRoleBean extends BaseBean<ReadOnlyLoginUserRole> {
 	/*
 	 * -------------------- Create Login User Role Dialog Start --------------------
 	 */
+
+	public ReadOnlyLoginUser getSearchLoginUserRoleUser() {
+		return this.searchLoginUserRoleUser;
+	}
+
+	public void setSearchLoginUserRoleUser(ReadOnlyLoginUser searchLoginUserRoleUser) {
+		this.searchLoginUserRoleUser = searchLoginUserRoleUser;
+	}
+
+	public Boolean getUseSearchLoginUserRoleUser() {
+		return this.useSearchLoginUserRoleUser;
+	}
+
+	public void setUseSearchLoginUserRoleUser(Boolean useSearchLoginUserRoleUser) {
+		this.useSearchLoginUserRoleUser = useSearchLoginUserRoleUser;
+	}
+
+	public EnumQueryComparator getSearchLoginUserRoleUserComparator() {
+		return this.searchLoginUserRoleUserComparator;
+	}
+
+	public void setSearchLoginUserRoleUserComparator(EnumQueryComparator searchLoginUserRoleUserComparator) {
+		this.searchLoginUserRoleUserComparator = searchLoginUserRoleUserComparator;
+	}
 
 	@NotBlank
 	private String createLoginUserRoleDialogName = null;

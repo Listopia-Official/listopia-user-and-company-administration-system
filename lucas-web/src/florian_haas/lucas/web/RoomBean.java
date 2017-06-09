@@ -22,7 +22,7 @@ import florian_haas.lucas.web.util.WebUtils;
 public class RoomBean extends BaseBean<ReadOnlyRoom> {
 
 	public RoomBean() {
-		super("room", 3);
+		super("room", 5);
 	}
 
 	private static final long serialVersionUID = 9056222365379147492L;
@@ -58,8 +58,44 @@ public class RoomBean extends BaseBean<ReadOnlyRoom> {
 	@NotNull
 	private Boolean useSearchRoomSectionId = Boolean.FALSE;
 
-	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
+	@QueryComparator(category = EnumQueryComparatorCategory.LOGIC)
 	private EnumQueryComparator searchRoomSectionIdComparator = EnumQueryComparator.EQUAL;
+
+	@NotNull
+	private Integer searchRoomSectionsCount = 0;
+
+	@NotNull
+	private Boolean useSearchRoomSectionsCount = Boolean.FALSE;
+
+	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
+	private EnumQueryComparator searchRoomSectionsCountComparator = EnumQueryComparator.EQUAL;
+
+	@NotNull
+	private Integer searchRoomOccupiedSectionsCount = 0;
+
+	@NotNull
+	private Boolean useSearchRoomOccupiedSectionsCount = Boolean.FALSE;
+
+	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
+	private EnumQueryComparator searchRoomOccupiedSectionsCountComparator = EnumQueryComparator.EQUAL;
+
+	@NotNull
+	private Integer searchRoomFreeSectionsCount = 0;
+
+	@NotNull
+	private Boolean useSearchRoomFreeSectionsCount = Boolean.FALSE;
+
+	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
+	private EnumQueryComparator searchRoomFreeSectionsCountComparator = EnumQueryComparator.EQUAL;
+
+	@NotNull
+	private ReadOnlyCompany searchRoomCompany = null;
+
+	@NotNull
+	private Boolean useSearchRoomCompany = Boolean.FALSE;
+
+	@QueryComparator(category = EnumQueryComparatorCategory.LOGIC)
+	private EnumQueryComparator searchRoomCompanyComparator = EnumQueryComparator.EQUAL;
 
 	public Long getSearchRoomId() {
 		return searchRoomId;
@@ -133,6 +169,102 @@ public class RoomBean extends BaseBean<ReadOnlyRoom> {
 		this.searchRoomSectionIdComparator = searchRoomSectionIdComparator;
 	}
 
+	public Integer getSearchRoomSectionsCount() {
+		return this.searchRoomSectionsCount;
+	}
+
+	public void setSearchRoomSectionsCount(Integer searchRoomSectionsCount) {
+		this.searchRoomSectionsCount = searchRoomSectionsCount;
+	}
+
+	public Boolean getUseSearchRoomSectionsCount() {
+		return this.useSearchRoomSectionsCount;
+	}
+
+	public void setUseSearchRoomSectionsCount(Boolean useSearchRoomSectionsCount) {
+		this.useSearchRoomSectionsCount = useSearchRoomSectionsCount;
+	}
+
+	public EnumQueryComparator getSearchRoomSectionsCountComparator() {
+		return this.searchRoomSectionsCountComparator;
+	}
+
+	public void setSearchRoomSectionsCountComparator(EnumQueryComparator searchRoomSectionsCountComparator) {
+		this.searchRoomSectionsCountComparator = searchRoomSectionsCountComparator;
+	}
+
+	public Integer getSearchRoomOccupiedSectionsCount() {
+		return this.searchRoomOccupiedSectionsCount;
+	}
+
+	public void setSearchRoomOccupiedSectionsCount(Integer searchRoomOccupiedSectionsCount) {
+		this.searchRoomOccupiedSectionsCount = searchRoomOccupiedSectionsCount;
+	}
+
+	public Boolean getUseSearchRoomOccupiedSectionsCount() {
+		return this.useSearchRoomOccupiedSectionsCount;
+	}
+
+	public void setUseSearchRoomOccupiedSectionsCount(Boolean useSearchRoomOccupiedSectionsCount) {
+		this.useSearchRoomOccupiedSectionsCount = useSearchRoomOccupiedSectionsCount;
+	}
+
+	public EnumQueryComparator getSearchRoomOccupiedSectionsCountComparator() {
+		return this.searchRoomOccupiedSectionsCountComparator;
+	}
+
+	public void setSearchRoomOccupiedSectionsCountComparator(EnumQueryComparator searchRoomOccupiedSectionsCountComparator) {
+		this.searchRoomOccupiedSectionsCountComparator = searchRoomOccupiedSectionsCountComparator;
+	}
+
+	public Integer getSearchRoomFreeSectionsCount() {
+		return this.searchRoomFreeSectionsCount;
+	}
+
+	public void setSearchRoomFreeSectionsCount(Integer searchRoomFreeSectionsCount) {
+		this.searchRoomFreeSectionsCount = searchRoomFreeSectionsCount;
+	}
+
+	public Boolean getUseSearchRoomFreeSectionsCount() {
+		return this.useSearchRoomFreeSectionsCount;
+	}
+
+	public void setUseSearchRoomFreeSectionsCount(Boolean useSearchRoomFreeSectionsCount) {
+		this.useSearchRoomFreeSectionsCount = useSearchRoomFreeSectionsCount;
+	}
+
+	public EnumQueryComparator getSearchRoomFreeSectionsCountComparator() {
+		return this.searchRoomFreeSectionsCountComparator;
+	}
+
+	public void setSearchRoomFreeSectionsCountComparator(EnumQueryComparator searchRoomFreeSectionsCountComparator) {
+		this.searchRoomFreeSectionsCountComparator = searchRoomFreeSectionsCountComparator;
+	}
+
+	public ReadOnlyCompany getSearchRoomCompany() {
+		return this.searchRoomCompany;
+	}
+
+	public void setSearchRoomCompany(ReadOnlyCompany searchRoomCompany) {
+		this.searchRoomCompany = searchRoomCompany;
+	}
+
+	public Boolean getUseSearchRoomCompany() {
+		return this.useSearchRoomCompany;
+	}
+
+	public void setUseSearchRoomCompany(Boolean useSearchRoomCompany) {
+		this.useSearchRoomCompany = useSearchRoomCompany;
+	}
+
+	public EnumQueryComparator getSearchRoomCompanyComparator() {
+		return this.searchRoomCompanyComparator;
+	}
+
+	public void setSearchRoomCompanyComparator(EnumQueryComparator searchRoomCompanyComparator) {
+		this.searchRoomCompanyComparator = searchRoomCompanyComparator;
+	}
+
 	@Override
 	public EnumPermission getFindDynamicPermission() {
 		return EnumPermission.ROOM_FIND_DYNAMIC;
@@ -150,8 +282,12 @@ public class RoomBean extends BaseBean<ReadOnlyRoom> {
 
 	@Override
 	protected List<? extends ReadOnlyRoom> searchEntities() {
-		return roomBean.findRooms(searchRoomId, searchRoomName, searchRoomSection != null ? searchRoomSection.getId() : null, useSearchRoomId,
-				useSearchRoomName, useSearchRoomSectionId, searchRoomIdComparator, searchRoomNameComparator, searchRoomSectionIdComparator);
+		return roomBean.findRooms(searchRoomId, searchRoomName, searchRoomSection != null ? searchRoomSection.getId() : null, searchRoomSectionsCount,
+				searchRoomOccupiedSectionsCount, searchRoomFreeSectionsCount, searchRoomCompany != null ? searchRoomCompany.getId() : null,
+				useSearchRoomId, useSearchRoomName, useSearchRoomSectionId, useSearchRoomSectionsCount, useSearchRoomOccupiedSectionsCount,
+				useSearchRoomFreeSectionsCount, useSearchRoomCompany, searchRoomIdComparator, searchRoomNameComparator, searchRoomSectionIdComparator,
+				searchRoomSectionsCountComparator, searchRoomOccupiedSectionsCountComparator, searchRoomFreeSectionsCountComparator,
+				searchRoomCompanyComparator);
 	}
 
 	@Override

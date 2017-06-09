@@ -26,6 +26,8 @@
 			type="florian_haas.lucas.web.converter.NullConverterNoText" />
 		<p:importConstants
 			type="florian_haas.lucas.web.converter.EnumConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.EmploymentConverter" />
 	</ui:define>
 	<ui:define name="buttonArea">
 		<p:toolbarGroup>
@@ -219,6 +221,19 @@
 					title="#{msg['lucas.application.userScreen.searchUserEmploymentsCountSelectBooleanCheckbox.tooltip']}" />
 			</p:column>
 			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchUserEmploymentIdSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{userBean.useSearchUserEmployment}"
+					title="#{msg['lucas.application.userScreen.searchUserEmploymentIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="userSearchCriteriaForm:searchUserEmploymentIdInputNumber userSearchCriteriaForm:searchUserEmploymentIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchUserEmploymentIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.userScreen.searchUserEmploymentIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.userScreen.searchUserEmploymentIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
 				<p:selectBooleanCheckbox id="searchUserRanksSelectBooleanCheckbox"
 					styleClass="checkbox" value="#{userBean.useSearchUserRanks}"
 					title="#{msg['lucas.application.userScreen.searchUserRanksSelectBooleanCheckbox.tooltip']}">
@@ -331,6 +346,21 @@
 			</p:column>
 			<p:column>
 				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchUserEmploymentIdComparator" />
+					<ui:param name="enabled"
+						value="#{userBean.useSearchUserEmployment}" />
+					<ui:param name="title"
+						value="lucas.application.userScreen.searchUserEmploymentIdComparator.tooltip" />
+					<ui:param name="value"
+						value="#{userBean.searchUserEmploymentComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchUserEmploymentIdInputNumber" />
+				</ui:include>
+			</p:column>
+			<p:column>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
 					<ui:param name="id" value="searchUserRanksComparator" />
 					<ui:param name="enabled" value="#{userBean.useSearchUserRanks}" />
 					<ui:param name="title"
@@ -391,7 +421,17 @@
 					disabled="#{not userBean.useSearchUserEmploymentsCount|| converterBean.isDisabled(userBean.searchUserEmploymentsCountComparator)}" />
 			</p:column>
 			<p:column>
-				<p:chips id="searchUserRanksChips"
+				<ui:include
+					src="/WEB-INF/web/autocomplete/selectEmploymentAutocomplete.xhtml">
+					<ui:param name="id" value="searchUserEmploymentIdInputNumber" />
+					<ui:param name="title" value="" />
+					<ui:param name="disabled"
+						value="#{not userBean.useSearchUserEmployment || converterBean.isDisabled(userBean.searchUserEmploymentComparator)}" />
+					<ui:param name="value" value="#{userBean.searchUserEmployment}" />
+				</ui:include>
+			</p:column>
+			<p:column>
+				<p:chips id="searchUserRanksChips" styleClass="chip-width"
 					value="#{userBean.searchUserRanks}"
 					disabled="#{not userBean.useSearchUserRanks|| converterBean.isDisabled(userBean.searchUserRanksComparator)}" />
 			</p:column>

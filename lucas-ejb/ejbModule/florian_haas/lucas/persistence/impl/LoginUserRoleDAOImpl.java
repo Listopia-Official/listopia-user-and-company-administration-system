@@ -21,13 +21,22 @@ public class LoginUserRoleDAOImpl extends DAOImpl<LoginUserRole> implements Logi
 	}
 
 	@Override
-	public List<LoginUserRole> findLoginUserRoles(Long id, String name, Set<String> permissions, Boolean useId, Boolean useName,
-			Boolean usePermissions, EnumQueryComparator idComparator, EnumQueryComparator nameComparator, EnumQueryComparator permissionsComparator) {
+	public List<LoginUserRole> findLoginUserRoles(Long id, String name, Set<String> permissions, Long loginUserId, Boolean useId, Boolean useName,
+			Boolean usePermissions, Boolean useLoginUserId, EnumQueryComparator idComparator, EnumQueryComparator nameComparator,
+			EnumQueryComparator permissionsComparator, EnumQueryComparator loginUserIdComparator) {
 		return readOnlyCriteriaQuery((query, root, builder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 
 			getSingularRestriction(LoginUserRole_.id, id, useId, idComparator, predicates, builder, root);
 			getSingularRestriction(LoginUserRole_.name, name, useName, nameComparator, predicates, builder, root);
+			if (useLoginUserId) {
+				Subquery<Long> sub = query.subquery(Long.class);
+				Root<LoginUser> loginUserRoot = sub.from(LoginUser.class);
+				Join<LoginUser, LoginUserRole> role = loginUserRoot.join(LoginUser_.roles, JoinType.LEFT);
+				sub.distinct(true).select(role.get(LoginUserRole_.id)).where(builder.equal(loginUserRoot.get(LoginUser_.id), loginUserId));
+				predicates.add(loginUserIdComparator == EnumQueryComparator.EQUAL ? root.get(LoginUserRole_.id).in(sub)
+						: root.get(LoginUserRole_.id).in(sub).not());
+			}
 			getPluralRestrictionCollection(LoginUserRole_.permissions, permissions, usePermissions, permissionsComparator, predicates, builder, root);
 
 			return predicates;

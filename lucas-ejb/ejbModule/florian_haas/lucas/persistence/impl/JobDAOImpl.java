@@ -12,12 +12,13 @@ public class JobDAOImpl extends DAOImpl<Job> implements JobDAO {
 
 	@Override
 	public List<Job> findJobs(Long jobId, String name, String description, Long companyId, EnumSalaryClass salaryClass,
-			Integer requiredEmployeesCount, EnumEmployeePosition position, Long employmentId, Integer employmentsCount, Boolean useJobId,
-			Boolean useName, Boolean useDescription, Boolean useCompanyId, Boolean useSalaryClass, Boolean useRequiredEmployeesCount,
-			Boolean useEmployeePosition, Boolean useEmploymentId, Boolean useEmploymentsCount, EnumQueryComparator jobIdComparator,
-			EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator, EnumQueryComparator companyIdComparator,
-			EnumQueryComparator salaryClassComparator, EnumQueryComparator requiredEmployeesCountComparator, EnumQueryComparator positionComparator,
-			EnumQueryComparator employmentIdComparator, EnumQueryComparator employmentsCountComparator) {
+			Integer requiredEmployeesCount, EnumEmployeePosition position, Long employmentId, Integer employmentsCount,
+			Boolean areEmploymentsRequired, Boolean useJobId, Boolean useName, Boolean useDescription, Boolean useCompanyId, Boolean useSalaryClass,
+			Boolean useRequiredEmployeesCount, Boolean useEmployeePosition, Boolean useEmploymentId, Boolean useEmploymentsCount,
+			Boolean useAreEmploymentsRequired, EnumQueryComparator jobIdComparator, EnumQueryComparator nameComparator,
+			EnumQueryComparator descriptionComparator, EnumQueryComparator companyIdComparator, EnumQueryComparator salaryClassComparator,
+			EnumQueryComparator requiredEmployeesCountComparator, EnumQueryComparator positionComparator, EnumQueryComparator employmentIdComparator,
+			EnumQueryComparator employmentsCountComparator) {
 		return readOnlyCriteriaQuery((query, root, builder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 
@@ -33,6 +34,10 @@ public class JobDAOImpl extends DAOImpl<Job> implements JobDAO {
 					root.join(Job_.employments, JoinType.LEFT));
 			getSingularRestriction(builder.size(root.get(Job_.employments)), employmentsCount, useEmploymentsCount, employmentsCountComparator,
 					predicates, builder, root);
+			if (useAreEmploymentsRequired) {
+				Predicate pred = builder.lessThan(builder.size(root.get(Job_.employments)), root.get(Job_.requiredEmploymentsCount));
+				predicates.add(areEmploymentsRequired ? pred : pred.not());
+			}
 			return predicates;
 		});
 	}

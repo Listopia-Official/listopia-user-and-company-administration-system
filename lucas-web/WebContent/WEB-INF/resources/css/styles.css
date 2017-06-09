@@ -97,3 +97,7 @@
 .collectionPanel {
 	white-space: pre-wrap;
 }
+
+.chip-width > .ui-chips-container {
+   max-width: 300px;
+}

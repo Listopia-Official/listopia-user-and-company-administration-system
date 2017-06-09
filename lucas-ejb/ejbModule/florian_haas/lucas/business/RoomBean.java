@@ -52,11 +52,15 @@ public class RoomBean implements RoomBeanLocal {
 
 	@Override
 	@RequiresPermissions(ROOM_FIND_DYNAMIC)
-	public List<? extends ReadOnlyRoom> findRooms(Long roomId, String name, Long roomSectionId, Boolean useRoomId, Boolean useName,
-			Boolean useRoomSectionId, EnumQueryComparator roomIdComparator, EnumQueryComparator roomNameComparator,
-			EnumQueryComparator roomSectionIdComparator) {
-		return roomDao.findRooms(roomId, name, roomSectionId, useRoomId, useName, useRoomSectionId, roomIdComparator, roomNameComparator,
-				roomSectionIdComparator);
+	public List<? extends ReadOnlyRoom> findRooms(Long roomId, String name, Long roomSectionId, Integer sectionsCount, Integer occupiedSectionsCount,
+			Integer freeSectionsCount, Long companyId, Boolean useRoomId, Boolean useName, Boolean useRoomSectionId, Boolean useSectionsCount,
+			Boolean useOccupiedSectionsCount, Boolean useFreeSectionsCount, Boolean useCompany, EnumQueryComparator roomIdComparator,
+			EnumQueryComparator roomNameComparator, EnumQueryComparator roomSectionIdComparator, EnumQueryComparator sectionsCountComparator,
+			EnumQueryComparator occupiedSectionsCountComparator, EnumQueryComparator freeSectionsCountComparator,
+			EnumQueryComparator companyComparator) {
+		return roomDao.findRooms(roomId, name, roomSectionId, sectionsCount, occupiedSectionsCount, freeSectionsCount, companyId, useRoomId, useName,
+				useRoomSectionId, useSectionsCount, useOccupiedSectionsCount, useFreeSectionsCount, useCompany, roomIdComparator, roomNameComparator,
+				roomSectionIdComparator, sectionsCountComparator, occupiedSectionsCountComparator, freeSectionsCountComparator, companyComparator);
 	}
 
 	@Override

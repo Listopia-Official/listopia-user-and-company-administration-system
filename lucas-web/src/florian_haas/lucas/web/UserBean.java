@@ -436,6 +436,15 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 	@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC)
 	private EnumQueryComparator searchUserEmploymentsCountComparator = EnumQueryComparator.EQUAL;
 
+	@NotNull
+	private ReadOnlyEmployment searchUserEmployment = null;
+
+	@NotNull
+	private Boolean useSearchUserEmployment = Boolean.FALSE;
+
+	@QueryComparator(category = EnumQueryComparatorCategory.LOGIC)
+	private EnumQueryComparator searchUserEmploymentComparator = EnumQueryComparator.EQUAL;
+
 	public Long getSearchUserId() {
 		return searchUserId;
 	}
@@ -628,6 +637,30 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 		this.searchUserEmploymentsCountComparator = searchUserEmploymentsCountComparator;
 	}
 
+	public ReadOnlyEmployment getSearchUserEmployment() {
+		return this.searchUserEmployment;
+	}
+
+	public void setSearchUserEmployment(ReadOnlyEmployment searchUserEmployment) {
+		this.searchUserEmployment = searchUserEmployment;
+	}
+
+	public Boolean getUseSearchUserEmployment() {
+		return this.useSearchUserEmployment;
+	}
+
+	public void setUseSearchUserEmployment(Boolean useSearchUserEmployment) {
+		this.useSearchUserEmployment = useSearchUserEmployment;
+	}
+
+	public EnumQueryComparator getSearchUserEmploymentComparator() {
+		return this.searchUserEmploymentComparator;
+	}
+
+	public void setSearchUserEmploymentComparator(EnumQueryComparator searchUserEmploymentComparator) {
+		this.searchUserEmploymentComparator = searchUserEmploymentComparator;
+	}
+
 	@Override
 	public EnumPermission getFindDynamicPermission() {
 		return EnumPermission.USER_FIND_DYNAMIC;
@@ -648,10 +681,11 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 		return userBean.findUsers(searchUserId, searchUserForename, searchUserSurname,
 				EnumSchoolClass.getMatchingClasses(useSearchUserSchoolGrade ? searchUserSchoolGrade : null,
 						useSearchUserSchoolClass ? searchUserSchoolClass : null, searchUserSchoolGradeComparator, searchUserSchoolClassComparator),
-				searchUserType, searchUserRanks, searchUserEmploymentsCount, useSearchUserId, useSearchUserForename, useSearchUserSurname,
-				useSearchUserSchoolGrade || useSearchUserSchoolClass, useSearchUserType, useSearchUserRanks, useSearchUserEmploymentsCount,
-				searchUserIdComparator, searchUserForenameComparator, searchUserSurnameComparator, searchUserTypeComparator,
-				searchUserRanksComparator, searchUserEmploymentsCountComparator);
+				searchUserType, searchUserRanks, searchUserEmploymentsCount, searchUserEmployment != null ? searchUserEmployment.getId() : null,
+				useSearchUserId, useSearchUserForename, useSearchUserSurname, useSearchUserSchoolGrade || useSearchUserSchoolClass, useSearchUserType,
+				useSearchUserRanks, useSearchUserEmploymentsCount, useSearchUserEmployment, searchUserIdComparator, searchUserForenameComparator,
+				searchUserSurnameComparator, searchUserTypeComparator, searchUserRanksComparator, searchUserEmploymentsCountComparator,
+				searchUserEmploymentComparator);
 	}
 
 	@Override

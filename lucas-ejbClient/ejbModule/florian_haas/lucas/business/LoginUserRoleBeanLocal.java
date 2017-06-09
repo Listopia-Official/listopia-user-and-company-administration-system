@@ -31,9 +31,11 @@ public interface LoginUserRoleBeanLocal {
 	public List<? extends ReadOnlyLoginUserRole> findAll();
 
 	public List<? extends ReadOnlyLoginUserRole> findLoginUserRoles(@NotNull Long id, @NotNull String name,
-			Set<@TypeNotNull @NotBlankString String> permissions, @NotNull Boolean useId, @NotNull Boolean useName, @NotNull Boolean usePermissions,
+			Set<@TypeNotNull @NotBlankString String> permissions, Long loginUserId, @NotNull Boolean useId, @NotNull Boolean useName,
+			@NotNull Boolean usePermissions, @NotNull Boolean useLoginUserId,
 			@QueryComparator(category = EnumQueryComparatorCategory.NUMERIC) EnumQueryComparator idComparator,
 			@QueryComparator(category = EnumQueryComparatorCategory.TEXT) EnumQueryComparator nameComparator,
-			@QueryComparator(category = EnumQueryComparatorCategory.ARRAY) EnumQueryComparator permissionsComparator);
+			@QueryComparator(category = EnumQueryComparatorCategory.ARRAY) EnumQueryComparator permissionsComparator,
+			@QueryComparator(category = EnumQueryComparatorCategory.LOGIC) EnumQueryComparator loginUserIdComparator);
 
 }
