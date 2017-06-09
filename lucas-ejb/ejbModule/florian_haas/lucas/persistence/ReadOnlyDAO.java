@@ -3,7 +3,6 @@ package florian_haas.lucas.persistence;
 import java.util.*;
 import java.util.function.Function;
 
-import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
 import javax.persistence.metamodel.SingularAttribute;
 
@@ -11,8 +10,6 @@ import florian_haas.lucas.model.EntityBase;
 import florian_haas.lucas.util.TriFunction;
 
 public interface ReadOnlyDAO<E extends EntityBase> {
-
-	public EntityManager getEntityManager();
 
 	public Class<E> getEntityClass();
 

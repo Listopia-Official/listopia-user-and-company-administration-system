@@ -26,11 +26,6 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 	}
 
 	@Override
-	public EntityManager getEntityManager() {
-		return manager;
-	}
-
-	@Override
 	public Class<E> getEntityClass() {
 		return entityClass;
 	}
