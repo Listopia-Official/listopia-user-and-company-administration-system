@@ -135,7 +135,7 @@
 					<ui:param name="value"
 						value="#{loginRoleBean.searchLoginUserRoleIdComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchLoginUserRoleIdInputNumber" />
 				</ui:include>
@@ -150,7 +150,7 @@
 					<ui:param name="value"
 						value="#{loginRoleBean.searchLoginUserRoleNameComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.TEXT_COMPARATORS}" />
+						value="#{EnumQueryComparator.TEXT_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchLoginUserRoleNameInputText" />
 				</ui:include>

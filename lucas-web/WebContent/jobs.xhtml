@@ -198,7 +198,7 @@
 						value="lucas.application.jobScreen.searchJobIdComparator.tooltip" />
 					<ui:param name="value" value="#{jobBean.searchJobIdComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent" value="searchJobIdInputNumber" />
 				</ui:include>
 			</p:column>
@@ -210,7 +210,7 @@
 						value="lucas.application.jobScreen.searchJobNameComparator.tooltip" />
 					<ui:param name="value" value="#{jobBean.searchJobNameComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.TEXT_COMPARATORS}" />
+						value="#{EnumQueryComparator.TEXT_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent" value="searchJobNameInputText" />
 				</ui:include>
 			</p:column>
@@ -237,7 +237,7 @@
 					<ui:param name="value"
 						value="#{jobBean.searchJobCompanyIdComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchJobCompanyIdInputNumber" />
 				</ui:include>
@@ -252,7 +252,7 @@
 					<ui:param name="value"
 						value="#{jobBean.searchJobEmploymentsCountComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchJobEmploymentsCountInputNumber" />
 				</ui:include>
@@ -268,7 +268,7 @@
 					<ui:param name="value"
 						value="#{jobBean.searchJobRequiredEmploymentsCountComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchJobRequiredEmploymentsCountInputNumber" />
 				</ui:include>
@@ -283,7 +283,7 @@
 					<ui:param name="value"
 						value="#{jobBean.searchJobEmploymentIdComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchJobEmploymentIdInputNumber" />
 				</ui:include>
@@ -297,7 +297,7 @@
 					<ui:param name="value"
 						value="#{jobBean.searchJobPositionComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchEmployeePositionSelectOneMenu" />
 				</ui:include>

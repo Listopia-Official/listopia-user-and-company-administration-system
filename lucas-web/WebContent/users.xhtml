@@ -255,7 +255,7 @@
 						value="lucas.application.userScreen.searchUserIdComparator.tooltip" />
 					<ui:param name="value" value="#{userBean.searchUserIdComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent" value="searchUserIdInputNumber" />
 				</ui:include>
 			</p:column>
@@ -339,7 +339,7 @@
 					<ui:param name="value"
 						value="#{userBean.searchUserEmploymentsCountComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchUserEmploymentsCountInputNumber" />
 				</ui:include>
@@ -354,7 +354,7 @@
 					<ui:param name="value"
 						value="#{userBean.searchUserEmploymentComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchUserEmploymentIdInputNumber" />
 				</ui:include>

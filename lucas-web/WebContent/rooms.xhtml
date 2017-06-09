@@ -166,7 +166,7 @@
 						value="lucas.application.roomScreen.searchRoomIdComparator.tooltip" />
 					<ui:param name="value" value="#{roomBean.searchRoomIdComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent" value="searchRoomIdInputNumber" />
 				</ui:include>
 			</p:column>
@@ -178,7 +178,7 @@
 						value="lucas.application.roomScreen.searchRoomNameComparator.tooltip" />
 					<ui:param name="value" value="#{roomBean.searchRoomNameComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.TEXT_COMPARATORS}" />
+						value="#{EnumQueryComparator.TEXT_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent" value="searchRoomNameInputText" />
 				</ui:include>
 			</p:column>

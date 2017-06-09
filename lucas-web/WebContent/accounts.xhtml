@@ -213,7 +213,7 @@
 					<ui:param name="value"
 						value="#{accountBean.searchAccountIdComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent" value="searchAccountIdInputNumber" />
 				</ui:include>
 			</p:column>
@@ -227,7 +227,7 @@
 					<ui:param name="value"
 						value="#{accountBean.searchAccountOwnerIdComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchAccountOwnerIdInputNumber" />
 				</ui:include>
@@ -242,7 +242,7 @@
 					<ui:param name="value"
 						value="#{accountBean.searchAccountOwnerTypeComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchAccountOwnerTypeSelectOneMenu" />
 				</ui:include>
@@ -257,7 +257,7 @@
 					<ui:param name="value"
 						value="#{accountBean.searchAccountBankBalanceComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchAccountBankBalanceInputNumber" />
 				</ui:include>

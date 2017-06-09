@@ -185,7 +185,7 @@
 					<ui:param name="value"
 						value="#{transactionLogBean.searchTransactionLogIdComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchTransactionLogIdInputNumber" />
 				</ui:include>
@@ -200,7 +200,7 @@
 					<ui:param name="value"
 						value="#{transactionLogBean.searchTransactionLogAccountIdComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchTransactionLogAccountIdInputNumber" />
 				</ui:include>
@@ -215,7 +215,7 @@
 					<ui:param name="value"
 						value="#{transactionLogBean.searchTransactionLogDateTimeComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchTransactionLogDateTimeCalendar" />
 				</ui:include>
@@ -230,7 +230,7 @@
 					<ui:param name="value"
 						value="#{transactionLogBean.searchTransactionLogActionComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchTransactionLogActionSelectOneMenu" />
 				</ui:include>
@@ -246,7 +246,7 @@
 					<ui:param name="value"
 						value="#{transactionLogBean.searchTransactionLogActionTypeComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.LOGIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchTransactionLogActionTypeSelectOneMenu" />
 				</ui:include>
@@ -278,7 +278,7 @@
 					<ui:param name="value"
 						value="#{transactionLogBean.searchTransactionLogPreviousBankBalanceComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchTransactionLogPreviousBankBalanceInputNumber" />
 				</ui:include>
@@ -293,7 +293,7 @@
 					<ui:param name="value"
 						value="#{transactionLogBean.searchTransactionLogAmountComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchTransactionLogAmountInputNumber" />
 				</ui:include>
@@ -309,7 +309,7 @@
 					<ui:param name="value"
 						value="#{transactionLogBean.searchTransactionLogCurrentBankBalanceComparator}" />
 					<ui:param name="comparators"
-						value="#{EnumQueryComparator.NUMERIC_COMPARATORS}" />
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
 					<ui:param name="targetComponent"
 						value="searchTransactionLogCurrentBankBalanceInputNumber" />
 				</ui:include>
