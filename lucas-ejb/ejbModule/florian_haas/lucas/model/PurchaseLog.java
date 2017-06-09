@@ -42,17 +42,24 @@ public class PurchaseLog extends EntityBase implements ReadOnlyPurchaseLog {
 	@Basic(optional = false)
 	@Column(nullable = false, scale = 7, precision = 38)
 	@ValidItemPrice
-	private BigDecimal currentPrice;
+	private BigDecimal currentFictionalPrice;
+
+	@Basic(optional = false)
+	@Column(nullable = false, scale = 7, precision = 38)
+	@ValidItemPrice
+	private BigDecimal currentRealPrice;
 
 	PurchaseLog() {}
 
-	public PurchaseLog(Company company, LocalDateTime dateTime, Item item, EnumPayType payType, Integer count, BigDecimal currentPrice) {
+	public PurchaseLog(Company company, LocalDateTime dateTime, Item item, EnumPayType payType, Integer count, BigDecimal currentFictionalPrice,
+			BigDecimal currentRealPrice) {
 		this.company = company;
 		this.dateTime = dateTime;
 		this.item = item;
 		this.payType = payType;
 		this.count = count;
-		this.currentPrice = currentPrice;
+		this.currentFictionalPrice = currentFictionalPrice;
+		this.currentRealPrice = currentRealPrice;
 	}
 
 	public Company getCompany() {
@@ -75,11 +82,21 @@ public class PurchaseLog extends EntityBase implements ReadOnlyPurchaseLog {
 		return this.count;
 	}
 
-	public BigDecimal getCurrentPrice() {
-		return this.currentPrice;
+	@Override
+	public BigDecimal getCurrentFictionalPrice() {
+		return currentFictionalPrice;
 	}
 
-	public BigDecimal getTotalPrice() {
-		return currentPrice.multiply(new BigDecimal(count));
+	@Override
+	public BigDecimal getCurrentRealPrice() {
+		return currentRealPrice;
+	}
+
+	public BigDecimal getTotalFictionalPrice() {
+		return currentFictionalPrice.multiply(new BigDecimal(count));
+	}
+
+	public BigDecimal getTotalRealPrice() {
+		return currentRealPrice.multiply(new BigDecimal(count));
 	}
 }

@@ -42,7 +42,7 @@ public class ItemBean implements ItemBeanLocal {
 
 	@Override
 	@RequiresPermissions(ITEM_SELL)
-	public void sell(Map<Long, Integer> items, Long companyId, EnumPayType payType) {
+	public void sell(Map<Long, Integer> items, Long companyId, EnumPayType payType, String payComment, String exchangeComment) {
 		Company company = companyDao.findById(companyId);
 		Set<ConstraintViolation<GlobalData>> violations = validator.validate((GlobalData) globalData.getInstance(), NotNullWarehouseRequired.class);
 		if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
@@ -50,11 +50,13 @@ public class ItemBean implements ItemBeanLocal {
 		items.forEach((itemId, count) -> {
 			Item item = itemDao.findById(itemId);
 			item.setItemsAvaible(item.getItemsAvaible() - count);
-			PurchaseLog log = new PurchaseLog(company, LocalDateTime.now(), item, payType, count, item.getPricePerItem());
+			PurchaseLog log = new PurchaseLog(company, LocalDateTime.now(), item, payType, count, item.getFictionalPricePerItem(),
+					item.getRealPricePerItem());
 			if (payType == EnumPayType.ACCOUNT) {
 				accountBean.transaction(company.getAccount().getId(), warehouse.getAccount().getId(),
-						item.getPricePerItem().multiply(new BigDecimal(count)),
-						company.getName() + " bought " + count + " " + item.getName() + " at warehouse");
+						item.getFictionalPricePerItem().multiply(new BigDecimal(count)), payComment);
+				accountBean.exchangeFictionalCurrencyToReal(warehouse.getAccount().getId(), item.getRealPricePerItem(), Boolean.FALSE,
+						exchangeComment);
 			}
 			item.addPurchaseLog(log);
 			company.addPurchaseLog(log);
@@ -76,12 +78,14 @@ public class ItemBean implements ItemBeanLocal {
 
 	@Override
 	@RequiresPermissions(ITEM_FIND_DYNAMIC)
-	public List<? extends ReadOnlyItem> findItems(Long id, String name, String description, Integer itemsAvaible, BigDecimal pricePerItem,
-			Boolean useId, Boolean useName, Boolean useDescription, Boolean useItemsAvaible, Boolean usePricePerItem,
-			EnumQueryComparator idComparator, EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator,
-			EnumQueryComparator itemsAvaibleComparator, EnumQueryComparator pricePerItemComparator) {
-		return itemDao.findItems(id, name, description, itemsAvaible, pricePerItem, useId, useName, useDescription, useItemsAvaible, usePricePerItem,
-				idComparator, nameComparator, descriptionComparator, itemsAvaibleComparator, pricePerItemComparator);
+	public List<? extends ReadOnlyItem> findItems(Long itemId, String name, String description, Integer itemsAvaible,
+			BigDecimal fictionalPricePerItem, BigDecimal realPricePerItem, Boolean useId, Boolean useName, Boolean useDescription,
+			Boolean useItemsAvaible, Boolean useFictionalPricePerItem, Boolean useRealPricePerItem, EnumQueryComparator idComparator,
+			EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator, EnumQueryComparator itemsAvaibleComparator,
+			EnumQueryComparator fictionalPricePerItemComparator, EnumQueryComparator realPricePerItemComparator) {
+		return itemDao.findItems(itemId, name, description, itemsAvaible, fictionalPricePerItem, realPricePerItem, useId, useName, useDescription,
+				useItemsAvaible, useFictionalPricePerItem, useRealPricePerItem, idComparator, nameComparator, descriptionComparator,
+				itemsAvaibleComparator, fictionalPricePerItemComparator, realPricePerItemComparator);
 	}
 
 	@Override
@@ -104,11 +108,20 @@ public class ItemBean implements ItemBeanLocal {
 	}
 
 	@Override
-	@RequiresPermissions(ITEM_SET_PRICE_PER_ITEM)
-	public Boolean setPricePerItem(Long itemId, BigDecimal pricePerItem) {
+	@RequiresPermissions(ITEM_SET_REAL_PRICE_PER_ITEM)
+	public Boolean setRealPricePerItem(Long itemId, BigDecimal realPricePerItem) {
 		Item item = itemDao.findById(itemId);
-		if (Utils.isEqual(item.getPricePerItem(), pricePerItem)) return Boolean.FALSE;
-		item.setPricePerItem(pricePerItem);
+		if (Utils.isEqual(item.getRealPricePerItem(), realPricePerItem)) return Boolean.FALSE;
+		item.setRealPricePerItem(realPricePerItem);
+		return Boolean.TRUE;
+	}
+
+	@Override
+	@RequiresPermissions(ITEM_SET_FICTIONAL_PRICE_PER_ITEM)
+	public Boolean setFictionalPricePerItem(Long itemId, BigDecimal fictionalPricePerItem) {
+		Item item = itemDao.findById(itemId);
+		if (Utils.isEqual(item.getFictionalPricePerItem(), fictionalPricePerItem)) return Boolean.FALSE;
+		item.setFictionalPricePerItem(fictionalPricePerItem);
 		return Boolean.TRUE;
 	}
 
@@ -130,9 +143,9 @@ public class ItemBean implements ItemBeanLocal {
 
 	@Override
 	@RequiresPermissions(ITEM_CREATE)
-	public Long newItem(String name, String description, BigDecimal price, Integer itemsAvaible) {
+	public Long newItem(String name, String description, BigDecimal fictionalPrice, BigDecimal realPrice, Integer itemsAvaible) {
 		checkIsItemNameUnique(name);
-		Item item = new Item(name, description, price, itemsAvaible);
+		Item item = new Item(name, description, fictionalPrice, realPrice, itemsAvaible);
 		itemDao.persist(item);
 		return item.getId();
 	}

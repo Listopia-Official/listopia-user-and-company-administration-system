@@ -11,7 +11,9 @@ public interface ReadOnlyItem extends ReadOnlyEntity {
 
 	public Integer getItemsAvaible();
 
-	public BigDecimal getPricePerItem();
+	public BigDecimal getFictionalPricePerItem();
+
+	public BigDecimal getRealPricePerItem();
 
 	public Boolean getHasToBeOrdered();
 

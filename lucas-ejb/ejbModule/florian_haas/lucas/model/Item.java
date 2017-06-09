@@ -35,7 +35,12 @@ public class Item extends EntityBase implements ReadOnlyItem {
 	@Basic(optional = false)
 	@Column(nullable = false, scale = 7, precision = 38)
 	@ValidItemPrice
-	private BigDecimal pricePerItem;
+	private BigDecimal fictionalPricePerItem;
+
+	@Basic(optional = false)
+	@Column(nullable = false, scale = 7, precision = 38)
+	@ValidItemPrice
+	private BigDecimal realPricePerItem;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "item")
 	@Valid
@@ -44,10 +49,11 @@ public class Item extends EntityBase implements ReadOnlyItem {
 
 	Item() {}
 
-	public Item(String name, String description, BigDecimal pricePerItem, Integer itemsAvaible) {
+	public Item(String name, String description, BigDecimal fictionalPricePerItem, BigDecimal realPricePerItem, Integer itemsAvaible) {
 		this.name = name;
 		this.description = description;
-		this.pricePerItem = pricePerItem;
+		this.realPricePerItem = realPricePerItem;
+		this.fictionalPricePerItem = fictionalPricePerItem;
 		this.itemsAvaible = itemsAvaible;
 	}
 
@@ -75,12 +81,20 @@ public class Item extends EntityBase implements ReadOnlyItem {
 		this.itemsAvaible = itemsAvaible;
 	}
 
-	public BigDecimal getPricePerItem() {
-		return this.pricePerItem;
+	public BigDecimal getRealPricePerItem() {
+		return this.realPricePerItem;
 	}
 
-	public void setPricePerItem(BigDecimal pricePerItem) {
-		this.pricePerItem = pricePerItem;
+	public void setRealPricePerItem(BigDecimal realPricePerItem) {
+		this.realPricePerItem = realPricePerItem;
+	}
+
+	public BigDecimal getFictionalPricePerItem() {
+		return this.fictionalPricePerItem;
+	}
+
+	public void setFictionalPricePerItem(BigDecimal fictionalPricePerItem) {
+		this.fictionalPricePerItem = fictionalPricePerItem;
 	}
 
 	public Boolean getHasToBeOrdered() {

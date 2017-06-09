@@ -15,8 +15,12 @@ public interface ReadOnlyPurchaseLog extends ReadOnlyEntity {
 
 	public Integer getCount();
 
-	public BigDecimal getCurrentPrice();
+	public BigDecimal getCurrentFictionalPrice();
 
-	public BigDecimal getTotalPrice();
+	public BigDecimal getCurrentRealPrice();
+
+	public BigDecimal getTotalFictionalPrice();
+
+	public BigDecimal getTotalRealPrice();
 
 }
