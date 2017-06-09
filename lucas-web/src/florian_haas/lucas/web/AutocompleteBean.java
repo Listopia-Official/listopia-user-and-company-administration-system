@@ -130,7 +130,8 @@ public class AutocompleteBean {
 		Long loginUserId = getIdParam();
 		Long userId = null;
 		if (loginUserId != null && entityBean.exists(loginUserId, ReadOnlyLoginUser.class) && loginBean.isBoundLoginUser(loginUserId)) {
-			userId = loginBean.findLoginUserById(loginUserId).getUser().getId();
+			ReadOnlyLoginUser user = loginBean.findLoginUserById(loginUserId);
+			userId = user.getUser() != null ? user.getUser().getId() : null;
 		}
 		return getImageOfUser(getDefaultUserImage(), userId);
 	}
