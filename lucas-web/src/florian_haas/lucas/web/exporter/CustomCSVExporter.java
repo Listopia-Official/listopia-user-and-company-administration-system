@@ -65,10 +65,10 @@ public class CustomCSVExporter extends CSVExporter {
 			HtmlCommandLink link = (HtmlCommandLink) component;
 			Object value = link.getValue();
 
-			if (value != null) { return String.valueOf(value); }
+			if (value != null) return String.valueOf(value);
 
 			for (UIComponent child : link.getChildren()) {
-				if ((child instanceof ValueHolder)) { return exportValue(context, child); }
+				if ((child instanceof ValueHolder)) return exportValue(context, child);
 			}
 
 			return "";
@@ -77,7 +77,7 @@ public class CustomCSVExporter extends CSVExporter {
 		if ((component instanceof ValueHolder)) {
 			if ((component instanceof EditableValueHolder)) {
 				Object submittedValue = ((EditableValueHolder) component).getSubmittedValue();
-				if (submittedValue != null) { return submittedValue.toString(); }
+				if (submittedValue != null) return submittedValue.toString();
 			}
 
 			ValueHolder valueHolder = (ValueHolder) component;
@@ -121,12 +121,12 @@ public class CustomCSVExporter extends CSVExporter {
 
 			}
 
-			return converter == null ? ""
+			return converter == null ? value != null ? value.toString() : ""
 					: (value != null && converter instanceof LongTextConverter) ? value.toString() : converter.getAsString(context, component, value);
 		}
 
-		if ((component instanceof CellEditor)) { return exportValue(context, ((CellEditor) component).getFacet("output")); }
-		if ((component instanceof HtmlGraphicImage)) { return (String) component.getAttributes().get("alt"); }
+		if ((component instanceof CellEditor)) return exportValue(context, ((CellEditor) component).getFacet("output"));
+		if ((component instanceof HtmlGraphicImage)) return (String) component.getAttributes().get("alt");
 
 		return "";
 	}
