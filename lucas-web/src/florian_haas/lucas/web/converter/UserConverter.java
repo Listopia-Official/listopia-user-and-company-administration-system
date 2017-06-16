@@ -4,6 +4,7 @@ import javax.faces.convert.FacesConverter;
 
 import florian_haas.lucas.business.UserBeanLocal;
 import florian_haas.lucas.model.ReadOnlyUser;
+import florian_haas.lucas.web.util.WebUtils;
 
 @FacesConverter(value = UserConverter.CONVERTER_ID, managed = true)
 public class UserConverter extends DefaultConverter<ReadOnlyUser> {
@@ -24,7 +25,7 @@ public class UserConverter extends DefaultConverter<ReadOnlyUser> {
 	@Override
 	protected Object[] getParamsFromValue(ReadOnlyUser value) {
 		return new Object[] {
-				value.getForename(), value.getSurname(), value.getSchoolClass(), value.getId() };
+				value.getForename(), value.getSurname(), WebUtils.getAsString(value.getSchoolClass(), EnumConverter.CONVERTER_ID), value.getId() };
 	}
 
 	@Override
