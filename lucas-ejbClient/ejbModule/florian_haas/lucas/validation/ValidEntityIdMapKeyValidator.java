@@ -8,7 +8,7 @@ import javax.validation.*;
 import florian_haas.lucas.business.EntityBeanLocal;
 import florian_haas.lucas.model.ReadOnlyEntity;
 
-public class ValidEntityIdMapKeyValidator implements ConstraintValidator<ValidEntityId, Map<Long, ?>> {
+public class ValidEntityIdMapKeyValidator implements ConstraintValidator<ValidEntityIdMapKey, Map<Long, ?>> {
 
 	@EJB
 	private EntityBeanLocal bean;
@@ -16,7 +16,7 @@ public class ValidEntityIdMapKeyValidator implements ConstraintValidator<ValidEn
 	private Class<? extends ReadOnlyEntity> entityClass;
 
 	@Override
-	public void initialize(ValidEntityId constraintAnnotation) {
+	public void initialize(ValidEntityIdMapKey constraintAnnotation) {
 		entityClass = constraintAnnotation.entityClass();
 	}
 
