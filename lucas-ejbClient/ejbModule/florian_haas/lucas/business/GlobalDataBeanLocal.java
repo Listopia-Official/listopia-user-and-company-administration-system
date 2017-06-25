@@ -62,7 +62,7 @@ public interface GlobalDataBeanLocal {
 
 	public Boolean setMinimumWage(@NotNull @DecimalMin(value = "0", inclusive = false) BigDecimal minimumWage);
 
-	public Boolean setWarehouse(@ValidEntityId(entityClass = ReadOnlyCompany.class) Long companyId);
+	public Boolean setWarehouse(@ValidEntityId(entityClass = ReadOnlyCompany.class, nullable = true) Long companyId);
 
 	public Boolean setTransactionLimit(@NotNull @DecimalMin(value = "0", inclusive = false) BigDecimal transactionLimit);
 

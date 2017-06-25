@@ -100,8 +100,8 @@ public class GlobalDataBean implements GlobalDataBeanLocal {
 	@RequiresPermissions(GLOBAL_DATA_SET_WAREHOUSE)
 	public Boolean setWarehouse(Long companyId) {
 		Company existingCompany = newInstance().getWarehouse();
-		Company company = companyDao.findById(companyId);
-		if (company.equals(existingCompany)) {
+		Company company = companyId != null ? companyDao.findById(companyId) : null;
+		if ((company != null && company.equals(existingCompany)) || (company == null && existingCompany == null)) {
 			return Boolean.FALSE;
 		} else {
 			newInstance().setWarehouse(company);
