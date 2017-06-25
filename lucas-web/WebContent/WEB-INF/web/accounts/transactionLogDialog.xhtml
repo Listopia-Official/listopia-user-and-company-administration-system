@@ -49,7 +49,7 @@
 					disabled="#{accountBean.transactionLogsDialogTransactionLogs.size() &lt;= 0}"
 					value="#{msg['lucas.application.accountScreen.transactionLogDialog.columnToggler.name']}"
 					icon="fa fa-calculator"
-					title="#{msg['lucas.application.accountScreen.transactionLogDialog.columnToggler.name']}" />
+					title="#{msg['lucas.application.accountScreen.transactionLogDialog.columnToggler.tooltip']}" />
 				<p:columnToggler datasource="transactionLogsTable"
 					trigger="columnToggler">
 					<p:ajax event="toggle" update="@(column)"
