@@ -9,6 +9,8 @@ import javax.inject.Named;
 import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.primefaces.event.ToggleEvent;
+import org.primefaces.model.Visibility;
 
 import florian_haas.lucas.business.*;
 import florian_haas.lucas.model.*;
@@ -871,6 +873,45 @@ public class CompanyBean extends BaseBean<ReadOnlyCompany> {
 
 	/*
 	 * -------------------- Company Card Manager Dialog End --------------------
+	 */
+
+	/*
+	 * -------------------- Show Purchase Logs Dialog Start --------------------
+	 */
+
+	private ReadOnlyCompany showPurchaseLogsDialogSelectedCompany = null;
+
+	private List<ReadOnlyPurchaseLog> showPurchaseLogsDialogLogs = new ArrayList<>();
+
+	private List<Boolean> showPurchaseLogsDialogLogsColumns = Arrays.asList(true, true, true, true, true, true, true, true, true);
+
+	public ReadOnlyCompany getShowPurchaseLogsDialogSelectedCompany() {
+		return this.showPurchaseLogsDialogSelectedCompany;
+	}
+
+	public List<ReadOnlyPurchaseLog> getShowPurchaseLogsDialogLogs() {
+		return this.showPurchaseLogsDialogLogs;
+	}
+
+	public List<Boolean> getShowPurchaseLogsDialogLogsColumns() {
+		return this.showPurchaseLogsDialogLogsColumns;
+	}
+
+	public void initShowPurchaseLogsDialog() {
+		if (!selectedEntities.isEmpty()) {
+			showPurchaseLogsDialogSelectedCompany = selectedEntities.get(0);
+			showPurchaseLogsDialogLogs.clear();
+			showPurchaseLogsDialogLogs.addAll(companyBean.getPurchaseLogs(showPurchaseLogsDialogSelectedCompany.getId()));
+			Collections.fill(showPurchaseLogsDialogLogsColumns, true);
+		}
+	}
+
+	public void purchaseLogDialogOnToggle(ToggleEvent e) {
+		showPurchaseLogsDialogLogsColumns.set((Integer) e.getData(), e.getVisibility() == Visibility.VISIBLE);
+	}
+
+	/*
+	 * -------------------- Show Purchase Logs Dialog End --------------------
 	 */
 
 }

@@ -81,4 +81,6 @@ public interface CompanyBeanLocal {
 
 	public List<? extends ReadOnlyCompany> getCompaniesByData(@NotNull String data, @NotNull @Min(1) Integer resultsCount);
 
+	public List<? extends ReadOnlyPurchaseLog> getPurchaseLogs(@ValidEntityId(entityClass = ReadOnlyCompany.class) Long companyId);
+
 }

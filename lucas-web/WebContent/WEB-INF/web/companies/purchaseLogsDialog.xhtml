@@ -1,0 +1,119 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.companyScreen.purchaseLogDialog.title" />
+	<ui:param name="closeable" value="true" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="purchaseLogDialog" />
+	<ui:param name="formId" value="purchaseLogDialogForm" />
+	<ui:define name="dialogContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.LocalDateTimeConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.CurrencyConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.RealCurrencyConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.ItemConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.CompanyConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.NullConverter" />
+		<h:outputText
+			value="#{companyBean.showPurchaseLogsDialogLogs.size()} "
+			style="font-weight:bold" />
+		<h:outputText
+			value="#{msg['lucas.application.companyScreen.purchaseLogDialog.header']}"
+			style="font-weight:bold" />
+		<h:outputText
+			value="#{companyBean.showPurchaseLogsDialogSelectedCompany}"
+			style="font-weight:bold"
+			converter="#{converterBean.getConverter(CompanyConverter.CONVERTER_ID)}" />
+		<p:dataTable style="margin-top:5px;max-height:500px"
+			id="purchaseLogsTable" tableStyle="table-layout: auto;"
+			resizableColumns="true" liveResize="true"
+			value="#{companyBean.showPurchaseLogsDialogLogs}" var="purchaseLog"
+			rowKey="#{purchaseLog.id}" draggableColumns="true"
+			emptyMessage="#{msg['lucas.application.companyScreen.purchaseLogDialog.noResults']}"
+			rows="10" paginator="true"
+			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {AdditionalComponents}"
+			currentPageReportTemplate="#{msg['lucas.application.companyScreen.purchaseLogDialog.currentPageReport1']} {currentPage} #{msg['lucas.application.companyScreen.purchaseLogDialog.currentPageReport2']} {totalPages}"
+			rowsPerPageTemplate="10,20,50,75,100,200,500,750,1000"
+			paginatorPosition="top">
+			<f:facet name="{AdditionalComponents}">
+				<p:commandButton id="columnToggler"
+					disabled="#{companyBean.showPurchaseLogsDialogLogs.size() &lt;= 0}"
+					value="#{msg['lucas.application.companyScreen.purchaseLogDialog.columnToggler.name']}"
+					icon="fa fa-calculator"
+					title="#{msg['lucas.application.companyScreen.purchaseLogDialog.columnToggler.tooltip']}" />
+				<p:columnToggler datasource="purchaseLogsTable"
+					trigger="columnToggler">
+					<p:ajax event="toggle" update="@(column)"
+						listener="#{companyBean.purchaseLogDialogOnToggle}" />
+				</p:columnToggler>
+			</f:facet>
+			<p:column sortBy="#{purchaseLog.id}"
+				visible="#{companyBean.showPurchaseLogsDialogLogsColumns[0]}"
+				headerText="#{msg['lucas.application.companyScreen.purchaseLogDialog.idHeader']}">
+				<h:outputText value="#{purchaseLog.id}" />
+			</p:column>
+			<p:column sortBy="#{purchaseLog.dateTime}"
+				visible="#{companyBean.showPurchaseLogsDialogLogsColumns[1]}"
+				headerText="#{msg['lucas.application.companyScreen.purchaseLogDialog.dateTimeHeader']}">
+				<h:outputText value="#{purchaseLog.dateTime}"
+					converter="#{converterBean.getConverter(LocalDateTimeConverter.CONVERTER_ID)}" />
+			</p:column>
+			<p:column sortable="false"
+				visible="#{companyBean.showPurchaseLogsDialogLogsColumns[2]}"
+				headerText="#{msg['lucas.application.companyScreen.purchaseLogDialog.itemHeader']}">
+				<h:outputText value="#{purchaseLog.item}"
+					converter="#{converterBean.getConverter(ItemConverter.CONVERTER_ID)}" />
+			</p:column>
+			<p:column sortBy="#{purchaseLog.payType}"
+				visible="#{companyBean.showPurchaseLogsDialogLogsColumns[3]}"
+				headerText="#{msg['lucas.application.companyScreen.purchaseLogDialog.payTypeHeader']}">
+				<h:outputText
+					value="#{converterBean.convertEnum(purchaseLog.payType)}" />
+			</p:column>
+			<p:column sortBy="#{purchaseLog.currentFictionalPrice}"
+				visible="#{companyBean.showPurchaseLogsDialogLogsColumns[4]}"
+				headerText="#{msg['lucas.application.companyScreen.purchaseLogDialog.fictionalPriceHeader']}">
+				<h:outputText value="#{purchaseLog.currentFictionalPrice}"
+					converter="#{converterBean.getManagedConverter(CurrencyConverter.CONVERTER_ID)}" />
+			</p:column>
+			<p:column sortBy="#{purchaseLog.currentRealPrice}"
+				visible="#{companyBean.showPurchaseLogsDialogLogsColumns[5]}"
+				headerText="#{msg['lucas.application.companyScreen.purchaseLogDialog.realPriceHeader']}">
+				<h:outputText value="#{purchaseLog.currentRealPrice}"
+					converter="#{converterBean.getManagedConverter(RealCurrencyConverter.CONVERTER_ID)}" />
+			</p:column>
+			<p:column sortBy="#{purchaseLog.count}"
+				visible="#{companyBean.showPurchaseLogsDialogLogsColumns[6]}"
+				headerText="#{msg['lucas.application.companyScreen.purchaseLogDialog.countHeader']}">
+				<h:outputText value="#{purchaseLog.count}" />
+			</p:column>
+			<p:column sortBy="#{purchaseLog.totalFictionalPrice}"
+				visible="#{companyBean.showPurchaseLogsDialogLogsColumns[7]}"
+				headerText="#{msg['lucas.application.companyScreen.purchaseLogDialog.totalFictionalPriceHeader']}">
+				<h:outputText value="#{purchaseLog.totalFictionalPrice}"
+					converter="#{converterBean.getManagedConverter(CurrencyConverter.CONVERTER_ID)}" />
+			</p:column>
+			<p:column sortBy="#{purchaseLog.totalRealPrice}"
+				visible="#{companyBean.showPurchaseLogsDialogLogsColumns[8]}"
+				headerText="#{msg['lucas.application.companyScreen.purchaseLogDialog.totalRealPriceHeader']}">
+				<h:outputText value="#{purchaseLog.totalRealPrice}"
+					converter="#{converterBean.getManagedConverter(RealCurrencyConverter.CONVERTER_ID)}" />
+			</p:column>
+		</p:dataTable>
+		<p:separator />
+		<p:commandButton style="float:right" process="@this"
+			value="#{msg['lucas.application.companyScreen.purchaseLogDialog.closeButton.name']}"
+			title="#{msg['lucas.application.companyScreen.purchaseLogDialog.closeButton.tooltip']}"
+			oncomplete="PF('purchaseLogDialog').hide()" immediate="true">
+		</p:commandButton>
+	</ui:define>
+</ui:composition>

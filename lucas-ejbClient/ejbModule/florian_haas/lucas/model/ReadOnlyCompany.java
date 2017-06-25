@@ -32,4 +32,6 @@ public interface ReadOnlyCompany extends ReadOnlyAccountOwner {
 
 	public List<? extends ReadOnlyJob> getJobs();
 
+	public Boolean removePurchaseLog(ReadOnlyPurchaseLog log);
+
 }

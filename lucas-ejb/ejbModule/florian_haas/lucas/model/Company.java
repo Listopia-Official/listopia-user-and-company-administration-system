@@ -194,4 +194,9 @@ public class Company extends AccountOwner implements ReadOnlyCompany {
 	public Boolean removeJob(Job job) {
 		return this.jobs.remove(job);
 	}
+
+	@Override
+	public Boolean removePurchaseLog(ReadOnlyPurchaseLog log) {
+		return purchaseLogs.remove(log);
+	}
 }

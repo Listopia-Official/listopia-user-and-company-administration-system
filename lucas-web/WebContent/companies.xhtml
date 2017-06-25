@@ -11,6 +11,7 @@
 		<ui:include src="/WEB-INF/web/companies/viewEmployeesDialog.xhtml" />
 		<ui:include
 			src="/WEB-INF/web/companies/companyCardManagerDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/companies/purchaseLogsDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/components/longTextDisplayDialog.xhtml" />
 	</ui:define>
 	<ui:define name="otherContent">
@@ -78,11 +79,10 @@
 			<p:commandButton resetValues="true"
 				value="#{msg['lucas.application.companyScreen.showPurchaseLogsButton.name']}"
 				title="#{msg['lucas.application.companyScreen.showPurchaseLogsButton.tooltip']}"
-				icon="fa fa-list-ul" disabled="true" />
-			<ui:remove>oncomplete="PF('createLoginUserRoleDialog').show()"
-			action="#{loginRoleBean.initCreateLoginUserRoleDialog}"
-			process="@this" update="createLoginUserRoleDialogForm"
-			disabled="#{companyBean.selectedEntities.size() !=1}"</ui:remove>
+				icon="fa fa-list-ul" oncomplete="PF('purchaseLogDialog').show()"
+				action="#{companyBean.initShowPurchaseLogsDialog}" process="@this"
+				update="purchaseLogDialogForm"
+				disabled="#{companyBean.selectedEntities.size() !=1}" />
 			<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 			<p:commandButton resetValues="true"
 				value="#{msg['lucas.application.companyScreen.removeCompanyButton.name']}"

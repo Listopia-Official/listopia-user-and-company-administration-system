@@ -275,4 +275,10 @@ public class CompanyBean implements CompanyBeanLocal {
 		return companyDao.getCompaniesFromData(data, resultsCount);
 	}
 
+	@Override
+	@RequiresPermissions(COMPANY_GET_PURCHASE_LOGS)
+	public List<? extends ReadOnlyPurchaseLog> getPurchaseLogs(Long companyId) {
+		return companyDao.findById(companyId).getPurchaseLogs();
+	}
+
 }
