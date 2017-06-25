@@ -1,0 +1,91 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.jobScreen.computeMissingEmploymentsDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="computeMissingEmploymentsDialog" />
+	<ui:param name="formId" value="computeMissingEmploymentsDialogForm" />
+	<ui:define name="dialogContent">
+		<p:importEnum type="florian_haas.lucas.model.EnumEmployeePosition" />
+		<p:importEnum type="florian_haas.lucas.model.EnumCompanyType" />
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.jobScreen.computeMissingEmploymentsDialog.validCompanyTypesSelectCheckboxMenu.name']}"
+							title="#{msg['lucas.application.jobScreen.computeMissingEmploymentsDialog.validCompanyTypesSelectCheckboxMenu.tooltip']}"
+							for="validCompanyTypesSelectCheckboxMenu" />
+					</p:column>
+					<p:column>
+						<p:message for="validCompanyTypesSelectCheckboxMenu" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:selectCheckboxMenu id="validCompanyTypesSelectCheckboxMenu"
+							value="#{jobBean.computeMissingEmploymentsDialogValidCompanyTypes}"
+							multiple="true"
+							title="#{msg['lucas.application.jobScreen.computeMissingEmploymentsDialog.validCompanyTypesSelectCheckboxMenu.tooltip']}"
+							converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}">
+							<f:selectItems value="#{EnumCompanyType.ALL_VALUES}"
+								var="companyType" itemValue="#{companyType}"
+								itemLabel=" #{converterBean.convertEnum(companyType)}" />
+						</p:selectCheckboxMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.jobScreen.computeMissingEmploymentsDialog.validJobsSelectCheckboxMenu.name']}"
+							title="#{msg['lucas.application.jobScreen.computeMissingEmploymentsDialog.validJobsSelectCheckboxMenu.tooltip']}"
+							for="validJobsSelectCheckboxMenu" />
+					</p:column>
+					<p:column>
+						<p:message for="validJobsSelectCheckboxMenu" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:selectCheckboxMenu id="validJobsSelectCheckboxMenu"
+							value="#{jobBean.computeMissingEmploymentsDialogValidJobs}"
+							multiple="true"
+							title="#{msg['lucas.application.jobScreen.computeMissingEmploymentsDialog.validJobsSelectCheckboxMenu.tooltip']}"
+							converter="#{converterBean.getConverter(EnumConverter.CONVERTER_ID)}">
+							<f:selectItems value="#{EnumEmployeePosition.ALL_VALUES}"
+								var="jobPosition" itemValue="#{jobPosition}"
+								itemLabel=" #{converterBean.convertEnum(jobPosition)}" />
+						</p:selectCheckboxMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton id="startJobDistributionButton"
+							process="@this validJobsSelectCheckboxMenu validCompanyTypesSelectCheckboxMenu"
+							update="@form" action="#{jobBean.computeMissingEmployments}"
+							value="#{msg['lucas.application.jobScreen.computeMissingEmploymentsDialog.startJobDistributionButton.name']}"
+							title="#{msg['lucas.application.jobScreen.computeMissingEmploymentsDialog.startJobDistributionButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('computeMissingEmploymentsDialog').hide()}" />
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this" immediate="true"
+							value="#{msg['lucas.application.jobScreen.computeMissingEmploymentsDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.jobScreen.computeMissingEmploymentsDialog.cancelButton.tooltip']}"
+							oncomplete="PF('computeMissingEmploymentsDialog').hide()">
+						</p:commandButton>
+					</p:column>
+					<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
+						<ui:param name="block" value="computeMissingEmploymentsDialogForm" />
+						<ui:param name="trigger"
+							value="computeMissingEmploymentsDialogForm:startJobDistributionButton" />
+					</ui:include>
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

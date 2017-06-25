@@ -1,6 +1,6 @@
 package florian_haas.lucas.business;
 
-import java.util.List;
+import java.util.*;
 
 import javax.ejb.Local;
 import javax.validation.constraints.*;
@@ -52,5 +52,8 @@ public interface JobBeanLocal {
 	public Boolean deleteJob(@ValidEntityId(entityClass = ReadOnlyJob.class) Long jobId);
 
 	public List<? extends ReadOnlyJob> getJobsByData(@NotNull String data, @NotNull @Min(1) Integer resultsCount);
+
+	public Integer computeMissingEmployments(@NotNull Set<@TypeNotNull EnumEmployeePosition> validJobs,
+			@NotNull Set<@TypeNotNull EnumCompanyType> validCompanyTypes);
 
 }

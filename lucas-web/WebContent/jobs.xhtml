@@ -9,6 +9,8 @@
 		<ui:include src="/WEB-INF/web/jobs/createJobDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/jobs/editJobDialog.xhtml" />
 		<ui:include src="/WEB-INF/web/components/longTextDisplayDialog.xhtml" />
+		<ui:include
+			src="/WEB-INF/web/jobs/computeMissingEmploymentsDialog.xhtml" />
 	</ui:define>
 	<ui:define name="otherContent">
 		<p:importEnum type="florian_haas.lucas.model.EnumEmployeePosition" />
@@ -66,6 +68,16 @@
 						message="#{msg['lucas.application.jobScreen.removeJobsConfirmDialog.message']}" />
 				</p:commandButton>
 			</ui:fragment>
+		</p:toolbarGroup>
+		<p:toolbarGroup align="right">
+			<p:commandButton resetValues="true"
+				rendered="#{loginBean.hasPermission(EnumPermission.JOB_COMPUTE_REQUIRED_EMPLOYMENTS)}"
+				value="#{msg['lucas.application.jobScreen.computeMissingEmploymentsButton.name']}"
+				title="#{msg['lucas.application.jobScreen.computeMissingEmploymentsButton.tooltip']}"
+				icon="fa fa-gears" styleClass="blockAllTrigger"
+				update="computeMissingEmploymentsDialogForm" process="@this"
+				action="#{jobBean.initComputeMissingEmploymentsDialog}"
+				oncomplete="PF('computeMissingEmploymentsDialog').show()" />
 		</p:toolbarGroup>
 	</ui:define>
 	<ui:define name="searchCriteria">

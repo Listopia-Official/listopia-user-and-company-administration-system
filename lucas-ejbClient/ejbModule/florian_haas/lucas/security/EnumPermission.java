@@ -236,6 +236,7 @@ public enum EnumPermission {
 	JOB_PRINT(JOB, "print"),
 	JOB_EXPORT(JOB, "export"),
 	JOB_FIND_BY_DATA(JOB, "findByData"),
+	JOB_COMPUTE_REQUIRED_EMPLOYMENTS(JOB, "computeRequiredEmployments"),
 
 	ID_CARD_ALL(ID_CARD, "*"),
 	ID_CARD_FIND_BY_ID(ID_CARD, "findById"),

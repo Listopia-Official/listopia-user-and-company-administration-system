@@ -2,7 +2,7 @@ package florian_haas.lucas.business;
 
 import static florian_haas.lucas.security.EnumPermission.*;
 
-import java.util.List;
+import java.util.*;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -138,5 +138,11 @@ public class JobBean implements JobBeanLocal {
 	@RequiresPermissions(JOB_FIND_BY_DATA)
 	public List<? extends ReadOnlyJob> getJobsByData(String data, Integer resultsCount) {
 		return jobDao.getJobsFromData(data, resultsCount);
+	}
+
+	@Override
+	@RequiresPermissions(JOB_COMPUTE_REQUIRED_EMPLOYMENTS)
+	public Integer computeMissingEmployments(Set<EnumEmployeePosition> validJobs, Set<EnumCompanyType> validCompanyTypes) {
+		return jobDao.computeMissingEmployments(validJobs, validCompanyTypes);
 	}
 }

@@ -23,4 +23,6 @@ public interface JobDAO extends DAO<Job> {
 
 	public List<Job> getJobsFromData(String data, Integer resultsCount);
 
+	public Integer computeMissingEmployments(Set<EnumEmployeePosition> validJobs, Set<EnumCompanyType> validCompanyTypes);
+
 }

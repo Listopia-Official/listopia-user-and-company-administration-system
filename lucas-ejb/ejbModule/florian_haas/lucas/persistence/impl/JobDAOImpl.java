@@ -1,5 +1,6 @@
 package florian_haas.lucas.persistence.impl;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import javax.persistence.criteria.*;
@@ -95,6 +96,20 @@ public class JobDAOImpl extends DAOImpl<Job> implements JobDAO {
 			return manager.createQuery(query).setMaxResults(resultsCount).getResultList();
 		}
 		return new ArrayList<>();
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Integer computeMissingEmployments(Set<EnumEmployeePosition> validJobs, Set<EnumCompanyType> validCompanyTypes) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<BigDecimal> query = builder.createQuery(BigDecimal.class);
+		Root<Job> jobRoot = query.from(Job.class);
+		Expression<Integer> diff = builder.diff(jobRoot.get(Job_.requiredEmploymentsCount), builder.size(jobRoot.get(Job_.employments)));
+		query.select(builder.toBigDecimal(
+				builder.sum((Expression<Integer>) (Expression<?>) builder.selectCase().when(builder.lessThan(diff, 0), 0).otherwise(diff))))
+				.where(builder.and(jobRoot.get(Job_.employeePosition).in(validJobs),
+						jobRoot.join(Job_.company).get(Company_.companyType).in(validCompanyTypes)));
+		return manager.createQuery(query).getSingleResult().toBigInteger().intValue();
 	}
 
 }

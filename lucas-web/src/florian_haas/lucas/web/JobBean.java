@@ -607,4 +607,47 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 			}, "lucas.application.jobScreen.removeJobs");
 		}
 	}
+
+	/*
+	 * -------------------- Compute Missing Employments Dialog Start --------------------
+	 */
+
+	private List<EnumEmployeePosition> computeMissingEmploymentsDialogValidJobs = new ArrayList<>();
+
+	private List<EnumCompanyType> computeMissingEmploymentsDialogValidCompanyTypes = new ArrayList<>();
+
+	public List<EnumEmployeePosition> getComputeMissingEmploymentsDialogValidJobs() {
+		return this.computeMissingEmploymentsDialogValidJobs;
+	}
+
+	public void setComputeMissingEmploymentsDialogValidJobs(List<EnumEmployeePosition> computeMissingEmploymentsDialogValidJobs) {
+		this.computeMissingEmploymentsDialogValidJobs = computeMissingEmploymentsDialogValidJobs;
+	}
+
+	public List<EnumCompanyType> getComputeMissingEmploymentsDialogValidCompanyTypes() {
+		return this.computeMissingEmploymentsDialogValidCompanyTypes;
+	}
+
+	public void setComputeMissingEmploymentsDialogValidCompanyTypes(List<EnumCompanyType> computeMissingEmploymentsDialogValidCompanyTypes) {
+		this.computeMissingEmploymentsDialogValidCompanyTypes = computeMissingEmploymentsDialogValidCompanyTypes;
+	}
+
+	public void initComputeMissingEmploymentsDialog() {
+		computeMissingEmploymentsDialogValidJobs.clear();
+		computeMissingEmploymentsDialogValidJobs.add(EnumEmployeePosition.EMPLOYEE);
+		computeMissingEmploymentsDialogValidCompanyTypes.clear();
+		computeMissingEmploymentsDialogValidCompanyTypes.add(EnumCompanyType.CIVIL);
+	}
+
+	public void computeMissingEmployments() {
+		WebUtils.executeTask(params -> {
+			params.add(jobBean.computeMissingEmployments(new HashSet<>(computeMissingEmploymentsDialogValidJobs),
+					new HashSet<>(computeMissingEmploymentsDialogValidCompanyTypes)));
+			return true;
+		}, "lucas.application.jobScreen.computeMissingEmployments.message");
+	}
+
+	/*
+	 * -------------------- Compute Missing Employments Dialog End --------------------
+	 */
 }
