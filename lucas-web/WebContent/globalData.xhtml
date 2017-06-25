@@ -12,6 +12,8 @@
 	<ui:define name="otherContent">
 		<p:importConstants
 			type="florian_haas.lucas.web.converter.ThemeConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.CompanyConverter" />
 		<p:importConstants type="florian_haas.lucas.model.EnumSchoolClass" />
 	</ui:define>
 	<ui:define name="content">
@@ -233,6 +235,12 @@
 								value="#{msg['lucas.application.globalDataScreen.realMoneyCountInputNumber.name']}"
 								title="#{msg['lucas.application.globalDataScreen.realMoneyCountInputNumber.tooltip']}" />
 						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_WAREHOUSE)}">
+							<p:outputLabel for="warehouseAutocomplete"
+								value="#{msg['lucas.application.globalDataScreen.warehouseAutocomplete.name']}"
+								title="#{msg['lucas.application.globalDataScreen.warehouseAutocomplete.tooltip']}" />
+						</p:column>
 					</p:row>
 					<p:row>
 						<p:column
@@ -299,7 +307,7 @@
 								value="#{globalDataBean.allMoney}" decimalPlaces="2"
 								symbolPosition="post" />
 						</p:column>
-							<p:column
+						<p:column
 							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_REAL_MONEY_COUNT)}">
 							<p:inputNumber id="realMoneyCountInputNumber" readonly="true"
 								symbol=" #{accountBean.realCurrencySymbol}"
@@ -307,10 +315,23 @@
 								value="#{globalDataBean.realMoneyCount}" decimalPlaces="2"
 								symbolPosition="post" />
 						</p:column>
+						<p:column
+							rendered="#{loginBean.hasPermission(EnumPermission.GLOBAL_DATA_GET_WAREHOUSE)}">
+							<ui:include
+								src="/WEB-INF/web/autocomplete/selectCompanyAutocomplete.xhtml">
+								<ui:param name="id" value="warehouseAutocomplete" />
+								<ui:param name="title"
+									value="#{msg['lucas.application.globalDataScreen.realMoneyCountInputNumber.tooltip']}" />
+								<ui:param name="disabled" value="#{false}" />
+								<ui:param name="readonly"
+									value="#{not loginBean.hasPermission(EnumPermission.GLOBAL_DATA_SET_WAREHOUSE)}" />
+								<ui:param name="value" value="#{globalDataBean.warehouse}" />
+							</ui:include>
+						</p:column>
 					</p:row>
 					<p:row>
 						<p:column
-							rendered="#{loginBean.hasPermissionsOr([EnumPermission.GLOBAL_DATA_SET_MAX_IDLE_TIME,EnumPermission.GLOBAL_DATA_SET_CURRENCY_SYMBOL,EnumPermission.GLOBAL_DATA_SET_TRANSACTION_LIMIT,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_WIDTH,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_HEIGHT,EnumPermission.GLOBAL_DATA_SET_MINIMUM_WAGE,EnumPermission.GLOBAL_DATA_ADD_UI_THEME,EnumPermission.GLOBAL_DATA_REMOVE_UI_THEME,EnumPermission.GLOBAL_DATA_SET_DEFAULT_UI_THEME,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_UPLOAD_SIZE_BYTES,EnumPermission.GLOBAL_DATA_SET_OPTIMAL_CIVIL_MANAGER_COUNT,EnumPermission.GLOBAL_DATA_SET_MIN_CIVIL_MANAGER_SCHOOL_GRADE,EnumPermission.GLOBAL_DATA_SET_REAL_CURRENCY_SYMBOL,EnumPermission.GLOBAL_DATA_SET_RATE_OF_EXCHANGE])}">
+							rendered="#{loginBean.hasPermissionsOr([EnumPermission.GLOBAL_DATA_SET_MAX_IDLE_TIME,EnumPermission.GLOBAL_DATA_SET_CURRENCY_SYMBOL,EnumPermission.GLOBAL_DATA_SET_TRANSACTION_LIMIT,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_WIDTH,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_HEIGHT,EnumPermission.GLOBAL_DATA_SET_MINIMUM_WAGE,EnumPermission.GLOBAL_DATA_ADD_UI_THEME,EnumPermission.GLOBAL_DATA_REMOVE_UI_THEME,EnumPermission.GLOBAL_DATA_SET_DEFAULT_UI_THEME,EnumPermission.GLOBAL_DATA_SET_MAX_USER_IMAGE_UPLOAD_SIZE_BYTES,EnumPermission.GLOBAL_DATA_SET_OPTIMAL_CIVIL_MANAGER_COUNT,EnumPermission.GLOBAL_DATA_SET_MIN_CIVIL_MANAGER_SCHOOL_GRADE,EnumPermission.GLOBAL_DATA_SET_REAL_CURRENCY_SYMBOL,EnumPermission.GLOBAL_DATA_SET_RATE_OF_EXCHANGE,EnumPermission.GLOBAL_DATA_SET_WAREHOUSE])}">
 							<p:commandButton
 								value="#{msg['lucas.application.globalDataScreen.saveButton.name']}"
 								title="#{msg['lucas.application.globalDataScreen.saveButton.tooltip']}"

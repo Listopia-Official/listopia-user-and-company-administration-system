@@ -14,6 +14,7 @@ import javax.validation.constraints.*;
 import org.hibernate.validator.constraints.NotBlank;
 
 import florian_haas.lucas.business.*;
+import florian_haas.lucas.model.ReadOnlyCompany;
 import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.validation.*;
 import florian_haas.lucas.web.util.WebUtils;
@@ -95,6 +96,8 @@ public class GlobalDataBean implements Serializable {
 	private BigDecimal allMoney = BigDecimal.ZERO;
 
 	private BigDecimal realMoneyCount = BigDecimal.ONE;
+
+	private ReadOnlyCompany warehouse = null;
 
 	public Long getMaxIdleTime() {
 		return maxIdleTime;
@@ -236,6 +239,14 @@ public class GlobalDataBean implements Serializable {
 		this.rateOfBackExchange = rateOfBackExchange;
 	}
 
+	public ReadOnlyCompany getWarehouse() {
+		return this.warehouse;
+	}
+
+	public void setWarehouse(ReadOnlyCompany warehouse) {
+		this.warehouse = warehouse;
+	}
+
 	@PostConstruct
 	public void refresh() {
 		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_MAX_IDLE_TIME)) {
@@ -297,6 +308,9 @@ public class GlobalDataBean implements Serializable {
 		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_REAL_MONEY_COUNT)) {
 			realMoneyCount = globalDataBean.getRealMoneyCount();
 		}
+		if (WebUtils.isPermitted(EnumPermission.GLOBAL_DATA_GET_WAREHOUSE)) {
+			warehouse = globalDataBean.getWarehouse();
+		}
 	}
 
 	public void save() {
@@ -343,6 +357,8 @@ public class GlobalDataBean implements Serializable {
 				"lucas.application.globalDataScreen.setRateOfExchange");
 		changeValue(rateOfBackExchange, globalDataBean::setRateOfBackExchange, EnumPermission.GLOBAL_DATA_SET_RATE_OF_BACK_EXCHANGE,
 				"lucas.application.globalDataScreen.setRateOfBackExchange");
+		changeValue(warehouse != null ? warehouse.getId() : null, globalDataBean::setWarehouse, EnumPermission.GLOBAL_DATA_SET_WAREHOUSE,
+				"lucas.application.globalDataScreen.setWarehouse");
 	}
 
 	private <T> void changeValue(T value, Predicate<T> setter, EnumPermission permission, String messagePrefix) {
