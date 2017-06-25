@@ -9,7 +9,7 @@ public interface ReadOnlyItem extends ReadOnlyEntity {
 
 	public String getDescription();
 
-	public Integer getItemsAvaible();
+	public Integer getItemsAvailable();
 
 	public BigDecimal getFictionalPricePerItem();
 

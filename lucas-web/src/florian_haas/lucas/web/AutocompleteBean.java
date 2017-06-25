@@ -42,6 +42,9 @@ public class AutocompleteBean {
 	@EJB
 	private EmploymentBeanLocal employmentBean;
 
+	@EJB
+	private ItemBeanLocal itemBean;
+
 	private Integer resultsSize = 11;
 
 	public List<? extends ReadOnlyAccount> completeAccount(String data) {
@@ -74,6 +77,10 @@ public class AutocompleteBean {
 
 	public List<? extends ReadOnlyEmployment> completeEmployment(String data) {
 		return employmentBean.getEmploymentsByData(data, resultsSize);
+	}
+
+	public List<? extends ReadOnlyItem> completeItem(String data) {
+		return itemBean.getItemsByData(data, resultsSize);
 	}
 
 	private Long getIdParam() {

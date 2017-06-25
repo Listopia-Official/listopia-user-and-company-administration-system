@@ -12,6 +12,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import florian_haas.lucas.validation.*;
 
 @Entity
+@ValidItem
 public class Item extends EntityBase implements ReadOnlyItem {
 
 	private static final long serialVersionUID = -3598214275967142864L;
@@ -30,7 +31,7 @@ public class Item extends EntityBase implements ReadOnlyItem {
 	@Column(nullable = false)
 	@NotNull
 	@Min(0)
-	private Integer itemsAvaible = 0;
+	private Integer itemsAvailable = 0;
 
 	@Basic(optional = false)
 	@Column(nullable = false, scale = 7, precision = 38)
@@ -54,7 +55,7 @@ public class Item extends EntityBase implements ReadOnlyItem {
 		this.description = description;
 		this.realPricePerItem = realPricePerItem;
 		this.fictionalPricePerItem = fictionalPricePerItem;
-		this.itemsAvaible = itemsAvaible;
+		this.itemsAvailable = itemsAvaible;
 	}
 
 	public String getName() {
@@ -73,12 +74,12 @@ public class Item extends EntityBase implements ReadOnlyItem {
 		this.description = description;
 	}
 
-	public Integer getItemsAvaible() {
-		return this.itemsAvaible;
+	public Integer getItemsAvailable() {
+		return this.itemsAvailable;
 	}
 
-	public void setItemsAvaible(Integer itemsAvaible) {
-		this.itemsAvaible = itemsAvaible;
+	public void setItemsAvailable(Integer itemsAvaible) {
+		this.itemsAvailable = itemsAvaible;
 	}
 
 	public BigDecimal getRealPricePerItem() {
@@ -98,7 +99,7 @@ public class Item extends EntityBase implements ReadOnlyItem {
 	}
 
 	public Boolean getHasToBeOrdered() {
-		return this.itemsAvaible.equals(0);
+		return this.itemsAvailable.equals(0);
 	}
 
 	public List<PurchaseLog> getPurchaseLogs() {
@@ -108,4 +109,5 @@ public class Item extends EntityBase implements ReadOnlyItem {
 	public Boolean addPurchaseLog(PurchaseLog purchaseLog) {
 		return this.purchaseLogs.add(purchaseLog);
 	}
+
 }

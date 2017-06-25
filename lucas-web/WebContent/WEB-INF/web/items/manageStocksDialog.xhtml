@@ -1,0 +1,85 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.itemScreen.manageStocksDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="manageStocksDialog" />
+	<ui:param name="formId" value="manageStocksDialogForm" />
+	<ui:define name="dialogContent">
+	<p:importEnum type="florian_haas.lucas.web.EnumStockManagerMode"/>
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.itemScreen.manageStocksDialog.amountInputNumber.name']}"
+							title="#{msg['lucas.application.itemScreen.manageStocksDialog.amountInputNumber.tooltip']}"
+							for="amountInputNumber" />
+					</p:column>
+					<p:column>
+						<p:message for="amountInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:inputNumber value="#{itemBean.manageStocksDialogAmount}"
+							minValue="0" id="amountInputNumber" decimalPlaces="0"
+							title="#{msg['lucas.application.itemScreen.manageStocksDialog.amountInputNumber.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.itemScreen.manageStocksDialog.modeSelectOneMenu.name']}"
+							title="#{msg['lucas.application.itemScreen.manageStocksDialog.modeSelectOneMenu.tooltip']}"
+							for="modeSelectOneMenu" />
+					</p:column>
+					<p:column colspan="2">
+						<p:message for="modeSelectOneMenu" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="3">
+						<p:selectOneMenu id="modeSelectOneMenu"
+							value="#{itemBean.manageStocksDialogMode}"
+							title="#{msg['lucas.application.itemScreen.manageStocksDialog.modeSelectOneMenu.tooltip']}">
+							<f:selectItems value="#{itemBean.getLegalModes()}" var="type"
+								itemValue="#{type}"
+								itemLabel="#{converterBean.convertEnum(type)}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<h:outputText
+							value="#{msg['lucas.application.itemScreen.manageStocksDialog.info']}"
+							style="font-style:italic" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this amountInputNumber modeSelectOneMenu"
+							update="@form dataAccorditionPanel:itemSearchResultsForm:itemSearchResultsTable"
+							action="#{itemBean.manageStocks}"
+							value="#{msg['lucas.application.itemScreen.manageStocksDialog.saveButton.name']}"
+							title="#{msg['lucas.application.itemScreen.manageStocksDialog.saveButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('manageStocksDialog').hide()}" />
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this" immediate="true"
+							value="#{msg['lucas.application.itemScreen.manageStocksDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.itemScreen.manageStocksDialog.cancelButton.tooltip']}"
+							oncomplete="PF('manageStocksDialog').hide()">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

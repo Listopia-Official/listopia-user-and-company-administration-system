@@ -50,14 +50,19 @@
 			<p:menuitem outcome="/accounts.xhtml"
 				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_ACCESS_VIEW)}"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.accountsMenuItem.name']}" />
-				<p:menuitem outcome="/transactionLogs.xhtml"
+			<p:menuitem outcome="/transactionLogs.xhtml"
 				rendered="#{loginBean.hasPermission(EnumPermission.ACCOUNT_VIEW_TRANSACTION_LOGS)}"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.transactionLogsMenuItem.name']}" />
 		</p:submenu>
-		<p:submenu rendered="#{false}"
+		<p:submenu
+			rendered="#{loginBean.hasPermission(EnumPermission.ITEM_ACCESS_VIEW)}"
 			label="#{msg['lucas.application.mainScreen.navigationMenu.warehouseSubmenu.name']}">
-			<p:menuitem disabled="true"
+			<p:menuitem outcome="/items.xhtml"
+				rendered="#{loginBean.hasPermission(EnumPermission.ITEM_ACCESS_VIEW)}"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.warehouseSubmenu.itemsMenuItem.name']}" />
+			<p:menuitem outcome="/sellItems.xhtml"
+				rendered="#{loginBean.hasPermission(EnumPermission.ITEM_SELL)}"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.warehouseSubmenu.sellMenuItem.name']}" />
 		</p:submenu>
 		<p:submenu
 			rendered="#{loginBean.hasPermissionsOr([EnumPermission.LOGIN_USER_ACCESS_VIEW,EnumPermission.LOGIN_ROLE_ACCESS_VIEW,EnumPermission.GLOBAL_DATA_ACCESS_VIEW])}"

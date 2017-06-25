@@ -148,6 +148,10 @@ public enum EnumPermission {
 	ITEM_CREATE(ITEM, "create"),
 	ITEM_PRINT(ITEM, "print"),
 	ITEM_EXPORT(ITEM, "export"),
+	ITEM_GET_PURCHASE_LOGS(ITEM, "getPurchaseLogs"),
+	ITEM_ACCESS_VIEW(ITEM, "accessView"),
+	ITEM_REMOVE(ITEM, "remove"),
+	ITEM_FIND_BY_DATA(ITEM, "findByData"),
 
 	USER_ALL(USER, "*"),
 	USER_CREATE_PUPIL(USER, "createPupil"),

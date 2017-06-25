@@ -1,0 +1,363 @@
+<ui:composition template="/WEB-INF/web/template/dataTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="siteBean" value="#{itemBean}" />
+	<ui:define name="dialogs">
+		<ui:include src="/WEB-INF/web/items/createItemDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/items/editItemDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/items/manageStocksDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/items/purchaseLogDialog.xhtml" />
+		<ui:include src="/WEB-INF/web/components/longTextDisplayDialog.xhtml" />
+	</ui:define>
+	<ui:define name="otherContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.CurrencyConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.RealCurrencyConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.BooleanConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.EnumConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.NullConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.NullConverterNoText" />
+	</ui:define>
+	<ui:define name="buttonArea">
+		<p:toolbarGroup align="left">
+			<ui:fragment
+				rendered="#{loginBean.hasPermission(EnumPermission.ITEM_CREATE)}">
+				<p:commandButton resetValues="true"
+					value="#{msg['lucas.application.itemScreen.createItemButton.name']}"
+					title="#{msg['lucas.application.itemScreen.createItemButton.tooltip']}"
+					icon="fa fa-plus" oncomplete="PF('createItemDialog').show()"
+					action="#{itemBean.initCreateItemDialog}" process="@this"
+					update="createItemDialogForm" />
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			</ui:fragment>
+			<ui:fragment
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.ITEM_SET_NAME,EnumPermission.ITEM_SET_DESCRIPTION,EnumPermission.ITEM_SET_REAL_PRICE_PER_ITEM,EnumPermission.ITEM_SET_FICTIONAL_PRICE_PER_ITEM,EnumPermission.ITEM_ADD_ITEMS_AVAIBLE,EnumPermission.ITEM_ADD_ITEMS_AVAIBLE])}">
+				<p:commandButton resetValues="true"
+					rendered="#{loginBean.hasPermissionsOr([EnumPermission.ITEM_SET_NAME,EnumPermission.ITEM_SET_DESCRIPTION,EnumPermission.ITEM_SET_REAL_PRICE_PER_ITEM,EnumPermission.ITEM_SET_FICTIONAL_PRICE_PER_ITEM])}"
+					value="#{msg['lucas.application.itemScreen.editItemButton.name']}"
+					title="#{msg['lucas.application.itemScreen.editItemButton.tooltip']}"
+					oncomplete="PF('editItemDialog').show()"
+					action="#{itemBean.initEditItemDialog}" process="@this"
+					update="editItemDialogForm" icon="fa fa-edit"
+					disabled="#{itemBean.selectedEntities.size() !=1}" />
+				<p:commandButton resetValues="true"
+					rendered="#{loginBean.hasPermissionsOr([EnumPermission.ITEM_ADD_ITEMS_AVAIBLE,EnumPermission.ITEM_ADD_ITEMS_AVAIBLE])}"
+					value="#{msg['lucas.application.itemScreen.editItemsAvailableButton.name']}"
+					title="#{msg['lucas.application.itemScreen.editItemsAvailableButton.tooltip']}"
+					icon="fa fa-columns" oncomplete="PF('manageStocksDialog').show()"
+					action="#{itemBean.initManageStocksDialog}" process="@this"
+					update="manageStocksDialogForm"
+					disabled="#{itemBean.selectedEntities.size() !=1}" />
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			</ui:fragment>
+			<ui:fragment
+				rendered="#{loginBean.hasPermission(EnumPermission.ITEM_GET_PURCHASE_LOGS)}">
+				<p:commandButton resetValues="true"
+					value="#{msg['lucas.application.itemScreen.showPurchaseLogsButton.name']}"
+					title="#{msg['lucas.application.itemScreen.showPurchaseLogsButton.tooltip']}"
+					icon="fa fa-list-ul" oncomplete="PF('purchaseLogDialog').show()"
+					action="#{itemBean.initShowPurchaseLogsDialog}" process="@this"
+					update="purchaseLogDialogForm"
+					disabled="#{itemBean.selectedEntities.size() !=1}" />
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			</ui:fragment>
+			<p:commandButton resetValues="true"
+				rendered="#{loginBean.hasPermission(EnumPermission.ITEM_REMOVE)}"
+				value="#{msg['lucas.application.itemScreen.removeItemButton.name']}"
+				title="#{msg['lucas.application.itemScreen.removeItemButton.tooltip']}"
+				icon="fa fa-remove"
+				update="dataAccorditionPanel:itemSearchResultsForm:itemSearchResultsTable"
+				process="@this" action="#{itemBean.deleteSelectedItems}"
+				disabled="#{itemBean.selectedEntities.size()==0}">
+				<p:confirm
+					header="#{msg['lucas.application.itemScreen.removeItems.confirm.header']}"
+					message="#{msg['lucas.application.itemScreen.removeItems.confirm.message']}" />
+			</p:commandButton>
+		</p:toolbarGroup>
+	</ui:define>
+	<ui:define name="searchCriteria">
+		<p:row>
+			<p:column>
+				<p:selectBooleanCheckbox id="searchItemIdSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{itemBean.useSearchItemId}"
+					title="#{msg['lucas.application.itemScreen.searchItemIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="itemSearchCriteriaForm:searchItemIdInputNumber itemSearchCriteriaForm:searchItemIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchItemIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.itemScreen.searchItemIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.itemScreen.searchItemIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox id="searchItemNameSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{itemBean.useSearchItemName}"
+					title="#{msg['lucas.application.itemScreen.searchItemNameSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="itemSearchCriteriaForm:searchItemNameInputText itemSearchCriteriaForm:searchItemNameComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchItemNameSelectBooleanCheckbox"
+					value="#{msg['lucas.application.itemScreen.searchItemNameSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.itemScreen.searchItemNameSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchItemDescriptionSelectBooleanCheckbox"
+					styleClass="checkbox" value="#{itemBean.useSearchItemDescription}"
+					title="#{msg['lucas.application.itemScreen.searchItemDescriptionSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="itemSearchCriteriaForm:searchItemDescriptionInputText itemSearchCriteriaForm:searchItemDescriptionComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchItemDescriptionSelectBooleanCheckbox"
+					value="#{msg['lucas.application.itemScreen.searchItemDescriptionSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.itemScreen.searchItemDescriptionSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchItemItemsAvailableSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{itemBean.useSearchItemItemsAvailable}"
+					title="#{msg['lucas.application.itemScreen.searchItemItemsAvailableSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="itemSearchCriteriaForm:searchItemItemsAvailableInputNumber itemSearchCriteriaForm:searchItemItemsAvailableComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchItemItemsAvailableSelectBooleanCheckbox"
+					value="#{msg['lucas.application.itemScreen.searchItemItemsAvailableSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.itemScreen.searchItemItemsAvailableSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchItemFictionalPriceSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{itemBean.useSearchItemFictionalPrice}"
+					title="#{msg['lucas.application.itemScreen.searchItemFictionalPriceSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="itemSearchCriteriaForm:searchItemFictionalPriceInputNumber itemSearchCriteriaForm:searchItemFictionalPriceComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchItemFictionalPriceSelectBooleanCheckbox"
+					value="#{msg['lucas.application.itemScreen.searchItemFictionalPriceSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.itemScreen.searchItemFictionalPriceSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchItemRealPriceSelectBooleanCheckbox" styleClass="checkbox"
+					value="#{itemBean.useSearchItemRealPrice}"
+					title="#{msg['lucas.application.itemScreen.searchItemRealPriceSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="itemSearchCriteriaForm:searchItemRealPriceInputNumber itemSearchCriteriaForm:searchItemRealPriceComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchItemRealPriceSelectBooleanCheckbox"
+					value="#{msg['lucas.application.itemScreen.searchItemRealPriceSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.itemScreen.searchItemRealPriceSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchItemHasToBeOrderedSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{itemBean.useSearchItemHasToBeOrdered}"
+					title="#{msg['lucas.application.itemScreen.searchItemHasToBeOrderedSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="itemSearchCriteriaForm:searchItemHasToBeOrderedBooleanButton"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchItemHasToBeOrderedSelectBooleanCheckbox"
+					value="#{msg['lucas.application.itemScreen.searchItemHasToBeOrderedSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.itemScreen.searchItemHasToBeOrderedSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchItemIdComparator" />
+					<ui:param name="enabled" value="#{itemBean.useSearchItemId}" />
+					<ui:param name="title"
+						value="lucas.application.itemScreen.searchItemIdComparator.tooltip" />
+					<ui:param name="value" value="#{itemBean.searchItemIdComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
+					<ui:param name="targetComponent" value="searchItemIdInputNumber" />
+				</ui:include>
+			</p:column>
+			<p:column>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchItemNameComparator" />
+					<ui:param name="enabled" value="#{itemBean.useSearchItemName}" />
+					<ui:param name="title"
+						value="lucas.application.itemScreen.searchItemNameComparator.tooltip" />
+					<ui:param name="value" value="#{itemBean.searchItemNameComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.TEXT_COMPARATORS_NOT_NULL}" />
+					<ui:param name="targetComponent" value="searchItemNameInputText" />
+				</ui:include>
+			</p:column>
+			<p:column>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchItemDescriptionComparator" />
+					<ui:param name="enabled"
+						value="#{itemBean.useSearchItemDescription}" />
+					<ui:param name="title"
+						value="lucas.application.itemScreen.searchItemDescriptionComparator.tooltip" />
+					<ui:param name="value"
+						value="#{itemBean.searchItemDescriptionComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.TEXT_COMPARATORS}" />
+					<ui:param name="targetComponent"
+						value="searchItemDescriptionInputText" />
+				</ui:include>
+			</p:column>
+			<p:column>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchItemItemsAvailableComparator" />
+					<ui:param name="enabled"
+						value="#{itemBean.useSearchItemItemsAvailable}" />
+					<ui:param name="title"
+						value="lucas.application.itemScreen.searchItemItemsAvailableComparator.tooltip" />
+					<ui:param name="value"
+						value="#{itemBean.searchItemItemsAvailableComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
+					<ui:param name="targetComponent"
+						value="searchItemItemsAvailableInputNumber" />
+				</ui:include>
+			</p:column>
+			<p:column>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchItemFictionalPriceComparator" />
+					<ui:param name="enabled"
+						value="#{itemBean.useSearchItemFictionalPrice}" />
+					<ui:param name="title"
+						value="lucas.application.itemScreen.searchItemFictionalPriceComparator.tooltip" />
+					<ui:param name="value"
+						value="#{itemBean.searchItemFictionalPriceComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
+					<ui:param name="targetComponent"
+						value="searchItemFictionalPriceInputNumber" />
+				</ui:include>
+			</p:column>
+			<p:column>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchItemRealPriceComparator" />
+					<ui:param name="enabled" value="#{itemBean.useSearchItemRealPrice}" />
+					<ui:param name="title"
+						value="lucas.application.itemScreen.searchItemRealPriceComparator.tooltip" />
+					<ui:param name="value"
+						value="#{itemBean.searchItemRealPriceComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
+					<ui:param name="targetComponent"
+						value="searchItemRealPriceInputNumber" />
+				</ui:include>
+			</p:column>
+			<p:column />
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:inputNumber value="#{itemBean.searchItemId}" minValue="0"
+					decimalPlaces="0" id="searchItemIdInputNumber"
+					disabled="#{not itemBean.useSearchItemId || converterBean.isDisabled(itemBean.searchItemIdComparator)}" />
+			</p:column>
+			<p:column>
+				<p:inputText value="#{itemBean.searchItemName}"
+					id="searchItemNameInputText"
+					disabled="#{not itemBean.useSearchItemName|| converterBean.isDisabled(itemBean.searchItemNameComparator)}" />
+			</p:column>
+			<p:column>
+				<p:inputText value="#{itemBean.searchItemDescription}"
+					id="searchItemDescriptionInputText"
+					converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}"
+					disabled="#{not itemBean.useSearchItemDescription|| converterBean.isDisabled(itemBean.searchItemDescriptionComparator)}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{itemBean.searchItemItemsAvailable}"
+					minValue="0" decimalPlaces="0"
+					id="searchItemItemsAvailableInputNumber"
+					disabled="#{not itemBean.useSearchItemItemsAvailable|| converterBean.isDisabled(itemBean.searchItemItemsAvailableComparator)}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{itemBean.searchItemFictionalPrice}"
+					minValue="0" decimalPlaces="2" emptyValue="zero"
+					symbol=" #{accountBean.currencySymbol}" symbolPosition="post"
+					id="searchItemFictionalPriceInputNumber"
+					disabled="#{not itemBean.useSearchItemFictionalPrice || converterBean.isDisabled(itemBean.searchItemFictionalPriceComparator)}" />
+			</p:column>
+			<p:column>
+				<p:inputNumber value="#{itemBean.searchItemRealPrice}" minValue="0"
+					decimalPlaces="2" emptyValue="zero"
+					symbol=" #{accountBean.realCurrencySymbol}" symbolPosition="post"
+					id="searchItemRealPriceInputNumber"
+					disabled="#{not itemBean.useSearchItemRealPrice || converterBean.isDisabled(itemBean.searchItemRealPriceComparator)}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanButton
+					offLabel="#{msg['lucas.application.booleanConverter.normal.false']}"
+					onLabel="#{msg['lucas.application.booleanConverter.normal.true']}"
+					id="searchItemHasToBeOrderedBooleanButton"
+					value="#{itemBean.searchItemHasToBeOrdered}"
+					disabled="#{not itemBean.useSearchItemHasToBeOrdered}" />
+			</p:column>
+		</p:row>
+	</ui:define>
+	<ui:define name="searchResults">
+		<p:column exportable="#{itemBean.resultsDatatableColumns[0]}"
+			headerText="#{msg['lucas.application.itemScreen.itemSearchResultsTable.idColumn.name']}"
+			sortBy="#{entity.id}"
+			visible="#{itemBean.resultsDatatableColumns[0]}">
+			<h:outputText value="#{entity.id}" />
+		</p:column>
+		<p:column exportable="#{itemBean.resultsDatatableColumns[1]}"
+			headerText="#{msg['lucas.application.itemScreen.itemSearchResultsTable.nameColumn.name']}"
+			sortBy="#{entity.name}"
+			visible="#{itemBean.resultsDatatableColumns[1]}">
+			<h:outputText value="#{entity.name}" />
+		</p:column>
+		<p:column exportable="#{itemBean.resultsDatatableColumns[2]}"
+			headerText="#{msg['lucas.application.itemScreen.itemSearchResultsTable.descriptionColumn.name']}"
+			sortBy="#{entity.description}"
+			visible="#{itemBean.resultsDatatableColumns[2]}">
+			<ui:include src="/WEB-INF/web/components/longTextDisplay.xhtml">
+				<ui:param name="text" value="#{entity.description}" />
+			</ui:include>
+		</p:column>
+		<p:column exportable="#{itemBean.resultsDatatableColumns[3]}"
+			headerText="#{msg['lucas.application.itemScreen.itemSearchResultsTable.itemsAvailableColumn.name']}"
+			sortBy="#{entity.itemsAvailable}"
+			visible="#{itemBean.resultsDatatableColumns[3]}">
+			<h:outputText value="#{entity.itemsAvailable}" />
+		</p:column>
+		<p:column exportable="#{itemBean.resultsDatatableColumns[4]}"
+			headerText="#{msg['lucas.application.itemScreen.itemSearchResultsTable.fictionalPriceColumn.name']}"
+			sortBy="#{entity.fictionalPrice}"
+			visible="#{itemBean.resultsDatatableColumns[4]}">
+			<h:outputText value="#{entity.fictionalPricePerItem}"
+				converter="#{converterBean.getManagedConverter(CurrencyConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column exportable="#{itemBean.resultsDatatableColumns[5]}"
+			headerText="#{msg['lucas.application.itemScreen.itemSearchResultsTable.realPriceColumn.name']}"
+			sortBy="#{entity.realPrice}"
+			visible="#{itemBean.resultsDatatableColumns[5]}">
+			<h:outputText value="#{entity.realPricePerItem}"
+				converter="#{converterBean.getManagedConverter(RealCurrencyConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column exportable="#{itemBean.resultsDatatableColumns[6]}"
+			headerText="#{msg['lucas.application.itemScreen.itemSearchResultsTable.hasToBeOrderedColumn.name']}"
+			sortBy="#{entity.hasToBeOrdered}"
+			visible="#{itemBean.resultsDatatableColumns[6]}">
+			<h:outputText value="#{entity.hasToBeOrdered}"
+				converter="#{converterBean.getConverter(BooleanConverter.CONVERTER_ID)}" />
+		</p:column>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,128 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.itemScreen.editItemDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="editItemDialog" />
+	<ui:param name="formId" value="editItemDialogForm" />
+	<ui:define name="dialogContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.NullConverterNoText" />
+		<p:importEnum type="florian_haas.lucas.model.EnumEmployeePosition" />
+		<p:importEnum type="florian_haas.lucas.model.EnumSalaryClass" />
+		<p:importEnum type="florian_haas.lucas.model.EnumWorkShift" />
+		<p:importConstants type="florian_haas.lucas.model.EnumSchoolClass" />
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row rendered="#{loginBean.hasPermission(EnumPermission.ITEM_SET_NAME)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.itemScreen.editItemDialog.nameInputText.name']}"
+							title="#{msg['lucas.application.itemScreen.editItemDialog.nameInputText.tooltip']}"
+							for="nameInputText" />
+					</p:column>
+					<p:column>
+						<p:message for="nameInputText" />
+					</p:column>
+				</p:row>
+				<p:row rendered="#{loginBean.hasPermission(EnumPermission.ITEM_SET_NAME)}">
+					<p:column colspan="2">
+						<p:inputText id="nameInputText"
+							value="#{itemBean.editItemDialogName}"
+							title="#{msg['lucas.application.itemScreen.editItemDialog.nameInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row 	rendered="#{loginBean.hasPermission(EnumPermission.ITEM_SET_DESCRIPTION)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.itemScreen.editItemDialog.descriptionInputTextarea.name']}"
+							title="#{msg['lucas.application.itemScreen.editItemDialog.descriptionInputTextarea.tooltip']}"
+							for="descriptionInputTextarea" />
+					</p:column>
+					<p:column>
+						<p:message for="descriptionInputTextarea" />
+					</p:column>
+				</p:row>
+				<p:row 	rendered="#{loginBean.hasPermission(EnumPermission.ITEM_SET_DESCRIPTION)}">
+					<p:column colspan="2" style="padding-bottom:0px">
+						<p:inputTextarea id="descriptionInputTextarea" scrollHeight="200"
+							style="resize: none;" autoResize="false" maxlength="255"
+							counter="descriptionInputTextareaOutputText"
+							value="#{itemBean.editItemDialogDescription}"
+							converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}"
+							counterTemplate="{0}#{msg['lucas.application.itemScreen.editItemDialog.descriptionInputTextarea.remainingCharacters']}"
+							title="#{msg['lucas.application.itemScreen.editItemDialog.descriptionInputTextarea.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row 	rendered="#{loginBean.hasPermission(EnumPermission.ITEM_SET_DESCRIPTION)}">
+					<p:column colspan="2" style="padding-bottom:0px;padding-top:0px">
+						<h:outputText id="descriptionInputTextareaOutputText"
+							style="float:right;font-style:italic" />
+					</p:column>
+				</p:row>
+				<p:row 	rendered="#{loginBean.hasPermission(EnumPermission.ITEM_SET_FICTIONAL_PRICE_PER_ITEM)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.itemScreen.editItemDialog.fictionalPriceInputNumber.name']}"
+							title="#{msg['lucas.application.itemScreen.editItemDialog.fictionalPriceInputNumber.tooltip']}"
+							for="fictionalPriceInputNumber" />
+					</p:column>
+					<p:column>
+						<p:message for="fictionalPriceInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row rendered="#{loginBean.hasPermission(EnumPermission.ITEM_SET_FICTIONAL_PRICE_PER_ITEM)}">
+					<p:column colspan="2">
+						<p:inputNumber id="fictionalPriceInputNumber"
+							value="#{itemBean.editItemDialogFictionalPrice}"
+							title="#{msg['lucas.application.itemScreen.editItemDialog.fictionalPriceInputNumber.tooltip']}"
+							minValue="0" symbol=" #{accountBean.currencySymbol}"
+							symbolPosition="post" emptyValue="zero" decimalPlaces="2" />
+					</p:column>
+				</p:row>
+				<p:row rendered="#{loginBean.hasPermission(EnumPermission.ITEM_SET_REAL_PRICE_PER_ITEM)}">
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.itemScreen.editItemDialog.realPriceInputNumber.name']}"
+							title="#{msg['lucas.application.itemScreen.editItemDialog.realPriceInputNumber.tooltip']}"
+							for="realPriceInputNumber" />
+					</p:column>
+					<p:column>
+						<p:message for="realPriceInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row rendered="#{loginBean.hasPermission(EnumPermission.ITEM_SET_REAL_PRICE_PER_ITEM)}">
+					<p:column colspan="2">
+						<p:inputNumber id="realPriceInputNumber"
+							value="#{itemBean.editItemDialogRealPrice}"
+							title="#{msg['lucas.application.itemScreen.editItemDialog.realPriceInputNumber.tooltip']}"
+							minValue="0" symbol=" #{accountBean.realCurrencySymbol}"
+							symbolPosition="post" emptyValue="zero" decimalPlaces="2" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this nameInputText descriptionInputTextarea fictionalPriceInputNumber realPriceInputNumber"
+							update="@form dataAccorditionPanel:itemSearchResultsForm:itemSearchResultsTable" action="#{itemBean.editItem}"
+							value="#{msg['lucas.application.itemScreen.editItemDialog.editItemButton.name']}"
+							title="#{msg['lucas.application.itemScreen.editItemDialog.editItemButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('editItemDialog').hide()}" />
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this" immediate="true"
+							value="#{msg['lucas.application.itemScreen.editItemDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.itemScreen.editItemDialog.cancelButton.tooltip']}"
+							oncomplete="PF('editItemDialog').hide()">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,153 @@
+<ui:composition template="/WEB-INF/web/template/dialogTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="dialogTitleKey"
+		value="lucas.application.itemScreen.createItemDialog.title" />
+	<ui:param name="closeable" value="false" />
+	<ui:param name="dynamic" value="true" />
+	<ui:param name="widgetVar" value="createItemDialog" />
+	<ui:param name="formId" value="createItemDialogForm" />
+	<ui:define name="dialogContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.NullConverterNoText" />
+		<p:importEnum type="florian_haas.lucas.model.EnumEmployeePosition" />
+		<p:importEnum type="florian_haas.lucas.model.EnumSalaryClass" />
+		<p:importEnum type="florian_haas.lucas.model.EnumWorkShift" />
+		<p:importConstants type="florian_haas.lucas.model.EnumSchoolClass" />
+		<div class="ui-fluid">
+			<p:panelGrid>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.itemScreen.createItemDialog.nameInputText.name']}"
+							title="#{msg['lucas.application.itemScreen.createItemDialog.nameInputText.tooltip']}"
+							for="nameInputText" />
+					</p:column>
+					<p:column>
+						<p:message for="nameInputText" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:inputText id="nameInputText"
+							value="#{itemBean.createItemDialogName}"
+							title="#{msg['lucas.application.itemScreen.createItemDialog.nameInputText.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.itemScreen.createItemDialog.descriptionInputTextarea.name']}"
+							title="#{msg['lucas.application.itemScreen.createItemDialog.descriptionInputTextarea.tooltip']}"
+							for="descriptionInputTextarea" />
+					</p:column>
+					<p:column>
+						<p:message for="descriptionInputTextarea" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2" style="padding-bottom:0px">
+						<p:inputTextarea id="descriptionInputTextarea" scrollHeight="200"
+							style="resize: none;" autoResize="false" maxlength="255"
+							counter="descriptionInputTextareaOutputText"
+							value="#{itemBean.createItemDialogDescription}"
+							converter="#{converterBean.getConverter(NullConverterNoText.CONVERTER_ID)}"
+							counterTemplate="{0}#{msg['lucas.application.itemScreen.createItemDialog.descriptionInputTextarea.remainingCharacters']}"
+							title="#{msg['lucas.application.itemScreen.createItemDialog.descriptionInputTextarea.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2" style="padding-bottom:0px;padding-top:0px">
+						<h:outputText id="descriptionInputTextareaOutputText"
+							style="float:right;font-style:italic" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.itemScreen.createItemDialog.fictionalPriceInputNumber.name']}"
+							title="#{msg['lucas.application.itemScreen.createItemDialog.fictionalPriceInputNumber.tooltip']}"
+							for="fictionalPriceInputNumber" />
+					</p:column>
+					<p:column>
+						<p:message for="fictionalPriceInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:inputNumber id="fictionalPriceInputNumber"
+							value="#{itemBean.createItemDialogFictionalPrice}"
+							title="#{msg['lucas.application.itemScreen.createItemDialog.fictionalPriceInputNumber.tooltip']}"
+							minValue="0" symbol=" #{accountBean.currencySymbol}"
+							symbolPosition="post" emptyValue="zero" decimalPlaces="2" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.itemScreen.createItemDialog.realPriceInputNumber.name']}"
+							title="#{msg['lucas.application.itemScreen.createItemDialog.realPriceInputNumber.tooltip']}"
+							for="realPriceInputNumber" />
+					</p:column>
+					<p:column>
+						<p:message for="realPriceInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:inputNumber id="realPriceInputNumber"
+							value="#{itemBean.createItemDialogRealPrice}"
+							title="#{msg['lucas.application.itemScreen.createItemDialog.realPriceInputNumber.tooltip']}"
+							minValue="0" symbol=" #{accountBean.realCurrencySymbol}"
+							symbolPosition="post" emptyValue="zero" decimalPlaces="2" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:outputLabel
+							value="#{msg['lucas.application.itemScreen.createItemDialog.itemsAvailableInputNumber.name']}"
+							title="#{msg['lucas.application.itemScreen.createItemDialog.itemsAvailableInputNumber.tooltip']}"
+							for="itemsAvailableInputNumber" />
+					</p:column>
+					<p:column>
+						<p:message for="itemsAvailableInputNumber" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<p:inputNumber value="#{itemBean.createItemDialogItemsAvailable}"
+							minValue="0" id="itemsAvailableInputNumber" decimalPlaces="0"
+							title="#{msg['lucas.application.itemScreen.createItemDialog.itemsAvailableInputNumber.tooltip']}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="2">
+						<h:outputText
+							value="#{msg['lucas.application.itemScreen.createItemDialog.info']}"
+							style="font-style:italic" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:commandButton
+							process="@this nameInputText descriptionInputTextarea fictionalPriceInputNumber realPriceInputNumber itemsAvailableInputNumber"
+							update="@form" action="#{itemBean.createItem}"
+							value="#{msg['lucas.application.itemScreen.createItemDialog.createItemButton.name']}"
+							title="#{msg['lucas.application.itemScreen.createItemDialog.createItemButton.tooltip']}"
+							oncomplete="if (args &amp;&amp; !args.validationFailed){PF('createItemDialog').hide()}" />
+					</p:column>
+					<p:column>
+						<p:commandButton process="@this" immediate="true"
+							value="#{msg['lucas.application.itemScreen.createItemDialog.cancelButton.name']}"
+							title="#{msg['lucas.application.itemScreen.createItemDialog.cancelButton.tooltip']}"
+							oncomplete="PF('createItemDialog').hide()">
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

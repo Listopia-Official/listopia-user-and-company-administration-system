@@ -1,0 +1,225 @@
+<ui:composition template="/WEB-INF/web/template/appTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="pageTitle"
+		value="#{msg['lucas.application.sellItemsScreen.title']}" />
+	<ui:define name="dialogs">
+	</ui:define>
+	<ui:define name="otherContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.ItemConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.CompanyConverter" />
+		<p:importEnum type="florian_haas.lucas.model.EnumPayType" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.CurrencyConverter" />
+	</ui:define>
+	<ui:define name="content">
+		<h:form>
+			<div class="ui-fluid" style="text-align: center">
+				<p:focus id="selectItemAutocompleteFocus"
+					for="selectItemAutocomplete" />
+				<p:panelGrid columns="3" style="width:100%"
+					columnClasses="width50Percent, top">
+					<p:panel>
+						<f:facet name="header">
+							<i class="fa fa-shopping-cart"></i>
+							<h:outputText
+								value=" #{msg['lucas.application.sellItemsScreen.shoppingChartPanel.title']}" />
+						</f:facet>
+						<p:panelGrid>
+							<p:row>
+								<p:column styleClass="left">
+									<p:outputLabel for="selectItemAutocomplete"
+										value="#{msg['lucas.application.sellItemsScreen.selectItemAutocomplete.name']}"
+										title="#{msg['lucas.application.sellItemsScreen.selectItemAutocomplete.tooltip']}" />
+								</p:column>
+								<p:column styleClass="left">
+									<p:outputLabel for="selectItemInputNumber"
+										value="#{msg['lucas.application.sellItemsScreen.selectItemCountInputNumber.name']}"
+										title="#{msg['lucas.application.sellItemsScreen.selectItemCountInputNumber.tooltip']}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<ui:include
+										src="/WEB-INF/web/autocomplete/selectItemAutocomplete.xhtml">
+										<ui:param name="id" value="selectItemAutocomplete" />
+										<ui:param name="title"
+											value="#{msg['lucas.application.sellItemsScreen.selectItemAutocomplete.tooltip']}" />
+										<ui:param name="disabled" value="#{false}" />
+										<ui:param name="value"
+											value="#{sellItemsBean.shoppingChartInputItem}" />
+									</ui:include>
+								</p:column>
+								<p:column>
+									<p:inputNumber id="selectItemInputNumber" decimalPlaces="0"
+										minValue="1" emptyValue="zero"
+										title="#{msg['lucas.application.sellItemsScreen.selectItemCountInputNumber.tooltip']}"
+										value="#{sellItemsBean.shoppingChartInputItemCount}" />
+								</p:column>
+								<p:column>
+									<p:commandButton
+										value="#{msg['lucas.application.sellItemsScreen.addItemToChartButton.name']}"
+										icon="fa fa-plus" action="#{sellItemsBean.addItemToChart}"
+										title="#{msg['lucas.application.sellItemsScreen.addItemToChartButton.tooltip']}"
+										process="selectItemAutocomplete selectItemInputNumber @this"
+										update="selectItemAutocompleteFocus selectItemAutocomplete shoppingChartDataTable totalPriceOutputText itemsCountOutputText selectItemInputNumber @this" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column colspan="3">
+									<p:dataTable rows="10" paginator="true" selectionMode="single"
+										styleClass="left" rowKey="#{item.id}" sortBy="#{item.name}"
+										selection="#{sellItemsBean.shoppingChartSelectedItem}"
+										id="shoppingChartDataTable" paginatorAlwaysVisible="false"
+										value="#{sellItemsBean.shoppingChart}" var="item">
+										<p:ajax event="rowSelect" update="@(.componentToUpdate)"
+											process="shoppingChartDataTable" />
+										<p:ajax event="rowUnselect" update="@(.componentToUpdate)"
+											process="shoppingChartDataTable" />
+										<p:column headerText="ID">
+											<h:outputText value="#{item.id}" />
+										</p:column>
+										<p:column headerText="Name">
+											<h:outputText value="#{item.name}" />
+										</p:column>
+										<p:column headerText="Price">
+											<h:outputText
+												converter="#{converterBean.getManagedConverter(CurrencyConverter.CONVERTER_ID)}"
+												value="#{item.fictionalPricePerItem}" />
+										</p:column>
+										<p:column headerText="Count">
+											<h:outputText
+												value="#{sellItemsBean.shoppingChartCount.get(item)}" />
+										</p:column>
+										<p:column headerText="Total Price">
+											<h:outputText
+												converter="#{converterBean.getManagedConverter(CurrencyConverter.CONVERTER_ID)}"
+												value="#{item.fictionalPricePerItem.multiply(sellItemsBean.getBigDecimalFromInt(sellItemsBean.shoppingChartCount.get(item)))}" />
+										</p:column>
+									</p:dataTable>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column styleClass="left" colspan="1">
+									<h:outputText style="font-weight:bold"
+										id="itemsCountOutputText"
+										value="#{sellItemsBean.shoppingChart.size()} #{msg['lucas.application.sellItemsScreen.itemsCountOutputText.text']}" />
+								</p:column>
+								<p:column style="width:20%">
+									<p:commandButton
+										value="#{msg['lucas.application.sellItemsScreen.editItemButton.name']}"
+										icon="fa fa-edit" action="#{sellItemsBean.editSelectedItem}"
+										styleClass="componentToUpdate"
+										title="#{msg['lucas.application.sellItemsScreen.editItemButton.tooltip']}"
+										process="@this shoppingChartDataTable"
+										update="selectItemAutocompleteFocus @(.componentToUpdate) selectItemAutocomplete shoppingChartDataTable totalPriceOutputText itemsCountOutputText selectItemInputNumber @this"
+										disabled="#{sellItemsBean.shoppingChartSelectedItem == null}" />
+								</p:column>
+								<p:column style="width:20%">
+									<p:commandButton
+										value="#{msg['lucas.application.sellItemsScreen.removeItemFromChartButton.name']}"
+										icon="fa fa-remove"
+										action="#{sellItemsBean.removeSelectedItem}"
+										process="@this shoppingChartDataTable"
+										title="#{msg['lucas.application.sellItemsScreen.removeItemFromChartButton.tooltip']}"
+										update="@(.componentToUpdate) selectItemAutocomplete shoppingChartDataTable totalPriceOutputText itemsCountOutputText selectItemInputNumber @this"
+										styleClass="componentToUpdate"
+										disabled="#{sellItemsBean.shoppingChartSelectedItem == null}" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:panel>
+					<p:panel>
+						<f:facet name="header">
+							<i class="fa fa-credit-card"></i>
+							<h:outputText
+								value=" #{msg['lucas.application.sellItemsScreen.paymentPanel.title']}" />
+						</f:facet>
+						<p:panelGrid style="width:100%">
+							<p:row>
+								<p:column styleClass="left">
+									<h:outputText style="font-weight:bold"
+										value="#{msg['lucas.application.sellItemsScreen.totalPriceOutputText.text']} " />
+									<h:outputText style="font-weight:bold"
+										id="totalPriceOutputText"
+										converter="#{converterBean.getManagedConverter(CurrencyConverter.CONVERTER_ID)}"
+										value="#{sellItemsBean.getTotalPrice()}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column colspan="2">
+									<p:separator />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column styleClass="left" style="width:30%!important">
+									<p:outputLabel
+										value="#{msg['lucas.application.sellItemsScreen.selectCompanyAutocomplete.name']}"
+										title="#{msg['lucas.application.sellItemsScreen.selectCompanyAutocomplete.tooltip']}"
+										for="selectCompanyAutocomplete" />
+								</p:column>
+								<p:column styleClass="left" style="width:30%!important">
+									<p:outputLabel
+										value="#{msg['lucas.application.sellItemsScreen.selectPaymentMethodSelectOneMenu.name']}"
+										for="selectPaymentMethodSelectOneMenu"
+										title="#{msg['lucas.application.sellItemsScreen.selectPaymentMethodSelectOneMenu.tooltip']}" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<ui:include
+										src="/WEB-INF/web/autocomplete/selectCompanyAutocomplete.xhtml">
+										<ui:param name="id" value="selectCompanyAutocomplete" />
+										<ui:param name="title"
+											value="#{msg['lucas.application.sellItemsScreen.selectCompanyAutocomplete.tooltip']}" />
+										<ui:param name="disabled" value="#{false}" />
+										<ui:param name="value" value="#{sellItemsBean.company}" />
+									</ui:include>
+								</p:column>
+								<p:column>
+									<p:selectOneMenu id="selectPaymentMethodSelectOneMenu"
+										title="#{msg['lucas.application.sellItemsScreen.selectPaymentMethodSelectOneMenu.tooltip']}"
+										value="#{sellItemsBean.paymentMethod}">
+										<f:selectItems value="#{EnumPayType.ALL_VALUES}" var="type"
+											itemValue="#{type}"
+											itemLabel="#{converterBean.convertEnum(type)}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<p:commandButton icon="fa fa-arrow-right"
+										value="#{msg['lucas.application.sellItemsScreen.payButton.name']}"
+										action="#{sellItemsBean.pay}"
+										title="#{msg['lucas.application.sellItemsScreen.payButton.tooltip']}"
+										update="@this selectCompanyAutocomplete selectPaymentMethodSelectOneMenu shoppingChartDataTable"
+										process="@this selectCompanyAutocomplete selectPaymentMethodSelectOneMenu shoppingChartDataTable">
+										<p:confirm
+											header="#{msg['lucas.application.sellItemsScreen.payButton.confirm.header']}"
+											message="#{msg['lucas.application.sellItemsScreen.payButton.confirm.message']}" />
+									</p:commandButton>
+								</p:column>
+								<p:column>
+									<p:commandButton action="#{sellItemsBean.reset}"
+										title="#{msg['lucas.application.sellItemsScreen.resetButton.tooltip']}"
+										process="@this" icon="fa fa-undo"
+										value="#{msg['lucas.application.sellItemsScreen.resetButton.name']}"
+										update="@form">
+										<p:confirm
+											header="#{msg['lucas.application.sellItemsScreen.resetButton.confirm.header']}"
+											message="#{msg['lucas.application.sellItemsScreen.resetButton.confirm.message']}" />
+									</p:commandButton>
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</p:panel>
+				</p:panelGrid>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
