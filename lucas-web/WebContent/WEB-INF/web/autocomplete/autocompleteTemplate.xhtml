@@ -5,6 +5,7 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 	<p:autoComplete id="#{templateId}" value="#{templateValue}"
 		title="#{templateTitle}" forceSelection="true"
+		readonly="#{readonly == null ? false : readonly}"
 		completeMethod="#{autocompleteBean[templateCompleteMethod]}"
 		var="entity" disabled="#{disabled == null ? false : disabled}"
 		converter="#{converterBean.getConverter(templateConverterId)}"
