@@ -23,12 +23,9 @@
 		<class>florian_haas.lucas.model.Job</class>
 		<class>florian_haas.lucas.model.IdCard</class>
 		<properties>
-			<property name="javax.persistence.schema-generation.database.action" value="create"/>
-			<property name="javax.persistence.schema-generation.scripts.action" value="create"/>
-			<property name="javax.persistence.schema-generation.scripts.create-target" value="E:\JavaEE\sql\scripts.sql"/>
-			<property name="javax.persistence.schema-generation.scripts.drop-target" value="E:\JavaEE\sql\scripts.sql"/>
-			<property name="javax.persistence.schema-generation.create-database-schemas" value="true"/>
 			<property name="eclipselink.logging.exceptions" value="false"/>
+			<property name="javax.persistence.schema-generation.database.action" value="create"/>
+			<property name="javax.persistence.schema-generation.create-database-schemas" value="true"/>
 		</properties>
 	</persistence-unit>
 </persistence>
