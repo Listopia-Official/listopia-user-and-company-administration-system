@@ -58,6 +58,7 @@
 								<p:column>
 									<p:inputNumber id="selectItemInputNumber" decimalPlaces="0"
 										minValue="1" emptyValue="zero"
+										onfocus="this.setSelectionRange(0, this.value.length)"
 										title="#{msg['lucas.application.sellItemsScreen.selectItemCountInputNumber.tooltip']}"
 										value="#{sellItemsBean.shoppingChartInputItemCount}" />
 								</p:column>
