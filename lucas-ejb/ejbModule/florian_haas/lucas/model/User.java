@@ -30,7 +30,9 @@ public class User extends AccountOwner implements ReadOnlyUser {
 	@NotNull
 	private List<@TypeNotNull String> ranks = new ArrayList<>();
 
-	@OneToOne(cascade = CascadeType.ALL, optional = true, orphanRemoval = true)
+	@NotNull
+	@OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+	@JoinColumn(nullable = false)
 	@Valid
 	private Attendancedata attendancedata;
 
@@ -58,9 +60,7 @@ public class User extends AccountOwner implements ReadOnlyUser {
 		this.surname = surname;
 		this.schoolClass = schoolClass;
 		if (ranks != null) this.ranks.addAll(ranks);
-		if (getUserType() != EnumUserType.TEACHER) {
-			attendancedata = new Attendancedata(this);
-		}
+		this.attendancedata = new Attendancedata(this);
 	}
 
 	public String getForename() {
