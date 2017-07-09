@@ -323,7 +323,11 @@ public class WebUtils {
 
 	public static final String JPEG_MIME = "image/jpeg";
 
+	public static final String PNG_MIME = "image/png";
+
 	public static final String JPEG_TYPE = "JPEG";
+
+	public static final String PNG_TYPE = "PNG";
 
 	public static final String SVG_MIME = "image/svg+xml";
 
@@ -332,6 +336,8 @@ public class WebUtils {
 	public static final String TEXT_MIME = "text";
 
 	public static final String CSV_TYPE = "CSV";
+
+	public static final String PDF_MIME = "application/pdf";
 
 	public static StreamedContent getJPEGImage(InputStream data) {
 		return getDataAsStreamedContent(data, JPEG_MIME);
@@ -379,6 +385,10 @@ public class WebUtils {
 		g.drawImage(image, 0, 0, null);
 		g.dispose();
 		return tmp;
+	}
+
+	public static BufferedImage deepCopy(BufferedImage img) {
+		return new BufferedImage(img.getColorModel(), img.copyData(null), img.isAlphaPremultiplied(), null);
 	}
 
 	public static <T> String getAsString(T object, Converter<T> converter) {
