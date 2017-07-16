@@ -11,19 +11,18 @@ import florian_haas.lucas.persistence.*;
 public class AttendancedataDAOImpl extends ReadOnlyDAOImpl<Attendancedata> implements AttendancedataDAO {
 
 	@Override
-	public List<Attendancedata> findAttendancedata(Long id, Boolean isUserInState, Long timePresentDay, Long validTimeMissing, Boolean useId,
-			Boolean useIsUserInState, Boolean useTimePresentDay, Boolean useVaidTimeMissing, EnumQueryComparator idComparator,
-			EnumQueryComparator timePresentDayComparator, EnumQueryComparator validTimeMissingComparator) {
+	public List<Attendancedata> findAttendancedata(Long id, Long userId, Boolean isUserInState, Long timePresentDay, Boolean useId, Boolean useUserId,
+			Boolean useIsUserInState, Boolean useTimePresentDay, EnumQueryComparator idComparator, EnumQueryComparator userIdComparator,
+			EnumQueryComparator timePresentDayComparator) {
 		return this.readOnlyCriteriaQuery((query, root, builder) -> {
 			List<Predicate> predicates = new ArrayList<>();
 
 			getSingularRestriction(Attendancedata_.id, id, useId, idComparator, predicates, builder, root);
-			getSingularRestriction(Attendancedata_.isUserInState, isUserInState, useIsUserInState, null, predicates, builder, root);
-			getSingularRestriction(Attendancedata_.timePresentDay, timePresentDay, useTimePresentDay, timePresentDayComparator, predicates, builder,
-					root);
-			getSingularRestriction(Attendancedata_.validTimeMissing, validTimeMissing, useVaidTimeMissing, validTimeMissingComparator, predicates,
-					builder, root);
-
+			getSingularRestriction(root.join(Attendancedata_.user).get(User_.id), userId, useUserId, userIdComparator, predicates, builder, root);
+			getSingularRestriction(root.get(Attendancedata_.isUserInState), isUserInState, useIsUserInState, null, predicates, builder, root);
+			getSingularRestriction(
+					builder.sum(root.get(Attendancedata_.timePresentDay), root.join(Attendancedata_.timeIn).get(Stopwatch_.tmpDuration)),
+					timePresentDay, useTimePresentDay, timePresentDayComparator, predicates, builder, root);
 			return predicates;
 		});
 	}

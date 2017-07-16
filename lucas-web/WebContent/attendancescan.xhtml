@@ -1,0 +1,51 @@
+<ui:composition template="/WEB-INF/web/template/appTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="pageTitle"
+		value="#{msg['lucas.application.attendanceScanScreen.title']}" />
+	<ui:define name="dialogs">
+	</ui:define>
+	<ui:define name="otherContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.UserConverter" />
+	</ui:define>
+	<ui:define name="content">
+		<h:form>
+			<p:spacer height="25px" />
+			<div class="ui-fluid" align="center">
+				<p:panel
+					header="#{msg['lucas.application.attendanceScanScreen.scanPanel.title']}"
+					style="display:inline-block">
+					<p:focus for="idCardIdInputNumber" />
+					<h:panelGrid>
+						<p:row>
+							<p:column>
+								<p:message for="idCardIdInputNumber" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:inputNumber id="idCardIdInputNumber"
+									value="#{attendanceScanBean.idCard}" minValue="0"
+									decimalPlaces="0" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<p:commandButton
+									value="#{msg['lucas.application.attendanceScanScreen.scanButton.name']}"
+									title="#{msg['lucas.application.attendanceScanScreen.scanButton.title']}"
+									icon="fa fa-barcode" action="#{attendanceScanBean.scan}"
+									update="@form" process="@form" />
+							</p:column>
+						</p:row>
+					</h:panelGrid>
+				</p:panel>
+			</div>
+			<p:spacer height="25px" />
+		</h:form>
+	</ui:define>
+</ui:composition>

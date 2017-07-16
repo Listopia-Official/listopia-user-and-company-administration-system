@@ -35,15 +35,6 @@
 				rendered="#{loginBean.hasPermission(EnumPermission.EMPLOYMENT_ACCESS_VIEW)}"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.mainSubmenu.employmentsMenuItem.name']}" />
 		</p:submenu>
-		<p:submenu rendered="#{false}"
-			label="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.name']}">
-			<p:menuitem disabled="true"
-				value="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.scanMenuItem.name']}" />
-			<p:menuitem disabled="true"
-				value="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.visaMenuItem.name']}" />
-			<p:menuitem disabled="true"
-				value="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.attendancedataMenuItem.name']}" />
-		</p:submenu>
 		<p:submenu
 			rendered="#{loginBean.hasPermissionsOr([EnumPermission.ACCOUNT_ACCESS_VIEW,EnumPermission.ACCOUNT_VIEW_TRANSACTION_LOGS])}"
 			label="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.name']}">
@@ -55,7 +46,7 @@
 				value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.transactionLogsMenuItem.name']}" />
 		</p:submenu>
 		<p:submenu
-			rendered="#{loginBean.hasPermission(EnumPermission.ITEM_ACCESS_VIEW)}"
+			rendered="#{loginBean.hasPermissionsOr([EnumPermission.ITEM_ACCESS_VIEW;EnumPermission.ITEM_SELL])}"
 			label="#{msg['lucas.application.mainScreen.navigationMenu.warehouseSubmenu.name']}">
 			<p:menuitem outcome="/items.xhtml"
 				rendered="#{loginBean.hasPermission(EnumPermission.ITEM_ACCESS_VIEW)}"
@@ -63,6 +54,16 @@
 			<p:menuitem outcome="/sellItems.xhtml"
 				rendered="#{loginBean.hasPermission(EnumPermission.ITEM_SELL)}"
 				value="#{msg['lucas.application.mainScreen.navigationMenu.warehouseSubmenu.sellMenuItem.name']}" />
+		</p:submenu>
+		<p:submenu
+			rendered="#{loginBean.hasPermissionsOr([EnumPermission.ATTENDANCE_ACCESS_VIEW,EnumPermission.ATTENDANCE_SCAN_ACCESS_VIEW])}"
+			label="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.name']}">
+			<p:menuitem outcome="/attendancedata.xhtml"
+				rendered="#{loginBean.hasPermission(EnumPermission.ATTENDANCE_ACCESS_VIEW)}"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.attendancedataMenuItem.name']}" />
+			<p:menuitem outcome="/attendancescan.xhtml"
+				rendered="#{loginBean.hasPermission(EnumPermission.ATTENDANCE_SCAN_ACCESS_VIEW)}"
+				value="#{msg['lucas.application.mainScreen.navigationMenu.dutySubmenu.scanMenuItem.name']}" />
 		</p:submenu>
 		<p:submenu
 			rendered="#{loginBean.hasPermissionsOr([EnumPermission.LOGIN_USER_ACCESS_VIEW,EnumPermission.LOGIN_ROLE_ACCESS_VIEW,EnumPermission.GLOBAL_DATA_ACCESS_VIEW])}"

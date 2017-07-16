@@ -1,0 +1,235 @@
+<ui:composition template="/WEB-INF/web/template/dataTemplate.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	<ui:param name="siteBean" value="#{attendancedataBean}" />
+	<ui:define name="dialogs">
+		<ui:include src="/WEB-INF/web/attendance/activityLogDialog.xhtml" />
+	</ui:define>
+	<ui:define name="otherContent">
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.BooleanConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.EnumConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.UserConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.LocalDateTimeConverter" />
+		<p:importConstants
+			type="florian_haas.lucas.web.converter.LongToTimeConverter" />
+	</ui:define>
+	<ui:define name="buttonArea">
+		<p:toolbarGroup align="left">
+			<ui:fragment
+				rendered="#{loginBean.hasPermission(EnumPermission.ATTENDANCE_SCAN)}">
+				<p:commandButton resetValues="true"
+					value="#{msg['lucas.application.attendancedataScreen.enterLeaveButton.name']}"
+					title="#{msg['lucas.application.attendancedataScreen.enterLeaveButton.tooltip']}"
+					icon="fa fa-barcode" action="#{attendancedataBean.togglePresence}"
+					process="@this"
+					update="dataAccorditionPanel:attendancedataSearchResultsForm:attendancedataSearchResultsTable"
+					disabled="#{attendancedataBean.selectedEntities.size() &lt;=0}" />
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			</ui:fragment>
+			<ui:fragment
+				rendered="#{loginBean.hasPermission(EnumPermission.ATTENDANCE_GET_ACTIVITY_LOGS)}">
+				<p:commandButton resetValues="true"
+					value="#{msg['lucas.application.attendancedataScreen.showAttendanceActivityLogsButton.name']}"
+					title="#{msg['lucas.application.attendancedataScreen.showAttendanceActivityLogsButton.tooltip']}"
+					icon="fa fa-list-ul" oncomplete="PF('activityLogDialog').show()"
+					action="#{attendancedataBean.initShowAttendanceActivityLogsDialog}"
+					process="@this" update="activityLogDialogForm"
+					disabled="#{attendancedataBean.selectedEntities.size() !=1}" />
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+			</ui:fragment>
+			<p:commandButton resetValues="true"
+				rendered="#{loginBean.hasPermission(EnumPermission.ATTENDANCE_RESET)}"
+				value="#{msg['lucas.application.attendancedataScreen.resetButton.name']}"
+				title="#{msg['lucas.application.attendancedataScreen.resetButton.tooltip']}"
+				icon="fa fa-undo" action="#{attendancedataBean.reset}"
+				process="@this"
+				update="dataAccorditionPanel:attendancedataSearchResultsForm:attendancedataSearchResultsTable"
+				disabled="#{attendancedataBean.selectedEntities.size() &lt;=0}">
+				<p:confirm
+					header="#{msg['lucas.application.attendancedataScreen.reset.confirm.header']}"
+					message="#{msg['lucas.application.attendancedataScreen.reset.confirm.message']}" />
+			</p:commandButton>
+		</p:toolbarGroup>
+	</ui:define>
+	<ui:define name="searchCriteria">
+		<p:row>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchAttendancedataIdSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{attendancedataBean.useSearchAttendancedataId}"
+					title="#{msg['lucas.application.attendancedataScreen.searchAttendancedataIdSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="attendancedataSearchCriteriaForm:searchAttendancedataIdInputNumber attendancedataSearchCriteriaForm:searchAttendancedataIdComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchAttendancedataIdSelectBooleanCheckbox"
+					value="#{msg['lucas.application.attendancedataScreen.searchAttendancedataIdSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.attendancedataScreen.searchAttendancedataIdSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchAttendancedataUserSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{attendancedataBean.useSearchAttendancedataUser}"
+					title="#{msg['lucas.application.attendancedataScreen.searchAttendancedataUserSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="attendancedataSearchCriteriaForm:searchAttendancedataUserInputNumber attendancedataSearchCriteriaForm:searchAttendancedataUserComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel for="searchAttendancedataUserSelectBooleanCheckbox"
+					value="#{msg['lucas.application.attendancedataScreen.searchAttendancedataUserSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.attendancedataScreen.searchAttendancedataUserSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchAttendancedataIsPresentSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{attendancedataBean.useSearchAttendancedataIsPresent}"
+					title="#{msg['lucas.application.attendancedataScreen.searchAttendancedataIsPresentSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="attendancedataSearchCriteriaForm:searchAttendancedataIsPresentBooleanButton"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchAttendancedataIsPresentSelectBooleanCheckbox"
+					value="#{msg['lucas.application.attendancedataScreen.searchAttendancedataIsPresentSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.attendancedataScreen.searchAttendancedataIsPresentSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+			<p:column>
+				<p:selectBooleanCheckbox
+					id="searchAttendancedataTimePresentSelectBooleanCheckbox"
+					styleClass="checkbox"
+					value="#{attendancedataBean.useSearchAttendancedataTimePresent}"
+					title="#{msg['lucas.application.attendancedataScreen.searchAttendancedataTimePresentSelectBooleanCheckbox.tooltip']}">
+					<p:ajax event="change"
+						update="attendancedataSearchCriteriaForm:searchAttendancedataTimePresentInputNumber attendancedataSearchCriteriaForm:searchAttendancedataTimePresentComparator"
+						process="@this" />
+				</p:selectBooleanCheckbox>
+				<p:outputLabel
+					for="searchAttendancedataTimePresentSelectBooleanCheckbox"
+					value="#{msg['lucas.application.attendancedataScreen.searchAttendancedataTimePresentSelectBooleanCheckbox.name']}"
+					title="#{msg['lucas.application.attendancedataScreen.searchAttendancedataTimePresentSelectBooleanCheckbox.tooltip']}" />
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchAttendancedataIdComparator" />
+					<ui:param name="enabled"
+						value="#{attendancedataBean.useSearchAttendancedataId}" />
+					<ui:param name="title"
+						value="lucas.application.attendancedataScreen.searchAttendancedataIdComparator.tooltip" />
+					<ui:param name="value"
+						value="#{attendancedataBean.searchAttendancedataIdComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
+					<ui:param name="targetComponent"
+						value="searchAttendancedataIdInputNumber" />
+				</ui:include>
+			</p:column>
+			<p:column>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id" value="searchAttendancedataUserComparator" />
+					<ui:param name="enabled"
+						value="#{attendancedataBean.useSearchAttendancedataUser}" />
+					<ui:param name="title"
+						value="lucas.application.attendancedataScreen.searchAttendancedataUserComparator.tooltip" />
+					<ui:param name="value"
+						value="#{attendancedataBean.searchAttendancedataUserComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.LOGIC_COMPARATORS_NOT_NULL}" />
+					<ui:param name="targetComponent"
+						value="searchAttendancedataUserInputNumber" />
+				</ui:include>
+			</p:column>
+			<p:column />
+			<p:column>
+				<ui:include src="/WEB-INF/web/components/queryComparator.xhtml">
+					<ui:param name="id"
+						value="searchAttendancedataTimePresentComparator" />
+					<ui:param name="enabled"
+						value="#{attendancedataBean.useSearchAttendancedataTimePresent}" />
+					<ui:param name="title"
+						value="lucas.application.attendancedataScreen.searchAttendancedataTimePresentComparator.tooltip" />
+					<ui:param name="value"
+						value="#{attendancedataBean.searchAttendancedataTimePresentComparator}" />
+					<ui:param name="comparators"
+						value="#{EnumQueryComparator.NUMERIC_COMPARATORS_NOT_NULL}" />
+					<ui:param name="targetComponent"
+						value="searchAttendancedataTimePresentInputNumber" />
+				</ui:include>
+			</p:column>
+		</p:row>
+		<p:row>
+			<p:column>
+				<p:inputNumber value="#{attendancedataBean.searchAttendancedataId}"
+					minValue="0" decimalPlaces="0"
+					id="searchAttendancedataIdInputNumber"
+					disabled="#{not attendancedataBean.useSearchAttendancedataId || converterBean.isDisabled(attendancedataBean.searchAttendancedataIdComparator)}" />
+			</p:column>
+			<p:column>
+				<ui:include
+					src="/WEB-INF/web/autocomplete/selectUserAutocomplete.xhtml">
+					<ui:param name="id" value="searchAttendancedataUserInputNumber" />
+					<ui:param name="title" value="" />
+					<ui:param name="disabled"
+						value="#{not attendancedataBean.useSearchAttendancedataUser|| converterBean.isDisabled(attendancedataBean.searchAttendancedataUserComparator)}" />
+					<ui:param name="value"
+						value="#{attendancedataBean.searchAttendancedataUser}" />
+				</ui:include>
+			</p:column>
+			<p:column>
+				<p:selectBooleanButton
+					offLabel="#{msg['lucas.application.booleanConverter.normal.false']}"
+					onLabel="#{msg['lucas.application.booleanConverter.normal.true']}"
+					id="searchAttendancedataIsPresentBooleanButton"
+					value="#{attendancedataBean.searchAttendancedataIsPresent}"
+					disabled="#{not attendancedataBean.useSearchAttendancedataIsPresent}" />
+			</p:column>
+			<p:column>
+				<p:inputMask id="searchAttendancedataTimePresentInputNumber"
+					value="#{attendancedataBean.searchAttendancedataTimePresent}"
+					mask="99:99:99"
+					converter="#{converterBean.getConverter(LongToTimeConverter.CONVERTER_ID)}"
+					disabled="#{not attendancedataBean.useSearchAttendancedataTimePresent || converterBean.isDisabled(attendancedataBean.searchAttendancedataTimePresentComparator)}" />
+			</p:column>
+		</p:row>
+	</ui:define>
+	<ui:define name="searchResults">
+		<p:column exportable="#{itemBean.resultsDatatableColumns[0]}"
+			headerText="#{msg['lucas.application.attendancedataScreen.attendancedataSearchResultsTable.idColumn.name']}"
+			sortBy="#{entity.id}"
+			visible="#{itemBean.resultsDatatableColumns[0]}">
+			<h:outputText value="#{entity.id}" />
+		</p:column>
+		<p:column exportable="#{itemBean.resultsDatatableColumns[1]}"
+			headerText="#{msg['lucas.application.attendancedataScreen.attendancedataSearchResultsTable.userColumn.name']}"
+			sortBy="#{entity.user}"
+			visible="#{itemBean.resultsDatatableColumns[1]}">
+			<h:outputText value="#{entity.user}"
+				converter="#{converterBean.getConverter(UserConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column exportable="#{itemBean.resultsDatatableColumns[2]}"
+			headerText="#{msg['lucas.application.attendancedataScreen.attendancedataSearchResultsTable.isPresentColumn.name']}"
+			sortBy="#{entity.isUserInState}"
+			visible="#{itemBean.resultsDatatableColumns[2]}">
+			<h:outputText value="#{entity.isUserInState}"
+				converter="#{converterBean.getConverter(BooleanConverter.CONVERTER_ID)}" />
+		</p:column>
+		<p:column exportable="#{itemBean.resultsDatatableColumns[3]}"
+			headerText="#{msg['lucas.application.attendancedataScreen.attendancedataSearchResultsTable.timePresentColumn.name']}"
+			sortBy="#{entity.timePresentDay}"
+			visible="#{itemBean.resultsDatatableColumns[3]}">
+			<h:outputText value="#{entity.timePresentDay}"
+				converter="#{converterBean.getConverter(LongToTimeConverter.CONVERTER_ID)}" />
+		</p:column>
+	</ui:define>
+</ui:composition>

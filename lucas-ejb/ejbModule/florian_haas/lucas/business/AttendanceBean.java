@@ -3,17 +3,18 @@ package florian_haas.lucas.business;
 import static florian_haas.lucas.security.EnumPermission.*;
 
 import java.time.*;
-import java.util.*;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.ejb.*;
 import javax.inject.Inject;
-import javax.validation.*;
+import javax.validation.Validator;
 import javax.validation.executable.*;
 
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.persistence.*;
 import florian_haas.lucas.security.*;
+import florian_haas.lucas.validation.ValidEntityId;
 
 @Stateless
 @ValidateOnExecution(type = ExecutableType.IMPLICIT)
@@ -41,28 +42,32 @@ public class AttendanceBean implements AttendanceBeanLocal {
 	@RequiresPermissions(ATTENDANCE_SCAN)
 	public Boolean scan(Long idCardId) {
 		ReadOnlyIdCard idCard = idCardDao.findById(idCardId);
-		if (idCard.getOwner().getOwnerType() == EnumAccountOwnerType.USER && idCard.getBlocked()
-				|| (idCard.getValidDay() != null && !idCard.getValidDay().equals(LocalDate.now()))) {
-			ReadOnlyUser user = (ReadOnlyUser) idCard.getOwner();
-			if (user.getUserType() != EnumUserType.TEACHER) {
-				ReadOnlyAttendancedata attendancedata = user.getAttendancedata();
-				if (attendancedata != null) {
-					if (attendancedata.getIsUserInState() == Boolean.TRUE) {
-						enter((Attendancedata) attendancedata);
-					} else if (attendancedata.getIsUserInState() == Boolean.FALSE) {
-						leave((Attendancedata) attendancedata);
-					}
-					return Boolean.TRUE;
-				}
-			}
+		if (idCard.getBlocked()) throw new LucasException("The id card is blocked", AttendanceBeanLocal.USER_CARD_BLOCKED_EXCEPTION_MARKER);
+		if (idCard.getValidDay() != null && !idCard.getValidDay().equals(LocalDate.now()))
+			throw new LucasException("The valid date for the id card isn't equal to the current date",
+					AttendanceBeanLocal.USER_CARD_INVALID_DATE_EXCEPTION_MARKER);
+		User user = (User) idCard.getOwner();
+		return this.scanByAttendancedata(user.getAttendancedata().getId());
+	}
+
+	@Override
+	@RequiresPermissions(ATTENDANCE_SCAN)
+	public Boolean scanByAttendancedata(@ValidEntityId(entityClass = ReadOnlyAttendancedata.class) Long attendancedataId) {
+		Attendancedata attendancedata = attendanceDao.findById(attendancedataId);
+		if (attendancedata.getIsUserInState() == Boolean.TRUE) {
+			leave((Attendancedata) attendancedata);
+			return Boolean.FALSE;
+		} else {
+			enter((Attendancedata) attendancedata);
+			return Boolean.TRUE;
 		}
-		return Boolean.FALSE;
 	}
 
 	private void enter(Attendancedata attendancedata) {
 		attendancedata.getTimeIn().start();
 		attendancedata.getTimeOut().stop();
-		Long duration = attendancedata.getTimeOut().getTmpDuration();
+		Long duration = attendancedata.getTimeOut().getDuration();
+		attendancedata.getTimeOut().reset();
 		EnumAttendanceAction action = EnumAttendanceAction.ENTER;
 		attendancedata.setIsUserInState(Boolean.TRUE);
 		addLog(attendancedata, action, duration);
@@ -71,8 +76,9 @@ public class AttendanceBean implements AttendanceBeanLocal {
 	private void leave(Attendancedata attendancedata) {
 		attendancedata.getTimeIn().stop();
 		attendancedata.getTimeOut().start();
-		Long duration = attendancedata.getTimeIn().getTmpDuration();
-		attendancedata.setTimePresentDay(attendancedata.getTimePresentDay() + duration);
+		Long duration = attendancedata.getTimeIn().getDuration();
+		attendancedata.getTimeIn().reset();
+		attendancedata.setTimePresentDay(attendancedata.getRawTimePresentDay() + duration);
 		EnumAttendanceAction action = EnumAttendanceAction.LEAVE;
 		attendancedata.setIsUserInState(Boolean.FALSE);
 		addLog(attendancedata, action, duration);
@@ -80,33 +86,7 @@ public class AttendanceBean implements AttendanceBeanLocal {
 
 	private void addLog(Attendancedata attendancedata, EnumAttendanceAction action, Long duration) {
 		AttendanceActivityLog log = new AttendanceActivityLog(attendancedata, LocalDateTime.now(), action, duration);
-		Set<ConstraintViolation<AttendanceActivityLog>> violations = validator.validate(log);
-		if (!violations.isEmpty()) throw new ConstraintViolationException(violations);
 		attendancedata.addActivityLog(log);
-	}
-
-	@Override
-	@RequiresPermissions(ATTENDANCE_EVALUATE_ALL)
-	public List<Long> evaluateAll() {
-		List<Long> ids = attendanceDao.findAllIds();
-		List<Long> requirementsNotMet = new ArrayList<>();
-		for (Long id : ids) {
-			Attendancedata attendancedata = attendanceDao.findById(id);
-			if (attendancedata != null) {
-				leave(attendancedata);
-				attendancedata.getTimeOut().stop();
-				attendancedata.getTimeIn().reset();
-				attendancedata.getTimeOut().reset();
-				AttendanceLog log = new AttendanceLog(attendancedata, LocalDate.now(), attendancedata.getTimePresentDay(),
-						globalData.getMinTimePresent(), attendancedata.getValidTimeMissing());
-				attendancedata.addAttendanceLog(log);
-				attendancedata.setTimePresentDay(0l);
-				if (!log.hasMetRequirements()) {
-					requirementsNotMet.add(attendancedata.getUser().getId());
-				}
-			}
-		}
-		return requirementsNotMet;
 	}
 
 	@Override
@@ -123,11 +103,30 @@ public class AttendanceBean implements AttendanceBeanLocal {
 
 	@Override
 	@RequiresPermissions(ATTENDANCE_FIND_DYNAMIC)
-	public List<? extends ReadOnlyAttendancedata> findAttendancedata(Long id, Boolean isUserInState, Long timePresentDay, Long validTimeMissing,
-			Boolean useId, Boolean useIsUserInState, Boolean useTimePresentDay, Boolean useVaidTimeMissing, EnumQueryComparator idComparator,
-			EnumQueryComparator timePresentDayComparator, EnumQueryComparator validTimeMissingComparator) {
-		return attendanceDao.findAttendancedata(id, isUserInState, timePresentDay, validTimeMissing, useId, useIsUserInState, useTimePresentDay,
-				useVaidTimeMissing, idComparator, timePresentDayComparator, validTimeMissingComparator);
+	public List<? extends ReadOnlyAttendancedata> findAttendancedata(Long id, Long userId, Boolean isUserInState, Long timePresentDay, Boolean useId,
+			Boolean useUserId, Boolean useIsUserInState, Boolean useTimePresentDay, EnumQueryComparator idComparator,
+			EnumQueryComparator userIdComparator, EnumQueryComparator timePresentDayComparator) {
+		return attendanceDao.findAttendancedata(id, userId, isUserInState, timePresentDay, useId, useUserId, useIsUserInState, useTimePresentDay,
+				idComparator, userIdComparator, timePresentDayComparator);
+	}
+
+	@Override
+	@RequiresPermissions(ATTENDANCE_GET_ACTIVITY_LOGS)
+	public List<? extends ReadOnlyAttendanceActivityLog> getAttendanceActivityLogs(Long id) {
+		return attendanceDao.findById(id).getActivityLogs();
+	}
+
+	@Override
+	@RequiresPermissions(ATTENDANCE_RESET)
+	public void reset(Long attendancedataId) {
+		Attendancedata data = attendanceDao.findById(attendancedataId);
+		data.getTimeIn().stop();
+		data.getTimeIn().reset();
+		data.getTimeOut().stop();
+		data.getTimeOut().reset();
+		data.setIsUserInState(Boolean.FALSE);
+		data.setTimePresentDay(0l);
+		data.resetLogs();
 	}
 
 }

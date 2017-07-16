@@ -8,12 +8,10 @@ public interface ReadOnlyAttendancedata extends ReadOnlyEntity {
 
 	public Boolean getIsUserInState();
 
+	public Long getRawTimePresentDay();
+
 	public Long getTimePresentDay();
 
-	public Long getValidTimeMissing();
-
 	public List<? extends ReadOnlyAttendanceActivityLog> getActivityLogs();
-
-	public List<? extends ReadOnlyAttendanceLog> getAttendanceLogs();
 
 }
