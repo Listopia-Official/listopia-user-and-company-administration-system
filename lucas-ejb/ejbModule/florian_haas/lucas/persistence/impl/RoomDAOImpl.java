@@ -46,11 +46,11 @@ public class RoomDAOImpl extends DAOImpl<Room> implements RoomDAO {
 					: builder.isNotNull(sections2.join(RoomSection_.company, JoinType.LEFT)));
 			switch (comparator) {
 				case EMPTY:
-				case LIKE:
+				case CONTAINS:
 				case EQUAL:
 				case MEMBER_OF:
 				case NOT_EMPTY:
-				case NOT_LIKE:
+				case CONTAINS_NOT:
 				case NOT_MEMBER_OF:
 				case NOT_NULL:
 				case NULL:

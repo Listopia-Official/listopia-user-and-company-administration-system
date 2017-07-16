@@ -138,10 +138,10 @@ public abstract class ReadOnlyDAOImpl<E extends EntityBase> implements ReadOnlyD
 				return builder.lessThan(attribute, value);
 			case NOT_EQUAL:
 				return builder.notEqual(attribute, value);
-			case LIKE:
-				if (value instanceof String) return builder.like((Expression<String>) (Expression<?>) attribute, (String) value);
-			case NOT_LIKE:
-				if (value instanceof String) return builder.notLike((Expression<String>) (Expression<?>) attribute, (String) value);
+			case CONTAINS:
+				if (value instanceof String) return builder.like((Expression<String>) (Expression<?>) attribute, "%" + (String) value + "%");
+			case CONTAINS_NOT:
+				return builder.notLike((Expression<String>) (Expression<?>) attribute, "%" + (String) value + "%");
 			case NULL:
 				return builder.isNull(attribute);
 			case NOT_NULL:

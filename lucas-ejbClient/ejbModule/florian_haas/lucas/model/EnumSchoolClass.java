@@ -127,9 +127,9 @@ public enum EnumSchoolClass {
 		if (comparator != null && Arrays.asList(possibleValues).contains(comparator)) {
 			switch (comparator) {
 				case EQUAL:
-				case LIKE:
+				case CONTAINS:
 				case MEMBER_OF:
-				case NOT_LIKE:
+				case CONTAINS_NOT:
 				case NOT_MEMBER_OF:
 				case EMPTY:
 				case NOT_EMPTY:
