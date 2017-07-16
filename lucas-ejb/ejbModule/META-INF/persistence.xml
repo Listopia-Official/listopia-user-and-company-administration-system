@@ -12,7 +12,6 @@
 		<class>florian_haas.lucas.model.TransactionLog</class>
 		<class>florian_haas.lucas.model.GlobalData</class>
 		<class>florian_haas.lucas.model.AttendanceActivityLog</class>
-		<class>florian_haas.lucas.model.AttendanceLog</class>
 		<class>florian_haas.lucas.model.Employment</class>
 		<class>florian_haas.lucas.model.Item</class>
 		<class>florian_haas.lucas.model.PurchaseLog</class>
