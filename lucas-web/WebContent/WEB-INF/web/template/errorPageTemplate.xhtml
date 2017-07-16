@@ -18,6 +18,15 @@
 					</p:column>
 				</p:row>
 				<ui:insert name="additionalContent" />
+				<p:row>
+					<p:column>
+						<p:button
+							value="#{msg['lucas.application.errorPage.template.mainpageButton.name']}"
+							title="#{msg['lucas.application.errorPage.template.mainpageButton.tooltip']}"
+							outcome="/main.xhtml" icon="fa fa-home"
+							style="display:block;width:initial;" />
+					</p:column>
+				</p:row>
 			</p:panelGrid>
 		</div>
 	</ui:define>
