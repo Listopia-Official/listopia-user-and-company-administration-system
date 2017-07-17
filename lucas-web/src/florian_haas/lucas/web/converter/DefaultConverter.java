@@ -26,7 +26,7 @@ public abstract class DefaultConverter<V extends ReadOnlyEntity> extends BasicCo
 		this.normalLangKey = this.langKeyBase.concat(NORMAL_KEY_SUFFIX);
 		this.nullLangKey = this.langKeyBase.concat(NULL_KEY_SUFFIX);
 		this.shortLangKey = this.langKeyBase.concat(SHORT_KEY_SUFFIX);
-		entityGetter = WebUtils.getCDIManagerBean(entityGetterClass);
+		entityGetter = WebUtils.getCDIManagedBean(entityGetterClass);
 	}
 
 	@Override

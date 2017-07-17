@@ -37,7 +37,7 @@ public class AccountOwnerConverter extends BasicConverter<ReadOnlyAccountOwner> 
 	@Override
 	protected ReadOnlyAccountOwner getObject(FacesContext context, UIComponent component, String value) {
 		Object key = component.getAttributes().get(CONVERTER_ID + value);
-		return key != null ? WebUtils.getCDIManagerBean(AccountBeanLocal.class).findAccountOwnerById(Long.parseLong(key.toString().trim())) : null;
+		return key != null ? WebUtils.getCDIManagedBean(AccountBeanLocal.class).findAccountOwnerById(Long.parseLong(key.toString().trim())) : null;
 	}
 
 }

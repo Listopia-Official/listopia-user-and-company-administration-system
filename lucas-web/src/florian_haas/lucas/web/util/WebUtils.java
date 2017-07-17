@@ -444,7 +444,7 @@ public class WebUtils {
 		while (it.hasNext()) {
 			E tmpEntity = it.next();
 			Long id = tmpEntity.getId();
-			if (getCDIManagerBean(EntityBean.class).exists(id, entityClass)) {
+			if (getCDIManagedBean(EntityBean.class).exists(id, entityClass)) {
 				if (onlySelected ? (selectedEntities.contains(tmpEntity)
 						|| (additionalEntitiesToRefresh != null && additionalEntitiesToRefresh.contains(tmpEntity))) : true) {
 					E refreshed = replacements != null && replacements.get(id) != null ? replacements.get(id) : entityDao.apply(id);
@@ -460,15 +460,15 @@ public class WebUtils {
 
 	public static String getCurrencyAsString(BigDecimal currency) {
 		FacesContext context = FacesContext.getCurrentInstance();
-		return getCDIManagerBean(CurrencyConverter.class).getAsString(context, UIComponent.getCurrentComponent(context), currency);
+		return getCDIManagedBean(CurrencyConverter.class).getAsString(context, UIComponent.getCurrentComponent(context), currency);
 	}
 
 	public static String getRealCurrencyAsString(BigDecimal currency) {
 		FacesContext context = FacesContext.getCurrentInstance();
-		return getCDIManagerBean(RealCurrencyConverter.class).getAsString(context, UIComponent.getCurrentComponent(context), currency);
+		return getCDIManagedBean(RealCurrencyConverter.class).getAsString(context, UIComponent.getCurrentComponent(context), currency);
 	}
 
-	public static <T> T getCDIManagerBean(Class<T> clazz) {
+	public static <T> T getCDIManagedBean(Class<T> clazz) {
 		return CDI.current().select(clazz).get();
 	}
 
