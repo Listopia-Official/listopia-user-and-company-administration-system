@@ -197,7 +197,7 @@
 		</p:column>
 		<p:column exportable="#{loginUserBean.resultsDatatableColumns[2]}"
 			headerText="#{msg['lucas.application.loginUserScreen.loginUserSearchResultsTable.user.name']}"
-			sortBy="#{entity.user}"
+			sortable="false"
 			visible="#{loginUserBean.resultsDatatableColumns[2]}">
 			<h:outputText value="#{entity.user}"
 				converter="#{converterBean.getConverter(UserConverter.CONVERTER_ID)}" />

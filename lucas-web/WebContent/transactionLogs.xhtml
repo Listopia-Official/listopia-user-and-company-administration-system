@@ -565,7 +565,7 @@
 		<p:column
 			exportable="#{transactionLogBean.resultsDatatableColumns[9]}"
 			headerText="#{msg['lucas.application.transactionLogScreen.transactionLogSearchResultsTable.bankUserColumn.name']}"
-			sortBy="#{entity.bankUser}"
+			sortable="false"
 			visible="#{transactionLogBean.resultsDatatableColumns[9]}">
 			<h:outputText value="#{entity.bankUser}"
 				converter="#{converterBean.getConverter(ShortLoginUserConverter.CONVERTER_ID)}" />

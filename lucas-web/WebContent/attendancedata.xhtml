@@ -212,8 +212,7 @@
 		</p:column>
 		<p:column exportable="#{itemBean.resultsDatatableColumns[1]}"
 			headerText="#{msg['lucas.application.attendancedataScreen.attendancedataSearchResultsTable.userColumn.name']}"
-			sortBy="#{entity.user}"
-			visible="#{itemBean.resultsDatatableColumns[1]}">
+			sortable="false" visible="#{itemBean.resultsDatatableColumns[1]}">
 			<h:outputText value="#{entity.user}"
 				converter="#{converterBean.getConverter(UserConverter.CONVERTER_ID)}" />
 		</p:column>

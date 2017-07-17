@@ -450,7 +450,7 @@
 		</p:column>
 		<p:column exportable="#{jobBean.resultsDatatableColumns[3]}"
 			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.companyColumn.name']}"
-			sortBy="#{entity.company}"
+			sortable="false"
 			visible="#{jobBean.resultsDatatableColumns[3]}">
 			<h:outputText value="#{entity.company}"
 				converter="#{converterBean.getConverter(CompanyConverter.CONVERTER_ID)}" />

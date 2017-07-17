@@ -436,8 +436,7 @@
 		</p:column>
 		<p:column exportable="#{companyBean.resultsDatatableColumns[3]}"
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.sectionColumn.name']}"
-			sortBy="#{entity.section}"
-			visible="#{companyBean.resultsDatatableColumns[3]}">
+			sortable="false" visible="#{companyBean.resultsDatatableColumns[3]}">
 			<h:outputText value="#{entity.section}"
 				converter="#{converterBean.getConverter(ShortRoomSectionConverter.CONVERTER_ID)}" />
 		</p:column>
@@ -450,8 +449,7 @@
 		</p:column>
 		<p:column exportable="#{companyBean.resultsDatatableColumns[5]}"
 			headerText="#{msg['lucas.application.companyScreen.companySearchResultsTable.parentCompanyColumn.name']}"
-			sortBy="#{entity.parentCompany}"
-			visible="#{companyBean.resultsDatatableColumns[5]}">
+			sortable="false" visible="#{companyBean.resultsDatatableColumns[5]}">
 			<h:outputText value="#{entity.parentCompany}"
 				converter="#{converterBean.getConverter(CompanyConverter.CONVERTER_ID)}" />
 		</p:column>

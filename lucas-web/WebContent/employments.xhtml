@@ -238,14 +238,14 @@
 		</p:column>
 		<p:column exportable="#{employmentBean.resultsDatatableColumns[1]}"
 			headerText="#{msg['lucas.application.employmentScreen.employmentSearchResultsTable.userColumn.name']}"
-			sortBy="#{entity.user}"
+			sortable="false"
 			visible="#{employmentBean.resultsDatatableColumns[1]}">
 			<h:outputText value="#{entity.user}"
 				converter="#{converterBean.getConverter(UserConverter.CONVERTER_ID)}" />
 		</p:column>
 		<p:column exportable="#{employmentBean.resultsDatatableColumns[2]}"
 			headerText="#{msg['lucas.application.employmentScreen.employmentSearchResultsTable.jobColumn.name']}"
-			sortBy="#{entity.company}"
+			sortable="false"
 			visible="#{employmentBean.resultsDatatableColumns[2]}">
 			<h:outputText value="#{entity.job}"
 				converter="#{converterBean.getConverter(JobConverter.CONVERTER_ID)}" />
