@@ -13,5 +13,10 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/io-7.0.3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/layout-7.0.3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/kernel-7.0.3.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/barbecue-1.5-beta1.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jdom.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

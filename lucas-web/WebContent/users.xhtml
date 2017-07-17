@@ -99,14 +99,14 @@
 				oncomplete="PF('imageManagerDialog').show()" icon="fa fa-image"
 				disabled="#{userBean.selectedEntities.size() != 1}" />
 			<p:commandButton
-				rendered="#{loginBean.hasPermissionsOr([EnumPermission.ID_CARD_ADD,EnumPermission.ID_CARD_REMOVE,EnumPermission.ID_CARD_BLOCK,EnumPermission.ID_CARD_UNBLOCK,EnumPermission.ID_CARD_SET_VALID_DATE]) &amp;&amp; loginBean.hasPermissionsAnd([EnumPermission.ID_CARD_FIND_BY_ID,EnumPermission.ID_CARD_GET_FROM_OWNER])}"
+				rendered="#{loginBean.hasPermissionsOr([EnumPermission.ID_CARD_ADD,EnumPermission.ID_CARD_REMOVE,EnumPermission.ID_CARD_EXPORT,EnumPermission.ID_CARD_BLOCK,EnumPermission.ID_CARD_UNBLOCK,EnumPermission.ID_CARD_SET_VALID_DATE]) &amp;&amp; loginBean.hasPermissionsAnd([EnumPermission.ID_CARD_FIND_BY_ID,EnumPermission.ID_CARD_GET_FROM_OWNER])}"
 				value="#{msg['lucas.application.userScreen.userCardManagerButton.name']}"
 				title="#{msg['lucas.application.userScreen.userCardManagerButton.tooltip']}"
 				update="userCardManagerDialogForm" process="@this"
 				action="#{userBean.initUserCardManagerDialog}"
 				oncomplete="PF('userCardManagerDialog').show()"
 				icon="fa fa-credit-card"
-				disabled="#{userBean.selectedEntities.size() != 1}" />
+				disabled="#{userBean.selectedEntities.size() == 0}" />
 			<p:commandButton
 				rendered="#{loginBean.hasPermission(EnumPermission.USER_SET_JOB_REQUESTS)}"
 				value="#{msg['lucas.application.userScreen.jobRequestsManagerButton.name']}"

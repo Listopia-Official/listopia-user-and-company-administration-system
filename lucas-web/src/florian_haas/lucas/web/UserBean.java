@@ -1,18 +1,21 @@
 package florian_haas.lucas.web;
 
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.util.*;
 
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.imageio.ImageIO;
 import javax.inject.Named;
 import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.*;
 
 import florian_haas.lucas.business.*;
 import florian_haas.lucas.model.*;
@@ -21,6 +24,7 @@ import florian_haas.lucas.security.EnumPermission;
 import florian_haas.lucas.util.Utils;
 import florian_haas.lucas.validation.*;
 import florian_haas.lucas.web.converter.*;
+import florian_haas.lucas.web.exporter.IdCardExporter;
 import florian_haas.lucas.web.util.WebUtils;
 
 @Named
@@ -927,7 +931,7 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 	@EJB
 	private IdCardBeanLocal idCardBean;
 
-	private ReadOnlyUser userCardManagerDialogSelectedUser;
+	private List<ReadOnlyUser> userCardManagerDialogSelectedUsers = new ArrayList<>();
 
 	private List<ReadOnlyIdCard> userCardManagerDialogSelectedUserCards = new ArrayList<>();
 
@@ -950,7 +954,7 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 	}
 
 	public ReadOnlyUser getUserCardManagerDialogSelectedUser() {
-		return this.userCardManagerDialogSelectedUser;
+		return this.userCardManagerDialogSelectedUsers.get(0);
 	}
 
 	public Date getUserCardManagerDialogValidDate() {
@@ -961,54 +965,69 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 		this.userCardManagerDialogValidDate = userCardManagerDialogValidDate;
 	}
 
+	public Boolean isUserCardBatchMode() {
+		return userCardManagerDialogSelectedUsers.size() > 1;
+	}
+
+	public List<ReadOnlyUser> getUserCardManagerDialogSelectedUsers() {
+		return this.userCardManagerDialogSelectedUsers;
+	}
+
 	public void initUserCardManagerDialog() {
 		if (!selectedEntities.isEmpty()) {
-			userCardManagerDialogSelectedUser = selectedEntities.get(0);
-			userCardManagerDialogSelectedUserCards.clear();
-			userCardManagerDialogUserCards.clear();
-			userCardManagerDialogValidDate = Date.from(Instant.now());
-			userCardManagerDialogUserCards.addAll(idCardBean.getIdCards(userCardManagerDialogSelectedUser.getId()));
+			userCardManagerDialogSelectedUsers.clear();
+			userCardManagerDialogSelectedUsers.addAll(selectedEntities);
+			if (userCardManagerDialogSelectedUsers.size() == 1) {
+				userCardManagerDialogSelectedUserCards = new ArrayList<>();
+				userCardManagerDialogUserCards.clear();
+				userCardManagerDialogValidDate = Date.from(Instant.now());
+				userCardManagerDialogUserCards.addAll(idCardBean.getIdCards(userCardManagerDialogSelectedUsers.get(0).getId()));
+			}
 		}
 	}
 
 	public void userCardManagerDialogNewUserCard() {
-		if (userCardManagerDialogSelectedUser != null) {
+		for (ReadOnlyUser user : userCardManagerDialogSelectedUsers) {
 			WebUtils.executeTask(params -> {
-				Long id = idCardBean.addIdCard(userCardManagerDialogSelectedUser.getId());
+				Long id = idCardBean.addIdCard(user.getId());
 				userCardManagerDialogUserCards.add(idCardBean.findIdCardById(id));
 				params.add(id);
 				return true;
 			}, "lucas.application.userScreen.createUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
-					Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, UserConverter.CONVERTER_ID)));
+					Utils.asList(WebUtils.getAsString(user, UserConverter.CONVERTER_ID)));
 		}
 	}
 
 	public void userCardManagerDialogBlockUserCards() {
-		for (ReadOnlyIdCard card : userCardManagerDialogSelectedUserCards) {
-			Long id = card.getId();
-			if (WebUtils.executeTask(params -> {
-				params.add(id);
-				return idCardBean.blockIdCard(id);
-			}, "lucas.application.userScreen.blockUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
-					Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, UserConverter.CONVERTER_ID)))) {
-				ReadOnlyIdCard newCard = idCardBean.findIdCardById(id);
-				WebUtils.refreshEntities(ReadOnlyIdCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
-						idCardBean::findIdCardById, true);
+		if (userCardManagerDialogSelectedUsers.size() == 1) {
+			for (ReadOnlyIdCard card : userCardManagerDialogSelectedUserCards) {
+				Long id = card.getId();
+				if (WebUtils.executeTask(params -> {
+					params.add(id);
+					return idCardBean.blockIdCard(id);
+				}, "lucas.application.userScreen.blockUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
+						Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUsers.get(0), UserConverter.CONVERTER_ID)))) {
+					ReadOnlyIdCard newCard = idCardBean.findIdCardById(id);
+					WebUtils.refreshEntities(ReadOnlyIdCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
+							idCardBean::findIdCardById, true);
+				}
 			}
 		}
 	}
 
 	public void userCardManagerDialogUnblockUserCards() {
-		for (ReadOnlyIdCard card : userCardManagerDialogSelectedUserCards) {
-			Long id = card.getId();
-			if (WebUtils.executeTask(params -> {
-				params.add(id);
-				return idCardBean.unblockIdCard(id);
-			}, "lucas.application.userScreen.unblockUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
-					Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, UserConverter.CONVERTER_ID)))) {
-				ReadOnlyIdCard newCard = idCardBean.findIdCardById(id);
-				WebUtils.refreshEntities(ReadOnlyIdCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
-						idCardBean::findIdCardById, true);
+		if (userCardManagerDialogSelectedUsers.size() == 1) {
+			for (ReadOnlyIdCard card : userCardManagerDialogSelectedUserCards) {
+				Long id = card.getId();
+				if (WebUtils.executeTask(params -> {
+					params.add(id);
+					return idCardBean.unblockIdCard(id);
+				}, "lucas.application.userScreen.unblockUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
+						Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUsers.get(0), UserConverter.CONVERTER_ID)))) {
+					ReadOnlyIdCard newCard = idCardBean.findIdCardById(id);
+					WebUtils.refreshEntities(ReadOnlyIdCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
+							idCardBean::findIdCardById, true);
+				}
 			}
 		}
 	}
@@ -1021,63 +1040,120 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 	}
 
 	public void userCardManagerDialogSetValidDay() {
-		for (ReadOnlyIdCard card : userCardManagerDialogSelectedUserCards) {
-			Long id = card.getId();
-			if (WebUtils.executeTask(params -> {
-				params.add(card.getId());
-				params.add(WebUtils.getAsString(Utils.asLocalDate(userCardManagerDialogValidDate), LocalDateConverter.CONVERTER_ID));
-				params.add(WebUtils.getAsString(card.getValidDay(), LocalDateConverter.CONVERTER_ID));
-				return idCardBean.setValidDate(id, Utils.asLocalDate(userCardManagerDialogValidDate));
-			}, "lucas.application.userScreen.setValidDay", USER_CARD_MANAGER_DIALOG_MESSAGES_ID)) {
-				ReadOnlyIdCard newCard = idCardBean.findIdCardById(id);
-				WebUtils.refreshEntities(ReadOnlyIdCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
-						idCardBean::findIdCardById, true);
+		if (userCardManagerDialogSelectedUsers.size() == 1) {
+			for (ReadOnlyIdCard card : userCardManagerDialogSelectedUserCards) {
+				Long id = card.getId();
+				if (WebUtils.executeTask(params -> {
+					params.add(card.getId());
+					params.add(WebUtils.getAsString(Utils.asLocalDate(userCardManagerDialogValidDate), LocalDateConverter.CONVERTER_ID));
+					params.add(WebUtils.getAsString(card.getValidDay(), LocalDateConverter.CONVERTER_ID));
+					return idCardBean.setValidDate(id, Utils.asLocalDate(userCardManagerDialogValidDate));
+				}, "lucas.application.userScreen.setValidDay", USER_CARD_MANAGER_DIALOG_MESSAGES_ID)) {
+					ReadOnlyIdCard newCard = idCardBean.findIdCardById(id);
+					WebUtils.refreshEntities(ReadOnlyIdCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
+							idCardBean::findIdCardById, true);
+				}
 			}
 		}
 	}
 
 	public void userCardManagerDialogRemoveValidDay() {
-		for (ReadOnlyIdCard card : userCardManagerDialogSelectedUserCards) {
-			Long id = card.getId();
-			if (WebUtils.executeTask(params -> {
-				params.add(card.getId());
-				return idCardBean.setValidDate(id, null);
-			}, "lucas.application.userScreen.removeValidDay", USER_CARD_MANAGER_DIALOG_MESSAGES_ID)) {
-				ReadOnlyIdCard newCard = idCardBean.findIdCardById(id);
-				WebUtils.refreshEntities(ReadOnlyIdCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
-						idCardBean::findIdCardById, true);
+		if (userCardManagerDialogSelectedUsers.size() == 1) {
+			for (ReadOnlyIdCard card : userCardManagerDialogSelectedUserCards) {
+				Long id = card.getId();
+				if (WebUtils.executeTask(params -> {
+					params.add(card.getId());
+					return idCardBean.setValidDate(id, null);
+				}, "lucas.application.userScreen.removeValidDay", USER_CARD_MANAGER_DIALOG_MESSAGES_ID)) {
+					ReadOnlyIdCard newCard = idCardBean.findIdCardById(id);
+					WebUtils.refreshEntities(ReadOnlyIdCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards, newCard,
+							idCardBean::findIdCardById, true);
+				}
 			}
 		}
 	}
 
 	public void userCardManagerDialogRemoveUserCards() {
-		if (!userCardManagerDialogSelectedUserCards.isEmpty()) {
-			ListIterator<ReadOnlyIdCard> it = userCardManagerDialogSelectedUserCards.listIterator();
-			while (it.hasNext()) {
-				WebUtils.executeTask(params -> {
-					ReadOnlyIdCard userCard = it.next();
-					Long id = userCard.getId();
-					Boolean removed = idCardBean.removeIdCard(id);
-					if (removed) {
-						userCardManagerDialogUserCards.remove(userCard);
-						it.remove();
-					}
-					params.add(id);
-					return removed;
-				}, "lucas.application.userScreen.deleteUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
-						Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUser, UserConverter.CONVERTER_ID)));
+		if (userCardManagerDialogSelectedUsers.size() == 1) {
+			if (!userCardManagerDialogSelectedUserCards.isEmpty()) {
+				ListIterator<ReadOnlyIdCard> it = userCardManagerDialogSelectedUserCards.listIterator();
+				while (it.hasNext()) {
+					WebUtils.executeTask(params -> {
+						ReadOnlyIdCard userCard = it.next();
+						Long id = userCard.getId();
+						Boolean removed = idCardBean.removeIdCard(id);
+						if (removed) {
+							userCardManagerDialogUserCards.remove(userCard);
+							it.remove();
+						}
+						params.add(id);
+						return removed;
+					}, "lucas.application.userScreen.deleteUserCard", USER_CARD_MANAGER_DIALOG_MESSAGES_ID,
+							Utils.asList(WebUtils.getAsString(userCardManagerDialogSelectedUsers.get(0), UserConverter.CONVERTER_ID)));
 
+				}
 			}
 		}
 	}
 
 	public void userCardManagerDialogRefreshUserCards() {
+		if (userCardManagerDialogSelectedUsers.size() == 1) {
+			WebUtils.executeTask((params) -> {
+				WebUtils.refreshEntities(ReadOnlyIdCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards,
+						idCardBean::findIdCardById, true);
+				params.add(userCardManagerDialogUserCards.size());
+				return true;
+			}, "lucas.application.userScreen.refreshUserCards", USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+		}
+	}
+
+	@EJB
+	private EmploymentBeanLocal employmentBean;
+
+	private StreamedContent exportUserCardRet = null;
+
+	public void userCardManagerDialogExportUserCards() {
+		exportUserCardRet = null;
 		WebUtils.executeTask((params) -> {
-			WebUtils.refreshEntities(ReadOnlyIdCard.class, userCardManagerDialogUserCards, userCardManagerDialogSelectedUserCards,
-					idCardBean::findIdCardById, true);
-			params.add(userCardManagerDialogUserCards.size());
+			Map<ReadOnlyUser, Set<ReadOnlyIdCard>> idCards = new HashMap<>();
+			int size = 0;
+			for (ReadOnlyUser user : userCardManagerDialogSelectedUsers) {
+				if (!isUserCardBatchMode()) {
+					for (ReadOnlyIdCard userCard : userCardManagerDialogSelectedUserCards) {
+						if (!idCards.containsKey(user)) idCards.put(user, new HashSet<>());
+						idCards.get(user).add(userCard);
+						++size;
+					}
+					break;
+				}
+				Set<ReadOnlyIdCard> cards = new HashSet<>(idCardBean.getIdCards(user.getId()));
+				cards.removeIf((idCard) -> idCard.getBlocked());
+				for (ReadOnlyIdCard userCard : cards) {
+					if (!idCards.containsKey(user)) idCards.put(user, new HashSet<>());
+					idCards.get(user).add(userCard);
+					++size;
+				}
+			}
+			params.add(size);
+			IdCardExporter exporter = new IdCardExporter(13.5f, 10f, new Dimension(90, 54), 5, 2, 0, 10,
+					ImageIO.read(FacesContext.getCurrentInstance().getExternalContext()
+							.getResourceAsStream("/WEB-INF/resources/images/Ausweis_System.png")),
+					ImageIO.read(FacesContext.getCurrentInstance().getExternalContext()
+							.getResourceAsStream("/WEB-INF/resources/images/Handwerkskammer_Rückseite.png")),
+					0xFFFFFF, 0xFFFFFF, IdCardExporter.ofCoords(133, 325, 706, 354), null, IdCardExporter.ofCoords(251, 396, 706, 424), null,
+					IdCardExporter.ofCoords(296, 458, 706, 579), IdCardExporter.ofCoords(243, 458, 282, 508), 0x000000,
+					IdCardExporter.ofCoords(0, 514, 286, 637), null, IdCardExporter.ofCoords(716, 236, 1032, 552), null, '\u25AA', 3, 0xFFFFFF,
+					"Times New Roman", 32, idCards, (user) -> {
+						return userBean.getImage(user.getId());
+					});
+			exporter.setBean(employmentBean);
+			exportUserCardRet = exporter.exportPdf();
 			return true;
-		}, "lucas.application.userScreen.refreshUserCards", USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+		}, "lucas.application.userScreen.exportUserCards", USER_CARD_MANAGER_DIALOG_MESSAGES_ID);
+	}
+
+	public StreamedContent getExportUserCardRet() {
+		return this.exportUserCardRet;
 	}
 
 	/*

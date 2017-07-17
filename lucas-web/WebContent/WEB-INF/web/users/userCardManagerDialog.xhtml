@@ -17,14 +17,19 @@
 			type="florian_haas.lucas.web.converter.UserConverter" />
 		<p:importConstants
 			type="florian_haas.lucas.web.converter.BooleanConverter" />
-		<h:outputText
+		<h:outputText rendered="#{userBean.isUserCardBatchMode()}"
+			value="#{userBean.userCardManagerDialogSelectedUsers.size() += msg['lucas.application.userScreen.userCardManagerDialog.header.batch']} "
+			style="font-weight:bold" />
+		<h:outputText rendered="#{!userBean.isUserCardBatchMode()}"
 			value="#{userBean.userCardManagerDialogUserCards.size()} "
 			style="font-weight:bold" />
-		<h:outputText
+		<h:outputText rendered="#{!userBean.isUserCardBatchMode()}"
 			value="#{msg['lucas.application.userScreen.userCardManagerDialog.header']}"
 			style="font-weight:bold" />
-		<h:outputText value="#{userBean.userCardManagerDialogSelectedUser}"
+		<h:outputText
+			value="#{userBean.userCardManagerDialogSelectedUsers.get(0)}"
 			style="font-weight:bold"
+			rendered="#{!userBean.isUserCardBatchMode()}"
 			converter="#{converterBean.getConverter(UserConverter.CONVERTER_ID)}" />
 		<p:messages for="userCardManagerDialogMessages" showDetail="true"
 			showIcon="true" showSummary="true" closable="true" autoUpdate="true" />
@@ -40,15 +45,15 @@
 					update="@form" />
 				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 				<p:commandButton
-					rendered="#{loginBean.hasPermission(EnumPermission.ID_CARD_BLOCK)}"
+					rendered="#{loginBean.hasPermission(EnumPermission.ID_CARD_BLOCK) &amp;&amp; !userBean.isUserCardBatchMode()}"
 					value="#{msg['lucas.application.userScreen.userCardManagerDialog.blockUserCardButton.name']}"
 					title="#{msg['lucas.application.userScreen.userCardManagerDialog.blockUserCardButton.tooltip']}"
 					icon="fa fa-lock"
 					action="#{userBean.userCardManagerDialogBlockUserCards}"
 					update="@form"
-					disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
+					disabled="#{empty userBean.userCardManagerDialogSelectedUserCards&amp;&amp; !userBean.isUserCardBatchMode()}" />
 				<p:commandButton
-					rendered="#{loginBean.hasPermission(EnumPermission.ID_CARD_UNBLOCK)}"
+					rendered="#{loginBean.hasPermission(EnumPermission.ID_CARD_UNBLOCK)&amp;&amp; !userBean.isUserCardBatchMode()}"
 					value="#{msg['lucas.application.userScreen.userCardManagerDialog.unblockUserCardButton.name']}"
 					title="#{msg['lucas.application.userScreen.userCardManagerDialog.unblockUserCardButton.tooltip']}"
 					icon="fa fa-unlock"
@@ -56,7 +61,7 @@
 					update="@form"
 					disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
 				<ui:fragment
-					rendered="#{loginBean.hasPermission(EnumPermission.ID_CARD_SET_VALID_DATE)}">
+					rendered="#{loginBean.hasPermission(EnumPermission.ID_CARD_SET_VALID_DATE)&amp;&amp; !userBean.isUserCardBatchMode()}">
 					<p:commandButton id="userCardManagerSetValidDayButton"
 						value="#{msg['lucas.application.userScreen.userCardManagerDialog.setValidDayButton.name']}"
 						title="#{msg['lucas.application.userScreen.userCardManagerDialog.setValidDayButton.tooltip']}"
@@ -107,34 +112,55 @@
 						disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}" />
 					<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
 				</ui:fragment>
-				<p:commandButton
-					rendered="#{loginBean.hasPermission(EnumPermission.ID_CARD_REMOVE)}"
-					value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardsButton.name']}"
-					title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardsButton.tooltip']}"
-					icon="fa fa-remove"
-					disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}"
-					actionListener="#{userBean.userCardManagerDialogRemoveUserCards}"
-					update="@form">
-					<p:confirm
-						header="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.header']}"
-						message="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.message']}" />
-				</p:commandButton>
+				<ui:fragment
+					rendered="#{loginBean.hasPermission(EnumPermission.ID_CARD_REMOVE)&amp;&amp; !userBean.isUserCardBatchMode()}">
+					<p:commandButton
+						value="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardsButton.name']}"
+						title="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardsButton.tooltip']}"
+						icon="fa fa-remove"
+						disabled="#{empty userBean.userCardManagerDialogSelectedUserCards}"
+						actionListener="#{userBean.userCardManagerDialogRemoveUserCards}"
+						update="@form">
+						<p:confirm
+							header="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.header']}"
+							message="#{msg['lucas.application.userScreen.userCardManagerDialog.removeUserCardConfirmationDialog.message']}" />
+					</p:commandButton>
+					<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+				</ui:fragment>
 			</p:toolbarGroup>
 			<p:toolbarGroup align="right">
+				<ui:fragment
+					rendered="#{loginBean.hasPermission(EnumPermission.ID_CARD_EXPORT)}">
+					<p:commandButton
+						value="#{msg['lucas.application.userScreen.userCardManagerDialog.exportUserCardsButton.name']}"
+						title="#{msg['lucas.application.userScreen.userCardManagerDialog.exportUserCardsButton.tooltip']}"
+						icon="fa fa-file-pdf-o" styleClass="blockDialogTrigger"
+						action="#{userBean.userCardManagerDialogExportUserCards()}"
+						disabled="#{empty userBean.userCardManagerDialogSelectedUserCards &amp;&amp; !userBean.isUserCardBatchMode()}"
+						update="@form"
+						oncomplete="if (args &amp;&amp; !args.validationFailed){$(&quot;#userCardManagerDialogForm\\:download&quot;).click();}" />
+					<p:commandButton ajax="false" id="download" style="display:none">
+						<p:fileDownload value="#{userBean.exportUserCardRet}" />
+					</p:commandButton>
+					<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+				</ui:fragment>
+				<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
+					<ui:param name="block" value="@form" />
+					<ui:param name="trigger" value="@(.blockDialogTrigger)" />
+				</ui:include>
 				<p:commandButton icon="fa fa-refresh"
 					id="userCardManagerRefreshTableButton"
+					styleClass="blockDialogTrigger"
+					rendered="#{!userBean.isUserCardBatchMode()}"
 					update="userCardManagerDialogUserCardTable"
 					disabled="#{userBean.userCardManagerDialogUserCards.size() &lt;= 0}"
 					title="#{msg['lucas.application.userScreen.userCardManagerDialog.refreshTableButton.tooltip']}"
 					action="#{userBean.userCardManagerDialogRefreshUserCards}" />
-				<ui:include src="/WEB-INF/web/components/blockUI.xhtml">
-					<ui:param name="block" value="userCardManagerDialogUserCardTable" />
-					<ui:param name="trigger" value="userCardManagerRefreshTableButton" />
-				</ui:include>
 			</p:toolbarGroup>
 		</p:toolbar>
 		<p:dataTable id="userCardManagerDialogUserCardTable"
 			tableStyle="table-layout: auto;"
+			rendered="#{!userBean.isUserCardBatchMode()}"
 			selection="#{userBean.userCardManagerDialogSelectedUserCards}"
 			style="margin-top:5px;max-height:350px" resizableColumns="true"
 			liveResize="true" value="#{userBean.userCardManagerDialogUserCards}"
