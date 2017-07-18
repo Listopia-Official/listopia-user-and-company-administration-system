@@ -25,7 +25,7 @@ public class AttendanceScanBean implements Serializable {
 	private IdCardBeanLocal idCardBean;
 
 	@ValidEntityId(entityClass = ReadOnlyIdCard.class, message = "{lucas.application.attendanceScanScreen.scan.message.invalidCardId}")
-	private Long idCard = 0l;
+	private Long idCard = null;
 
 	public Long getIdCard() {
 		return this.idCard;

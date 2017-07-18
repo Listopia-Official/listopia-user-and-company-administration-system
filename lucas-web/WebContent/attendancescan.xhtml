@@ -28,7 +28,7 @@
 						</p:row>
 						<p:row>
 							<p:column>
-								<p:inputNumber id="idCardIdInputNumber"
+								<p:inputNumber id="idCardIdInputNumber" emptyValue="empty"
 									value="#{attendanceScanBean.idCard}" minValue="0"
 									decimalPlaces="0" />
 							</p:column>
@@ -39,7 +39,7 @@
 									value="#{msg['lucas.application.attendanceScanScreen.scanButton.name']}"
 									title="#{msg['lucas.application.attendanceScanScreen.scanButton.title']}"
 									icon="fa fa-barcode" action="#{attendanceScanBean.scan}"
-									update="@form" process="@form" />
+									update="@form" process="@form" resetValues="true" />
 							</p:column>
 						</p:row>
 					</h:panelGrid>
