@@ -35,7 +35,7 @@ public class Account extends EntityBase implements ReadOnlyAccount {
 	@NotNull
 	private Boolean isProtected = Boolean.FALSE;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "account")
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER, mappedBy = "account")
 	@Valid
 	@NotNull
 	private List<@TypeNotNull TransactionLog> transactionLogs = new ArrayList<>();
