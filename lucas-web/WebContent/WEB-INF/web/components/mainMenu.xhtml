@@ -46,7 +46,7 @@
 				value="#{msg['lucas.application.mainScreen.navigationMenu.financesSubmenu.transactionLogsMenuItem.name']}" />
 		</p:submenu>
 		<p:submenu
-			rendered="#{loginBean.hasPermissionsOr([EnumPermission.ITEM_ACCESS_VIEW;EnumPermission.ITEM_SELL])}"
+			rendered="#{loginBean.hasPermissionsOr([EnumPermission.ITEM_ACCESS_VIEW,EnumPermission.ITEM_SELL])}"
 			label="#{msg['lucas.application.mainScreen.navigationMenu.warehouseSubmenu.name']}">
 			<p:menuitem outcome="/items.xhtml"
 				rendered="#{loginBean.hasPermission(EnumPermission.ITEM_ACCESS_VIEW)}"
