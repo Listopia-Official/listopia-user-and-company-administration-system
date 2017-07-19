@@ -161,8 +161,10 @@ public class LoginBean implements LoginBeanLocal {
 	public List<? extends ReadOnlyLoginUser> findLoginUsers(Long id, String username, Long userId, List<Long> roleIds, Boolean useId,
 			Boolean useUsername, Boolean useUserId, Boolean useRoleIds, EnumQueryComparator idComparator, EnumQueryComparator usernameComparator,
 			EnumQueryComparator userIdComparator, EnumQueryComparator roleIdsComparator) {
-		return loginUserDao.findLoginUsers(id, username, userId, roleIds, useId, useUsername, useUserId, useRoleIds, idComparator, usernameComparator,
-				userIdComparator, roleIdsComparator);
+		return (!useId && !useUsername && !useUserId && !useRoleIds
+				&& !this.getSubject().isPermitted(EnumPermission.LOGIN_USER_FIND_ALL.getPermissionString())) ? new ArrayList<>()
+						: loginUserDao.findLoginUsers(id, username, userId, roleIds, useId, useUsername, useUserId, useRoleIds, idComparator,
+								usernameComparator, userIdComparator, roleIdsComparator);
 	}
 
 	@Override

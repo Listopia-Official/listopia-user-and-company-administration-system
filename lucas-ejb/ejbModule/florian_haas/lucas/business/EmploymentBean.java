@@ -46,6 +46,9 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	private AccountBeanLocal accountBean;
 
 	@EJB
+	private LoginBeanLocal loginBean;
+
+	@EJB
 	private GlobalDataBeanLocal globalDataBean;
 
 	@Resource
@@ -146,8 +149,10 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	public List<? extends ReadOnlyEmployment> findEmployments(Long employmentId, Long userId, Long jobId, Set<EnumWorkShift> workShifts,
 			Boolean useEmploymentId, Boolean useUserId, Boolean useJobId, Boolean useWorkShifts, EnumQueryComparator employmentIdComparator,
 			EnumQueryComparator userIdComparator, EnumQueryComparator jobIdComparator, EnumQueryComparator workShiftsComparator) {
-		return employmentDao.findEmployments(employmentId, userId, jobId, workShifts, useEmploymentId, useUserId, useJobId, useWorkShifts,
-				employmentIdComparator, userIdComparator, jobIdComparator, workShiftsComparator);
+		return (!useEmploymentId && !useUserId && !useJobId && !useWorkShifts
+				&& !loginBean.getSubject().isPermitted(EnumPermission.EMPLOYMENT_FIND_ALL.getPermissionString())) ? new ArrayList<>()
+						: employmentDao.findEmployments(employmentId, userId, jobId, workShifts, useEmploymentId, useUserId, useJobId, useWorkShifts,
+								employmentIdComparator, userIdComparator, jobIdComparator, workShiftsComparator);
 	}
 
 	@Override

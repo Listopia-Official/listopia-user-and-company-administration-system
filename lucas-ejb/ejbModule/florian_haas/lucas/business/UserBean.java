@@ -5,7 +5,7 @@ import static florian_haas.lucas.security.EnumPermission.*;
 import java.util.*;
 import java.util.function.*;
 
-import javax.ejb.Stateless;
+import javax.ejb.*;
 import javax.inject.Inject;
 import javax.validation.executable.*;
 
@@ -25,6 +25,9 @@ public class UserBean implements UserBeanLocal {
 	@JPADAO
 	@Inject
 	private JobDAO jobDao;
+
+	@EJB
+	private LoginBeanLocal loginBean;
 
 	@Override
 	@RequiresPermissions(USER_CREATE_PUPIL)
@@ -70,9 +73,13 @@ public class UserBean implements UserBeanLocal {
 			EnumQueryComparator userIdComparator, EnumQueryComparator forenameComparator, EnumQueryComparator surnameComparator,
 			EnumQueryComparator searchUserTypeComparator, EnumQueryComparator ranksComparator, EnumQueryComparator employmentsCountComparator,
 			EnumQueryComparator employmentIdComparator) {
-		return userDao.findUsers(userId, forename, surname, schoolClasses, userType, ranks, employmentsCount, employmentId, useUserId, useForename,
-				useSurname, useSchoolClass, useUserType, useRanks, useEmploymentsCount, useEmploymentId, userIdComparator, forenameComparator,
-				surnameComparator, searchUserTypeComparator, ranksComparator, employmentsCountComparator, employmentIdComparator);
+		return (!useUserId && !useForename && !useSurname && !useSchoolClass && !useUserType && !useRanks && !useEmploymentsCount && !useEmploymentId
+				&& !loginBean.getSubject().isPermitted(EnumPermission.ROOM_FIND_ALL.getPermissionString()))
+						? new ArrayList<>()
+						: userDao.findUsers(userId, forename, surname, schoolClasses, userType, ranks, employmentsCount, employmentId, useUserId,
+								useForename, useSurname, useSchoolClass, useUserType, useRanks, useEmploymentsCount, useEmploymentId,
+								userIdComparator, forenameComparator, surnameComparator, searchUserTypeComparator, ranksComparator,
+								employmentsCountComparator, employmentIdComparator);
 	}
 
 	@Override

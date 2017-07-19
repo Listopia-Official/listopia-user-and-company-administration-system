@@ -3,7 +3,7 @@ package florian_haas.lucas.business;
 import static florian_haas.lucas.security.EnumPermission.*;
 
 import java.time.*;
-import java.util.List;
+import java.util.*;
 
 import javax.annotation.Resource;
 import javax.ejb.*;
@@ -27,6 +27,9 @@ public class AttendanceBean implements AttendanceBeanLocal {
 
 	@EJB
 	private UserBeanLocal userBean;
+
+	@EJB
+	private LoginBeanLocal loginBean;
 
 	@Inject
 	@JPADAO
@@ -106,8 +109,10 @@ public class AttendanceBean implements AttendanceBeanLocal {
 	public List<? extends ReadOnlyAttendancedata> findAttendancedata(Long id, Long userId, Boolean isUserInState, Long timePresentDay, Boolean useId,
 			Boolean useUserId, Boolean useIsUserInState, Boolean useTimePresentDay, EnumQueryComparator idComparator,
 			EnumQueryComparator userIdComparator, EnumQueryComparator timePresentDayComparator) {
-		return attendanceDao.findAttendancedata(id, userId, isUserInState, timePresentDay, useId, useUserId, useIsUserInState, useTimePresentDay,
-				idComparator, userIdComparator, timePresentDayComparator);
+		return (!useId && !useUserId && !useIsUserInState && !useTimePresentDay
+				&& !loginBean.getSubject().isPermitted(EnumPermission.ATTENDANCE_FIND_ALL.getPermissionString())) ? new ArrayList<>()
+						: attendanceDao.findAttendancedata(id, userId, isUserInState, timePresentDay, useId, useUserId, useIsUserInState,
+								useTimePresentDay, idComparator, userIdComparator, timePresentDayComparator);
 	}
 
 	@Override

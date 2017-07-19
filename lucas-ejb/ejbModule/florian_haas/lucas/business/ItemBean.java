@@ -36,6 +36,9 @@ public class ItemBean implements ItemBeanLocal {
 	@EJB
 	private AccountBeanLocal accountBean;
 
+	@EJB
+	private LoginBeanLocal loginBean;
+
 	@Resource
 	private Validator validator;
 
@@ -90,9 +93,13 @@ public class ItemBean implements ItemBeanLocal {
 			EnumQueryComparator idComparator, EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator,
 			EnumQueryComparator itemsAvaibleComparator, EnumQueryComparator fictionalPricePerItemComparator,
 			EnumQueryComparator realPricePerItemComparator) {
-		return itemDao.findItems(itemId, name, description, itemsAvaible, fictionalPricePerItem, realPricePerItem, hasToBeOrdered, useId, useName,
-				useDescription, useItemsAvaible, useFictionalPricePerItem, useRealPricePerItem, useHasToBeOrdered, idComparator, nameComparator,
-				descriptionComparator, itemsAvaibleComparator, fictionalPricePerItemComparator, realPricePerItemComparator);
+		return (!useId && !useName && !useDescription && !useItemsAvaible && !useFictionalPricePerItem && !useFictionalPricePerItem
+				&& !useHasToBeOrdered && !loginBean.getSubject().isPermitted(EnumPermission.EMPLOYMENT_FIND_ALL.getPermissionString()))
+						? new ArrayList<>()
+						: itemDao.findItems(itemId, name, description, itemsAvaible, fictionalPricePerItem, realPricePerItem, hasToBeOrdered, useId,
+								useName, useDescription, useItemsAvaible, useFictionalPricePerItem, useRealPricePerItem, useHasToBeOrdered,
+								idComparator, nameComparator, descriptionComparator, itemsAvaibleComparator, fictionalPricePerItemComparator,
+								realPricePerItemComparator);
 	}
 
 	@Override

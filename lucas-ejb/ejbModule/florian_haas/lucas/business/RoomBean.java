@@ -2,9 +2,9 @@ package florian_haas.lucas.business;
 
 import static florian_haas.lucas.security.EnumPermission.*;
 
-import java.util.List;
+import java.util.*;
 
-import javax.ejb.Stateless;
+import javax.ejb.*;
 import javax.inject.Inject;
 import javax.validation.executable.*;
 
@@ -24,6 +24,9 @@ public class RoomBean implements RoomBeanLocal {
 	@Inject
 	@JPADAO
 	private RoomSectionDAO roomSectionDao;
+
+	@EJB
+	private LoginBeanLocal loginBean;
 
 	@Override
 	@RequiresPermissions(ROOM_CREATE)
@@ -58,9 +61,13 @@ public class RoomBean implements RoomBeanLocal {
 			EnumQueryComparator roomNameComparator, EnumQueryComparator roomSectionIdComparator, EnumQueryComparator sectionsCountComparator,
 			EnumQueryComparator occupiedSectionsCountComparator, EnumQueryComparator freeSectionsCountComparator,
 			EnumQueryComparator companyComparator) {
-		return roomDao.findRooms(roomId, name, roomSectionId, sectionsCount, occupiedSectionsCount, freeSectionsCount, companyId, useRoomId, useName,
-				useRoomSectionId, useSectionsCount, useOccupiedSectionsCount, useFreeSectionsCount, useCompany, roomIdComparator, roomNameComparator,
-				roomSectionIdComparator, sectionsCountComparator, occupiedSectionsCountComparator, freeSectionsCountComparator, companyComparator);
+		return (!useRoomId && !useName && !useRoomSectionId && !useSectionsCount && !useOccupiedSectionsCount && !useFreeSectionsCount && !useCompany
+				&& !loginBean.getSubject().isPermitted(EnumPermission.ROOM_FIND_ALL.getPermissionString()))
+						? new ArrayList<>()
+						: roomDao.findRooms(roomId, name, roomSectionId, sectionsCount, occupiedSectionsCount, freeSectionsCount, companyId,
+								useRoomId, useName, useRoomSectionId, useSectionsCount, useOccupiedSectionsCount, useFreeSectionsCount, useCompany,
+								roomIdComparator, roomNameComparator, roomSectionIdComparator, sectionsCountComparator,
+								occupiedSectionsCountComparator, freeSectionsCountComparator, companyComparator);
 	}
 
 	@Override

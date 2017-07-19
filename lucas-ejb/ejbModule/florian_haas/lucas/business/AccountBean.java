@@ -4,7 +4,7 @@ import static florian_haas.lucas.security.EnumPermission.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
 
 import javax.annotation.Resource;
 import javax.ejb.*;
@@ -253,8 +253,12 @@ public class AccountBean implements AccountBeanLocal {
 			Boolean blocked, Boolean isProtected, Boolean useId, Boolean useOwnerId, Boolean useOwnerType, Boolean useBankBalance, Boolean useBlocked,
 			Boolean useProtected, EnumQueryComparator idComparator, EnumQueryComparator ownerIdComparator, EnumQueryComparator ownerTypeComparator,
 			EnumQueryComparator bankBalanceComparator) {
-		return accountDao.findAccounts(id, ownerId, ownerType, bankBalance, blocked, isProtected, useId, useOwnerId, useOwnerType, useBankBalance,
-				useBlocked, useProtected, idComparator, ownerIdComparator, ownerTypeComparator, bankBalanceComparator);
+		return (!useId && !useOwnerId && !useOwnerType && !useBankBalance && !useBlocked && !useProtected
+				&& !loginBean.getSubject().isPermitted(EnumPermission.ACCOUNT_FIND_ALL.getPermissionString()))
+						? new ArrayList<>()
+						: accountDao.findAccounts(id, ownerId, ownerType, bankBalance, blocked, isProtected, useId, useOwnerId, useOwnerType,
+								useBankBalance, useBlocked, useProtected, idComparator, ownerIdComparator, ownerTypeComparator,
+								bankBalanceComparator);
 	}
 
 	@Override
@@ -279,11 +283,16 @@ public class AccountBean implements AccountBeanLocal {
 			EnumQueryComparator actionComparator, EnumQueryComparator actionTypeComparator, EnumQueryComparator relatedAccountIdComparator,
 			EnumQueryComparator amountComparator, EnumQueryComparator previousBankBalanceComparator, EnumQueryComparator currentBankBalanceComparator,
 			EnumQueryComparator bankUserIdComparator, EnumQueryComparator commentComparator) {
-		return transactionLogDao.findTransactionLogs(id, accountId, dateTime, action, actionType, relatedAccountId, amount, previousBankBalance,
-				currentBankBalance, bankUserId, comment, useId, useAccountId, useDateTime, useAction, useActionType, useRelatedAccountId, useAmount,
-				usePreviousBankBalance, useCurrentBankBalance, useBankUser, useComment, idComparator, accountIdComparator, dateTimeComparator,
-				actionComparator, actionTypeComparator, relatedAccountIdComparator, amountComparator, previousBankBalanceComparator,
-				currentBankBalanceComparator, bankUserIdComparator, commentComparator);
+		return (!useId && !useAccountId && !useDateTime && !useAction && !useActionType && !useRelatedAccountId && !useAmount
+				&& !usePreviousBankBalance && !useCurrentBankBalance && !useBankUser && !useComment
+				&& !loginBean.getSubject().isPermitted(EnumPermission.ACCOUNT_FIND_ALL_TRANSACTION_LOGS.getPermissionString()))
+						? new ArrayList<>()
+						: transactionLogDao.findTransactionLogs(id, accountId, dateTime, action, actionType, relatedAccountId, amount,
+								previousBankBalance, currentBankBalance, bankUserId, comment, useId, useAccountId, useDateTime, useAction,
+								useActionType, useRelatedAccountId, useAmount, usePreviousBankBalance, useCurrentBankBalance, useBankUser, useComment,
+								idComparator, accountIdComparator, dateTimeComparator, actionComparator, actionTypeComparator,
+								relatedAccountIdComparator, amountComparator, previousBankBalanceComparator, currentBankBalanceComparator,
+								bankUserIdComparator, commentComparator);
 	}
 
 	@Override

@@ -4,7 +4,7 @@ import static florian_haas.lucas.security.EnumPermission.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 
 import javax.annotation.Resource;
 import javax.ejb.*;
@@ -45,6 +45,9 @@ public class CompanyBean implements CompanyBeanLocal {
 
 	@EJB
 	private JobBeanLocal jobBean;
+
+	@EJB
+	private LoginBeanLocal loginBean;
 
 	@EJB
 	private UserBeanLocal userBean;
@@ -126,10 +129,14 @@ public class CompanyBean implements CompanyBeanLocal {
 			Boolean useJobCount, EnumQueryComparator idComparator, EnumQueryComparator nameComparator, EnumQueryComparator descriptionComparator,
 			EnumQueryComparator roomSectionIdComparator, EnumQueryComparator companyTypeComparator, EnumQueryComparator parentCompanyIdComparator,
 			EnumQueryComparator jobIdComparator, EnumQueryComparator jobCountComparator) {
-		return companyDao.findCompanies(companyId, name, description, roomSectionId, companyType, parentCompanyId, jobId, areEmployeesRequired,
-				jobCount, useId, useName, useDescription, useRoomSectionId, useCompanyType, useParentCompanyId, useJobId, useAreEmployeesRequired,
-				useJobCount, idComparator, nameComparator, descriptionComparator, roomSectionIdComparator, companyTypeComparator,
-				parentCompanyIdComparator, jobIdComparator, jobCountComparator);
+		return (!useId && !useName && !useDescription && !useRoomSectionId && !useCompanyType && !useParentCompanyId && !useJobId
+				&& !useAreEmployeesRequired && !useJobCount
+				&& !loginBean.getSubject().isPermitted(EnumPermission.COMPANY_FIND_ALL.getPermissionString()))
+						? new ArrayList<>()
+						: companyDao.findCompanies(companyId, name, description, roomSectionId, companyType, parentCompanyId, jobId,
+								areEmployeesRequired, jobCount, useId, useName, useDescription, useRoomSectionId, useCompanyType, useParentCompanyId,
+								useJobId, useAreEmployeesRequired, useJobCount, idComparator, nameComparator, descriptionComparator,
+								roomSectionIdComparator, companyTypeComparator, parentCompanyIdComparator, jobIdComparator, jobCountComparator);
 	}
 
 	@Override

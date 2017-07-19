@@ -4,7 +4,7 @@ import static florian_haas.lucas.security.EnumPermission.*;
 
 import java.util.*;
 
-import javax.ejb.Stateless;
+import javax.ejb.*;
 import javax.inject.Inject;
 import javax.validation.executable.*;
 
@@ -20,6 +20,9 @@ public class LoginUserRoleBean implements LoginUserRoleBeanLocal {
 	@Inject
 	@JPADAO
 	private LoginUserRoleDAO loginUserRoleDao;
+
+	@EJB
+	private LoginBeanLocal loginBean;
 
 	@Override
 	@RequiresPermissions(LOGIN_ROLE_CREATE)
@@ -82,8 +85,10 @@ public class LoginUserRoleBean implements LoginUserRoleBeanLocal {
 	public List<? extends ReadOnlyLoginUserRole> findLoginUserRoles(Long id, String name, Set<String> permissions, Long loginUserId, Boolean useId,
 			Boolean useName, Boolean usePermissions, Boolean useLoginUserId, EnumQueryComparator idComparator, EnumQueryComparator nameComparator,
 			EnumQueryComparator permissionsComparator, EnumQueryComparator loginUserIdComparator) {
-		return loginUserRoleDao.findLoginUserRoles(id, name, permissions, loginUserId, useId, useName, usePermissions, useLoginUserId, idComparator,
-				nameComparator, permissionsComparator, loginUserIdComparator);
+		return (!useId && !useName && !usePermissions && !useLoginUserId
+				&& !loginBean.getSubject().isPermitted(EnumPermission.LOGIN_ROLE_FIND_ALL.getPermissionString())) ? new ArrayList<>()
+						: loginUserRoleDao.findLoginUserRoles(id, name, permissions, loginUserId, useId, useName, usePermissions, useLoginUserId,
+								idComparator, nameComparator, permissionsComparator, loginUserIdComparator);
 	}
 
 	@Override

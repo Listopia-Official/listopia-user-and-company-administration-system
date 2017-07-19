@@ -4,7 +4,7 @@ import static florian_haas.lucas.security.EnumPermission.*;
 
 import java.util.*;
 
-import javax.ejb.Stateless;
+import javax.ejb.*;
 import javax.inject.Inject;
 import javax.validation.executable.*;
 
@@ -29,6 +29,9 @@ public class JobBean implements JobBeanLocal {
 	@Inject
 	@JPADAO
 	private UserDAO userDao;
+
+	@EJB
+	private LoginBeanLocal loginBean;
 
 	@Override
 	@RequiresPermissions(JOB_CREATE)
@@ -66,11 +69,15 @@ public class JobBean implements JobBeanLocal {
 			EnumQueryComparator descriptionComparator, EnumQueryComparator companyIdComparator, EnumQueryComparator salaryClassComparator,
 			EnumQueryComparator requiredEmployeesCountComparator, EnumQueryComparator positionComparator, EnumQueryComparator employmentIdComparator,
 			EnumQueryComparator employmentsCountComparator) {
-		return jobDao.findJobs(jobId, name, description, companyId, salaryClass, requiredEmployeesCount, position, employmentId, employmentsCount,
-				areEmploymentsRequired, useJobId, useName, useDescription, useCompanyId, useSalaryClass, useRequiredEmployeesCount,
-				useEmployeePosition, useEmploymentId, useEmploymentsCount, useAreEmploymentsRequired, jobIdComparator, nameComparator,
-				descriptionComparator, companyIdComparator, salaryClassComparator, requiredEmployeesCountComparator, positionComparator,
-				employmentIdComparator, employmentsCountComparator);
+		return (!useJobId && !useName && !useDescription && !useCompanyId && !useSalaryClass && !useRequiredEmployeesCount && !useEmployeePosition
+				&& !useEmploymentId && !useEmploymentsCount && !useAreEmploymentsRequired
+				&& !loginBean.getSubject().isPermitted(EnumPermission.JOB_FIND_ALL.getPermissionString()))
+						? new ArrayList<>()
+						: jobDao.findJobs(jobId, name, description, companyId, salaryClass, requiredEmployeesCount, position, employmentId,
+								employmentsCount, areEmploymentsRequired, useJobId, useName, useDescription, useCompanyId, useSalaryClass,
+								useRequiredEmployeesCount, useEmployeePosition, useEmploymentId, useEmploymentsCount, useAreEmploymentsRequired,
+								jobIdComparator, nameComparator, descriptionComparator, companyIdComparator, salaryClassComparator,
+								requiredEmployeesCountComparator, positionComparator, employmentIdComparator, employmentsCountComparator);
 	}
 
 	@Override
