@@ -24,8 +24,10 @@ import florian_haas.lucas.web.util.WebUtils;
 public class LoginUserBean extends BaseBean<ReadOnlyLoginUser> {
 
 	public LoginUserBean() {
-		super("loginUser", 4);
+		super(BASE_NAME, 4);
 	}
+
+	public static final String BASE_NAME = "loginUser";
 
 	private static final long serialVersionUID = -3674051794597830546L;
 

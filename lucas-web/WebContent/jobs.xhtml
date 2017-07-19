@@ -68,18 +68,33 @@
 						message="#{msg['lucas.application.jobScreen.removeJobsConfirmDialog.message']}" />
 				</p:commandButton>
 			</ui:fragment>
-		</p:toolbarGroup>
-		<p:toolbarGroup align="right">
-			<p:commandButton resetValues="true"
-				rendered="#{loginBean.hasPermission(EnumPermission.JOB_COMPUTE_REQUIRED_EMPLOYMENTS)}"
-				value="#{msg['lucas.application.jobScreen.computeMissingEmploymentsButton.name']}"
-				title="#{msg['lucas.application.jobScreen.computeMissingEmploymentsButton.tooltip']}"
-				icon="fa fa-gears" styleClass="blockAllTrigger"
-				update="computeMissingEmploymentsDialogForm" process="@this"
-				action="#{jobBean.initComputeMissingEmploymentsDialog}"
-				oncomplete="PF('computeMissingEmploymentsDialog').show()" />
+			<ui:fragment
+				rendered="#{loginBean.hasPermission(EnumPermission.JOB_COMPUTE_REQUIRED_EMPLOYMENTS)}">
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+				<p:commandButton resetValues="true"
+					value="#{msg['lucas.application.jobScreen.computeMissingEmploymentsButton.name']}"
+					title="#{msg['lucas.application.jobScreen.computeMissingEmploymentsButton.tooltip']}"
+					icon="fa fa-gears" styleClass="blockAllTrigger"
+					update="computeMissingEmploymentsDialogForm" process="@this"
+					action="#{jobBean.initComputeMissingEmploymentsDialog}"
+					oncomplete="PF('computeMissingEmploymentsDialog').show()" />
+			</ui:fragment>
 		</p:toolbarGroup>
 	</ui:define>
+	<ui:define name="referencesArea">
+		<p:menuitem
+			value="#{msg['lucas.application.jobScreen.references.companiesButton.name']}"
+			icon="fa fa-government"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.COMPANY_ACCESS_VIEW,EnumPermission.COMPANY_FIND_BY_ID])}"
+			action="#{jobBean.showReferencedCompanies}" />
+		<p:menuitem
+			value="#{msg['lucas.application.jobScreen.references.employmentsButton.name']}"
+			icon="fa fa-group"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.EMPLOYMENT_ACCESS_VIEW,EnumPermission.EMPLOYMENT_FIND_BY_ID,EnumPermission.JOB_GET_EMPLOYMENTS])}"
+			action="#{jobBean.showReferencedEmployments}" />
+	</ui:define>
+	<ui:param name="referencesButtonDisabled"
+		value="#{loginBean.hasPermissionsAnd([EnumPermission.COMPANY_ACCESS_VIEW,EnumPermission.COMPANY_FIND_BY_ID])||loginBean.hasPermissionsAnd([EnumPermission.EMPLOYMENT_ACCESS_VIEW,EnumPermission.EMPLOYMENT_FIND_BY_ID,EnumPermission.JOB_GET_EMPLOYMENTS])}" />
 	<ui:define name="searchCriteria">
 		<p:row>
 			<p:column>
@@ -450,8 +465,7 @@
 		</p:column>
 		<p:column exportable="#{jobBean.resultsDatatableColumns[3]}"
 			headerText="#{msg['lucas.application.jobScreen.jobSearchResultsTable.companyColumn.name']}"
-			sortable="false"
-			visible="#{jobBean.resultsDatatableColumns[3]}">
+			sortable="false" visible="#{jobBean.resultsDatatableColumns[3]}">
 			<h:outputText value="#{entity.company}"
 				converter="#{converterBean.getConverter(CompanyConverter.CONVERTER_ID)}" />
 		</p:column>

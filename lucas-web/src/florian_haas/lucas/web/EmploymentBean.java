@@ -20,6 +20,12 @@ import florian_haas.lucas.web.util.WebUtils;
 @ViewScoped
 public class EmploymentBean extends BaseBean<ReadOnlyEmployment> {
 
+	public EmploymentBean() {
+		super(BASE_NAME, 4);
+	}
+
+	public static final String BASE_NAME = "employment";
+
 	private static final long serialVersionUID = 6550522987925022505L;
 
 	@EJB
@@ -70,10 +76,6 @@ public class EmploymentBean extends BaseBean<ReadOnlyEmployment> {
 
 	@QueryComparator(category = EnumQueryComparatorCategory.ARRAY)
 	private EnumQueryComparator searchEmploymentWorkShiftsComparator = EnumQueryComparator.MEMBER_OF;
-
-	public EmploymentBean() {
-		super("employment", 4);
-	}
 
 	public Long getSearchEmploymentId() {
 		return this.searchEmploymentId;
@@ -383,4 +385,14 @@ public class EmploymentBean extends BaseBean<ReadOnlyEmployment> {
 	/*
 	 * -------------------- Distribute Jobs Dialog End --------------------
 	 */
+
+	public String showReferencedUsers() {
+		navigateToBeanSingle(UserBean.BASE_NAME, (employment) -> employment.getUser().getId());
+		return "/users?faces-redirect=true";
+	}
+
+	public String showReferencedJobs() {
+		navigateToBeanSingle(JobBean.BASE_NAME, (employment) -> employment.getJob().getId());
+		return "/jobs?faces-redirect=true";
+	}
 }

@@ -83,4 +83,8 @@ public interface CompanyBeanLocal {
 
 	public List<? extends ReadOnlyPurchaseLog> getPurchaseLogs(@ValidEntityId(entityClass = ReadOnlyCompany.class) Long companyId);
 
+	public List<? extends ReadOnlyJob> getJobs(@ValidEntityId(entityClass = ReadOnlyCompany.class) Long companyId);
+
+	public List<? extends ReadOnlyEmployment> getEmployments(@ValidEntityId(entityClass = ReadOnlyCompany.class) Long companyId);
+
 }

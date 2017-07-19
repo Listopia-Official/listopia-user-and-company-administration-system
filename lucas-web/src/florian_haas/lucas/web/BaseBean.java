@@ -2,7 +2,9 @@ package florian_haas.lucas.web;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Function;
 
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.validation.constraints.NotNull;
 
@@ -42,6 +44,43 @@ public abstract class BaseBean<T extends ReadOnlyEntity> implements Serializable
 		for (int i = 0; i < maxColumnCount; i++) {
 			resultsDatatableColumns.add(Boolean.TRUE);
 		}
+	}
+
+	@PostConstruct
+	public void onPostConstruct() {
+		WebUtils.executeTask((params) -> {
+			ViewNavigationBean bean = WebUtils.getCDIManagedBean(ViewNavigationBean.class);
+			List<Long> ids = bean.getIds(getViewID(this.baseName));
+			if (ids != null) {
+				for (Long id : ids) {
+					T entity = entityGetter(id);
+					if (!searchResults.contains(entity)) this.searchResults.add(entity);
+				}
+			}
+			params.add(searchResults.size());
+			return searchResults.size() > 0;
+		}, Boolean.TRUE, Boolean.FALSE, "lucas.application.dataTemplate.init.message");
+	}
+
+	protected final String getViewID(String baseName) {
+		return "lucas:view_" + baseName;
+	}
+
+	protected void navigateToBeanSingle(String baseName, Function<T, Long> idGetter) {
+		navigateToBean(baseName, (entity) -> {
+			Long id = idGetter.apply(entity);
+			return id == null ? null : Arrays.asList(id);
+		});
+	}
+
+	protected void navigateToBean(String baseName, Function<T, List<Long>> idGetter) {
+		ViewNavigationBean bean = WebUtils.getCDIManagedBean(ViewNavigationBean.class);
+		List<Long> ids = new ArrayList<>();
+		for (T entity : selectedEntities) {
+			List<Long> ids2 = idGetter.apply(entity);
+			if (ids2 != null) ids.addAll(ids2);
+		}
+		bean.setIds(getViewID(baseName), ids);
 	}
 
 	public String getBaseName() {

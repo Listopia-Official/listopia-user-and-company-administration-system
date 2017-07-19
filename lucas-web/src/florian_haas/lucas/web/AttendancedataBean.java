@@ -28,8 +28,10 @@ public class AttendancedataBean extends BaseBean<ReadOnlyAttendancedata> {
 	private AttendanceBeanLocal attendanceBean;
 
 	public AttendancedataBean() {
-		super("attendancedata", 4);
+		super(BASE_NAME, 4);
 	}
+
+	public static final String BASE_NAME = "attendancedata";
 
 	@NotNull
 	@Min(0)
@@ -246,6 +248,11 @@ public class AttendancedataBean extends BaseBean<ReadOnlyAttendancedata> {
 			}, "lucas.application.attendancedataScreen.reset.message");
 		});
 		WebUtils.refreshEntities(ReadOnlyAttendancedata.class, searchResults, selectedEntities, attendanceBean::findById, Boolean.TRUE);
+	}
+
+	public String showReferencedUsers() {
+		navigateToBeanSingle(UserBean.BASE_NAME, (attendancedata) -> attendancedata.getUser().getId());
+		return "/users?faces-redirect=true";
 	}
 
 }

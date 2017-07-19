@@ -118,6 +118,25 @@
 				disabled="#{accountBean.selectedEntities.size() != 1}" />
 		</p:toolbarGroup>
 	</ui:define>
+	<ui:define name="referencesArea">
+		<p:menuitem
+			value="#{msg['lucas.application.accountScreen.references.usersButton.name']}"
+			icon="fa fa-user"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.USER_FIND_BY_ID,EnumPermission.USER_ACCESS_VIEW])}"
+			action="#{accountBean.showReferencedUsers}" />
+		<p:menuitem
+			value="#{msg['lucas.application.accountScreen.references.companiesButton.name']}"
+			icon="fa fa-building"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.COMPANY_FIND_BY_ID,EnumPermission.COMPANY_ACCESS_VIEW])}"
+			action="#{accountBean.showReferencedCompanies}" />
+		<p:menuitem
+			value="#{msg['lucas.application.accountScreen.references.transactionLogsButton.name']}"
+			icon="fa fa-list"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.ACCOUNT_FIND_TRANSACTION_LOG_BY_ID,EnumPermission.ACCOUNT_VIEW_TRANSACTION_LOGS])}"
+			action="#{accountBean.showReferencedTransactionLogs}" />
+	</ui:define>
+	<ui:param name="referencesButtonDisabled"
+		value="#{loginBean.hasPermissionsAnd([EnumPermission.ACCOUNT_FIND_TRANSACTION_LOG_BY_ID,EnumPermission.ACCOUNT_VIEW_TRANSACTION_LOGS])||loginBean.hasPermissionsAnd([EnumPermission.USER_FIND_BY_ID,EnumPermission.USER_ACCESS_VIEW])||loginBean.hasPermissionsAnd([EnumPermission.COMPANY_FIND_BY_ID,EnumPermission.COMPANY_ACCESS_VIEW])}" />
 	<ui:define name="searchCriteria">
 		<p:row>
 			<p:column>

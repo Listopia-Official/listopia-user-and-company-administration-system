@@ -32,8 +32,10 @@ import florian_haas.lucas.web.util.WebUtils;
 public class UserBean extends BaseBean<ReadOnlyUser> {
 
 	public UserBean() {
-		super("user", 7);
+		super(BASE_NAME, 7);
 	}
+
+	public static final String BASE_NAME = "user";
 
 	private static final long serialVersionUID = -2324504686340886417L;
 
@@ -1228,5 +1230,26 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 	/*
 	 * -------------------- Job Requests Manager Dialog End --------------------
 	 */
+
+	public String showReferencedAccounts() {
+		navigateToBeanSingle(AccountBean.BASE_NAME, (user) -> user.getAccount().getId());
+		return "/accounts?faces-redirect=true";
+	}
+
+	public String showReferencedAttendancedata() {
+		navigateToBeanSingle(AttendancedataBean.BASE_NAME, (user) -> user.getAttendancedata().getId());
+		return "/attendancedata?faces-redirect=true";
+	}
+
+	public String showReferencedEmployments() {
+		navigateToBean(EmploymentBean.BASE_NAME, (user) -> {
+			List<Long> ids = new ArrayList<>();
+			for (ReadOnlyEmployment employment : employmentBean.getEmploymentsByUser(user.getId())) {
+				ids.add(employment.getId());
+			}
+			return ids;
+		});
+		return "/employments?faces-redirect=true";
+	}
 
 }

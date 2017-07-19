@@ -129,6 +129,25 @@
 				disabled="#{userBean.selectedEntities.size() &lt;= 0 || true}" />
 		</p:toolbarGroup>
 	</ui:define>
+	<ui:define name="referencesArea">
+		<p:menuitem
+			value="#{msg['lucas.application.userScreen.references.accountButton.name']}"
+			icon="fa fa-credit-card"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.ACCOUNT_ACCESS_VIEW,EnumPermission.ACCOUNT_FIND_BY_ID])}"
+			action="#{userBean.showReferencedAccounts}" />
+		<p:menuitem
+			value="#{msg['lucas.application.userScreen.references.attendancedataButton.name']}"
+			icon="fa fa-user-secret"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.ATTENDANCE_ACCESS_VIEW,EnumPermission.ATTENDANCE_FIND_BY_ID])}"
+			action="#{userBean.showReferencedAttendancedata}" />
+		<p:menuitem
+			value="#{msg['lucas.application.userScreen.references.employmentsButton.name']}"
+			icon="fa fa-group"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.EMPLOYMENT_ACCESS_VIEW,EnumPermission.EMPLOYMENT_FIND_BY_ID,EnumPermission.EMPLOYMENT_GET_FROM_USER])}"
+			action="#{userBean.showReferencedEmployments}" />
+	</ui:define>
+	<ui:param name="referencesButtonDisabled"
+		value="#{loginBean.hasPermissionsAnd([EnumPermission.ACCOUNT_ACCESS_VIEW,EnumPermission.ACCOUNT_FIND_BY_ID])||loginBean.hasPermissionsAnd([EnumPermission.ATTENDANCE_ACCESS_VIEW,EnumPermission.ATTENDANCE_FIND_BY_ID])||loginBean.hasPermissionsAnd([EnumPermission.EMPLOYMENT_ACCESS_VIEW,EnumPermission.EMPLOYMENT_FIND_BY_ID,EnumPermission.EMPLOYMENT_GET_FROM_USER])}" />
 	<ui:define name="searchCriteria">
 		<p:row>
 			<p:column>

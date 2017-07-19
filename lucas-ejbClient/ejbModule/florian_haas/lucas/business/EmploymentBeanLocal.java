@@ -55,4 +55,6 @@ public interface EmploymentBeanLocal {
 
 	public List<? extends ReadOnlyEmployment> getEmploymentsByData(@NotNull String data, @NotNull @Min(1) Integer resultsCount);
 
+	public Set<? extends ReadOnlyEmployment> getEmploymentsByUser(@ValidEntityId(entityClass = ReadOnlyUser.class) Long userId);
+
 }

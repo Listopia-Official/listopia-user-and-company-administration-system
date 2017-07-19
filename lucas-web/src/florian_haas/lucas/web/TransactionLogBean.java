@@ -22,6 +22,8 @@ import florian_haas.lucas.web.util.WebUtils;
 @ViewScoped
 public class TransactionLogBean extends BaseBean<ReadOnlyTransactionLog> {
 
+	public static final String BASE_NAME = "transactionLog";
+
 	private static final long serialVersionUID = 1674970990233017621L;
 
 	@EJB
@@ -31,7 +33,7 @@ public class TransactionLogBean extends BaseBean<ReadOnlyTransactionLog> {
 	private GlobalDataBeanLocal globalDataBean;
 
 	public TransactionLogBean() {
-		super("transactionLog", 11);
+		super(BASE_NAME, 11);
 		this.getResultsDatatableColumns().set(6, Boolean.FALSE);
 		this.getResultsDatatableColumns().set(8, Boolean.FALSE);
 	}
@@ -470,6 +472,21 @@ public class TransactionLogBean extends BaseBean<ReadOnlyTransactionLog> {
 				return key != null ? WebUtils.getTranslatedMessage(key, params.toArray(new Object[params.size()])) : null;
 			}, Utils.asList(log.getId(), WebUtils.getAsString(log.getAccount(), AccountConverter.CONVERTER_ID)));
 		}
+	}
+
+	public String showReferencedAccount() {
+		navigateToBeanSingle(AccountBean.BASE_NAME, (log) -> log.getAccount().getId());
+		return "/accounts?faces-redirect=true";
+	}
+
+	public String showReferencedReferencedAccount() {
+		navigateToBeanSingle(AccountBean.BASE_NAME, (log) -> log.getRelatedAccount() != null ? log.getRelatedAccount().getId() : null);
+		return "/accounts?faces-redirect=true";
+	}
+
+	public String showReferencedBankUser() {
+		navigateToBeanSingle(LoginUserBean.BASE_NAME, (log) -> log.getBankUser() != null ? log.getBankUser().getId() : null);
+		return "/loginUsers?faces-redirect=true";
 	}
 
 }

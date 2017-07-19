@@ -24,13 +24,15 @@ import florian_haas.lucas.web.util.WebUtils;
 @ViewScoped
 public class ItemBean extends BaseBean<ReadOnlyItem> {
 
+	public static final String BASE_NAME = "item";
+
 	private static final long serialVersionUID = -897326768889144895L;
 
 	@EJB
 	private ItemBeanLocal itemBean;
 
 	public ItemBean() {
-		super("item", 7);
+		super(BASE_NAME, 7);
 	}
 
 	@NotNull

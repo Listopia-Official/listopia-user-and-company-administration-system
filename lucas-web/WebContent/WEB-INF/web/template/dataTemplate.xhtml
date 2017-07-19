@@ -5,7 +5,8 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:define name="templateContent">
-		<p:importEnum type="florian_haas.lucas.persistence.EnumQueryComparator" />
+		<p:importEnum
+			type="florian_haas.lucas.persistence.EnumQueryComparator" />
 		<p:importConstants
 			type="florian_haas.lucas.persistence.EnumQueryComparator" />
 	</ui:define>
@@ -17,6 +18,15 @@
 					style="width:99%!important;margin-left:auto;margin-right:auto;margin-top:10px!important"
 					styleClass="toolbar dataToolbar">
 					<ui:insert name="buttonArea" />
+					<p:toolbarGroup align="right">
+						<p:menuButton
+							value="#{msg['lucas.application.dataTemplate.referencesMenuButton.name']}"
+							icon="fa fa-external-link"
+							disabled="#{siteBean.selectedEntities.size() &lt;=0}"
+							rendered="#{referencesButtonDisabled == null ? false : referencesButtonDisabled}">
+							<ui:insert name="referencesArea" />
+						</p:menuButton>
+					</p:toolbarGroup>
 				</p:toolbar>
 			</h:form>
 			<p:accordionPanel multiple="true" id="dataAccorditionPanel"
@@ -100,7 +110,8 @@
 									value="#{msg['lucas.application.dataTemplate.searchResults.resultsTableColumnToggler.name']}"
 									icon="fa fa-calculator"
 									title="#{msg['lucas.application.dataTemplate.searchResults.resultsTableColumnToggler.tooltip']}" />
-								<p:columnToggler datasource="#{siteBean.baseName}SearchResultsTable"
+								<p:columnToggler
+									datasource="#{siteBean.baseName}SearchResultsTable"
 									trigger="resultsTableColumnToggler">
 									<p:ajax event="toggle" listener="#{siteBean.onToggle}" />
 								</p:columnToggler>

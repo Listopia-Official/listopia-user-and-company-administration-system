@@ -56,18 +56,33 @@
 						message="#{msg['lucas.application.employmentScreen.removeEmploymentsConfirmDialog.message']}" />
 				</p:commandButton>
 			</ui:fragment>
-		</p:toolbarGroup>
-		<p:toolbarGroup align="right">
-			<p:commandButton
-				rendered="#{loginBean.hasPermission(EnumPermission.EMPLOYMENT_DISTRIBUTE_JOBS)}"
-				value="#{msg['lucas.application.employmentScreen.jobDistributionButton.name']}"
-				title="#{msg['lucas.application.employmentScreen.jobDistributionButton.tooltip']}"
-				icon="fa fa-clipboard" styleClass="blockAllTrigger"
-				update="distributeJobsDialogForm" process="@this"
-				action="#{employmentBean.initDistributeJobsDialog}"
-				oncomplete="PF('distributeJobsDialog').show()" />
+			<ui:fragment
+				rendered="#{loginBean.hasPermission(EnumPermission.EMPLOYMENT_DISTRIBUTE_JOBS)}">
+				<ui:include src="/WEB-INF/web/components/toolbarSeparator.xhtml" />
+				<p:commandButton
+					value="#{msg['lucas.application.employmentScreen.jobDistributionButton.name']}"
+					title="#{msg['lucas.application.employmentScreen.jobDistributionButton.tooltip']}"
+					icon="fa fa-clipboard" styleClass="blockAllTrigger"
+					update="distributeJobsDialogForm" process="@this"
+					action="#{employmentBean.initDistributeJobsDialog}"
+					oncomplete="PF('distributeJobsDialog').show()" />
+			</ui:fragment>
 		</p:toolbarGroup>
 	</ui:define>
+	<ui:define name="referencesArea">
+		<p:menuitem
+			value="#{msg['lucas.application.employmentScreen.references.usersButton.name']}"
+			icon="fa fa-user"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.USER_ACCESS_VIEW,EnumPermission.USER_FIND_BY_ID])}"
+			action="#{employmentBean.showReferencedUsers}" />
+		<p:menuitem
+			value="#{msg['lucas.application.employmentScreen.references.jobsButton.name']}"
+			icon="fa fa-suitcase"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.JOB_ACCESS_VIEW,EnumPermission.JOB_FIND_BY_ID])}"
+			action="#{employmentBean.showReferencedJobs}" />
+	</ui:define>
+	<ui:param name="referencesButtonDisabled"
+		value="#{loginBean.hasPermissionsAnd([EnumPermission.USER_ACCESS_VIEW,EnumPermission.USER_FIND_BY_ID])||loginBean.hasPermissionsAnd([EnumPermission.JOB_ACCESS_VIEW,EnumPermission.JOB_FIND_BY_ID])}" />
 	<ui:define name="searchCriteria">
 		<p:row>
 			<p:column>

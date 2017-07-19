@@ -238,4 +238,10 @@ public class EmploymentBean implements EmploymentBeanLocal {
 	public List<? extends ReadOnlyEmployment> getEmploymentsByData(String data, Integer resultsCount) {
 		return employmentDao.getEmploymentsFromData(data, resultsCount);
 	}
+
+	@Override
+	@RequiresPermissions(EMPLOYMENT_GET_FROM_USER)
+	public Set<? extends ReadOnlyEmployment> getEmploymentsByUser(Long userId) {
+		return userDao.findById(userId).getEmployments();
+	}
 }

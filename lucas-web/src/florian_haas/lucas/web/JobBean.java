@@ -23,6 +23,8 @@ import florian_haas.lucas.web.util.WebUtils;
 @ViewScoped
 public class JobBean extends BaseBean<ReadOnlyJob> {
 
+	public static final String BASE_NAME = "job";
+
 	private static final long serialVersionUID = 1555704972109670099L;
 
 	@EJB
@@ -35,7 +37,7 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 	private CompanyBeanLocal companyBean;
 
 	public JobBean() {
-		super("job", 8);
+		super(BASE_NAME, 8);
 	}
 
 	@Override
@@ -650,4 +652,20 @@ public class JobBean extends BaseBean<ReadOnlyJob> {
 	/*
 	 * -------------------- Compute Missing Employments Dialog End --------------------
 	 */
+
+	public String showReferencedCompanies() {
+		navigateToBeanSingle(CompanyBean.BASE_NAME, (job) -> job.getCompany().getId());
+		return "/companies?faces-redirect=true";
+	}
+
+	public String showReferencedEmployments() {
+		navigateToBean(EmploymentBean.BASE_NAME, (job) -> {
+			List<Long> ids = new ArrayList<>();
+			for (ReadOnlyEmployment employment : jobBean.getEmployments(job.getId())) {
+				ids.add(employment.getId());
+			}
+			return ids;
+		});
+		return "/employments?faces-redirect=true";
+	}
 }

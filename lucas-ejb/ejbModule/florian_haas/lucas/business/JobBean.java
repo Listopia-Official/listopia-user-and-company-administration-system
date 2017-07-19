@@ -11,6 +11,7 @@ import javax.validation.executable.*;
 import florian_haas.lucas.model.*;
 import florian_haas.lucas.persistence.*;
 import florian_haas.lucas.security.*;
+import florian_haas.lucas.validation.ValidEntityId;
 
 @Stateless
 @ValidateOnExecution(type = ExecutableType.IMPLICIT)
@@ -144,5 +145,11 @@ public class JobBean implements JobBeanLocal {
 	@RequiresPermissions(JOB_COMPUTE_REQUIRED_EMPLOYMENTS)
 	public Integer computeMissingEmployments(Set<EnumEmployeePosition> validJobs, Set<EnumCompanyType> validCompanyTypes) {
 		return jobDao.computeMissingEmployments(validJobs, validCompanyTypes);
+	}
+
+	@Override
+	@RequiresPermissions(JOB_GET_EMPLOYMENTS)
+	public List<? extends ReadOnlyEmployment> getEmployments(@ValidEntityId(entityClass = ReadOnlyJob.class) Long jobId) {
+		return jobDao.findById(jobId).getEmployments();
 	}
 }

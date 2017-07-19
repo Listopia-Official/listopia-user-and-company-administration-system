@@ -264,6 +264,12 @@ public class CompanyBean implements CompanyBeanLocal {
 	}
 
 	@Override
+	@RequiresPermissions(COMPANY_GET_EMPLOYMENTS)
+	public List<Employment> getEmployments(Long companyId) {
+		return companyDao.findById(companyId).getAllEmployees();
+	}
+
+	@Override
 	@RequiresPermissions(COMPANY_GET_COMPANY_TYPE_FROM_ID)
 	public EnumCompanyType getCompanyTypeFromId(Long companyId) {
 		return companyDao.getCompanyTypeFromId(companyId);
@@ -279,6 +285,12 @@ public class CompanyBean implements CompanyBeanLocal {
 	@RequiresPermissions(COMPANY_GET_PURCHASE_LOGS)
 	public List<? extends ReadOnlyPurchaseLog> getPurchaseLogs(Long companyId) {
 		return companyDao.findById(companyId).getPurchaseLogs();
+	}
+
+	@Override
+	@RequiresPermissions(COMPANY_GET_JOBS)
+	public List<? extends ReadOnlyJob> getJobs(Long companyId) {
+		return companyDao.findById(companyId).getJobs();
 	}
 
 }

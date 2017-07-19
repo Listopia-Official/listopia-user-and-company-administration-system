@@ -26,8 +26,10 @@ import florian_haas.lucas.web.util.WebUtils;
 public class AccountBean extends BaseBean<ReadOnlyAccount> {
 
 	public AccountBean() {
-		super("account", 6);
+		super(BASE_NAME, 6);
 	}
+
+	public static final String BASE_NAME = "account";
 
 	private static final long serialVersionUID = 7962757114064858876L;
 
@@ -736,4 +738,27 @@ public class AccountBean extends BaseBean<ReadOnlyAccount> {
 	/*
 	 * -------------------- Currency Back Exchange Dialog End --------------------
 	 */
+
+	public String showReferencedUsers() {
+		navigateToBeanSingle(UserBean.BASE_NAME,
+				(account) -> account.getOwner().getOwnerType() == EnumAccountOwnerType.USER ? account.getOwner().getId() : null);
+		return "/users?faces-redirect=true";
+	}
+
+	public String showReferencedCompanies() {
+		navigateToBeanSingle(CompanyBean.BASE_NAME,
+				(account) -> account.getOwner().getOwnerType() == EnumAccountOwnerType.COMPANY ? account.getOwner().getId() : null);
+		return "/companies?faces-redirect=true";
+	}
+
+	public String showReferencedTransactionLogs() {
+		navigateToBean(TransactionLogBean.BASE_NAME, (account) -> {
+			List<Long> ids = new ArrayList<>();
+			for (ReadOnlyTransactionLog log : account.getTransactionLogs()) {
+				ids.add(log.getId());
+			}
+			return ids;
+		});
+		return "/transactionLogs?faces-redirect=true";
+	}
 }

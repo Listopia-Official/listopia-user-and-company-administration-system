@@ -22,8 +22,10 @@ import florian_haas.lucas.web.util.WebUtils;
 public class RoomBean extends BaseBean<ReadOnlyRoom> {
 
 	public RoomBean() {
-		super("room", 5);
+		super(BASE_NAME, 5);
 	}
+
+	public static final String BASE_NAME = "room";
 
 	private static final long serialVersionUID = 9056222365379147492L;
 

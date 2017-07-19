@@ -94,6 +94,30 @@
 			disabled="#{companyBean.selectedEntities.size() &lt;=0}"</ui:remove>
 		</p:toolbarGroup>
 	</ui:define>
+	<ui:define name="referencesArea">
+		<p:menuitem
+			value="#{msg['lucas.application.companyScreen.references.accountButton.name']}"
+			icon="fa fa-credit-card"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.ACCOUNT_ACCESS_VIEW,EnumPermission.ACCOUNT_FIND_BY_ID])}"
+			action="#{companyBean.showReferencedAccounts}" />
+		<p:menuitem
+			value="#{msg['lucas.application.companyScreen.references.roomButton.name']}"
+			icon="fa fa-home"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.ROOM_ACCESS_VIEW,EnumPermission.ROOM_FIND_BY_ID])}"
+			action="#{companyBean.showReferencedRooms}" />
+		<p:menuitem
+			value="#{msg['lucas.application.companyScreen.references.jobButton.name']}"
+			icon="fa fa-suitcase"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.JOB_ACCESS_VIEW,EnumPermission.JOB_FIND_BY_ID,EnumPermission.COMPANY_GET_JOBS])}"
+			action="#{companyBean.showReferencedJobs}" />
+		<p:menuitem
+			value="#{msg['lucas.application.companyScreen.references.employmentsButton.name']}"
+			icon="fa fa-group"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.EMPLOYMENT_ACCESS_VIEW,EnumPermission.EMPLOYMENT_FIND_BY_ID,EnumPermission.COMPANY_GET_EMPLOYMENTS])}"
+			action="#{companyBean.showReferencedEmployments}" />
+	</ui:define>
+	<ui:param name="referencesButtonDisabled"
+		value="#{loginBean.hasPermissionsAnd([EnumPermission.ACCOUNT_ACCESS_VIEW,EnumPermission.ACCOUNT_FIND_BY_ID])||loginBean.hasPermissionsAnd([EnumPermission.ROOM_ACCESS_VIEW,EnumPermission.ROOM_FIND_BY_ID])||loginBean.hasPermissionsAnd([EnumPermission.JOB_ACCESS_VIEW,EnumPermission.JOB_FIND_BY_ID,EnumPermission.COMPANY_GET_JOBS])||loginBean.hasPermissionsAnd([EnumPermission.EMPLOYMENT_ACCESS_VIEW,EnumPermission.EMPLOYMENT_FIND_BY_ID,EnumPermission.COMPANY_GET_EMPLOYMENTS])}" />
 	<ui:define name="searchCriteria">
 		<p:row>
 			<p:column>

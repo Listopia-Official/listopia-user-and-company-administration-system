@@ -56,4 +56,6 @@ public interface JobBeanLocal {
 	public Integer computeMissingEmployments(@NotNull Set<@TypeNotNull EnumEmployeePosition> validJobs,
 			@NotNull Set<@TypeNotNull EnumCompanyType> validCompanyTypes);
 
+	public List<? extends ReadOnlyEmployment> getEmployments(@ValidEntityId(entityClass = ReadOnlyJob.class) Long jobId);
+
 }

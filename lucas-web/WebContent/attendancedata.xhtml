@@ -58,6 +58,15 @@
 			</p:commandButton>
 		</p:toolbarGroup>
 	</ui:define>
+	<ui:define name="referencesArea">
+		<p:menuitem
+			value="#{msg['lucas.application.attendancedataScreen.references.usersButton.name']}"
+			icon="fa fa-user"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.USER_ACCESS_VIEW,EnumPermission.USER_FIND_BY_ID])}"
+			action="#{attendancedataBean.showReferencedUsers}" />
+	</ui:define>
+	<ui:param name="referencesButtonDisabled"
+		value="#{loginBean.hasPermissionsAnd([EnumPermission.USER_ACCESS_VIEW,EnumPermission.USER_FIND_BY_ID])}" />
 	<ui:define name="searchCriteria">
 		<p:row>
 			<p:column>

@@ -39,6 +39,25 @@
 			</p:commandButton>
 		</p:toolbarGroup>
 	</ui:define>
+	<ui:define name="referencesArea">
+		<p:menuitem
+			value="#{msg['lucas.application.transactionLogScreen.references.accountButton.name']}"
+			icon="fa fa-user"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.ACCOUNT_ACCESS_VIEW,EnumPermission.ACCOUNT_FIND_BY_ID])}"
+			action="#{transactionLogBean.showReferencedAccount}" />
+		<p:menuitem
+			value="#{msg['lucas.application.transactionLogScreen.references.referencedAccountButton.name']}"
+			icon="fa fa-user-plus"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.ACCOUNT_ACCESS_VIEW,EnumPermission.ACCOUNT_FIND_BY_ID])}"
+			action="#{transactionLogBean.showReferencedReferencedAccount}" />
+		<p:menuitem
+			value="#{msg['lucas.application.transactionLogScreen.references.bankUserButton.name']}"
+			icon="fa fa-user-md"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.LOGIN_USER_ACCESS_VIEW,EnumPermission.LOGIN_USER_FIND_BY_ID])}"
+			action="#{transactionLogBean.showReferencedBankUser}" />
+	</ui:define>
+	<ui:param name="referencesButtonDisabled"
+		value="#{loginBean.hasPermissionsAnd([EnumPermission.ACCOUNT_ACCESS_VIEW,EnumPermission.ACCOUNT_FIND_BY_ID])||loginBean.hasPermissionsAnd([EnumPermission.LOGIN_USER_ACCESS_VIEW,EnumPermission.LOGIN_USER_FIND_BY_ID])}" />
 	<ui:define name="searchCriteria">
 		<p:row>
 			<p:column>

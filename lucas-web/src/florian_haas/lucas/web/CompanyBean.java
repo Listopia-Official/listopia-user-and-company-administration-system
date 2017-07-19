@@ -26,8 +26,10 @@ import florian_haas.lucas.web.util.WebUtils;
 public class CompanyBean extends BaseBean<ReadOnlyCompany> {
 
 	public CompanyBean() {
-		super("company", 7);
+		super(BASE_NAME, 7);
 	}
+
+	public static final String BASE_NAME = "company";
 
 	private static final long serialVersionUID = 5394240973288053983L;
 
@@ -913,5 +915,37 @@ public class CompanyBean extends BaseBean<ReadOnlyCompany> {
 	/*
 	 * -------------------- Show Purchase Logs Dialog End --------------------
 	 */
+
+	public String showReferencedAccounts() {
+		navigateToBeanSingle(AccountBean.BASE_NAME, (company) -> company.getAccount().getId());
+		return "/accounts?faces-redirect=true";
+	}
+
+	public String showReferencedRooms() {
+		navigateToBeanSingle(RoomBean.BASE_NAME, (company) -> company.getSection() == null ? null : company.getSection().getRoom().getId());
+		return "/rooms?faces-redirect=true";
+	}
+
+	public String showReferencedJobs() {
+		navigateToBean(JobBean.BASE_NAME, (company) -> {
+			List<Long> ids = new ArrayList<>();
+			for (ReadOnlyJob job : companyBean.getJobs(company.getId())) {
+				ids.add(job.getId());
+			}
+			return ids;
+		});
+		return "/jobs?faces-redirect=true";
+	}
+
+	public String showReferencedEmployments() {
+		navigateToBean(EmploymentBean.BASE_NAME, (company) -> {
+			List<Long> ids = new ArrayList<>();
+			for (ReadOnlyEmployment employment : companyBean.getEmployments(company.getId())) {
+				ids.add(employment.getId());
+			}
+			return ids;
+		});
+		return "/employments?faces-redirect=true";
+	}
 
 }

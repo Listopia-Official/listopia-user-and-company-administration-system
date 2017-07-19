@@ -74,6 +74,8 @@ public enum EnumPermission {
 	COMPANY_GET_COMPANY_TYPE_FROM_ID(COMPANY, "getCompanyTyoeFromId"),
 	COMPANY_FIND_BY_DATA(COMPANY, "findByData"),
 	COMPANY_GET_PURCHASE_LOGS(COMPANY, "getPurchaseLogs"),
+	COMPANY_GET_JOBS(COMPANY, "getJobs"),
+	COMPANY_GET_EMPLOYMENTS(COMPANY, "getEmployments"),
 
 	EMPLOYMENT_ALL(EMPLOYMENT, "*"),
 	EMPLOYMENT_CREATE(EMPLOYMENT, "create"),
@@ -93,6 +95,7 @@ public enum EnumPermission {
 	EMPLOYMENT_REMOVE_WORK_SHIFT(EMPLOYMENT, "removeWorkShift"),
 	EMPLOYMENT_DISTRIBUTE_JOBS(EMPLOYMENT, "distributeJobs"),
 	EMPLOYMENT_FIND_BY_DATA(EMPLOYMENT, "findByData"),
+	EMPLOYMENT_GET_FROM_USER(EMPLOYMENT, "getFromUser"),
 
 	ENTITY_ALL(ENTITY, "*"),
 	ENTITY_EXISTS(ENTITY, "exists"),
@@ -247,6 +250,7 @@ public enum EnumPermission {
 	JOB_EXPORT(JOB, "export"),
 	JOB_FIND_BY_DATA(JOB, "findByData"),
 	JOB_COMPUTE_REQUIRED_EMPLOYMENTS(JOB, "computeRequiredEmployments"),
+	JOB_GET_EMPLOYMENTS(JOB, "getEmployments"),
 
 	ID_CARD_ALL(ID_CARD, "*"),
 	ID_CARD_FIND_BY_ID(ID_CARD, "findById"),

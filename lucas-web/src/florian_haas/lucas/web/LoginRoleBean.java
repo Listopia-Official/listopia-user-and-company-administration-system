@@ -24,8 +24,10 @@ import florian_haas.lucas.web.util.WebUtils;
 public class LoginRoleBean extends BaseBean<ReadOnlyLoginUserRole> {
 
 	public LoginRoleBean() {
-		super("loginRole", 3);
+		super(BASE_NAME, 3);
 	}
+
+	public static final String BASE_NAME = "loginRole";
 
 	private static final long serialVersionUID = 5788543415266420741L;
 

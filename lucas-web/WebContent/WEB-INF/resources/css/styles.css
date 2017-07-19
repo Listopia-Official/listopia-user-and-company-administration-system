@@ -98,10 +98,15 @@
 	white-space: pre-wrap;
 }
 
-.chip-width > .ui-chips-container {
-   max-width: 300px;
+.chip-width>.ui-chips-container {
+	max-width: 300px;
 }
 
 .top {
 	vertical-align: top;
+}
+
+.ui-menuitem-icon {
+	text-align: center;
+	margin-right: 4px;
 }
