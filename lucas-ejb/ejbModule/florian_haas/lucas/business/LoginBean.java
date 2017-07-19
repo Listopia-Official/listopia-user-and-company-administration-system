@@ -210,4 +210,10 @@ public class LoginBean implements LoginBeanLocal {
 		return loginUserDao.isBoundLoginUser(loginUserId);
 	}
 
+	@Override
+	@RequiresPermissions(LOGIN_USER_FIND_BY_USERNAME)
+	public ReadOnlyLoginUser getLoginUserByUser(Long userId) {
+		return this.findLoginUserByUsername(Long.toString(userId));
+	}
+
 }

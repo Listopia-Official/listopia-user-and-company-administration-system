@@ -145,9 +145,14 @@
 			icon="fa fa-group"
 			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.EMPLOYMENT_ACCESS_VIEW,EnumPermission.EMPLOYMENT_FIND_BY_ID,EnumPermission.EMPLOYMENT_GET_FROM_USER])}"
 			action="#{userBean.showReferencedEmployments}" />
+		<p:menuitem
+			value="#{msg['lucas.application.userScreen.references.loginUsersButton.name']}"
+			icon="fa fa-user-md"
+			rendered="#{loginBean.hasPermissionsAnd([EnumPermission.LOGIN_USER_FIND_BY_ID,EnumPermission.LOGIN_USER_FIND_BY_USERNAME,EnumPermission.LOGIN_USER_ACCESS_VIEW])}"
+			action="#{userBean.showReferencedLoginUsers}" />
 	</ui:define>
 	<ui:param name="referencesButtonDisabled"
-		value="#{loginBean.hasPermissionsAnd([EnumPermission.ACCOUNT_ACCESS_VIEW,EnumPermission.ACCOUNT_FIND_BY_ID])||loginBean.hasPermissionsAnd([EnumPermission.ATTENDANCE_ACCESS_VIEW,EnumPermission.ATTENDANCE_FIND_BY_ID])||loginBean.hasPermissionsAnd([EnumPermission.EMPLOYMENT_ACCESS_VIEW,EnumPermission.EMPLOYMENT_FIND_BY_ID,EnumPermission.EMPLOYMENT_GET_FROM_USER])}" />
+		value="#{loginBean.hasPermissionsAnd([EnumPermission.ACCOUNT_ACCESS_VIEW,EnumPermission.ACCOUNT_FIND_BY_ID])||loginBean.hasPermissionsAnd([EnumPermission.ATTENDANCE_ACCESS_VIEW,EnumPermission.ATTENDANCE_FIND_BY_ID])||loginBean.hasPermissionsAnd([EnumPermission.EMPLOYMENT_ACCESS_VIEW,EnumPermission.EMPLOYMENT_FIND_BY_ID,EnumPermission.EMPLOYMENT_GET_FROM_USER])||loginBean.hasPermissionsAnd([EnumPermission.LOGIN_USER_FIND_BY_ID,EnumPermission.LOGIN_USER_FIND_BY_USERNAME,EnumPermission.LOGIN_USER_ACCESS_VIEW])}" />
 	<ui:define name="searchCriteria">
 		<p:row>
 			<p:column>

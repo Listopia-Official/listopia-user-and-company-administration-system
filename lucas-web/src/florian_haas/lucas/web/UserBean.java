@@ -43,6 +43,9 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 	private UserBeanLocal userBean;
 
 	@EJB
+	private LoginBeanLocal loginBean;
+
+	@EJB
 	private EntityBeanLocal entityBean;
 
 	@EJB
@@ -1250,6 +1253,14 @@ public class UserBean extends BaseBean<ReadOnlyUser> {
 			return ids;
 		});
 		return "/employments?faces-redirect=true";
+	}
+
+	public String showReferencedLoginUsers() {
+		navigateToBeanSingle(LoginUserBean.BASE_NAME, (user) -> {
+			ReadOnlyLoginUser loginUser = loginBean.getLoginUserByUser(user.getId());
+			return loginUser == null ? null : loginUser.getId();
+		});
+		return "/loginUsers?faces-redirect=true";
 	}
 
 }

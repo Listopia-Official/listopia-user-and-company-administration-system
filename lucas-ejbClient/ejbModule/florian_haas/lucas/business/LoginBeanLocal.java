@@ -63,4 +63,6 @@ public interface LoginBeanLocal {
 
 	public Boolean isBoundLoginUser(@ValidEntityId(entityClass = ReadOnlyLoginUser.class) Long loginUserId);
 
+	public ReadOnlyLoginUser getLoginUserByUser(@ValidEntityId(entityClass = ReadOnlyUser.class) Long userId);
+
 }
